@@ -1,0 +1,14 @@
+NewToKWizTitle=פרויקט עץ דעת חדש
+NewToKWizDescription=אשף זה יוצר פרויקט עץ דעת חדש
+NewToKWizReqProjName=שם &פרויקט:
+NewToKWizReqCreatorName=שם &יוצר
+NewToKWizReqRootFile=קובץ ה&שורש
+NewToKWizBrowseCmd=עיין
+NewToKWizOpenCmd=פתח
+NewToKWizErrSpecName=יש לציין את השם הפרויקט
+NewToKWizErrExist=כבר קיים פרויקט בשם זה. אנא ממך, צייך שם חדש 
+NewToKWizErrNameInvalid=שם הפרויקט צריך להיות חוקי
+NewToKWizErrMissingCreator=אנא ציין את שם היוצר
+NewToKWizErrSelectRoot=אנא בחר שורש
+NewToKWizErrRootNotSrc=השורש חייב להיות קובץ src
+NewToKWizErrRootNotExist=השורש שנבחר אינו קיים
