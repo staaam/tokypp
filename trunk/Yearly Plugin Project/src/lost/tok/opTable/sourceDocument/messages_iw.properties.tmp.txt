@@ -1,3 +1,0 @@
-SourceDocument.ChapterLabel=פרק
-SourceDocument.TitleLabel=כותרת
-SourceDocument.AuthorLabel=מאת
