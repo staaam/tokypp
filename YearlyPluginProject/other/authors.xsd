@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+	<!--elementFormDefault="qualified"
+    xmlns="http://tempuri.org/XMLSchema.xsd"
+    xmlns:mstns="http://tempuri.org/XMLSchema.xsd"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"			    -->
+
+	
+	<xsd:complexType name="AuthorsGroup">
+		<xsd:sequence>	
+			<xsd:element name="id" type="xsd:positiveInteger" />
+			<xsd:element name="name" type="xsd:string" />
+			<xsd:element name="nextGroupId" type="xsd:nonNegativeInteger" />
+			<xsd:element name="prevGroupId" type="xsd:nonNegativeInteger" />
+			<xsd:element name="author" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:element name="authors">
+		<xsd:complexType>
+			<xsd:sequence>	
+				<xsd:element name="authorsGroup" type="AuthorsGroup" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>
