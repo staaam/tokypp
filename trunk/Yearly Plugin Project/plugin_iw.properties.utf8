@@ -1,9 +1,0 @@
-source.editor.name=שולחן הניתוחים
-wizards.catagory=מידע
-wizards.wizard.tok=עץ דעת
-action.name.mark=סמן
-action.tooltip.mark=מסמן את המקטע הנבחר
-action.name.unmarkAll=בטל סימונים
-action.tooltip.unmarkAll=מבטל את כל הסימונים במסמך
-action.name.addQuote=הוסף ציטוט
-action.tooltip.addQuote=יוצר ציטוט חדש מהקטעים המסומנים
