@@ -1,0 +1,11 @@
+AddQuoteAction.Error=שגיאה
+AddQuoteWizard.AddQuote=הוסף ציטוט
+AddQuoteWizard.Opinion=דעה
+AddQuoteWizard.Ok=אישור
+AddQuoteWizard.Cancel=ביטול
+AddQuoteAction.NoMarkedText=עליך קודם לסמן טקסט
+AddQuoteWizard.QuoteText=ציטוט
+AddQuoteWizard.QuoteComment=הערה
+AddQuoteWizard.Discussion=דיון
+AddQuoteAction.SourceNotLinkedToProject=המקור צריך להיות שייך לפרויקט
+AddQuoteAction.DiscussionNotExists=הדיון לא קיים
