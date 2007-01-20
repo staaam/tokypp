@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2007 sp1 (http://www.altova.com) by hadas zin (personal use) -->
+<source xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="C:\DOCUME~1\zin\Desktop\sourcenew.xsd">
+	<name>Or Ahaim's Torah interpretation</name>
+	<author>Or Ahaim</author>
+	<child>
+		<chapter>
+			<name>chapter 11</name>
+			<child>
+				<text>
+					<name>Verse 1</name>
+					<content>One language</content>
+				</text>
+			</child>
+		</chapter>
+	</child>
+	<child>
+		<chapter>
+			<name>chapter 12</name>
+			<child>
+				<chapter>
+					<name>Subchapter 15</name>
+					<child>
+						<text>
+							<name>Verse 1</name>
+							<content>One to another. One</content>
+						</text>
+					</child>
+					<child>
+						<text>
+							<name>Verse 2</name>
+							<content>Ad-noy descended to see. He</content>
+						</text>
+					</child>
+				</chapter>
+			</child>
+		</chapter>
+	</child>
+</source>

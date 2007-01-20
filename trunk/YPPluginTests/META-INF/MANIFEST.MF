@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: YPPluginTests Plug-in
+Bundle-SymbolicName: YPPluginTests
+Bundle-Version: 1.0.0
+Bundle-Activator: lost.tok.Activator
+Bundle-Localization: plugin
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.junit,
+ Yearly_Plugin_Project,
+ org.eclipse.core.resources,
+ org.eclipse.jface.text
+Eclipse-LazyStart: true
