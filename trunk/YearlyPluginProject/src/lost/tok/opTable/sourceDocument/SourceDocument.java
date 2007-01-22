@@ -8,7 +8,7 @@ import org.dom4j.Element;
 import org.eclipse.jface.text.Document;
 
 public class SourceDocument extends Document {
-	Chapter rootChapter;
+	Chapter  rootChapter;
 
 	HashMap<String, Chapter> map;
 
