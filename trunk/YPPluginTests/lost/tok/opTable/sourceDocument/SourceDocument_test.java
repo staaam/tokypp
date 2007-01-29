@@ -47,6 +47,30 @@ public class SourceDocument_test extends TestCase {
 	 * 
 	 * assertEquals("fails in English mode",expected, actual); }
 	 */
+	
+	public void testCreateDocToParse()
+	{
+		Chapter c = null;
+		String text = "This is the story of an unparsed document"; 
+		
+		SourceDocument doc = new SourceDocument();
+		doc.setUnparsed(text,"Source Parser","Shay Nahum");
+		assertEquals("TITLE:\tSource Parser\nBY   :	Shay Nahum\n\n" +
+				"Chapter 1:\t(Unparsed Text)\n" + text,
+				doc.getChapterFromOffset(0).toString());
+		c = doc.getChapterFromOffset(50);
+		assertEquals("Chapter 1:\t(Unparsed Text)\n" + text, c.toString());
+	}
+	
+	public void testCreateNewChapter()
+	{
+		String text = "This is the story of an unparsed document"; 
+		
+		SourceDocument doc = new SourceDocument();
+		doc.setUnparsed(text,"Source Parser","Shay Nahum");
+		
+		doc.createNewChapter(30, "Document?");
+	}
 
 	public void testGetChapterFromOffset() {
 		SourceDocument doc = loadDoc(Paths.OR_AHAIM_EN);
