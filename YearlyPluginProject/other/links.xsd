@@ -1,35 +1,36 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-<xsd:include schemaLocation="common.xsd"/>
-
-
+	<xsd:include schemaLocation="common.xsd"/>
 	<!--elementFormDefault="qualified"
     xmlns="http://tempuri.org/XMLSchema.xsd"
     xmlns:mstns="http://tempuri.org/XMLSchema.xsd"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"			    -->
-
-	
 	<xsd:complexType name="Link">
-		<xsd:sequence>	
-			<xsd:element name="discussionFile" type="xsd:string" />
-			<xsd:element name="type" type="LinkType" />
-			<xsd:element name="excerptions" type="Excerption" maxOccurs="unbounded"/>
-			<xsd:element name="linkSubject" type="xsd:string" />
+		<xsd:sequence>
+			<xsd:element name="discussionFile" type="xsd:string"/>
+			<xsd:element name="type" type="LinkType"/>
+			<xsd:element name="linkSubject" type="xsd:string"/>
+			<xsd:element name="sublink" type="SubLink" maxOccurs="unbounded"/>
 		</xsd:sequence>
 	</xsd:complexType>
-
+	<xsd:complexType name="SubLink">
+		<xsd:sequence>
+			<xsd:element name="sourceFile" type="xsd:string"/>
+			<xsd:element name="excerption" type="Excerption" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
 	<xsd:simpleType name="LinkType">
 		<xsd:restriction base="xsd:string">
 			<xsd:enumeration value="difficulty"/>
+			<xsd:enumeration value="interpretation"/>
+			<xsd:enumeration value="general"/>
 		</xsd:restriction>
 	</xsd:simpleType>
-
 	<xsd:element name="links">
 		<xsd:complexType>
-			<xsd:sequence>	
-				<xsd:element name="link" type="Link" maxOccurs="unbounded" minOccurs="0"/>
+			<xsd:sequence>
+				<xsd:element name="link" type="Link" minOccurs="0" maxOccurs="unbounded"/>
 			</xsd:sequence>
 		</xsd:complexType>
 	</xsd:element>
-
 </xsd:schema>
