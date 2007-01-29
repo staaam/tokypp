@@ -1,21 +1,32 @@
 package lost.tok.opTable.sourceDocument;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 
+import org.dom4j.Element;
+
 public class Chapter {
+	
+	/** The title before each chapter */
+	static public final String CHAPTER_STR = Messages.getString("SourceDocument.ChapterLabel");
+	/** The name of an unparsed text excerpt */
+	static public final String UNPARSED_STR = "(Unparsed Text)";
+	
 	String label;
 
+	/** The name of the chapter. Part of its title */
 	String name;
-
+	/** The parent of this chapter. null for root */ 
 	Chapter parent;
-
+	/** The chapters below this one */
 	LinkedList<Chapter> children;
-
+	/** The offset of the chapter from the start of the DISPLAYED document */
 	Integer offset;
-
+	/** The length of the chapter, including its subchapters */
 	Integer length;
 
+	/** Creates a childless Chapter */
 	public Chapter(String label, String name) {
 		this.label = label;
 		this.name = name;
@@ -23,6 +34,27 @@ public class Chapter {
 		children = new LinkedList<Chapter>();
 		offset = new Integer(0);
 		length = new Integer(label.length());
+	}
+	
+	/** Creates a chapter whose children are derived from the root element */
+	public Chapter(String label, String name, Element root, String chapterLabel) {
+		this(label,name);
+		
+		Iterator itr = root.elementIterator("child"); //$NON-NLS-1$
+		//Integer sequenceNumber = 1;
+		while (itr.hasNext()) {
+			Element el = (Element) itr.next();
+			Element next = el.element("chapter"); //$NON-NLS-1$
+			String nextLabel = chapterLabel + (children.size()+1);
+			Chapter child;
+			if (next != null) {
+				child = addChapter(next, nextLabel);
+			} else {
+				next = el.element("text"); //$NON-NLS-1$
+				child = addText(next, nextLabel);
+			}
+			this.add(child);
+		}
 	}
 
 	public String toString() {
@@ -70,5 +102,37 @@ public class Chapter {
 
 	public String getName() {
 		return name;
+	}
+	
+	static private Chapter addChapter(Element el, String label) {
+		String chapName = el.elementTextTrim("name"); //$NON-NLS-1$
+		String chapLabel = getChapterLabel(label, chapName);
+
+		Chapter c = new Chapter(chapLabel, chapName, el, label + "."); //$NON-NLS-1$
+
+		return c;
+	}
+	
+	static private Chapter addText(Element el, String label) {
+		String chapName = el.elementTextTrim("name"); //$NON-NLS-1$
+		String chapLabel = getChapterLabel(label, chapName);
+
+		Element textElement = el.element("content"); //$NON-NLS-1$
+
+		// Note(Shay): should we really create a new chapter here?
+		Chapter c = new Chapter(chapLabel, chapName);
+
+		c.add(new ChapterText(textElement.getUniquePath(),
+				formatText(textElement)));
+
+		return c;
+	}
+	
+	static private String formatText(Element textElement) {
+		return textElement.getStringValue().trim() + "\n"; //$NON-NLS-1$
+	}
+
+	static private String getChapterLabel(String label, String name) {
+		return label + ":\t" + name + "\n"; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 }
