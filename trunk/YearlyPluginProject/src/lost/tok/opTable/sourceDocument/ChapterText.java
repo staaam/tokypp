@@ -77,4 +77,18 @@ public class ChapterText extends Chapter {
 	public String toString() {
 		return text;
 	}
+	
+	/** 
+	 * Creates a new {chapter,sub chapter,text} ending at that offset  
+	 * Related to Source Parser. 
+	 */
+	public void createNewChapter(Integer offset, String name)
+	{
+		if (offset.equals(length))
+		{
+			// no need to create a new chapter, just update this one
+			
+		}
+		
+	}
 }
