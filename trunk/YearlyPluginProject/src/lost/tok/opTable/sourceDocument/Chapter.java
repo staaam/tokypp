@@ -87,6 +87,20 @@ public class Chapter {
 			length += c.length;
 		}
 	}
+	
+	public void updateLabel()
+	{
+		String NewLabelBase = "";
+		Chapter son = this;
+		while (son.parent != null)
+		{
+			int index = son.parent.children.indexOf(son);
+			NewLabelBase = "." + (index + 1) + NewLabelBase;
+			son = son.parent;
+		}
+		NewLabelBase = CHAPTER_STR + " " + NewLabelBase.substring(1);
+		this.label = getChapterLabel(NewLabelBase, name);		
+	}
 
 	public Chapter getParent() {
 		return parent;
@@ -102,6 +116,11 @@ public class Chapter {
 
 	public String getName() {
 		return name;
+	}
+	
+	public boolean isUnparsed()
+	{
+		return false;
 	}
 	
 	static private Chapter addChapter(Element el, String label) {

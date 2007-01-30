@@ -13,6 +13,13 @@ public class RangeSearch {
 	RangeSearch() {
 		ps = new LinkedList<LabeledPosition>();
 	}
+	
+	void clear()
+	{
+		ps.clear();
+		p = null;
+		sorted = false;
+	}
 
 	void add(Integer offset, Integer length, String name) {
 		ps.add(new LabeledPosition(offset, length, name));

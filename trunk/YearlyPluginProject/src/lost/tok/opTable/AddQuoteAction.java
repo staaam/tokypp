@@ -19,9 +19,9 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.part.FileEditorInput;
 
-public class AddQuoteAction extends AbstractOpTableAction {
+public class AddQuoteAction extends AbstractEditorAction {
 	public void run(IAction action) {
-		List<Excerption> excerptions = activeEditor.getMarked();
+		List<Excerption> excerptions = ((OperationTable)activeEditor).getMarked();
 		System.out.println("The are " + excerptions.size() + " Excerptions:"); //$NON-NLS-1$ //$NON-NLS-2$
 		for (Excerption e : excerptions) {
 			System.out.println(e);
@@ -92,7 +92,7 @@ public class AddQuoteAction extends AbstractOpTableAction {
 			return;
 		}
 
-		activeEditor.clearMarked();
+		((OperationTable)activeEditor).clearMarked();
 	}
 
 	void messageBox(String title, String message) {

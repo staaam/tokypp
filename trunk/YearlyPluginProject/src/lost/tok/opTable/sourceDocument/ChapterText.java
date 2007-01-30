@@ -78,17 +78,50 @@ public class ChapterText extends Chapter {
 		return text;
 	}
 	
+	private static int uniqueIdCounter = 0; // TODO(Shay): Why must label be unique?
+	
 	/** 
 	 * Creates a new {chapter,sub chapter,text} ending at that offset  
 	 * Related to Source Parser. 
 	 */
 	public void createNewChapter(Integer offset, String name)
 	{
-		if (offset.equals(length))
+		String originalText = text;
+		
+		if (isUnparsed())
 		{
-			// no need to create a new chapter, just update this one
-			
+			// change the label/name of this chapter to what it should be
+			this.parent.name = name;
+			this.parent.updateLabel();
+		}
+		else
+		{
+			Chapter myOldParent = this.parent;
+			myOldParent.children.clear();
+			Chapter myNewParent = new Chapter("", name);
+			myOldParent.add(myNewParent);
+			myNewParent.add(this);
+			myNewParent.updateLabel();
 		}
 		
+		this.name = "";
+		this.label = Chapter.UNPARSED_STR + (uniqueIdCounter++); // FIXME(Shay): Should be some sort of xPath which I haven't understood
+		this.text = originalText.substring(0, offset).trim() + "\n";
+		this.excerPath = ""; // FIXME(Shay): Update this!
+		
+		if (!offset.equals(length-1))
+		{
+			Chapter textChapParent = new Chapter("",Chapter.UNPARSED_STR);
+			ChapterText textChap = new ChapterText(Chapter.UNPARSED_STR, originalText.substring(offset).trim() + "\n");
+			textChapParent.add(textChap);
+			this.parent.parent.add(textChapParent);
+			textChapParent.updateLabel();
+		}
+		// otherwise, no need to create a new chapter		
+	}
+
+	public boolean isUnparsed()
+	{
+		return label.equals(Chapter.UNPARSED_STR + "/0");
 	}
 }

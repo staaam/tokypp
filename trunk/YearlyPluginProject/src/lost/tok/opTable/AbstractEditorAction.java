@@ -5,21 +5,22 @@ import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.editors.text.TextEditor;
 
-public abstract class AbstractOpTableAction implements IEditorActionDelegate {
+public abstract class AbstractEditorAction implements IEditorActionDelegate {
 
-	protected OperationTable activeEditor;
+	protected TextEditor activeEditor;
 
 	protected TextSelection currentSelection;
 
-	public AbstractOpTableAction() {
+	public AbstractEditorAction() {
 		activeEditor = null;
 		currentSelection = null;
 	}
 
 	public void setActiveEditor(IAction action, IEditorPart targetEditor) {
-		assert (targetEditor instanceof OperationTable);
-		activeEditor = (OperationTable) targetEditor;
+		assert (targetEditor instanceof TextEditor);
+		activeEditor = (TextEditor) targetEditor;
 	}
 
 	public void selectionChanged(IAction action, ISelection selection) {

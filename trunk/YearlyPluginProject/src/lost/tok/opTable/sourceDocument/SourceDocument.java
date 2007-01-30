@@ -2,7 +2,6 @@ package lost.tok.opTable.sourceDocument;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 
 import org.dom4j.Element;
 import org.eclipse.jface.text.Document;
@@ -21,23 +20,29 @@ public class SourceDocument extends Document {
 		map = new HashMap<String, Chapter>();
 		r = new RangeSearch();
 
-		Element root = d.getRootElement();
-		
+		Element root = d.getRootElement();	
 		title = root.elementTextTrim("name");
 		author = root.elementTextTrim("author");
 
 		rootChapter = new Chapter(getTitle(), "", root, Chapter.CHAPTER_STR + " ");
-
+		update();
+	}
+	
+	/**
+	 * Recalculates the chapter's offset and rangeSearch
+	 */
+	public void update()
+	{
+		map.clear();
+		r.clear();
+		
 		rootChapter.fixOffsetLength(0, map);
-
 		set(rootChapter.toString());
 
 		for (String key : map.keySet()) {
-			// if (key.matches(".*/text/\\d+")) {
 			Chapter c = map.get(key);
 			r.add(c.offset, c.length, key);
-			// }
-		}
+		}				
 	}
 	
 	public void setUnparsed(String s, String title, String author)
@@ -47,22 +52,14 @@ public class SourceDocument extends Document {
 		this.title = title;
 		this.author = author;
 		
-		ChapterText ctext= new ChapterText(Chapter.UNPARSED_STR, s);
+		ChapterText ctext= new ChapterText(Chapter.UNPARSED_STR, s.trim() + "\n");
 		Chapter firstChapter = new Chapter(Chapter.CHAPTER_STR + " 1:\t" + 
 					Chapter.UNPARSED_STR + "\n",Chapter.UNPARSED_STR);
 		firstChapter.add(ctext);
 		rootChapter = new Chapter(getTitle(), "");
 		rootChapter.add(firstChapter);
 		
-		rootChapter.fixOffsetLength(0, map);
-		set(rootChapter.toString());
-
-		for (String key : map.keySet()) {
-			// if (key.matches(".*/text/\\d+")) {
-			Chapter c = map.get(key);
-			r.add(c.offset, c.length, key);
-			// }
-		}
+		update();
 	}
 	
 	/** 
@@ -84,11 +81,12 @@ public class SourceDocument extends Document {
 		}
 
 		Chapter c = this.getChapterFromOffset(wordEndOffset);		
-		if (c instanceof ChapterText && Chapter.UNPARSED_STR.equals(c.getName()))
+		if (c instanceof ChapterText)
 		{
 			((ChapterText)c).createNewChapter(wordEndOffset - c.getOffset(), name);
+			update();
 		}
-		// else the command is invalid, and is ignored
+		// else the command is invalid, and it is ignored
 	}
 
 	public Chapter getChapterFromOffset(Integer offset) {

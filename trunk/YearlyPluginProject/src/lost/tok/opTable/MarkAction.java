@@ -2,7 +2,7 @@ package lost.tok.opTable;
 
 import org.eclipse.jface.action.IAction;
 
-public class MarkAction extends AbstractOpTableAction {
+public class MarkAction extends AbstractEditorAction {
 
 	public void run(IAction action) {
 		assert (activeEditor != null);
@@ -10,7 +10,7 @@ public class MarkAction extends AbstractOpTableAction {
 				|| currentSelection.getLength() == 0)
 			return;
 
-		activeEditor.mark(currentSelection);
+		((OperationTable)activeEditor).mark(currentSelection);
 	}
 
 }
