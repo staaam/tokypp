@@ -11,6 +11,13 @@
             icon="icons/sample.gif"
             id="lost.tok.opTable.OperationTable"
             name="%source.editor.name"/>
+      <editor
+            class="lost.tok.sourceParser.SourceParser"
+            default="true"
+            extensions="txt"
+            icon="icons/Mark.bmp"
+            id="lost.tok.sourceParser.SourceParser"
+            name="Source Parser"/>
    </extension>
    <extension
          point="org.eclipse.ui.newWizards">
@@ -82,6 +89,20 @@
                style="push"
                toolbarPath="OpTableGroup"
                tooltip="%action.tooltip.addQuote"/>
+      </editorContribution>
+      <editorContribution
+            id="lost.tok.sourceParser.Contribution"
+            targetID="lost.tok.sourceParser.SourceParser">
+         <action
+               class="lost.tok.sourceParser.EndHereAction"
+               icon="icons/AddQuote.bmp"
+               id="lost.tok.sourceParser.endHereAction"
+               label="End Chapter Here"
+               menubarPath="edit/SourceParser"
+               state="true"
+               style="push"
+               toolbarPath="SourceParser"
+               tooltip="Clicky here to create a new chapter ending at the current cursor location"/>
       </editorContribution>
    </extension>
 </plugin>
