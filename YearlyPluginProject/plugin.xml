@@ -95,6 +95,7 @@
             targetID="lost.tok.sourceParser.SourceParser">
          <action
                class="lost.tok.sourceParser.EndHereAction"
+               definitionId="lost.tok.sourceParser.command.endHereAction"
                icon="icons/AddQuote.bmp"
                id="lost.tok.sourceParser.endHereAction"
                label="End Chapter Here"
@@ -104,5 +105,18 @@
                toolbarPath="SourceParser"
                tooltip="Clicky here to create a new chapter ending at the current cursor location"/>
       </editorContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            category="Source Parser"
+            id="lost.tok.sourceParser.command.endHereAction"
+            name="End Chapter Here"/>
+      <keyBinding
+            commandId="lost.tok.sourceParser.command.endHereAction"
+            contextId="org.eclipse.ui.contexts.window"
+            keyConfigurationId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            keySequence="ALT+Q"
+            scope="org.eclipse.ui.contexts.window"/>
    </extension>
 </plugin>
