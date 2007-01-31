@@ -1,12 +1,8 @@
 package lost.tok.opTable;
 
-import javax.swing.text.StyleConstants;
-import javax.swing.text.StyleConstants.FontConstants;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.widgets.Display;
 
 /**

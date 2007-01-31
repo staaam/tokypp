@@ -1,9 +1,13 @@
 package lost.tok.new_wizard;
 
+import java.io.File;
+
+import lost.tok.Messages;
+
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.Path;
+import org.eclipse.jface.dialogs.IDialogPage;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardPage;
@@ -16,19 +20,9 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.dialogs.ContainerSelectionDialog;
-import org.eclipse.ui.dialogs.SaveAsDialog;
-import org.eclipse.ui.dialogs.SelectionDialog;
 import org.eclipse.swt.widgets.FileDialog;
-import java.awt.*;
-import java.io.File;
-
-import javax.swing.JFileChooser;
-
-import lost.tok.Messages;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
 
 /**
  * The "New" wizard page allows setting the container for the new file as well
