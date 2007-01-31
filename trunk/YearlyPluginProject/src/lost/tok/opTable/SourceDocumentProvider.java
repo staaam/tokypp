@@ -1,20 +1,15 @@
 package lost.tok.opTable;
 
 import java.io.InputStream;
-import java.util.List;
 
 import lost.tok.sourceDocument.SourceDocument;
 
-import org.dom4j.Document;
 import org.dom4j.DocumentException;
-import org.dom4j.ProcessingInstruction;
 import org.dom4j.io.SAXReader;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.text.IDocument;
-import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.editors.text.FileDocumentProvider;
-import org.eclipse.ui.part.FileEditorInput;
 
 public class SourceDocumentProvider extends FileDocumentProvider {
 	protected void setDocumentContent(IDocument document,

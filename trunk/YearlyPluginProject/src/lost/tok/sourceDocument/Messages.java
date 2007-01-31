@@ -14,7 +14,6 @@ public class Messages {
 
 	public static String getString(String key) {
 		try {
-			ResourceBundle rs = RESOURCE_BUNDLE;
 			return RESOURCE_BUNDLE.getString(key);
 
 		} catch (MissingResourceException e) {

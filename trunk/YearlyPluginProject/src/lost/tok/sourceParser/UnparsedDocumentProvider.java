@@ -1,16 +1,16 @@
 package lost.tok.sourceParser;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jface.text.IDocument;
-import org.eclipse.ui.editors.text.FileDocumentProvider;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import lost.tok.sourceDocument.SourceDocument;
+
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.text.IDocument;
+import org.eclipse.ui.editors.text.FileDocumentProvider;
 
 public class UnparsedDocumentProvider extends FileDocumentProvider {
 
