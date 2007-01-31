@@ -39,11 +39,15 @@ public class SourceParser extends TextEditor
 
 		srcview.setEditable(true);
 		srcview.getTextWidget().setWordWrap(false);
+		
+		// Note(Shay): Bah... looking for this function was tedious!
+		this.getSourceViewerDecorationSupport(srcview).dispose();
 
 		refreshDisplay();
 	}
 
 	public void refreshDisplay() {
+	
 		StyleRange chapterTextStyle = StyleManager.getChapterStyle();
 		
 		ISourceViewer srcview = this.getSourceViewer();
@@ -73,7 +77,7 @@ public class SourceParser extends TextEditor
 		ISourceViewer srcview = this.getSourceViewer();
 		SourceDocument document = (SourceDocument) srcview.getDocument();
 		
-		if (document.getChapterFromOffset(offset) instanceof ChapterText)
+		if (document.getChapterFromOffset(offset-1) instanceof ChapterText)
 		{
 			Shell s = srcview.getTextWidget().getShell();
 			EnterTitleDialog di = new EnterTitleDialog(s, this, offset);
@@ -89,12 +93,14 @@ public class SourceParser extends TextEditor
 		
 		ISourceViewer srcview = this.getSourceViewer();
 		SourceDocument document = (SourceDocument) srcview.getDocument();
-		document.createNewChapter(offset, name);
+		int newDocOffset = document.createNewChapter(offset-1, name);
 		
 		refreshDisplay();
+		int newWidgetOffset = modelOffset2WidgetOffset(srcview, newDocOffset);
+		srcview.getTextWidget().setCaretOffset(newWidgetOffset);
 	}
 	
-	public int getCursorLocation()
+	public int getCaretLocation()
 	{
 		ISourceViewer srcview = this.getSourceViewer();
 		int cursorWidgetOffset = srcview.getTextWidget().getCaretOffset(); 

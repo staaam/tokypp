@@ -82,9 +82,10 @@ public class ChapterText extends Chapter {
 	
 	/** 
 	 * Creates a new {chapter,sub chapter,text} ending at that offset  
-	 * Related to Source Parser. 
+	 * Returns the ChapterText with the unparsed text,
+	 *  or itself if no such chap was created
 	 */
-	public void createNewChapter(Integer offset, String name)
+	public ChapterText createNewChapter(Integer offset, String name)
 	{
 		String originalText = text;
 		
@@ -116,8 +117,10 @@ public class ChapterText extends Chapter {
 			textChapParent.add(textChap);
 			this.parent.parent.add(textChapParent);
 			textChapParent.updateLabel();
+			return textChap;
 		}
-		// otherwise, no need to create a new chapter		
+		// otherwise, no need to create a new chapter
+		return this;
 	}
 
 	public boolean isUnparsed()

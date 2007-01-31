@@ -1,7 +1,6 @@
 package lost.tok.sourceDocument;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -69,15 +68,15 @@ public class SourceDocument extends Document {
 	 * Creates a new {chapter,sub chapter,text} ending at that offset.
 	 * If the offset is an unparsed text instance, creates a new chapter (and splits the instance)
 	 * Otherwise, closes a previous unparsed text instance (if exists, and not too far)  
-	 * Related to Source Parser. 
+	 * Returns the best new offset for the caret in the document, or -1 if unchanged
 	 */
-	public void createNewChapter(Integer offset, String name)
+	public int createNewChapter(Integer offset, String name)
 	{
 		String fullText = this.get();
 		int wordEndOffset = offset;
 		char offset_char = fullText.charAt(wordEndOffset);
 		while ( wordEndOffset < fullText.length() && 
-				(Character.isDigit(offset_char) || Character.isLetter(offset_char)))
+				(!Character.isWhitespace(offset_char)))
 		{
 			wordEndOffset++;
 			offset_char = fullText.charAt(wordEndOffset);		
@@ -86,10 +85,12 @@ public class SourceDocument extends Document {
 		Chapter c = this.getChapterFromOffset(wordEndOffset);		
 		if (c instanceof ChapterText)
 		{
-			((ChapterText)c).createNewChapter(wordEndOffset - c.getOffset(), name);
+			ChapterText newChap = ((ChapterText)c).createNewChapter(wordEndOffset - c.getOffset(), name);
 			update();
+			return newChap.offset;
 		}
 		// else the command is invalid, and it is ignored
+		return -1;
 	}
 
 	public Chapter getChapterFromOffset(Integer offset) {
