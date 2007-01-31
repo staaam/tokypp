@@ -3,15 +3,15 @@ package lost.tok.sourceParser;
 import java.util.LinkedList;
 
 import lost.tok.ToK;
-import lost.tok.opTable.SourceDocumentProvider;
 import lost.tok.opTable.StyleManager;
-import lost.tok.opTable.sourceDocument.Chapter;
-import lost.tok.opTable.sourceDocument.ChapterText;
-import lost.tok.opTable.sourceDocument.SourceDocument;
+import lost.tok.sourceDocument.Chapter;
+import lost.tok.sourceDocument.ChapterText;
+import lost.tok.sourceDocument.SourceDocument;
 
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.editors.text.TextEditor;
 
 public class SourceParser extends TextEditor 
@@ -67,15 +67,39 @@ public class SourceParser extends TextEditor
 
 		srcview.getTextWidget().redraw();
 	}
-	static int i = 0; //FIXME(remove)	
-	public void createNewChapter(int offset)
-	{
 
-		System.out.println(this.getCursorPosition()); // FIXME(Shay): Remove
+	public void openNewChapterDialog(int offset)
+	{
 		ISourceViewer srcview = this.getSourceViewer();
 		SourceDocument document = (SourceDocument) srcview.getDocument();
-		document.createNewChapter(offset, "Me New Chapter " + (i++)); // TODO(Shay): Add the friggin dialog
+		
+		if (document.getChapterFromOffset(offset) instanceof ChapterText)
+		{
+			Shell s = srcview.getTextWidget().getShell();
+			EnterTitleDialog di = new EnterTitleDialog(s, this, offset);
+			di.open();
+			// the dialog will call to createNewChapter once the user has entered a name
+		}
+	}
+	
+	public void createNewChapter(int offset, String name)
+	{
+		if (name.equals(Chapter.UNPARSED_STR))
+			return; // Note: the user can't create chapters called (Unparsed Text)
+		
+		ISourceViewer srcview = this.getSourceViewer();
+		SourceDocument document = (SourceDocument) srcview.getDocument();
+		document.createNewChapter(offset, name);
+		
 		refreshDisplay();
 	}
+	
+	public int getCursorLocation()
+	{
+		ISourceViewer srcview = this.getSourceViewer();
+		int cursorWidgetOffset = srcview.getTextWidget().getCaretOffset(); 
+		return widgetOffset2ModelOffset(srcview, cursorWidgetOffset);
+	}
+	
 
 }

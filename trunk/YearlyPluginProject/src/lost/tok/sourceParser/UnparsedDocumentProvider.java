@@ -9,7 +9,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import lost.tok.opTable.sourceDocument.SourceDocument;
+
+import lost.tok.sourceDocument.SourceDocument;
 
 public class UnparsedDocumentProvider extends FileDocumentProvider {
 

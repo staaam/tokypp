@@ -1,4 +1,4 @@
-package lost.tok.opTable.sourceDocument;
+package lost.tok.sourceDocument;
 
 import java.util.Vector;
 

@@ -1,7 +1,9 @@
-package lost.tok.opTable.sourceDocument;
+package lost.tok.sourceDocument;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.dom4j.Element;
 import org.eclipse.jface.text.Document;
@@ -12,12 +14,12 @@ public class SourceDocument extends Document {
 	String author;
 	//String subPath; Shay: Is this needed?
 
-	HashMap<String, Chapter> map;
+	List<Chapter> chapters;
 
 	RangeSearch r;
 
 	public void set(org.dom4j.Document d) {
-		map = new HashMap<String, Chapter>();
+		chapters = new LinkedList<Chapter>();
 		r = new RangeSearch();
 
 		Element root = d.getRootElement();	
@@ -33,21 +35,22 @@ public class SourceDocument extends Document {
 	 */
 	public void update()
 	{
-		map.clear();
+		chapters.clear();
 		r.clear();
 		
-		rootChapter.fixOffsetLength(0, map);
+		rootChapter.fixOffsetLength(0);
+		rootChapter.getTree(chapters);
+		
 		set(rootChapter.toString());
 
-		for (String key : map.keySet()) {
-			Chapter c = map.get(key);
-			r.add(c.offset, c.length, key);
-		}				
+		for (Chapter c : chapters) {
+			r.add(c.getOffset(), c.length, c);
+		}
 	}
 	
 	public void setUnparsed(String s, String title, String author)
 	{
-		map = new HashMap<String, Chapter>();
+		chapters = new LinkedList<Chapter>();
 		r = new RangeSearch();
 		this.title = title;
 		this.author = author;
@@ -90,11 +93,11 @@ public class SourceDocument extends Document {
 	}
 
 	public Chapter getChapterFromOffset(Integer offset) {
-		return map.get(r.search(offset));
+		return r.search(offset);
 	}
 
 	public Collection<Chapter> getAllChapters() {
-		return map.values();
+		return chapters;
 	}
 
 	protected String getTitle() {
