@@ -11,6 +11,9 @@ import org.eclipse.core.resources.ResourcesPlugin;
 
 import junit.framework.TestCase;
 import lost.tok.Paths;
+import lost.tok.sourceDocument.Chapter;
+import lost.tok.sourceDocument.ChapterText;
+import lost.tok.sourceDocument.SourceDocument;
 
 public class SourceDocument_test extends TestCase {
 
@@ -56,10 +59,10 @@ public class SourceDocument_test extends TestCase {
 		SourceDocument doc = new SourceDocument();
 		doc.setUnparsed(text,"Source Parser","Shay Nahum");
 		assertEquals("TITLE:\tSource Parser\nBY   :	Shay Nahum\n\n" +
-				"Chapter 1:\t(Unparsed Text)\n" + text,
+				"Chapter 1:\t(Unparsed Text)\n" + text + "\n",
 				doc.getChapterFromOffset(0).toString());
 		c = doc.getChapterFromOffset(50);
-		assertEquals("Chapter 1:\t(Unparsed Text)\n" + text, c.toString());
+		assertEquals("Chapter 1:\t(Unparsed Text)\n" + text + "\n", c.toString());
 	}
 	
 	public void testCreateNewChapter()

@@ -11,7 +11,7 @@ import org.eclipse.ui.IEditorInput;
 import junit.framework.TestCase;
 import lost.tok.opTable.OperationTable;
 import lost.tok.opTable.SourceDocumentProvider;
-import lost.tok.opTable.sourceDocument.SourceDocument;
+import lost.tok.sourceDocument.SourceDocument;
 
 /**
  * Due to the difficulties with creating and testing an Editor using the
