@@ -3,7 +3,7 @@ package lost.tok.opTable;
 import java.io.InputStream;
 import java.util.List;
 
-import lost.tok.opTable.sourceDocument.SourceDocument;
+import lost.tok.sourceDocument.SourceDocument;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentException;

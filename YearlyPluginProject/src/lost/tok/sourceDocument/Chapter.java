@@ -1,8 +1,9 @@
-package lost.tok.opTable.sourceDocument;
+package lost.tok.sourceDocument;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 
 import org.dom4j.Element;
 
@@ -76,14 +77,12 @@ public class Chapter {
 		return label.length();
 	}
 
-	public void fixOffsetLength(Integer offset, HashMap<String, Chapter> map) {
+	public void fixOffsetLength(Integer offset) {
 		this.offset = offset;
 		length = getInnerLength();
 
-		map.put(label, this);
-
 		for (Chapter c : children) {
-			c.fixOffsetLength(offset + length, map);
+			c.fixOffsetLength(offset + length);
 			length += c.length;
 		}
 	}
@@ -100,6 +99,14 @@ public class Chapter {
 		}
 		NewLabelBase = CHAPTER_STR + " " + NewLabelBase.substring(1);
 		this.label = getChapterLabel(NewLabelBase, name);		
+	}
+	
+	/** Returns this chapter and all its offsprings, sorted DFS-wise */
+	public void getTree(List<Chapter> l)
+	{
+		l.add(this);
+		for (Chapter child : children)
+			child.getTree(l);
 	}
 
 	public Chapter getParent() {

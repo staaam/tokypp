@@ -1,4 +1,4 @@
-package lost.tok.opTable.sourceDocument;
+package lost.tok.sourceDocument;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -21,12 +21,12 @@ public class RangeSearch {
 		sorted = false;
 	}
 
-	void add(Integer offset, Integer length, String name) {
-		ps.add(new LabeledPosition(offset, length, name));
+	void add(Integer offset, Integer length, Chapter chap) {
+		ps.add(new LabeledPosition(offset, length, chap));
 		sorted = false;
 	}
 
-	String search(Integer offset) {
+	Chapter search(Integer offset) {
 		if (!sorted) {
 			p = new LabeledPosition[ps.size()];
 			ps.toArray(p);
@@ -36,8 +36,8 @@ public class RangeSearch {
 				.binarySearch(p, new LabeledPosition(offset, 0, null));
 		i = (i >= 0) ? i : -i - 2;
 		if (p[i].offset + p[i].length > offset) {
-			return p[i].getLabel();
+			return p[i].getChapter();
 		}
-		return new String();
+		return null;
 	}
 }

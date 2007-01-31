@@ -9,9 +9,9 @@ import java.util.Map.Entry;
 
 import lost.tok.Excerption;
 import lost.tok.ToK;
-import lost.tok.opTable.sourceDocument.Chapter;
-import lost.tok.opTable.sourceDocument.ChapterText;
-import lost.tok.opTable.sourceDocument.SourceDocument;
+import lost.tok.sourceDocument.Chapter;
+import lost.tok.sourceDocument.ChapterText;
+import lost.tok.sourceDocument.SourceDocument;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;

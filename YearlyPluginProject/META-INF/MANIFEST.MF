@@ -20,7 +20,7 @@ Bundle-Vendor: Team LOST
 Export-Package: lost.tok,
  lost.tok.new_wizard,
  lost.tok.opTable,
- lost.tok.opTable.sourceDocument,
+ lost.tok.sourceDocument,
  org.dom4j,
  org.dom4j.bean,
  org.dom4j.datatype,

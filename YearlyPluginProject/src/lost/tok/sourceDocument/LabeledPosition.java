@@ -1,20 +1,20 @@
-package lost.tok.opTable.sourceDocument;
+package lost.tok.sourceDocument;
 
 import org.eclipse.jface.text.Position;
 
 class LabeledPosition extends Position implements Comparable<LabeledPosition> {
-	String label;
+	Chapter chapter;
 
-	public LabeledPosition(Integer offset, Integer length, String name) {
+	public LabeledPosition(Integer offset, Integer length, Chapter chapter) {
 		super(offset, length);
-		label = name;
+		this.chapter = chapter;
 	}
 
 	public int compareTo(LabeledPosition o) {
 		return new Integer(offset).compareTo(o.offset);
 	}
 
-	public String getLabel() {
-		return label;
+	public Chapter getChapter() {
+		return chapter;
 	}
 }
