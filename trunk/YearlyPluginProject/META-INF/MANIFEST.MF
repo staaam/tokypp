@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Yearly_Plugin_Project Plug-in
 Bundle-SymbolicName: Yearly_Plugin_Project;singleton:=true
 Bundle-Version: 0.2.0
-Bundle-Activator: yearly_plugin_project.Activator
+Bundle-Activator: lost.tok.activator.Activator
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
@@ -18,6 +18,7 @@ Require-Bundle: org.eclipse.ui,
 Eclipse-LazyStart: true
 Bundle-Vendor: Team LOST
 Export-Package: lost.tok,
+ lost.tok.activator,
  lost.tok.new_wizard,
  lost.tok.opTable,
  lost.tok.sourceDocument,
@@ -34,5 +35,4 @@ Export-Package: lost.tok,
  org.dom4j.tree,
  org.dom4j.util,
  org.dom4j.xpath,
- org.dom4j.xpp,
- yearly_plugin_project
+ org.dom4j.xpp
