@@ -78,8 +78,6 @@ public class ChapterText extends Chapter {
 		return text;
 	}
 	
-	private static int uniqueIdCounter = 0; // TODO(Shay): Why must label be unique?
-	
 	/** 
 	 * Creates a new {chapter,sub chapter,text} ending at that offset  
 	 * Returns the ChapterText with the unparsed text,
@@ -106,7 +104,7 @@ public class ChapterText extends Chapter {
 		}
 		
 		this.name = "";
-		this.label = Chapter.UNPARSED_STR + (uniqueIdCounter++); // FIXME(Shay): Should be some sort of xPath which I haven't understood
+		this.label = Chapter.UNPARSED_STR;
 		this.text = originalText.substring(0, offset).trim() + "\n";
 		this.excerPath = ""; // FIXME(Shay): Update this!
 		
