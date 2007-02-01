@@ -1,17 +1,6 @@
 package lost.tok;
 
-import java.util.List;
-
-import org.dom4j.DocumentException;
-import org.dom4j.io.SAXReader;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.jface.text.TextSelection;
-import org.eclipse.ui.IEditorInput;
-
 import junit.framework.TestCase;
-import lost.tok.opTable.OperationTable;
-import lost.tok.opTable.SourceDocumentProvider;
-import lost.tok.sourceDocument.SourceDocument;
 
 /**
  * Due to the difficulties with creating and testing an Editor using the
