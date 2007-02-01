@@ -3,15 +3,15 @@ package lost.tok;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+
+import junit.framework.TestCase;
+
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.XPath;
 import org.dom4j.io.SAXReader;
-import org.eclipse.core.resources.IWorkspace;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import junit.framework.TestCase;
 
 public class Discussion_test extends TestCase {
 

@@ -5,15 +5,14 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import org.dom4j.DocumentException;
-import org.dom4j.io.SAXReader;
-import org.eclipse.core.resources.ResourcesPlugin;
-
 import junit.framework.TestCase;
 import lost.tok.Paths;
 import lost.tok.sourceDocument.Chapter;
 import lost.tok.sourceDocument.ChapterText;
 import lost.tok.sourceDocument.SourceDocument;
+
+import org.dom4j.DocumentException;
+import org.dom4j.io.SAXReader;
 
 public class SourceDocument_test extends TestCase {
 
@@ -37,19 +36,6 @@ public class SourceDocument_test extends TestCase {
 			assertEquals("fails in Hebrew mode", expected, actual);
 		}
 	}
-
-	// FIXME(Shay): Since we cannot run eclipse in both Hebrew and English
-	// Modes at the same time, one of these tests will always fail
-	/*
-	 * public void testSetDocumentHeb() { final String sourceFilename =
-	 * Paths.OR_AHAIM_HE; final String expectedResFileName =
-	 * Paths.OR_AHAIM_HE_RES;
-	 * 
-	 * SourceDocument doc = loadDoc(sourceFilename); String actual = doc.get();
-	 * String expected = readFile(expectedResFileName);
-	 * 
-	 * assertEquals("fails in English mode",expected, actual); }
-	 */
 	
 	public void testCreateDocToParse()
 	{
