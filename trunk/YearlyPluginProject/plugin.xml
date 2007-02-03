@@ -156,6 +156,22 @@
       </editorContribution>
    </extension>
    <extension
+         id="lost.tok.ToKNature"
+         point="org.eclipse.core.resources.natures">
+      <runtime>
+         <run class="lost.tok.ToKNature"/>
+      </runtime>
+      <content-type id="lost.tok.ToK"/>
+      <builder id="lost.tok.ToKBuilder"/>
+   </extension>
+   <extension
+         id="lost.tok.ToKBuilder"
+         point="org.eclipse.core.resources.builders">
+      <builder hasNature="true">
+         <run class="lost.tok.ToKBuilder"/>
+      </builder>
+   </extension>
+   <extension
          point="org.eclipse.ui.commands">
       <command
             category="Source Parser"
