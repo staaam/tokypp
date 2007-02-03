@@ -18,6 +18,14 @@
             icon="icons/Mark.bmp"
             id="lost.tok.sourceParser.SourceParser"
             name="Source Parser"/>
+      <editor
+            class="lost.tok.linkTable.LinkageEditor"
+            contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
+            default="false"
+            extensions="src"
+            icon="icons/main_link_ico.gif"
+            id="lost.tok.linkTable.LinkageEditor"
+            name="Link discussion to root"/>
    </extension>
    <extension
          point="org.eclipse.ui.newWizards">
@@ -37,6 +45,13 @@
              icon="icons/sample.gif"
              id="lost.tok.unparsedDocWizard"
              name="Unparsed Source"
+             project="false"/>
+       <wizard
+             category="lost.tok.Categoy"
+             class="lost.tok.newLinkWizard.NewLinkWizard"
+             icon="icons/sample.gif"
+             id="lost.tok.newLinkWizard.NewLinkWizard"
+             name="Link discussion to root"
              project="false"/>
    </extension>
    <extension
@@ -111,6 +126,33 @@
                style="push"
                toolbarPath="SourceParser"
                tooltip="Clicky here to create a new chapter ending at the current cursor location"/>
+      </editorContribution>
+      <editorContribution
+            id="lost.tok.linkTable.Contribution"
+            targetID="lost.tok.linkTable.LinkageEditor">
+         <action
+               class="lost.tok.opTable.MarkAction"
+               icon="icons/Mark.bmp"
+               id="lost.tok.opTable.MarkAction"
+               label="%action.name.mark"
+               state="true"
+               style="push"
+               tooltip="%action.tooltip.mark"/>
+         <action
+               class="lost.tok.opTable.UnMarkAllAction"
+               icon="icons/UnMarkAll.bmp"
+               id="lost.tok.opTable.UnMarkAllAction"
+               label="%action.name.unmarkAll"
+               state="true"
+               style="push"
+               tooltip="%action.tooltip.unmarkAll"/>
+         <action
+               class="lost.tok.linkTable.LinkAction"
+               icon="icons/main_link_ico.gif"
+               id="lost.tok.linkTable.LinkAction"
+               label="Link"
+               state="true"
+               style="push"/>
       </editorContribution>
    </extension>
    <extension
