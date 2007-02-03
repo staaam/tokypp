@@ -10,6 +10,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.xml.XMLConstants;
@@ -59,7 +60,7 @@ public class ToK {
 
 	private IFile authorFile, linkFile;
 
-	private List<Discussion> discussions = new ArrayList<Discussion>();
+	private List<Discussion> discussions = null;
 
 	public final static QualifiedName tokQName = new QualifiedName(null, "ToK Object");
 	public final static QualifiedName creatorQName = new QualifiedName("lost.tok", "Creator");
@@ -70,7 +71,7 @@ public class ToK {
 	public ToK(IProject project) {
 		createToKFromProject(project);
 	}
-	
+
 	public ToK(String projectName, String creator, String root) {
 		if (!checkProjectName(projectName))
 			return;
@@ -571,7 +572,7 @@ public class ToK {
 			// Add the new discussion object to the discussions
 			Discussion tempDiscussion = new Discussion(this, discName,
 					getProjectCreator());
-			discussions.add(tempDiscussion);
+			getDiscussions().add(tempDiscussion);
 
 			OutputFormat outformat = OutputFormat.createPrettyPrint();
 			outformat.setEncoding("UTF-8");
@@ -698,18 +699,40 @@ public class ToK {
 	}
 
 	public Discussion getDiscussion(String discName) throws CoreException {
-
-		for (int i = 0; i < discussions.size(); i++) {
-			if (discussions.get(i).getDiscName().equalsIgnoreCase(discName)) {
-				return discussions.get(i);
+		List<Discussion> discussions = getDiscussions();
+		for (Discussion discussion : discussions) {
+			if (discussion.getDiscName().equalsIgnoreCase(discName)) {
+				return discussion;
 			}
 		}
 		throwCoreException("No such discussion exists!");
 		return null;
-
 	}
 
 	public List<Discussion> getDiscussions() {
+		if (discussions == null) {
+			loadDiscussions();
+		}
 		return discussions;
+	}
+
+	private void loadDiscussions() {
+		discussions = new LinkedList<Discussion>();
+		
+		try {
+			IResource[] files = getDiscussionFolder().members();
+			for (IResource resource : files) {
+				if (resource instanceof IFile) {
+					IFile file = (IFile) resource;
+					if (isExtentionLegel(file.getName(), "dis")) {
+						discussions.add(new Discussion(this, file.getLocation().toOSString()));
+					}
+				}
+			}
+		} catch (CoreException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 }
