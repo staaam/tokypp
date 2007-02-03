@@ -20,6 +20,7 @@ import org.dom4j.XPath;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -49,6 +50,18 @@ public class Discussion {
 		this.creatorName = creatorName;
 	}
 
+	public Discussion(ToK myToK, String filename) {
+		super();
+		this.myToK = myToK;
+		
+		Document d = readFromXML(filename);
+		
+		setDiscName(DocumentHelper.createXPath("/discussion/name")
+				.selectSingleNode(d).getText());
+		setCreatorName(DocumentHelper.createXPath("/discussion/user")
+				.selectSingleNode(d).getText());
+	}
+
 	// write the document to the XML file
 	private void writeToXml(Document doc) {
 		try {
@@ -68,10 +81,14 @@ public class Discussion {
 	}
 
 	private Document readFromXML() {
-		Document doc = DocumentHelper.createDocument();
-		SAXReader reader = new SAXReader();
 		String path = myToK.getDiscussionFolder().getFile(discName + ".dis")
 				.getLocation().toOSString();
+		return readFromXML(path);
+	}
+
+	private Document readFromXML(String path) {
+		Document doc = DocumentHelper.createDocument();
+		SAXReader reader = new SAXReader();
 		try {
 			BufferedReader rdr = new BufferedReader(new InputStreamReader(
 					new FileInputStream(path), "UTF-8"));
