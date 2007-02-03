@@ -5,6 +5,7 @@ package lost.tok;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -48,6 +49,24 @@ public class Discussion {
 		this.myToK = myToK;
 		this.discName = discName;
 		this.creatorName = creatorName;
+		
+		if (new File(getFullFileName()).exists()) {
+			System.out.println("discussion " + discName + " already exists");
+			return;
+		}
+		
+		writeToXml(discussionSkeleton(discName, creatorName));		
+	}
+
+	private Document discussionSkeleton(String discName, String creatorName) {
+		Document doc = DocumentHelper.createDocument();
+		Element disc = doc.addElement("discussion");
+		disc.addElement("name").addText(discName);
+		disc.addElement("user").addText(creatorName);
+		Element defOpin = disc.addElement("opinion");
+		defOpin.addElement("id").addText("1");
+		defOpin.addElement("name").addText(DEFAULT_OPINION);
+		return doc;
 	}
 
 	public Discussion(ToK myToK, String filename) {
@@ -67,10 +86,9 @@ public class Discussion {
 		try {
 			OutputFormat outformat = OutputFormat.createPrettyPrint();
 			outformat.setEncoding("UTF-8");
-			String outputFileName = (myToK.getDiscussionFolder()
-					.getFile(discName + ".dis")).getLocation().toOSString();
+
 			BufferedWriter wrtr = new BufferedWriter(new OutputStreamWriter(
-					new FileOutputStream(outputFileName), "UTF-8"));
+					new FileOutputStream(getFullFileName()), "UTF-8"));
 
 			XMLWriter writer = new XMLWriter(wrtr, outformat);
 			writer.write(doc);
@@ -80,10 +98,12 @@ public class Discussion {
 		}
 	}
 
+	private String getFullFileName() {
+		return myToK.getDiscussionFolder().getFile(discName + ".dis").getLocation().toOSString();
+	}
+
 	private Document readFromXML() {
-		String path = myToK.getDiscussionFolder().getFile(discName + ".dis")
-				.getLocation().toOSString();
-		return readFromXML(path);
+		return readFromXML(getFullFileName());
 	}
 
 	private Document readFromXML(String path) {
@@ -362,4 +382,36 @@ public class Discussion {
 		return myToK;
 	}
 
+	public String[] getOpinions() {
+		Document doc = readFromXML();
+
+		XPath xpathSelector = DocumentHelper.createXPath("//opinion/name");
+		List result = xpathSelector.selectNodes(doc);
+		
+		String[] ss = new String[result.size()]; 
+		int i = 0;
+		for (Object object : result) {
+			Element e = (Element) object;
+			ss[i++] = e.getText();
+		}
+		
+		return ss;
+	}
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

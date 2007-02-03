@@ -51,29 +51,26 @@ public class AddQuoteAction extends AbstractEditorAction {
 	}
 
 	private void addQuote(ToK tok, Quote q) {
-		List<Discussion> discussions = tok.getDiscussions(); // - all
-		// discussions
-		if (discussions.isEmpty()) {
+		if (tok.getDiscussions().isEmpty()) {
 			// messageBox("Error", "No discuttions found");
 			// return;
 
 			// TODO: First iteration only
 			tok.addDiscussion("Test Discussion"); //$NON-NLS-1$
-			discussions = tok.getDiscussions();
 		}
 
-		List<String> discStrings = new LinkedList<String>();
-		for (Discussion discussion : discussions) {
-			discStrings.add(discussion.getDiscName());
-		}
-
-		List<String> opinStrings = new LinkedList<String>();
-		// tok.getOpinions(); - all opinions
-		// TODO: First iteration only
-		opinStrings.add(Discussion.DEFAULT_OPINION);
+//		List<String> discStrings = new LinkedList<String>();
+//		for (Discussion discussion : discussions) {
+//			discStrings.add(discussion.getDiscName());
+//		}
+//
+//		List<String> opinStrings = new LinkedList<String>();
+//		// tok.getOpinions(); - all opinions
+//		// TODO: First iteration only
+//		opinStrings.add(Discussion.DEFAULT_OPINION);
 
 		AddQuoteWizard w = new AddQuoteWizard();
-		w.createAddQuoteWizard(discStrings, opinStrings, q.getText());
+		w.createAddQuoteWizard(tok.getDiscussions(), q.getText());
 		if (!w.run()) {
 			return;
 		}
