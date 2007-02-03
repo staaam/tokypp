@@ -30,7 +30,6 @@ import org.dom4j.io.XMLWriter;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -38,8 +37,10 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.wizard.ProgressMonitorPart;
 
 
 /**
@@ -52,72 +53,77 @@ public class ToK {
 
 	private IProject treeOfKnowledgeProj;
 
-	private IProjectDescription projectDescrip;
-
 	private IProgressMonitor progMonitor;
-
-	private String projCreator;
 
 	private IFolder srcFolder, discFolder;
 
-	private IFile rootFile, authorFile, linkFile;
+	private IFile authorFile, linkFile;
 
 	private List<Discussion> discussions = new ArrayList<Discussion>();
 
-	final static QualifiedName tokQName = new QualifiedName(null, "ToK Object");
+	public final static QualifiedName tokQName = new QualifiedName(null, "ToK Object");
+	public final static QualifiedName creatorQName = new QualifiedName("lost.tok", "Creator");
 
-	public void createToKProject(String projectName, String creator, String root)
-			throws CoreException, IOException {
-		projCreator = creator;
+	public static final int MIN_AUTHOR_GROUP = 1;
+	public static final int MAX_AUTHOR_GROUP = 5;
+
+	public ToK(IProject project) {
+		createToKFromProject(project);
+	}
+	
+	public ToK(String projectName, String creator, String root) {
 		if (!checkProjectName(projectName))
 			return;
 
+		createToKFromProject(
+				ResourcesPlugin.getWorkspace().getRoot().getProject(projectName));
+		
 		try {
-			workSpaceTok = ResourcesPlugin.getWorkspace();
-		} catch (IllegalStateException e) {
-			System.out.println("workspace problem");
-			throw e;
-		}
-
-		treeOfKnowledgeProj = workSpaceTok.getRoot().getProject(projectName);
-
-		try {
-			if (!treeOfKnowledgeProj.exists())
-				treeOfKnowledgeProj.create(projectDescrip, progMonitor);
-			else
-				return;
-
+			treeOfKnowledgeProj.setPersistentProperty(creatorQName, creator);
 		} catch (CoreException e) {
-			System.out.println("exception in project creation: " + e);
-			throw e;
+			e.printStackTrace();
 		}
-		System.out
-				.println("number of projects:"
-						+ ResourcesPlugin.getWorkspace().getRoot()
-								.getProjects().length);
-		treeOfKnowledgeProj.open(progMonitor);
 
-		// setting project properties
-		String value = projCreator;
-		QualifiedName name = new QualifiedName("TOK Project creator", "Creator");
-		treeOfKnowledgeProj.setPersistentProperty(name, value);
+		setTokRoot(root);
+	}
 
-		value = getRootName(root);
-		name = new QualifiedName("TOK Project root", "Root");
-		treeOfKnowledgeProj.setPersistentProperty(name, value);
+	private void createToKFromProject(IProject project) {
+		System.out.println("here :)");
+		
+		
+		workSpaceTok = project.getWorkspace();
+		treeOfKnowledgeProj = project;
+		progMonitor = new NullProgressMonitor();
 
-		treeOfKnowledgeProj.setSessionProperty(tokQName, this);
+		if (!treeOfKnowledgeProj.exists()) {
+			try {
+				treeOfKnowledgeProj.create(progMonitor);
+			} catch (CoreException e) {
+				System.out.println("exception in project create: " + e);
+			}
+		}
 
-		// see if we can get the property
-		// System.out.println("the creator is:"+
-		// treeOfKnowledgeProj.getPersistentProperty(name));
-		if (!createToKLibraries(treeOfKnowledgeProj))
-			return;
-		if (!createToKFiles())
-			return;
-		if (!setTokRoot(root))
-			return;
+		try {
+			treeOfKnowledgeProj.open(progMonitor);
+		} catch (CoreException e) {
+			System.out.println("exception in project open: " + e);
+		}
 
+		try {
+			treeOfKnowledgeProj.setSessionProperty(tokQName, this);
+		} catch (CoreException e) {
+			System.out.println("exception in setSessionProperty: " + e);
+		}
+
+		ToKNature.setNature(treeOfKnowledgeProj);
+		
+		try {
+			createToKLibraries();
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
+		
+		createToKFiles();
 	}
 
 	private boolean checkProjectName(String projectName) {
@@ -129,15 +135,10 @@ public class ToK {
 
 	}
 
-	public boolean createToKLibraries(IProject proj) throws CoreException {
-		srcFolder = proj.getFolder("Sources");
-		discFolder = proj.getFolder("Discussions");
+	public boolean createToKLibraries() throws CoreException {
+		srcFolder = treeOfKnowledgeProj.getFolder("Sources");
+		discFolder = treeOfKnowledgeProj.getFolder("Discussions");
 
-		// at this point, no resources have been created
-		if (!proj.exists())
-			System.out.println("project does not exist");
-		if (!proj.isOpen())
-			proj.open(null);
 		if (!srcFolder.exists())
 			srcFolder.create(IResource.NONE, true, progMonitor);
 		if (!discFolder.exists())
@@ -146,117 +147,108 @@ public class ToK {
 		return true;
 	}
 
-	public boolean createToKFiles() throws CoreException, FileNotFoundException {
+	public boolean createToKFiles() {
 		// creating the files
 
-		authorFile = treeOfKnowledgeProj.getFile("Authors.xml");
-		if (authorFile.exists()) {
-			System.out.println("Authors already exists!");
-			return false;
-		}
-		linkFile = treeOfKnowledgeProj.getFile("Links.xml");
-		if (linkFile.exists()) {
-			System.out.println("Links already exists!");
-			return false;
-		}
-
-		Document authDoc = DocumentHelper.createDocument();
-
-		// Create the Skeleton of the authors file
-		Element authElm = authDoc.addElement("authors");
-		Element inAuthElm = authElm.addElement("authorsGroup");
-		inAuthElm.addElement("id").addText("1");
-		inAuthElm.addElement("name").addText("first author group");
-		inAuthElm.addElement("nextGroupId").addText("2");
-		inAuthElm.addElement("prevGroupId").addText("0");
-
-		inAuthElm = authElm.addElement("authorsGroup");
-		inAuthElm.addElement("id").addText("2");
-		inAuthElm.addElement("name").addText("second author group");
-		inAuthElm.addElement("nextGroupId").addText("3");
-		inAuthElm.addElement("prevGroupId").addText("1");
-
-		inAuthElm = authElm.addElement("authorsGroup");
-		inAuthElm.addElement("id").addText("3");
-		inAuthElm.addElement("name").addText("third author group");
-		inAuthElm.addElement("nextGroupId").addText("4");
-		inAuthElm.addElement("prevGroupId").addText("2");
-
-		inAuthElm = authElm.addElement("authorsGroup");
-		inAuthElm.addElement("id").addText("4");
-		inAuthElm.addElement("name").addText("fourth author group");
-		inAuthElm.addElement("nextGroupId").addText("5");
-		inAuthElm.addElement("prevGroupId").addText("3");
-
-		inAuthElm = authElm.addElement("authorsGroup");
-		inAuthElm.addElement("id").addText("5");
-		inAuthElm.addElement("name").addText("fifth author group");
-		inAuthElm.addElement("nextGroupId").addText("0");
-		inAuthElm.addElement("prevGroupId").addText("4");
-
-		try {
-
-			OutputFormat outformat = OutputFormat.createPrettyPrint();
-			outformat.setEncoding("UTF-8");
-			IPath res = authorFile.getLocation();
-			FileWriter fw = new FileWriter(res.toOSString());
-			XMLWriter writer = new XMLWriter(fw, outformat);
-			writer.write(authDoc);
-			writer.flush();
-		} catch (IOException e) {
-			e.printStackTrace();
-			return false;
-		}
-
-		Document linkDoc = DocumentHelper.createDocument();
-
-		// Create the Skeleton of the Links file
-		linkDoc.addElement("links");
-
-		try {
-			// authorFile.create(IResource.NONE, true, progMonitor);
-
-			OutputFormat outformat = OutputFormat.createPrettyPrint();
-			outformat.setEncoding("UTF-8");
-			IPath res = linkFile.getLocation();
-			FileWriter fw = new FileWriter(res.toOSString());
-			XMLWriter writer = new XMLWriter(fw, outformat);
-			writer.write(linkDoc);
-			writer.flush();
-
-		} catch (IOException e) {
-			e.printStackTrace();
-			return false;
-		}
+		createAuthorsFile();
+		
+		createLinksFile();
 
 		return true;
 
 	}
 
-	public boolean setTokRoot(String rootPath) throws CoreException,
-			IOException {
-		// checking file exists
-		File tempFile = new File(rootPath);
+	private void createLinksFile() {
+		linkFile = treeOfKnowledgeProj.getFile("Links.xml");
+		if (!linkFile.exists()) {
+			try {
+				// authorFile.create(IResource.NONE, true, progMonitor);
 
-		if (!tempFile.exists() || !isExtentionLegel(rootPath, "src")) {
-			System.out.println("file is none existant or extention not src");
-			return false;
+				OutputFormat outformat = OutputFormat.createPrettyPrint();
+				outformat.setEncoding("UTF-8");
+				IPath res = linkFile.getLocation();
+				FileWriter fw = new FileWriter(res.toOSString());
+				XMLWriter writer = new XMLWriter(fw, outformat);
+				writer.write(linksSkeleton());
+				writer.flush();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
+	}
 
+	private void createAuthorsFile() {
+		authorFile = treeOfKnowledgeProj.getFile("Authors.xml");
+		if (!authorFile.exists()) {
+			try {
+				OutputFormat outformat = OutputFormat.createPrettyPrint();
+				outformat.setEncoding("UTF-8");
+				IPath res = authorFile.getLocation();
+				FileWriter fw = new FileWriter(res.toOSString());
+				XMLWriter writer = new XMLWriter(fw, outformat);
+				writer.write(authorsSkeleton());
+				writer.flush();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private Document linksSkeleton() {
+		Document linkDoc = DocumentHelper.createDocument();
+
+		// Create the Skeleton of the Links file
+		linkDoc.addElement("links");
+		return linkDoc;
+	}
+
+	private Document authorsSkeleton() {
+		Document authDoc = DocumentHelper.createDocument();
+
+		// Create the Skeleton of the authors file
+		Element authElm = authDoc.addElement("authors");
+		
+		for (int i = MIN_AUTHOR_GROUP; i <= MAX_AUTHOR_GROUP; i++) {
+			Element inAuthElm = authElm.addElement("authorsGroup");
+			inAuthElm.addElement("id").addText(String.valueOf(i));
+			inAuthElm.addElement("name").addText("author group " + String.valueOf(i));
+			inAuthElm.addElement("nextGroupId").addText(String.valueOf(nextOf(i)));
+			inAuthElm.addElement("prevGroupId").addText(String.valueOf(prevOf(i)));
+		}
+		return authDoc;
+	}
+
+	private int nextOf(int i) {
+		i = i + 1;
+		return (i > MAX_AUTHOR_GROUP) ? MIN_AUTHOR_GROUP : i;
+	}
+
+
+	private int prevOf(int i) {
+		i = i - 1;
+		return (i < MIN_AUTHOR_GROUP) ? MAX_AUTHOR_GROUP : i;
+	}
+	
+	public boolean setTokRoot(String rootPath) {
 		// getting the root name
 		String rootName = getRootName(rootPath);
 
 		// This should add the new root file to sources folder
-		rootFile = srcFolder.getFile(rootName);
-		FileInputStream fins = new FileInputStream(rootPath);
-		rootFile.create(fins, true, this.progMonitor);
+		try {
+			srcFolder.getFile(rootName).create(
+					new FileInputStream(rootPath), true, progMonitor);
+		} catch (FileNotFoundException e) {
+			System.out.println("file is none existant or extention not src");
+			return false;
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
 
+		// not relevant, since there may be several sources
 		// setting the root atribute
-		QualifiedName name = new QualifiedName("TOK Root File", "Is Root");
-		rootFile.setPersistentProperty(name, "true");
+//		QualifiedName name = new QualifiedName("TOK Root File", "Is Root");
+//		rootFile.setPersistentProperty(name, "true");
 
-		// see if we can get the property
-		// System.out.println("is root:"+ rootFile.getPersistentProperty(name));
 		return true;
 	}
 
@@ -566,7 +558,7 @@ public class ToK {
 		Document doc = DocumentHelper.createDocument();
 		Element disc = doc.addElement("discussion");
 		disc.addElement("name").addText(discName);
-		disc.addElement("user").addText(projCreator);
+		disc.addElement("user").addText(getProjectCreator());
 		Element defOpin = disc.addElement("opinion");
 		defOpin.addElement("id").addText("1");
 		defOpin.addElement("name").addText("Default Opinion");
@@ -578,7 +570,7 @@ public class ToK {
 
 			// Add the new discussion object to the discussions
 			Discussion tempDiscussion = new Discussion(this, discName,
-					projCreator);
+					getProjectCreator());
 			discussions.add(tempDiscussion);
 
 			OutputFormat outformat = OutputFormat.createPrettyPrint();
@@ -677,7 +669,12 @@ public class ToK {
 	}
 
 	public String getProjectCreator() {
-		return projCreator;
+		try {
+			return treeOfKnowledgeProj.getPersistentProperty(creatorQName);
+		} catch (CoreException e) {
+			e.printStackTrace();
+			return null; 
+		}
 	}
 
 	public IFolder getResourceFolder() {
@@ -688,18 +685,15 @@ public class ToK {
 		return discFolder;
 	}
 
-	public IFile getRootFile() {
-		return rootFile;
-	}
-
 	public static ToK getProjectToK(IProject project) {
 		try {
-			return (ToK) project.getSessionProperty(tokQName);
+			Object o = project.getSessionProperty(tokQName);
+			if (o == null) {
+				throw new CoreException(Status.CANCEL_STATUS);
+			}
+			return (ToK) o;
 		} catch (CoreException e) {
-			// TODO: First iteration only
-			return new ToK();
-			// TODO Auto-generated catch block
-			// e.printStackTrace();
+			return new ToK(project);
 		}
 	}
 
