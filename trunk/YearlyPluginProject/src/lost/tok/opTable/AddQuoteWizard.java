@@ -1,10 +1,13 @@
 package lost.tok.opTable;
 
+import java.util.HashMap;
 import java.util.List;
 
 import lost.tok.Discussion;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
@@ -23,19 +26,35 @@ public class AddQuoteWizard {
 	String opinion;
 
 	String comment;
+	
+	HashMap<String, Discussion> discMap = new HashMap<String, Discussion>();
 
-	public void createAddQuoteWizard(List<String> discStrings,
-			List<String> opinStrings, String text) {
+	public void createAddQuoteWizard(List<Discussion> disussions,
+			String text) {
 		createSShell();
 
-		combo.setItems((String[]) discStrings.toArray(new String[discStrings
-				.size()]));
-		combo.select(0);
+		String[] discs = new String[disussions.size()];
+		int i=0;
+		for (Discussion discussion : disussions) {
+			discs[i] = discussion.getDiscName() + " (" + discussion.getCreatorName() + ")";
+			discMap.put(discs[i++], discussion);
+		}
+		
+		combo.addSelectionListener(new SelectionListener() {
 
-		combo1.setItems((String[]) opinStrings.toArray(new String[opinStrings
-				.size()]));
-		combo1.select(opinStrings.indexOf(Discussion.DEFAULT_OPINION));
+			public void widgetDefaultSelected(SelectionEvent e) {
+				widgetSelected(e);
+			}
 
+			public void widgetSelected(SelectionEvent e) {
+				combo1.setItems(discMap.get(combo.getText()).getOpinions());
+				combo1.select(0);
+			}
+		
+		});
+
+		combo.setItems(discs);
+		
 		textArea.setText(text);
 	}
 

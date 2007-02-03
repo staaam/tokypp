@@ -554,41 +554,10 @@ public class ToK {
 	 *            the name of the discussion to be created
 	 */
 	public void addDiscussion(String discName) {
-
-		// Create the Skeleton of the discussion
-		Document doc = DocumentHelper.createDocument();
-		Element disc = doc.addElement("discussion");
-		disc.addElement("name").addText(discName);
-		disc.addElement("user").addText(getProjectCreator());
-		Element defOpin = disc.addElement("opinion");
-		defOpin.addElement("id").addText("1");
-		defOpin.addElement("name").addText("Default Opinion");
-
-		IFile file = discFolder.getFile(discName + ".dis");
-		if (file.exists()) {
-			System.out.println("Discussion already exists!");
-		} else {
-
-			// Add the new discussion object to the discussions
-			Discussion tempDiscussion = new Discussion(this, discName,
-					getProjectCreator());
-			getDiscussions().add(tempDiscussion);
-
-			OutputFormat outformat = OutputFormat.createPrettyPrint();
-			outformat.setEncoding("UTF-8");
-			IPath res = file.getLocation();
-
-			try {
-				FileWriter fw = new FileWriter(res.toOSString());
-				XMLWriter writer = new XMLWriter(fw, outformat);
-				writer.write(doc);
-				writer.flush();
-			} catch (IOException e) {
-
-				e.printStackTrace();
-			}
-
-		}
+		// Add the new discussion object to the discussions
+		Discussion tempDiscussion = new Discussion(this, discName,
+				getProjectCreator());
+		getDiscussions().add(tempDiscussion);
 	}
 
 	/**
