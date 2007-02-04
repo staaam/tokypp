@@ -7,12 +7,15 @@ import lost.tok.Discussion;
 import lost.tok.Excerption;
 import lost.tok.Quote;
 import lost.tok.ToK;
+import lost.tok.opTable.wizards.AddQuoteWizard;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.part.FileEditorInput;
 
 public class AddQuoteAction extends AbstractEditorAction {
@@ -69,23 +72,16 @@ public class AddQuoteAction extends AbstractEditorAction {
 //		// TODO: First iteration only
 //		opinStrings.add(Discussion.DEFAULT_OPINION);
 
-		AddQuoteWizard w = new AddQuoteWizard();
-		w.createAddQuoteWizard(tok.getDiscussions(), q.getText());
-		if (!w.run()) {
-			return;
+		AddQuoteWizard w = new AddQuoteWizard(tok.getDiscussions(), q);
+		
+		WizardDialog wd = new WizardDialog(new Shell(), w);
+		wd.setBlockOnOpen(true);
+		
+		wd.open();
+		
+		if (w.finished()) { 
+			((OperationTable)activeEditor).clearMarked();
 		}
-
-		q.setComment(w.getComment());
-		try {
-			Discussion discussion = tok.getDiscussion(w.getDiscussion());
-			discussion.addQuote(q, w.getOpinion());
-		} catch (CoreException e) {
-			messageBox(
-					Messages.getString("AddQuoteAction.Error"), Messages.getString("AddQuoteAction.DiscussionNotExists")); //$NON-NLS-1$ //$NON-NLS-2$
-			return;
-		}
-
-		((OperationTable)activeEditor).clearMarked();
 	}
 
 	void messageBox(String title, String message) {
