@@ -43,24 +43,6 @@ public class OperationTable extends TextEditor {
 	public OperationTable() {
 		super();
 
-		// ISelection selection =
-		// PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getSelection();
-		//		
-		// if (selection instanceof TreeSelection) {
-		// TreeSelection ts = (TreeSelection)selection;
-		// TreePath[] tp = ts.getPaths();
-		// Object seg = tp[0].getFirstSegment();
-		// if (seg instanceof IProject) {
-		// IProject project = (IProject) seg;
-		// try {
-		// tok = (ToK) project.getSessionProperty(ToK.qualifiedName);
-		// } catch (CoreException e) {
-		// e.printStackTrace();
-		// }
-		// }
-		// System.out.println("");
-		// }
-
 		setDocumentProvider(new SourceDocumentProvider());
 		markedExcerptions = new TreeMap<Integer, Excerption>();
 		markedText = new TreeMap<Integer, Integer>();

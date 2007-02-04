@@ -50,8 +50,6 @@ import org.eclipse.jface.wizard.ProgressMonitorPart;
  */
 public class ToK {
 
-	private IWorkspace workSpaceTok;
-
 	private IProject treeOfKnowledgeProj;
 
 	private IProgressMonitor progMonitor;
@@ -89,10 +87,8 @@ public class ToK {
 	}
 
 	private void createToKFromProject(IProject project) {
-		System.out.println("here :)");
+		System.out.println("createToKFromProject");
 		
-		
-		workSpaceTok = project.getWorkspace();
 		treeOfKnowledgeProj = project;
 		progMonitor = new NullProgressMonitor();
 
@@ -631,7 +627,7 @@ public class ToK {
 	}
 
 	public IWorkspace getWorkspace() {
-		return workSpaceTok;
+		return getProject().getWorkspace();
 	}
 
 	public IProject getProject() {
