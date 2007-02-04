@@ -53,6 +53,13 @@
              id="lost.tok.newLinkWizard.NewLinkWizard"
              name="Link discussion to root"
              project="false"/>
+       <wizard
+             category="lost.tok.Categoy"
+             class="lost.tok.opTable.wizards.AddQuoteWizard"
+             icon="icons/sample.gif"
+             id="lost.tok.opTable.addQuoteWizard"
+             name="Add Quote"
+             project="false"/>
    </extension>
    <extension
          point="org.eclipse.ui.popupMenus">
