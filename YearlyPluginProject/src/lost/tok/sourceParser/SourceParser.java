@@ -77,10 +77,12 @@ public class SourceParser extends TextEditor
 		ISourceViewer srcview = this.getSourceViewer();
 		SourceDocument document = (SourceDocument) srcview.getDocument();
 		
-		if (document.getChapterFromOffset(offset-1) instanceof ChapterText)
+		Chapter c = document.getChapterFromOffset(offset-1);
+		
+		if (c instanceof ChapterText)
 		{
 			Shell s = srcview.getTextWidget().getShell();
-			EnterTitleDialog di = new EnterTitleDialog(s, this, offset);
+			EnterTitleDialog di = new EnterTitleDialog(s, this, offset, (ChapterText)c);
 			di.open();
 			// the dialog will call to createNewChapter once the user has entered a name
 		}
@@ -93,11 +95,13 @@ public class SourceParser extends TextEditor
 		
 		ISourceViewer srcview = this.getSourceViewer();
 		SourceDocument document = (SourceDocument) srcview.getDocument();
+		int oldTopLineIndex = srcview.getTopIndex(); 
 		int newDocOffset = document.createNewChapter(offset-1, name);
 		
-		refreshDisplay();
 		int newWidgetOffset = modelOffset2WidgetOffset(srcview, newDocOffset);
 		srcview.getTextWidget().setCaretOffset(newWidgetOffset);
+		srcview.setTopIndex(oldTopLineIndex);
+		refreshDisplay();
 	}
 	
 	public int getCaretLocation()

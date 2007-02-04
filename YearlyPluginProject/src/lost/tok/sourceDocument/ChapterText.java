@@ -125,4 +125,32 @@ public class ChapterText extends Chapter {
 	{
 		return label.equals(Chapter.UNPARSED_STR + "/0");
 	}
+	
+	/**
+	 * Checks if it is ok to name the chapter's text with this name
+	 * @param name the new name
+	 * @return true if it is ok, false otherwise (ie has brother with the same name)
+	 */
+	public boolean isLegalName(String newName)
+	{
+		if (newName.equals(Chapter.UNPARSED_STR))
+			return false;
+
+		if (!this.isUnparsed())
+			return true; // a new sub-level will be created. there are no brothers
+		
+		if (this.parent == null)
+			return true;
+		
+		Chapter gp = this.parent.parent;
+		if (gp == null)
+			return true;
+		
+		for (Chapter uncle : gp.children)
+		{
+			if (uncle.name.equals(newName))
+				return false;
+		}
+		return true;
+	}
 }

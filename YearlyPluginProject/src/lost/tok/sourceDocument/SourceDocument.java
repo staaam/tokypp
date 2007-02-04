@@ -40,11 +40,11 @@ public class SourceDocument extends Document {
 		rootChapter.fixOffsetLength(0);
 		rootChapter.getTree(chapters);
 		
-		set(rootChapter.toString());
-
 		for (Chapter c : chapters) {
 			r.add(c.getOffset(), c.length, c);
 		}
+		
+		set(rootChapter.toString());
 	}
 	
 	public void setUnparsed(String s, String title, String author)
