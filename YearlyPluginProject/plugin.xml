@@ -34,6 +34,14 @@
             icon="icons/sample.gif"
             id="lost.tok.opTable.ShowLinkedDiscussions"
             name="Show Linked Discussions"/>
+      <editor
+            class="lost.tok.disEditor.DiscussionEditor"
+            contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
+            default="true"
+            extensions="dis"
+            icon="icons/sample.gif"
+            id="lost.tok.disEditor.DiscussionEditor"
+            name="Discussion Editor"/>
    </extension>
    <extension
          point="org.eclipse.ui.newWizards">
