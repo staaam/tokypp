@@ -2,6 +2,7 @@ package lost.tok.opTable;
 
 import java.io.InputStream;
 
+import lost.tok.GeneralFunctions;
 import lost.tok.sourceDocument.SourceDocument;
 
 import org.dom4j.DocumentException;
@@ -14,16 +15,7 @@ import org.eclipse.ui.editors.text.FileDocumentProvider;
 public class SourceDocumentProvider extends FileDocumentProvider {
 	protected void setDocumentContent(IDocument document,
 			InputStream contentStream, String encoding) throws CoreException {
-		try {
-			// contentStream.reset();
-
-			SAXReader reader = new SAXReader();
-
-			((SourceDocument) document).set(reader.read(contentStream));
-		} catch (DocumentException e) {
-			e.printStackTrace();
-		}
-
+		((SourceDocument) document).set(GeneralFunctions.readFromXML(contentStream));
 	}
 
 	@Override

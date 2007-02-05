@@ -57,16 +57,27 @@ public class OperationTable extends TextEditor {
 		return false;
 	}
 
-	/**
+	/*
+	 * 
 	 * Sets the source viewer as uneditable
+	 * 
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.ui.IObjectActionDelegate#setActivePart(org.eclipse.jface.action.IAction,
+	 *      org.eclipse.ui.IWorkbenchPart)
+	 * 
 	 */
 	public void createPartControl(Composite parent) {
+		System.out.println("createPartControl");
 		super.createPartControl(parent);
+
+		showChangeInformation(false);
+
 		ISourceViewer srcview = this.getSourceViewer();
 		assert (srcview != null);
 
-		srcview.setEditable(true);
-		srcview.getTextWidget().setWordWrap(true);
+		//srcview.setEditable(true);
+		//srcview.getTextWidget().setWordWrap(true);
 		hookContextMenu(parent);
 
 		refreshDisplay();
@@ -80,7 +91,7 @@ public class OperationTable extends TextEditor {
 	}
 
 	// Shay: this should add the pop up action, but it doesn't work
-	private void hookContextMenu(Control parent) {
+	protected void hookContextMenu(Control parent) {
 
 		MenuManager menuMgr = new MenuManager("#PopupMenu");
 		addAction(menuMgr, "lost.tok.opTable.MarkPopUpMenu.Action");

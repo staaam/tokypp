@@ -3,14 +3,7 @@
  */
 package lost.tok;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.util.Iterator;
 import java.util.List;
 
@@ -18,10 +11,6 @@ import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.XPath;
-import org.dom4j.io.OutputFormat;
-import org.dom4j.io.SAXReader;
-import org.dom4j.io.XMLWriter;
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -78,7 +67,7 @@ public class Discussion {
 		super();
 		this.myToK = myToK;
 		
-		Document d = readFromXML(filename);
+		Document d = GeneralFunctions.readFromXML(filename);
 		
 		setDiscName(DocumentHelper.createXPath("/discussion/name")
 				.selectSingleNode(d).getText());
@@ -88,19 +77,7 @@ public class Discussion {
 
 	// write the document to the XML file
 	private void writeToXml(Document doc) {
-		try {
-			OutputFormat outformat = OutputFormat.createPrettyPrint();
-			outformat.setEncoding("UTF-8");
-
-			BufferedWriter wrtr = new BufferedWriter(new OutputStreamWriter(
-					new FileOutputStream(getFullFileName()), "UTF-8"));
-
-			XMLWriter writer = new XMLWriter(wrtr, outformat);
-			writer.write(doc);
-			writer.flush();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		GeneralFunctions.writeToXml(getFullFileName(), doc);
 	}
 
 	private String getFullFileName() {
@@ -108,20 +85,7 @@ public class Discussion {
 	}
 
 	private Document readFromXML() {
-		return readFromXML(getFullFileName());
-	}
-
-	private Document readFromXML(String path) {
-		Document doc = DocumentHelper.createDocument();
-		SAXReader reader = new SAXReader();
-		try {
-			BufferedReader rdr = new BufferedReader(new InputStreamReader(
-					new FileInputStream(path), "UTF-8"));
-			doc = reader.read(rdr);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return doc;
+		return GeneralFunctions.readFromXML(getFullFileName());
 	}
 
 	public void addOpinion(String opinionName) {
