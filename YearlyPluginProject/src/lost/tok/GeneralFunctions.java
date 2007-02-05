@@ -20,7 +20,7 @@ import org.eclipse.core.resources.IFile;
 public class GeneralFunctions {
 	
 	public static Document readFromXML(IFile file) {
-		return readFromXML(file.getFullPath().toOSString());
+		return readFromXML(file.getLocation().toOSString());
 	}
 
 	public static Document readFromXML(String path) {
@@ -47,7 +47,7 @@ public class GeneralFunctions {
 	}
 
 	public static void writeToXml(IFile file, Document document) {
-		writeToXml(file.getFullPath().toOSString(), document);		
+		writeToXml(file.getLocation().toOSString(), document);		
 	}
 	
 	public static void writeToXml(String path, Document doc) {
