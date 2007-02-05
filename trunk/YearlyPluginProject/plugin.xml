@@ -39,7 +39,7 @@
             contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
             default="true"
             extensions="dis"
-            icon="icons/sample.gif"
+            icon="icons/opinion.gif"
             id="lost.tok.disEditor.DiscussionEditor"
             name="Discussion Editor"/>
    </extension>
