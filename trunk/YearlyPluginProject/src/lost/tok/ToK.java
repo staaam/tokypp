@@ -24,8 +24,6 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.Node;
 import org.dom4j.io.OutputFormat;
-import org.dom4j.io.SAXReader;
-import org.dom4j.io.XMLWriter;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -66,6 +64,14 @@ public class ToK {
 
 	public ToK(IProject project) {
 		createToKFromProject(project);
+	}
+
+	public IFile getLinkFile() {
+		return linkFile;
+	}
+
+	public IFile getAuthorFile() {
+		return authorFile;
 	}
 
 	public ToK(String projectName, String creator, String root) {
@@ -156,36 +162,14 @@ public class ToK {
 	private void createLinksFile() {
 		linkFile = treeOfKnowledgeProj.getFile("Links.xml");
 		if (!linkFile.exists()) {
-			try {
-				// authorFile.create(IResource.NONE, true, progMonitor);
-
-				OutputFormat outformat = OutputFormat.createPrettyPrint();
-				outformat.setEncoding("UTF-8");
-				IPath res = linkFile.getLocation();
-				FileWriter fw = new FileWriter(res.toOSString());
-				XMLWriter writer = new XMLWriter(fw, outformat);
-				writer.write(linksSkeleton());
-				writer.flush();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			GeneralFunctions.writeToXml(linkFile, linksSkeleton());
 		}
 	}
 
 	private void createAuthorsFile() {
 		authorFile = treeOfKnowledgeProj.getFile("Authors.xml");
 		if (!authorFile.exists()) {
-			try {
-				OutputFormat outformat = OutputFormat.createPrettyPrint();
-				outformat.setEncoding("UTF-8");
-				IPath res = authorFile.getLocation();
-				FileWriter fw = new FileWriter(res.toOSString());
-				XMLWriter writer = new XMLWriter(fw, outformat);
-				writer.write(authorsSkeleton());
-				writer.flush();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			GeneralFunctions.writeToXml(authorFile, authorsSkeleton());
 		}
 	}
 
@@ -323,10 +307,7 @@ public class ToK {
 
 		try {
 			// Open source file and get author name
-			Document sourceDocumentObject;
-			File sourceFile = new File(filePathVarified);
-			SAXReader sourceReader = new SAXReader();
-			sourceDocumentObject = sourceReader.read(sourceFile);
+			Document sourceDocumentObject = GeneralFunctions.readFromXML(filePathVarified);
 			sourceAuthor.name = sourceDocumentObject.getRootElement().element(
 					"author").getText();
 			// System.out.println("Source's author is " + sourceAuthor.name);
@@ -338,13 +319,8 @@ public class ToK {
 
 		try {
 			// Open authors XML file
-			Document authorsDocumentObject;
-			File authorsFile = new File(treeOfKnowledgeProj.getLocationURI()
-					.getPath()
-					+ "/Authors.xml");
-			SAXReader authorsReader = new SAXReader();
-			authorsDocumentObject = authorsReader.read(new FileInputStream(
-					authorsFile));
+			Document authorsDocumentObject = GeneralFunctions.readFromXML(getAuthorFile());
+
 			Iterator groupsIterator = authorsDocumentObject.getRootElement()
 					.elementIterator("authorsGroup");
 			int authorDefaultRank = 3;
@@ -386,13 +362,8 @@ public class ToK {
 	// Evgeni
 	private void AddAuthorToFile(Author author) {
 		try {
-			Document authorsDocumentObject;
-			File authorsFile = new File(treeOfKnowledgeProj.getLocationURI()
-					.getPath()
-					+ "/Authors.xml");
-			SAXReader authorsReader = new SAXReader();
-			authorsDocumentObject = authorsReader.read(new FileInputStream(
-					authorsFile));
+			Document authorsDocumentObject = GeneralFunctions.readFromXML(getAuthorFile());
+
 			Iterator groupsIterator = authorsDocumentObject.getRootElement()
 					.elementIterator("authorsGroup");
 
@@ -401,13 +372,7 @@ public class ToK {
 				if (Integer.parseInt(element.element("id").getTextTrim()) == author.rank) {
 					Element newAuthorElem = element.addElement("author");
 					newAuthorElem.addText(author.name);
-					OutputFormat outformat = OutputFormat.createPrettyPrint();
-					outformat.setEncoding("UTF-8");
-					IPath res = authorFile.getLocation();
-					FileWriter fw = new FileWriter(res.toOSString());
-					XMLWriter writer = new XMLWriter(fw, outformat);
-					writer.write(authorsDocumentObject);
-					writer.flush();
+					GeneralFunctions.writeToXml(getAuthorFile(), authorsDocumentObject);
 				}
 			}
 			System.out.println("Added new author tag to " + author.rank
@@ -421,13 +386,7 @@ public class ToK {
 	// Evgeni
 	private void RemoveAuthorFromFile(Author author) {
 		try {
-			Document authorsDocumentObject;
-			File authorsFile = new File(treeOfKnowledgeProj.getLocationURI()
-					.getPath()
-					+ "/Authors.xml");
-			SAXReader authorsReader = new SAXReader();
-			authorsDocumentObject = authorsReader.read(new FileInputStream(
-					authorsFile));
+			Document authorsDocumentObject = GeneralFunctions.readFromXML(getAuthorFile());
 			Iterator groupsIterator = authorsDocumentObject.getRootElement()
 					.elementIterator("authorsGroup");
 
@@ -439,14 +398,7 @@ public class ToK {
 					Element authorElement = (Element) authorsIterator.next();
 					if (authorElement.getTextTrim().equals(author.name)) {
 						groupElement.remove(authorElement);
-						OutputFormat outformat = OutputFormat
-								.createPrettyPrint();
-						outformat.setEncoding("UTF-8");
-						IPath res = authorFile.getLocation();
-						FileWriter fw = new FileWriter(res.toOSString());
-						XMLWriter writer = new XMLWriter(fw, outformat);
-						writer.write(authorsDocumentObject);
-						writer.flush();
+						GeneralFunctions.writeToXml(getAuthorFile(), authorsDocumentObject);
 						break;
 					}
 				}
@@ -462,13 +414,7 @@ public class ToK {
 	// Evgeni
 	private void ChangeAuthorRank(Author author, int rank) {
 		try {
-			Document authorsDocumentObject;
-			File authorsFile = new File(treeOfKnowledgeProj.getLocationURI()
-					.getPath()
-					+ "/Authors.xml");
-			SAXReader authorsReader = new SAXReader();
-			authorsDocumentObject = authorsReader.read(new FileInputStream(
-					authorsFile));
+			Document authorsDocumentObject = GeneralFunctions.readFromXML(getAuthorFile());
 			Iterator groupsIterator = authorsDocumentObject.getRootElement()
 					.elementIterator("authorsGroup");
 			int authorDefaultRank = 3;
@@ -548,47 +494,8 @@ public class ToK {
 	 *            the name of the discussion to be created
 	 */
 	public void addDiscussion(String discName) {
-
-		// Create the Skeleton of the discussion
-		Document doc = DocumentHelper.createDocument();
-		Element disc = doc.addElement("discussion");
-		disc.addElement("name").addText(discName);
-		disc.addElement("user").addText(this.getProjectCreator());
-		Element defOpin = disc.addElement("opinion");
-		defOpin.addElement("id").addText(String.valueOf((Discussion.getNextId())));
-		defOpin.addElement("name").addText(Discussion.DEFAULT_OPINION);
-
-		IFile file = discFolder.getFile(discName + ".dis");
-		if (file.exists()) {
-			System.out.println("Discussion already exists!");
-		} else {
-
-			// Add the new discussion object to the discussions
-			Discussion tempDiscussion = new Discussion(this, discName,
-					this.getProjectCreator());
-			discussions.add(tempDiscussion);
-
-			OutputFormat outformat = OutputFormat.createPrettyPrint();
-			outformat.setEncoding("UTF-8");
-			IPath res = file.getLocation();
-
-			try {
-				FileWriter fw = new FileWriter(res.toOSString());
-				XMLWriter writer = new XMLWriter(fw, outformat);
-				writer.write(doc);
-				writer.flush();
-			} catch (IOException e) {
-
-				e.printStackTrace();
-			}
-
-		}
-
-		// Add the new discussion object to the discussions
-		Discussion tempDiscussion = new Discussion(this, discName,
-				getProjectCreator());
-		getDiscussions().add(tempDiscussion);
-
+		getDiscussions().add(new Discussion(this, discName,
+				getProjectCreator()));
 	}
 
 	/**
@@ -602,16 +509,7 @@ public class ToK {
 		String discName = disc.getDiscName();
 
 		// Open the Links file
-		Document doc = DocumentHelper.createDocument();
-		SAXReader reader = new SAXReader();
-		String path = linkFile.getLocation().toOSString();
-		File file = new File(path);
-
-		try {
-			doc = reader.read(file);
-		} catch (DocumentException e) {
-			e.printStackTrace();
-		}
+		Document doc = GeneralFunctions.readFromXML(getLinkFile());
 		
 		Node link = doc.selectSingleNode("//link/discussionFile[text()=\"" + discName + ".dis\"]");
 		Element newLink = null;
@@ -632,21 +530,7 @@ public class ToK {
 			subLink.add(exp[i].toXML());	
 		}
 		
-		
-
-		OutputFormat outformat = OutputFormat.createPrettyPrint();
-		outformat.setEncoding("UTF-8");
-
-		try {
-
-			FileWriter fw = new FileWriter(linkFile.getLocation().toOSString());
-			XMLWriter writer = new XMLWriter(fw, outformat);
-			writer.write(doc);
-			writer.flush();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
+		GeneralFunctions.writeToXml(getLinkFile(), doc);
 	}
 
 	/**

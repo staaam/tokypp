@@ -4,7 +4,6 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Node;
-import org.dom4j.io.SAXReader;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
@@ -18,6 +17,7 @@ import org.eclipse.core.resources.*;
 import org.eclipse.core.runtime.CoreException;
 import java.io.*;
 
+import lost.tok.GeneralFunctions;
 import lost.tok.ToK;
 
 import org.eclipse.ui.*;
@@ -66,14 +66,7 @@ public class NewLinkWizard extends Wizard implements INewWizard {
 		IFile links = project.getFile("Links.xml");
 		
 		String path = links.getLocation().toOSString();
-		Document doc = DocumentHelper.createDocument();
-		SAXReader reader = new SAXReader();
-		try {
-			doc = reader.read(new File(path));
-		} catch (DocumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		Document doc = GeneralFunctions.readFromXML(path);
 		Node root = doc.getRootElement();
 		tok = ToK.getProjectToK(project);
 

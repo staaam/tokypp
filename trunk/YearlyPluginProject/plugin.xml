@@ -26,6 +26,14 @@
             icon="icons/main_link_ico.gif"
             id="lost.tok.linkTable.LinkageEditor"
             name="Link discussion to root"/>
+      <editor
+            class="lost.tok.opTable.ShowLinkedDiscussions"
+            contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
+            default="false"
+            extensions="src"
+            icon="icons/sample.gif"
+            id="lost.tok.opTable.ShowLinkedDiscussions"
+            name="Show Linked Discussions"/>
    </extension>
    <extension
          point="org.eclipse.ui.newWizards">
@@ -99,6 +107,17 @@
             <separator name="group1"/>
          </menu>
       </viewerContribution>
+      <objectContribution
+            adaptable="true"
+            id="lost.tok.rootDiscussions.RootDiscussions"
+            nameFilter="*.src"
+            objectClass="org.eclipse.core.resources.IFile">
+         <action
+               class="lost.tok.opTable.ShowLinkedDiscussions"
+               enablesFor="+"
+               id="lost.tok.opTable.showLinkedDiscussionsAction"
+               label="Show Linked Discussions"/>
+      </objectContribution>
    </extension>
    <extension
          point="org.eclipse.ui.editorActions">
