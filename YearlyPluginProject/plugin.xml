@@ -272,13 +272,13 @@
          name="New Invokatron Document Action"
          point="org.eclipse.ui.actionSets">
       <actionSet
-            id="invokatron.actionSet"
+            id="lost.tok.disImportExport"
             label="Invokatron Actions"
             visible="true">
          <action
-               class="invokatron.wizard.RunWizardAction"
+               class="lost.tok.disImportExport.DiscussionImportExport"
                icon="icons/import.gif"
-               id="invokatron.wizard.RunWizardAction"
+               id="lost.tok.disImportExport"
                label="YearlyPluginProject.action1"
                style="push"
                toolbarPath="org.eclipse.ui.workbench.file/new.ext"
