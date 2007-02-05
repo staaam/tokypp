@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 import lost.tok.Excerption;
+import lost.tok.GeneralFunctions;
 
 
 import org.dom4j.DocumentHelper;
@@ -40,6 +41,7 @@ public class SourceDocument extends Document {
 	
 	private IProject tokProj;
 	private String sourceName;
+	private IFile outputFile;
 
 	public void set(org.dom4j.Document d) {
 		chapters = new LinkedList<Chapter>();
@@ -125,8 +127,11 @@ public class SourceDocument extends Document {
 		return chapters;
 	}
 	
+	//a function that converts a SourceDocument class to an XML document
 	public void toXML(IProject tokProj, String sourceName)
 	{
+		outputFile = tokProj.getFolder("Sources").getFile(sourceName);
+		
 		//create the XML and fill the name and author tags
 		createXML();
 		
@@ -137,13 +142,14 @@ public class SourceDocument extends Document {
 		}
 	}
 	
+	//create the XML for the source and fill the name and author tags
 	private void createXML() {
-		IFile parsedSource = tokProj.getFolder("Sources").getFile(sourceName);
-		if (!parsedSource.exists()){
+		
+		if (!outputFile.exists()){
 			try {
 				OutputFormat outformat = OutputFormat.createPrettyPrint();
 				outformat.setEncoding("UTF-8");
-				IPath res = parsedSource.getLocation();
+				IPath res = outputFile.getLocation();
 				FileWriter fw = new FileWriter(res.toOSString());
 				XMLWriter writer = new XMLWriter(fw, outformat);
 				writer.write(sourceSkeleton());
@@ -154,6 +160,7 @@ public class SourceDocument extends Document {
 		}
 	}
 	
+	//filling the name and author tags
 	private org.dom4j.Document sourceSkeleton() {
 		// Create the Skeleton of the source file
 		org.dom4j.Document sourceDoc = DocumentHelper.createDocument();
@@ -165,44 +172,16 @@ public class SourceDocument extends Document {
 		return sourceDoc;
 	}
 	
-	private org.dom4j.Document readFromXML() {
-		String path = tokProj.getFolder("Sources").getFile(sourceName).getLocation().toOSString();
-		
-		org.dom4j.Document doc = DocumentHelper.createDocument();
-		SAXReader reader = new SAXReader();
-		try {
-			BufferedReader rdr = new BufferedReader(new InputStreamReader(
-					new FileInputStream(path), "UTF-8"));
-			doc = reader.read(rdr);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return doc;
-	}
-	
-	
-	private void writeToXml(org.dom4j.Document doc) {
-		try {
-			OutputFormat outformat = OutputFormat.createPrettyPrint();
-			outformat.setEncoding("UTF-8");
-			String outputFileName = (tokProj.getFolder("Sources").getFile(sourceName)).getLocation().toOSString();
-			BufferedWriter wrtr = new BufferedWriter(new OutputStreamWriter(
-					new FileOutputStream(outputFileName), "UTF-8"));
-
-			XMLWriter writer = new XMLWriter(wrtr, outformat);
-			writer.write(doc);
-			writer.flush();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
+	//a function that runs on the tree in a preorder manner.
+	//for every node it will enter the information into the XML file.
 	private void preorderFunc(Chapter chapter, String currXMLPath){
 		if (nextChapterIsText(chapter)){
+			//the son of this node is a text node
 			treatTextNode(chapter,currXMLPath);
 			return;
 		}
 		else{
+			//this is a regular chapter node
 			treatChapterNode(chapter,currXMLPath);
 			currXMLPath = currXMLPath + "/chapter[name='" + chapter.getName() + "']/child";
 			for (Chapter c: chapter.children){ 
@@ -213,15 +192,17 @@ public class SourceDocument extends Document {
 	
 	
 
+	//chaecks if the son of the given chapter is a text node
 	private boolean nextChapterIsText(Chapter chapter) {
 		if (chapter.children.getFirst() instanceof ChapterText )
 			return true;
 		return false;
 	}
 
+	//entering chapter information to the XML
 	private void treatChapterNode(Chapter c, String currXMLPath){
 		//for each node we create the apropriate tags
-		org.dom4j.Document doc = readFromXML();
+		org.dom4j.Document doc = GeneralFunctions.readFromXML(outputFile);
 		
 		XPath xpathSelector = DocumentHelper.createXPath(currXMLPath);
 		List result = xpathSelector.selectNodes(doc);
@@ -230,27 +211,33 @@ public class SourceDocument extends Document {
 		chapterElm.addElement("name").addText(c.getName());			
 		chapterElm.addElement("child");
 	
-		writeToXml(doc);
+		
+		GeneralFunctions.writeToXml(outputFile, doc);
+
 		System.out.println("chapter name is: " + c.getName());
 	}
 	
+	//entering chapter & text information to the XML
 	private void treatTextNode(Chapter c, String currXMLPath) {
-//		if it is a text node we write the contents
-		org.dom4j.Document doc = readFromXML();
+		//if it is a text node we write the contents
+		org.dom4j.Document doc = GeneralFunctions.readFromXML(outputFile);
 		
 		XPath xpathSelector = DocumentHelper.createXPath(currXMLPath);
 		List result = xpathSelector.selectNodes(doc);
 		
 		Element chapterElm = (Element) result.get(0);
 		Element textElm = chapterElm.addElement("text");
+		//the name is of the current chapter, while the content is from the son
 		textElm.addElement("name").addText(c.getName());
 		textElm.addElement("content").addText(getTextofChild(c));
 		
-		writeToXml(doc);
+		GeneralFunctions.writeToXml(outputFile, doc);
+		
 		System.out.println("   text node");
 		
 	}
 
+	//retrieve the text from the child node
 	private String getTextofChild(Chapter c) {
 		ChapterText textC = (ChapterText) c.children.getFirst();
 		return textC.text;
