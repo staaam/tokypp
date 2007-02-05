@@ -267,4 +267,22 @@
             keySequence="ALT+Q"
             scope="org.eclipse.ui.contexts.window"/>
    </extension>
+   <extension
+         id="NewInvokatronAction"
+         name="New Invokatron Document Action"
+         point="org.eclipse.ui.actionSets">
+      <actionSet
+            id="invokatron.actionSet"
+            label="Invokatron Actions"
+            visible="true">
+         <action
+               class="invokatron.wizard.RunWizardAction"
+               icon="icons/import.gif"
+               id="invokatron.wizard.RunWizardAction"
+               label="YearlyPluginProject.action1"
+               style="push"
+               toolbarPath="org.eclipse.ui.workbench.file/new.ext"
+               tooltip="Starts the New Invokatron Document Wizard."/>
+      </actionSet>
+   </extension>
 </plugin>
