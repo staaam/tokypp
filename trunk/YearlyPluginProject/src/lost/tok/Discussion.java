@@ -33,6 +33,8 @@ import org.eclipse.core.runtime.Status;
 public class Discussion {
 
 	public static final String DEFAULT_OPINION = "Default Opinion";
+	
+	public static int NEXT_ID = 1;
 
 	private ToK myToK;
 
@@ -43,6 +45,9 @@ public class Discussion {
 	private Integer opinionsId = 1;
 
 	private Integer quotesId = 1;
+	
+	public static final String[] relTypes = {"opposition","agreement"};
+	
 
 	public Discussion(ToK myToK, String discName, String creatorName) {
 		super();
@@ -380,6 +385,10 @@ public class Discussion {
 
 	public ToK getMyToK() {
 		return myToK;
+	}
+	
+	public static int getNextId(){
+		return NEXT_ID++;
 	}
 
 	public String[] getOpinions() {
