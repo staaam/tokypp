@@ -1,6 +1,3 @@
-/**
- * 
- */
 package lost.tok;
 
 import java.io.File;
@@ -25,6 +22,7 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.dom4j.Node;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
@@ -550,19 +548,56 @@ public class ToK {
 	 *            the name of the discussion to be created
 	 */
 	public void addDiscussion(String discName) {
+
+		// Create the Skeleton of the discussion
+		Document doc = DocumentHelper.createDocument();
+		Element disc = doc.addElement("discussion");
+		disc.addElement("name").addText(discName);
+		disc.addElement("user").addText(this.getProjectCreator());
+		Element defOpin = disc.addElement("opinion");
+		defOpin.addElement("id").addText(String.valueOf((Discussion.getNextId())));
+		defOpin.addElement("name").addText(Discussion.DEFAULT_OPINION);
+
+		IFile file = discFolder.getFile(discName + ".dis");
+		if (file.exists()) {
+			System.out.println("Discussion already exists!");
+		} else {
+
+			// Add the new discussion object to the discussions
+			Discussion tempDiscussion = new Discussion(this, discName,
+					this.getProjectCreator());
+			discussions.add(tempDiscussion);
+
+			OutputFormat outformat = OutputFormat.createPrettyPrint();
+			outformat.setEncoding("UTF-8");
+			IPath res = file.getLocation();
+
+			try {
+				FileWriter fw = new FileWriter(res.toOSString());
+				XMLWriter writer = new XMLWriter(fw, outformat);
+				writer.write(doc);
+				writer.flush();
+			} catch (IOException e) {
+
+				e.printStackTrace();
+			}
+
+		}
+
 		// Add the new discussion object to the discussions
 		Discussion tempDiscussion = new Discussion(this, discName,
 				getProjectCreator());
 		getDiscussions().add(tempDiscussion);
+
 	}
 
 	/**
 	 * Links an existing discussion to a segment in the root of the ToK project
 	 * 
 	 * @param disc
-	 *            an object representing n existing discussion
+	 *            an object representing an existing discussion
 	 */
-	public void linkDiscussionRoot(Discussion disc, Excerption exp) {
+	public void linkDiscussionRoot(Discussion disc, String sourceFile, Excerption[] exp, String subject, String linkType) {
 
 		String discName = disc.getDiscName();
 
@@ -577,14 +612,27 @@ public class ToK {
 		} catch (DocumentException e) {
 			e.printStackTrace();
 		}
+		
+		Node link = doc.selectSingleNode("//link/discussionFile[text()=\"" + discName + ".dis\"]");
+		Element newLink = null;
+		if (link != null){ 
+			newLink  = link.getParent();
+		}
+		else{
 
-		// Add pre-defined link element to the Links file
-		Element links = doc.getRootElement();
-		Element newLink = links.addElement("link");
-		newLink.addElement("discussionFile").addText(discName + ".dis");
-		newLink.addElement("type").addText("difficulty");
-		newLink.add(exp.toXML());
-		newLink.addElement("linkSubject").addText("What is an Excerption?!");
+			Element links = doc.getRootElement();
+			newLink = links.addElement("link");
+			newLink.addElement("discussionFile").addText(discName + ".dis");
+			newLink.addElement("type").addText(linkType);
+			newLink.addElement("linkSubject").addText(subject);
+		}
+		
+		for (int i = 0; i < exp.length; i++) {
+			Element subLink = newLink.addElement("sublink").addElement("sourceFile").addText(sourceFile);
+			subLink.add(exp[i].toXML());	
+		}
+		
+		
 
 		OutputFormat outformat = OutputFormat.createPrettyPrint();
 		outformat.setEncoding("UTF-8");
@@ -608,13 +656,11 @@ public class ToK {
 	 * @param discName
 	 *            the name of the discussion
 	 */
-	public void linkNewDiscussionRoot(String discName, Excerption exp) {
+	public void linkNewDiscussionRoot(String discName, String sourceName, Excerption[] exp, String subject, String linkType) {
 
 		addDiscussion(discName);
 		try {
-			linkDiscussionRoot(getDiscussion(discName), new Excerption(
-					"/Bible/The Begining/The Continue/The First Paragraph", "",
-					2, 22));
+			linkDiscussionRoot(getDiscussion(discName),sourceName, exp, subject, linkType);
 		} catch (CoreException e) {
 			e.printStackTrace();
 		}

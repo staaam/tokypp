@@ -39,6 +39,15 @@
             id="lost.tok.newTokWizard"
             name="%wizards.wizard.tok"
             project="true"/>
+
+       <wizard
+             category="lost.tok.Categoy"
+             class="lost.tok.sourceParser.wizards.UnparsedDocWizard"
+             icon="icons/sample.gif"
+             id="lost.tok.unparsedDocWizard"
+             name="Unparsed Source"
+             project="false"/>
+
        <wizard
              category="lost.tok.Categoy"
              class="lost.tok.sourceParser.wizards.UnparsedDocWizard"
@@ -60,6 +69,14 @@
              id="lost.tok.opTable.addQuoteWizard"
              name="Add Quote"
              project="false"/>
+       <wizard
+             category="lost.tok.Categoy"
+             class="lost.tok.newRelationWizard.NewRelationWizard"
+             icon="icons/sample.gif"
+             id="lost.tok.newRelationWizard.NewRelationWizard"
+             name="Create Relation"
+             project="false"/>
+>>>>>>> .r34
    </extension>
    <extension
          point="org.eclipse.ui.popupMenus">
@@ -119,6 +136,23 @@
                toolbarPath="OpTableGroup"
                tooltip="%action.tooltip.addQuote"/>
       </editorContribution>
+
+      <editorContribution
+            id="lost.tok.sourceParser.Contribution"
+            targetID="lost.tok.sourceParser.SourceParser">
+         <action
+               class="lost.tok.sourceParser.EndHereAction"
+               definitionId="lost.tok.sourceParser.command.endHereAction"
+               icon="icons/AddQuote.bmp"
+               id="lost.tok.sourceParser.endHereAction"
+               label="End Chapter Here"
+               menubarPath="edit/SourceParser"
+               state="true"
+               style="push"
+               toolbarPath="SourceParser"
+               tooltip="Clicky here to create a new chapter ending at the current cursor location"/>
+      </editorContribution>
+
       <editorContribution
             id="lost.tok.sourceParser.Contribution"
             targetID="lost.tok.sourceParser.SourceParser">
@@ -161,6 +195,21 @@
                state="true"
                style="push"/>
       </editorContribution>
+
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            category="Source Parser"
+            id="lost.tok.sourceParser.command.endHereAction"
+            name="End Chapter Here"/>
+      <keyBinding
+            commandId="lost.tok.sourceParser.command.endHereAction"
+            contextId="org.eclipse.ui.contexts.window"
+            keyConfigurationId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            keySequence="ALT+Q"
+            scope="org.eclipse.ui.contexts.window"/>
    </extension>
    <extension
          id="lost.tok.ToKNature"
