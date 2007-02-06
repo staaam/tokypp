@@ -19,9 +19,14 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IViewReference;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ContainerSelectionDialog;
 import org.eclipse.ui.dialogs.SaveAsDialog;
 import org.eclipse.ui.dialogs.SelectionDialog;
+import org.eclipse.ui.internal.Workbench;
 import org.eclipse.swt.widgets.FileDialog;
 import java.awt.*;
 import java.io.File;
@@ -29,6 +34,7 @@ import java.io.File;
 import javax.swing.JFileChooser;
 
 import lost.tok.Messages;
+import lost.tok.excerptionsView.ExcerptionView;
 
 /**
  * The "New" wizard page allows setting the container for the new file as well
@@ -115,6 +121,14 @@ public class NewLinkWizardPage extends WizardPage {
 				handleBrowse();
 			}
 		});
+				
+		IViewPart view = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(ExcerptionView.ID);
+		
+		if (view ==null) {
+			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().activate(new ExcerptionView());
+			view = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(ExcerptionView.ID);
+		}		
+		
 		initialize();
 		dialogChanged();
 		setControl(container);

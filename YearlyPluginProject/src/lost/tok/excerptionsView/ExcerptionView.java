@@ -43,6 +43,8 @@ public class ExcerptionView extends ViewPart {
 	private Action action2;
 	private Action doubleClickAction;
 	
+	public final static String ID = "lost.tok.excerptionsView.ExcerptionView";
+	
 	
 	class FileExcerption{
 		List<Excerption> excerptions = new ArrayList<Excerption>();
@@ -164,28 +166,31 @@ public class ExcerptionView extends ViewPart {
  * expose its hierarchy.
  */
 		private void initialize() {
-			
-			
-			TreeObject to1 = new TreeObject("Leaf 1");
-			TreeObject to2 = new TreeObject("Leaf 2");
-			TreeObject to3 = new TreeObject("Leaf 3");
-			TreeParent p1 = new TreeParent("Parent 1");
-			p1.addChild(to1);
-			p1.addChild(to2);
-			p1.addChild(to3);
-			
-			TreeObject to4 = new TreeObject("Leaf 4");
-			TreeParent p2 = new TreeParent("Parent 2");
-			p2.addChild(to4);
-			
-			TreeParent root = new TreeParent("Root");
-			root.addChild(p1);
-			root.addChild(p2);
-			
-			invisibleRoot = new TreeParent("");
-			invisibleRoot.addChild(root);
+			treeBuildAndRefresh();
 		}
+		
+		
+private void treeBuildAndRefresh() {
+	invisibleRoot = new TreeParent("");
+	
+	for (Iterator iter = objects.iterator(); iter.hasNext();) {
+		FileExcerption element = (FileExcerption) iter.next();
+		TreeParent parentFile =  new TreeParent(element.getSourceFileName());
+		for (Iterator iterator = element.getExcerptions().iterator(); iterator.hasNext();) {
+			Excerption exp = (Excerption) iterator.next();
+			int i = 40 > exp.getText().length() ? exp.getText().length() : 40;
+			String expPrefix = exp.getText().substring(0,i) + "...";
+			parentFile.addChild(new TreeObject(expPrefix));
+		}
+		invisibleRoot.addChild(parentFile);
 	}
+	viewer.add(viewer.getTree(), invisibleRoot);
+	viewer.refresh();
+	viewer.expandAll();
+}
+	}
+	
+	
 	class ViewLabelProvider extends LabelProvider {
 
 		public String getText(Object obj) {
@@ -318,6 +323,7 @@ public class ExcerptionView extends ViewPart {
 				for (int i = 0; i < exp.length; i++) {
 					element.addExcerption(exp[i]);	
 				}
+				((ViewContentProvider)viewer.getContentProvider()).treeBuildAndRefresh();
 				return;
 			}
 		}
@@ -327,7 +333,8 @@ public class ExcerptionView extends ViewPart {
 		for (int i = 0; i < exp.length; i++) {
 			temp.addExcerption(exp[i]);	
 		}
-		
+		objects.add(temp);
+		((ViewContentProvider)viewer.getContentProvider()).treeBuildAndRefresh();
 	}
 	
 	
