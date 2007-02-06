@@ -1,8 +1,10 @@
 package lost.tok.newRelationWizard;
 
+import lost.tok.Discussion;
 import lost.tok.ToK;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
@@ -53,19 +55,19 @@ public class NewRelationWizard extends Wizard implements INewWizard {
 	 */
 	public boolean performFinish() {
 		
-		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject();
+		IStructuredSelection ssel = (IStructuredSelection) selection;
+		IResource resource = (IResource)ssel.getFirstElement();
+		IProject project = resource.getProject();
 		tok = ToK.getProjectToK(project);
-
-	/*	//TODO
+		
 		try {
-			tok.linkDiscussionRoot(disc,source, exp, subject, linkType)
+			String[] ids = page.getSelectedQuotes();
+			Discussion disc = tok.getDiscussion(page.getDiscName());
+			disc.createOpinionLink(Integer.valueOf(ids[0]), Integer.valueOf(ids[1]), page.getComment(),page.getRelationType());
 		} catch (CoreException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
+		}
 		return true;
 	}
 

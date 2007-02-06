@@ -1,8 +1,10 @@
 package lost.tok.newRelationWizard;
 
 import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -12,6 +14,9 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.events.TreeEvent;
+import org.eclipse.swt.events.TreeListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -21,6 +26,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.dialogs.ContainerSelectionDialog;
 import org.eclipse.ui.dialogs.SaveAsDialog;
 import org.eclipse.ui.dialogs.SelectionDialog;
@@ -32,6 +38,7 @@ import javax.swing.JFileChooser;
 
 import lost.tok.Discussion;
 import lost.tok.Messages;
+import lost.tok.ToK;
 
 /**
  * The "New" wizard page allows setting the container for the new file as well
@@ -40,21 +47,19 @@ import lost.tok.Messages;
  */
 
 public class NewRelationWizardPage extends WizardPage {
-	
-	private Text rootText;
 
-	private Text fileText;
-
-	private Text creatorText;
 
 	private ISelection selection;
-
-	private FileDialog dialog;
-	
 	
 	private Combo relType;
 	
-	private Tree objects;
+	private Text comment;
+	
+	private Tree leftObjects;
+	
+	private Tree rightObjects;
+	
+	private String discName;
 
 	/**
 	 * Constructor for SampleNewWizardPage.
@@ -72,83 +77,140 @@ public class NewRelationWizardPage extends WizardPage {
 	 * @see IDialogPage#createControl(Composite)
 	 */
 	public void createControl(Composite parent) {
+		
+		initialize();
 		Composite container = new Composite(parent, SWT.NULL);
 		GridLayout layout = new GridLayout();
 		container.setLayout(layout);
 		layout.numColumns = 3;
 		layout.verticalSpacing = 9;
 
+		
+		
 		Label label = new Label(container, SWT.NULL);
 		label.setText("Relation type:"); //$NON-NLS-1$
 
-		relType = new Combo(container, SWT.BORDER | SWT.SINGLE);
+		relType = new Combo(container, SWT.NULL);
 		for (int i = 0; i < Discussion.relTypes.length; i++) {
 			relType.add(Discussion.relTypes[i]);
 		}
 		
+		relType.addSelectionListener(new SelectionListener(){
+			
+			public void widgetDefaultSelected(SelectionEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			public void widgetSelected(SelectionEvent arg0) {
+				// TODO Auto-generated method stub
+				dialogChanged();
+			}
+			
+		});
 		
-		fileText = new Text(container, SWT.BORDER | SWT.SINGLE);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		fileText.setLayoutData(gd);
-		fileText.addModifyListener(new ModifyListener() {
-			public void modifyText(ModifyEvent e) {
-				dialogChanged();
-			}
-		});
-
+		relType.setLayoutData(gd);
+		
 		label = new Label(container, SWT.NULL);
 		label.setText(""); //$NON-NLS-1$
 		label = new Label(container, SWT.NULL);
-		label.setText(Messages.getString("NewToKWizReqCreatorName")); //$NON-NLS-1$
-		creatorText = new Text(container, SWT.BORDER | SWT.SINGLE);
+		label.setText("Comment"); //$NON-NLS-1$
+		comment = new Text(container, SWT.BORDER | SWT.SINGLE);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
-		creatorText.setLayoutData(gd);
-		creatorText.addModifyListener(new ModifyListener() {
+		comment.setLayoutData(gd);
+		comment.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				dialogChanged();
 			}
 		});
 
 		label = new Label(container, SWT.NULL);
-		label.setText(""); //$NON-NLS-1$
+		label.setText(""); //$NON-NLS-1$		
+		gd = new GridData(GridData.FILL_BOTH);
+		leftObjects = new Tree(container,SWT.NULL);
+		leftObjects.setLayoutData(gd);
+		leftObjects.setSize(100, 200);
+		
+		gd = new GridData(GridData.FILL_BOTH);
+		rightObjects = new Tree(container,SWT.NULL);
+		rightObjects.setLayoutData(gd);
+		rightObjects.setSize(100, 200);
+				
+		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject();
+	
+		
+		
+		//FOR DEBUGGING ONLY!!!!!!!!
+		ToK tok = new ToK("Test2","Arie","Babel_he.src");
+		//@TODO
+		//ToK tok = ToK.getProjectToK(project);
+		
+		
+		
+		
+		
+		Discussion disc = null;
+		try {
+			disc = tok.getDiscussion(discName);
+		} catch (CoreException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		String[] opinions = disc.getOpinions();
+		
+		for (int i = 0; i < opinions.length; i++) {
+			TreeItem leftOpinion = new TreeItem(leftObjects,0);
+			TreeItem rightOpinion = new TreeItem(rightObjects,0);
+			leftOpinion.setText(opinions[i]);
+			rightOpinion.setText(opinions[i]);
+			
+			String[] quotes = null;
+			try {
+				quotes = disc.getQuotes(opinions[i]);
+			} catch (CoreException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			for (int j = 0; j < quotes.length; j++) {
+				TreeItem leftQuote = new TreeItem(leftOpinion,0);
+				TreeItem rightQuote = new TreeItem(rightOpinion,0);
+				leftQuote.setText(quotes[i]);
+				rightQuote.setText(quotes[i]);
+			}
+		}
+		leftObjects.addSelectionListener(new SelectionListener(){
 
-		label = new Label(container, SWT.NULL);
-		label.setText(Messages.getString("NewToKWizReqRootFile")); //$NON-NLS-1$
-		rootText = new Text(container, SWT.BORDER | SWT.SINGLE);
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		rootText.setLayoutData(gd);
-		rootText.addModifyListener(new ModifyListener() {
-			public void modifyText(ModifyEvent e) {
+			public void widgetDefaultSelected(SelectionEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			public void widgetSelected(SelectionEvent arg0) {
 				dialogChanged();
+				
 			}
+			
 		});
+		
+		rightObjects.addSelectionListener(new SelectionListener(){
 
-		Button button = new Button(container, SWT.PUSH);
-		button.setText(Messages.getString("NewToKWizBrowseCmd")); //$NON-NLS-1$
-		button.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				handleBrowse();
+			public void widgetDefaultSelected(SelectionEvent arg0) {
+				// TODO Auto-generated method stub
+				
 			}
+
+			public void widgetSelected(SelectionEvent arg0) {
+				dialogChanged();
+				
+			}
+			
 		});
-		initialize();
 		dialogChanged();
 		setControl(container);
 	}
 
-	/**
-	 * Uses the standard container selection dialog to choose the new value for
-	 * the container field.
-	 */
-	private void handleBrowse() {
-		FileDialog fd = new FileDialog(getShell(), SWT.OPEN);
-		fd.setText(Messages.getString("NewToKWizOpenCmd")); //$NON-NLS-1$
-		fd.setFilterPath("C:/"); //$NON-NLS-1$
-		String[] filterExt = {
-				"*.src", "*.xml", "*.txt", "*.doc", ".rtf", "*.*" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
-		fd.setFilterExtensions(filterExt);
-		String selected = fd.open();
-		rootText.setText(selected);
-	}
+	
 
 	/**
 	 * Tests if the current workbench selection is a suitable container to use.
@@ -162,12 +224,8 @@ public class NewRelationWizardPage extends WizardPage {
 				return;
 			Object obj = ssel.getFirstElement();
 			if (obj instanceof IResource) {
-				IContainer container;
-				if (obj instanceof IContainer)
-					container = (IContainer) obj;
-				else
-					container = ((IResource) obj).getParent();
-				rootText.setText(container.getFullPath().toString());
+				IResource resource = (IResource) obj;
+				discName = resource.getName().split(".dis")[0];
 			}
 		}
 	}
@@ -178,14 +236,21 @@ public class NewRelationWizardPage extends WizardPage {
 
 	private void dialogChanged() {
 
-		String projectName = getProjectName();
-		String creatorName = getCreatorName();
-		String rootName = getRootName();
-
-		if (projectName.length() == 0) {
-			updateStatus(Messages.getString("NewToKWizErrSpecName")); //$NON-NLS-1$
+		String relType = getRelationType();
+		String comment = getComment();
+		TreeItem[] leftSelected = leftObjects.getSelection();
+		TreeItem[] rightSelected = rightObjects.getSelection();
+		
+		if (leftSelected.length + rightSelected.length != 2) {
+			updateStatus("Please choose 2 objects to link between"); //$NON-NLS-1$
 			return;
 		}
+		
+		if (relType.length() == 0){
+			updateStatus("Please choose a type of relationship"); //$NON-NLS-1$
+		}
+		
+		/*
 		if (projectNameExists(projectName)) {
 			updateStatus(Messages.getString("NewToKWizErrExist")); //$NON-NLS-1$
 			return;
@@ -212,7 +277,7 @@ public class NewRelationWizardPage extends WizardPage {
 			updateStatus(Messages.getString("NewToKWizErrRootNotExist")); //$NON-NLS-1$
 			return;
 		}
-
+		*/
 		updateStatus(null);
 	}
 
@@ -249,15 +314,25 @@ public class NewRelationWizardPage extends WizardPage {
 		setPageComplete(message == null);
 	}
 
-	public String getProjectName() {
-		return fileText.getText();
+	public String getRelationType() {
+		return relType.getText();
 	}
 
-	public String getCreatorName() {
-		return creatorText.getText();
+	public String getComment() {
+		return comment.getText();
+	}
+	
+	public String[] getSelectedQuotes(){
+		
+		TreeItem[] leftSelected = leftObjects.getSelection();
+		TreeItem[] rightSelected = rightObjects.getSelection();
+		String[] selectedText = new String[2];
+		selectedText[0] = leftSelected[0].getText();
+		selectedText[1] = rightSelected[0].getText();
+		return selectedText;
 	}
 
-	public String getRootName() {
-		return rootText.getText();
+	public String getDiscName() {
+		return discName;
 	}
 }

@@ -6,10 +6,12 @@ package lost.tok;
 import java.io.File;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.dom4j.Node;
 import org.dom4j.XPath;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
@@ -35,7 +37,9 @@ public class Discussion {
 
 	private Integer quotesId = 1;
 	
-	public static final String[] relTypes = {"opposition","agreement"};
+	private Quote[] quotes;
+	
+	public static final String[] relTypes = {"opposition","interpretation"};
 	
 
 	public Discussion(ToK myToK, String discName, String creatorName) {
@@ -171,7 +175,7 @@ public class Discussion {
 		List result0 = xpathSelector0.selectNodes(doc);
 		Element defOp = (Element) result0.get(0);
 		defOp.addElement("quote").addElement("id").addText(
-				java.lang.Integer.toString(id));
+				java.lang.Integer.toString(id++));
 
 		writeToXml(doc);
 	}
@@ -371,6 +375,29 @@ public class Discussion {
 		return ss;
 	}
 
+	
+	public String[] getQuotes(String opinion) throws CoreException{
+		
+		int j=0;
+		Document doc = readFromXML();
+
+		List result = doc.selectNodes("//opinion[name='"+ opinion + "']/quote/id/text()");
+		Node[] _ids = new Node[result.size()];
+		ListIterator<Node> iterator = result.listIterator();
+		
+		while (iterator.hasNext()) {
+			Node element = (Node) iterator.next();
+			_ids[j++] = element;
+		}
+				
+		String[] ids = new String[_ids.length];
+		for (int i = 0; i < _ids.length; i++) {
+			ids[i] = _ids[i].getText();
+		}
+		
+		return ids;
+		
+	}
 }
 
 
