@@ -1,5 +1,7 @@
 package lost.tok;
 
+import lost.tok.GeneralFunctions.Properties;
+
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
@@ -9,7 +11,7 @@ import org.dom4j.Element;
  * 
  * @author Team LOST
  */
-public class Excerption {
+public class Excerption extends Properties {
 	String sourceFilePath;
 
 	String text;
@@ -17,7 +19,7 @@ public class Excerption {
 	Integer startPos;
 
 	Integer endPos;
-
+	
 	public Excerption(String path, String text, int start, int end) {
 		this.sourceFilePath = path;
 		this.startPos = start;

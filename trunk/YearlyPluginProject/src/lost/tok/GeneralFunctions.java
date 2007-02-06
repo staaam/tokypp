@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.HashMap;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
@@ -16,8 +17,21 @@ import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.QualifiedName;
 
 public class GeneralFunctions {
+	
+	public static class Properties {
+		HashMap<QualifiedName, Object> properties = new HashMap<QualifiedName, Object>();
+		
+		public Object getProperty(QualifiedName key) {
+			return properties.get(key);
+		}
+
+		public Object setProperty(QualifiedName key, Object value) {
+			return properties.put(key, value);
+		}
+	}
 	
 	public static Document readFromXML(IFile file) {
 		return readFromXML(file.getLocation().toOSString());
