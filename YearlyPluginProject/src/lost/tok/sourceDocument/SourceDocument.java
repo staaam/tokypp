@@ -1,28 +1,17 @@
 package lost.tok.sourceDocument;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.ListIterator;
 
-import lost.tok.Excerption;
 import lost.tok.GeneralFunctions;
-
 
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.XPath;
 import org.dom4j.io.OutputFormat;
-import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -39,8 +28,6 @@ public class SourceDocument extends Document {
 
 	RangeSearch r;
 	
-	private IProject tokProj;
-	private String sourceName;
 	private IFile outputFile;
 
 	public void set(org.dom4j.Document d) {
@@ -248,5 +235,21 @@ public class SourceDocument extends Document {
 		return Messages.getString("SourceDocument.TitleLabel") + ":\t" + title + "\n" +
 				Messages.getString("SourceDocument.AuthorLabel") + ":\t" + author + "\n" + 
 				"\n"; //$NON-NLS-1$
+	}
+
+	public int getAbsoluteOffset(String sourceFilePath, int offset) {
+		Chapter c = getChapter(sourceFilePath);
+		if (c == null) {
+			return -1;
+		}
+		return c.getOffset() + offset;
+	}
+
+	public Chapter getChapter(String chapterPath) {
+		return rootChapter.getChapter(chapterPath);
+	}
+
+	public ChapterText getChapterText(String chapterPath) {
+		return rootChapter.getChapterText(chapterPath);
 	}
 }

@@ -4,9 +4,7 @@ import java.util.List;
 
 import lost.tok.Discussion;
 import lost.tok.Quote;
-import lost.tok.opTable.Messages;
 
-import org.dom4j.Comment;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.wizard.Wizard;
 

@@ -1,9 +1,7 @@
 package lost.tok.opTable;
 
-import java.util.LinkedList;
 import java.util.List;
 
-import lost.tok.Discussion;
 import lost.tok.Excerption;
 import lost.tok.Quote;
 import lost.tok.ToK;
@@ -11,7 +9,6 @@ import lost.tok.opTable.wizards.AddQuoteWizard;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.MessageBox;

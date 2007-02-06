@@ -1,5 +1,7 @@
-#Fri Feb 02 15:46:08 GMT+02:00 2007
+#Mon Feb 05 21:07:05 GMT+02:00 2007
 eclipse.preferences.version=1
+encoding//other/common.xsd=UTF8
+encoding//other/links.xsd=UTF8
 encoding//src/lost/tok/messages.properties=8859_1
 encoding//src/lost/tok/opTable/messages.properties=8859_1
 encoding//src/lost/tok/sourceDocument/messages.properties=8859_1

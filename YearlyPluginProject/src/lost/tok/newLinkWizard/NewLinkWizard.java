@@ -70,16 +70,16 @@ public class NewLinkWizard extends Wizard implements INewWizard {
 		Node root = doc.getRootElement();
 		tok = ToK.getProjectToK(project);
 
-		//TODO
-		try {
-			tok.linkDiscussionRoot(disc,source, exp, subject, linkType)
-		} catch (CoreException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		//TODO
+//		try {
+//			tok.linkDiscussionRoot(disc,source, exp, subject, linkType)
+//		} catch (CoreException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		return true;
 	}
 
