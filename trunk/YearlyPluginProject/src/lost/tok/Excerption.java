@@ -50,6 +50,14 @@ public class Excerption {
 	public int hashCode() {
 		return (sourceFilePath + "/" + startPos + "-" + endPos).hashCode();
 	}
+	
+	public Excerption(Element excerption) {
+		this(
+				excerption.element("sourceFilePath").getText(),
+				null,
+				Integer.valueOf(excerption.element("startPos").getText()),
+				Integer.valueOf(excerption.element("endPos").getText()));
+	}
 
 	public Element toXML() {
 		Element e = DocumentHelper.createElement("excerption");
@@ -57,6 +65,10 @@ public class Excerption {
 		e.addElement("startPos").addText(startPos.toString());
 		e.addElement("endPos").addText(endPos.toString());
 		return e;
+	}
+
+	public void setText(String text) {
+		this.text = text;
 	}
 
 }

@@ -160,4 +160,24 @@ public class Chapter {
 	static private String getChapterLabel(String label, String name) {
 		return label + ":\t" + name + "\n"; //$NON-NLS-1$ //$NON-NLS-2$
 	}
+
+	public Chapter getChapter(String chapterPath) {
+		int slash = chapterPath.indexOf("/");
+		String chapterName = (slash == -1) ? chapterPath : chapterPath.substring(0, slash);
+		
+		for (Chapter chapter : children) {
+			if (chapter.getName().compareTo(chapterName) == 0) {
+				return (slash == -1) ? chapter : chapter.getChapter(chapterPath.substring(slash + 1));
+			}
+		}
+		return null;
+	}
+
+	public ChapterText getChapterText(String chapterPath) {
+		Chapter c = getChapter(chapterPath);
+		if (c.children.getFirst() instanceof ChapterText) {
+			return (ChapterText) c.children.getFirst();
+		}
+		return  null;
+	}
 }

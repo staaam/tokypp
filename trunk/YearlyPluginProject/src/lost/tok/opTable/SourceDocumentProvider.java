@@ -5,8 +5,6 @@ import java.io.InputStream;
 import lost.tok.GeneralFunctions;
 import lost.tok.sourceDocument.SourceDocument;
 
-import org.dom4j.DocumentException;
-import org.dom4j.io.SAXReader;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.text.IDocument;
