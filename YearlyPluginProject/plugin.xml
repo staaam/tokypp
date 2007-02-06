@@ -27,7 +27,7 @@
             id="lost.tok.linkTable.LinkageEditor"
             name="Link discussion to root"/>
       <editor
-            class="lost.tok.opTable.ShowLinkedDiscussions"
+            class="lost.tok.opTable.RootDiscussions"
             contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
             default="false"
             extensions="src"
@@ -121,7 +121,7 @@
             nameFilter="*.src"
             objectClass="org.eclipse.core.resources.IFile">
          <action
-               class="lost.tok.opTable.ShowLinkedDiscussions"
+               class="lost.tok.opTable.RootDiscussions"
                enablesFor="+"
                id="lost.tok.opTable.showLinkedDiscussionsAction"
                label="Show Linked Discussions"/>

@@ -105,10 +105,10 @@ public class ExcerptionView extends ViewPart {
 	}
 	
 	class TreeParent extends TreeObject {
-		private ArrayList children;
+		private ArrayList<TreeObject> children;
 		public TreeParent(String name) {
 			super(name);
-			children = new ArrayList();
+			children = new ArrayList<TreeObject>();
 		}
 		public void addChild(TreeObject child) {
 			children.add(child);

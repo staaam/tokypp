@@ -13,6 +13,7 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.Node;
 import org.dom4j.XPath;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -37,7 +38,7 @@ public class Discussion {
 
 	private Integer quotesId = 1;
 	
-	private Quote[] quotes;
+//	private Quote[] quotes;
 	
 	public static final String[] relTypes = {"opposition","interpretation"};
 	
@@ -112,6 +113,10 @@ public class Discussion {
 		opinion.addElement("name").addText(opinionName);
 
 		writeToXml(doc);
+	}
+	
+	public IFile getFile() {
+		return myToK.getDiscussionFolder().getFile(discName + ".dis");
 	}
 
 	public void removeOpinion(Integer opinionId) {
