@@ -13,9 +13,8 @@ public class RangeSearch {
 	RangeSearch() {
 		ps = new LinkedList<LabeledPosition>();
 	}
-	
-	void clear()
-	{
+
+	void clear() {
 		ps.clear();
 		p = null;
 		sorted = false;

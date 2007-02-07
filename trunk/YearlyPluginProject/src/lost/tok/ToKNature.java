@@ -7,7 +7,7 @@ import org.eclipse.core.resources.IProjectNature;
 import org.eclipse.core.runtime.CoreException;
 
 public class ToKNature implements IProjectNature {
-	
+
 	/**
 	 * ID of this project nature
 	 */
@@ -17,7 +17,7 @@ public class ToKNature implements IProjectNature {
 
 	public void configure() throws CoreException {
 		System.out.println("configure");
-		
+
 		IProjectDescription desc = project.getDescription();
 		ICommand[] commands = desc.getBuildSpec();
 
@@ -82,9 +82,7 @@ public class ToKNature implements IProjectNature {
 			project.setDescription(description, null);
 		} catch (CoreException e) {
 		}
-		
-	}
-		
 
+	}
 
 }

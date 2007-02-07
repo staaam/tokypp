@@ -5,10 +5,7 @@ import lost.tok.ToK;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
@@ -31,13 +28,14 @@ public class NewRelationWizard extends Wizard implements INewWizard {
 	private ISelection selection;
 
 	private ToK tok = null;
-	
+
 	/**
 	 * Constructor for SampleNewWizard.
 	 */
 	public NewRelationWizard() {
 		super();
 		setNeedsProgressMonitor(true);
+		setWindowTitle("New Relation Wizard");
 	}
 
 	/**
@@ -54,27 +52,23 @@ public class NewRelationWizard extends Wizard implements INewWizard {
 	 * will create an operation and run it using wizard as execution context.
 	 */
 	public boolean performFinish() {
-		
+
 		IStructuredSelection ssel = (IStructuredSelection) selection;
-		IResource resource = (IResource)ssel.getFirstElement();
+		IResource resource = (IResource) ssel.getFirstElement();
 		IProject project = resource.getProject();
 		tok = ToK.getProjectToK(project);
-		
+
 		try {
-			String[] ids = page.getSelectedQuotes();
+			Integer[] ids = page.getSelectedQuotes();
 			Discussion disc = tok.getDiscussion(page.getDiscName());
-			disc.createOpinionLink(Integer.valueOf(ids[0]), Integer.valueOf(ids[1]), page.getComment(),page.getRelationType());
+			disc
+					.createOpinionLink(ids[0], ids[1], page.getComment(), page
+							.getRelationType());
 		} catch (CoreException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return true;
-	}
-
-	private void throwCoreException(String message) throws CoreException {
-		IStatus status = new Status(IStatus.ERROR, "Yearly_Plugin_Project",
-				IStatus.OK, message, null);
-		throw new CoreException(status);
 	}
 
 	/**

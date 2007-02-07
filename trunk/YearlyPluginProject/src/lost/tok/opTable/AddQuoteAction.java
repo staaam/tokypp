@@ -17,7 +17,8 @@ import org.eclipse.ui.part.FileEditorInput;
 
 public class AddQuoteAction extends AbstractEditorAction {
 	public void run(IAction action) {
-		List<Excerption> excerptions = ((OperationTable)activeEditor).getMarked();
+		List<Excerption> excerptions = ((OperationTable) activeEditor)
+				.getMarked();
 		System.out.println("The are " + excerptions.size() + " Excerptions:"); //$NON-NLS-1$ //$NON-NLS-2$
 		for (Excerption e : excerptions) {
 			System.out.println(e);
@@ -59,25 +60,25 @@ public class AddQuoteAction extends AbstractEditorAction {
 			tok.addDiscussion("Test Discussion"); //$NON-NLS-1$
 		}
 
-//		List<String> discStrings = new LinkedList<String>();
-//		for (Discussion discussion : discussions) {
-//			discStrings.add(discussion.getDiscName());
-//		}
-//
-//		List<String> opinStrings = new LinkedList<String>();
-//		// tok.getOpinions(); - all opinions
-//		// TODO: First iteration only
-//		opinStrings.add(Discussion.DEFAULT_OPINION);
+		// List<String> discStrings = new LinkedList<String>();
+		// for (Discussion discussion : discussions) {
+		// discStrings.add(discussion.getDiscName());
+		// }
+		//
+		// List<String> opinStrings = new LinkedList<String>();
+		// // tok.getOpinions(); - all opinions
+		// // TODO: First iteration only
+		// opinStrings.add(Discussion.DEFAULT_OPINION);
 
 		AddQuoteWizard w = new AddQuoteWizard(tok.getDiscussions(), q);
-		
+
 		WizardDialog wd = new WizardDialog(new Shell(), w);
 		wd.setBlockOnOpen(true);
-		
+
 		wd.open();
-		
-		if (w.finished()) { 
-			((OperationTable)activeEditor).clearMarked();
+
+		if (w.finished()) {
+			((OperationTable) activeEditor).clearMarked();
 		}
 	}
 

@@ -10,22 +10,25 @@ import org.eclipse.jface.wizard.Wizard;
 
 public class AddQuoteWizard extends Wizard {
 	private AddQuoteWizardPage page;
+
 	boolean finished = false;
+
 	List<Discussion> disussions;
+
 	Quote quote;
 
 	public AddQuoteWizard(List<Discussion> disussions, Quote quote) {
 		super();
-		
+
 		this.disussions = disussions;
 		this.quote = quote;
-		
-		setWindowTitle("Add quote");		
-		
+
+		setWindowTitle("Add quote");
+
 		page = new AddQuoteWizardPage(disussions, quote.getText());
 		addPage(page);
 	}
-	
+
 	@Override
 	public boolean performFinish() {
 		finished = true;
@@ -44,8 +47,3 @@ public class AddQuoteWizard extends Wizard {
 		return finished;
 	}
 }
-
-
-
-
-

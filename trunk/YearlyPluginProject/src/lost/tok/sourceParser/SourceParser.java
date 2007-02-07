@@ -14,12 +14,10 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.editors.text.TextEditor;
 
-public class SourceParser extends TextEditor 
-{
+public class SourceParser extends TextEditor {
 	ToK tok = null;
 
-	public SourceParser()
-	{
+	public SourceParser() {
 		super();
 		setDocumentProvider(new UnparsedDocumentProvider());
 	}
@@ -39,7 +37,7 @@ public class SourceParser extends TextEditor
 
 		srcview.setEditable(true);
 		srcview.getTextWidget().setWordWrap(false);
-		
+
 		// Note(Shay): Bah... looking for this function was tedious!
 		this.getSourceViewerDecorationSupport(srcview).dispose();
 
@@ -47,13 +45,13 @@ public class SourceParser extends TextEditor
 	}
 
 	public void refreshDisplay() {
-	
+
 		StyleRange chapterTextStyle = StyleManager.getChapterStyle();
-		
+
 		ISourceViewer srcview = this.getSourceViewer();
-		
+
 		SourceDocument document = (SourceDocument) srcview.getDocument();
-		
+
 		LinkedList<Chapter> allChapters = new LinkedList<Chapter>();
 		for (Chapter chapter : document.getAllChapters()) {
 			if (!(chapter instanceof ChapterText)) {
@@ -72,44 +70,42 @@ public class SourceParser extends TextEditor
 		srcview.getTextWidget().redraw();
 	}
 
-	public void openNewChapterDialog(int offset)
-	{
+	public void openNewChapterDialog(int offset) {
 		ISourceViewer srcview = this.getSourceViewer();
 		SourceDocument document = (SourceDocument) srcview.getDocument();
-		
-		Chapter c = document.getChapterFromOffset(offset-1);
-		
-		if (c instanceof ChapterText)
-		{
+
+		Chapter c = document.getChapterFromOffset(offset - 1);
+
+		if (c instanceof ChapterText) {
 			Shell s = srcview.getTextWidget().getShell();
-			EnterTitleDialog di = new EnterTitleDialog(s, this, offset, (ChapterText)c);
+			EnterTitleDialog di = new EnterTitleDialog(s, this, offset,
+					(ChapterText) c);
 			di.open();
-			// the dialog will call to createNewChapter once the user has entered a name
+			// the dialog will call to createNewChapter once the user has
+			// entered a name
 		}
 	}
-	
-	public void createNewChapter(int offset, String name)
-	{
+
+	public void createNewChapter(int offset, String name) {
 		if (name.equals(Chapter.UNPARSED_STR))
-			return; // Note: the user can't create chapters called (Unparsed Text)
-		
+			return; // Note: the user can't create chapters called (Unparsed
+					// Text)
+
 		ISourceViewer srcview = this.getSourceViewer();
 		SourceDocument document = (SourceDocument) srcview.getDocument();
-		int oldTopLineIndex = srcview.getTopIndex(); 
-		int newDocOffset = document.createNewChapter(offset-1, name);
-		
+		int oldTopLineIndex = srcview.getTopIndex();
+		int newDocOffset = document.createNewChapter(offset - 1, name);
+
 		int newWidgetOffset = modelOffset2WidgetOffset(srcview, newDocOffset);
 		srcview.getTextWidget().setCaretOffset(newWidgetOffset);
 		srcview.setTopIndex(oldTopLineIndex);
 		refreshDisplay();
 	}
-	
-	public int getCaretLocation()
-	{
+
+	public int getCaretLocation() {
 		ISourceViewer srcview = this.getSourceViewer();
-		int cursorWidgetOffset = srcview.getTextWidget().getCaretOffset(); 
+		int cursorWidgetOffset = srcview.getTextWidget().getCaretOffset();
 		return widgetOffset2ModelOffset(srcview, cursorWidgetOffset);
 	}
-	
 
 }

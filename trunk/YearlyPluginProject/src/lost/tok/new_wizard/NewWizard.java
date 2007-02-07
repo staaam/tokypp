@@ -52,10 +52,8 @@ public class NewWizard extends Wizard implements INewWizard {
 	 * will create an operation and run it using wizard as execution context.
 	 */
 	public boolean performFinish() {
-		tok = new ToK(
-				page.getProjectName(),
-				page.getCreatorName(),
-				page.getRootName());
+		tok = new ToK(page.getProjectName(), page.getCreatorName(), page
+				.getRootName());
 		return true;
 	}
 

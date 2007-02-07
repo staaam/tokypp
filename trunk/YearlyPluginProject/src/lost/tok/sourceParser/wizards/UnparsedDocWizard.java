@@ -13,7 +13,7 @@ public class UnparsedDocWizard extends Wizard implements INewWizard {
 
 	private ISelection selection;
 
-	//private ToK tok;
+	// private ToK tok;
 
 	/**
 	 * Constructor for SampleNewWizard.
@@ -38,17 +38,13 @@ public class UnparsedDocWizard extends Wizard implements INewWizard {
 	 */
 	public boolean performFinish() {
 		// Shay(TODO)
-/*		tok = new ToK();
-		try {
-			tok.createToKProject(page.getProjectName(), page.getCreatorName(),
-					page.getRootName());
-		} catch (CoreException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
+		/*
+		 * tok = new ToK(); try { tok.createToKProject(page.getProjectName(),
+		 * page.getCreatorName(), page.getRootName()); } catch (CoreException e) { //
+		 * TODO Auto-generated catch block e.printStackTrace(); } catch
+		 * (IOException e) { // TODO Auto-generated catch block
+		 * e.printStackTrace(); }
+		 */
 		return true;
 	}
 

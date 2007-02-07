@@ -16,30 +16,29 @@ public class UnparsedDocumentProvider extends FileDocumentProvider {
 
 	protected void setDocumentContent(IDocument document,
 			InputStream contentStream, String encoding) throws CoreException {
-		SourceDocument srcDoc = (SourceDocument)document;
-		
+		SourceDocument srcDoc = (SourceDocument) document;
+
 		StringBuffer sb = new StringBuffer();
-		
+
 		try {
 			BufferedReader br = null;
 			if (encoding == null)
-				br = new BufferedReader( new InputStreamReader(contentStream));
+				br = new BufferedReader(new InputStreamReader(contentStream));
 			else
-				br = new BufferedReader( new InputStreamReader(contentStream, encoding));
-			
+				br = new BufferedReader(new InputStreamReader(contentStream,
+						encoding));
+
 			int c = br.read();
-			while (c != -1)
-			{
-				sb.append((char)c);
+			while (c != -1) {
+				sb.append((char) c);
 				c = br.read();
-			}			
-		} catch (IOException e)
-		{
+			}
+		} catch (IOException e) {
 			e.printStackTrace();
-			//throw new CoreException(new Status()...
+			// throw new CoreException(new Status()...
 		}
-		
-		// 	TODO(Shay) add a dialog or something to get the names
+
+		// TODO(Shay) add a dialog or something to get the names
 		srcDoc.setUnparsed(sb.toString(), "Anna Banana", "Shay");
 	}
 

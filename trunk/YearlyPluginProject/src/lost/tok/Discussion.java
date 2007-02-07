@@ -6,12 +6,10 @@ package lost.tok;
 import java.io.File;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
-import org.dom4j.Node;
 import org.dom4j.XPath;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
@@ -25,7 +23,7 @@ import org.eclipse.core.runtime.Status;
 public class Discussion {
 
 	public static final String DEFAULT_OPINION = "Default Opinion";
-	
+
 	public static int NEXT_ID = 1;
 
 	private ToK myToK;
@@ -37,24 +35,23 @@ public class Discussion {
 	private Integer opinionsId = 1;
 
 	private Integer quotesId = 1;
-	
-//	private Quote[] quotes;
-	
-	public static final String[] relTypes = {"opposition","interpretation"};
-	
+
+	// private Quote[] quotes;
+
+	public static final String[] relTypes = { "opposition", "interpretation" };
 
 	public Discussion(ToK myToK, String discName, String creatorName) {
 		super();
 		this.myToK = myToK;
 		this.discName = discName;
 		this.creatorName = creatorName;
-		
+
 		if (new File(getFullFileName()).exists()) {
 			System.out.println("discussion " + discName + " already exists");
 			return;
 		}
-		
-		writeToXml(discussionSkeleton(discName, creatorName));		
+
+		writeToXml(discussionSkeleton(discName, creatorName));
 	}
 
 	private Document discussionSkeleton(String discName, String creatorName) {
@@ -71,9 +68,9 @@ public class Discussion {
 	public Discussion(ToK myToK, String filename) {
 		super();
 		this.myToK = myToK;
-		
+
 		Document d = GeneralFunctions.readFromXML(filename);
-		
+
 		setDiscName(DocumentHelper.createXPath("/discussion/name")
 				.selectSingleNode(d).getText());
 		setCreatorName(DocumentHelper.createXPath("/discussion/user")
@@ -86,7 +83,8 @@ public class Discussion {
 	}
 
 	private String getFullFileName() {
-		return myToK.getDiscussionFolder().getFile(discName + ".dis").getLocation().toOSString();
+		return myToK.getDiscussionFolder().getFile(discName + ".dis")
+				.getLocation().toOSString();
 	}
 
 	private Document readFromXML() {
@@ -114,7 +112,7 @@ public class Discussion {
 
 		writeToXml(doc);
 	}
-	
+
 	public IFile getFile() {
 		return myToK.getDiscussionFolder().getFile(discName + ".dis");
 	}
@@ -359,8 +357,8 @@ public class Discussion {
 	public ToK getMyToK() {
 		return myToK;
 	}
-	
-	public static int getNextId(){
+
+	public static int getNextId() {
 		return NEXT_ID++;
 	}
 
@@ -369,54 +367,31 @@ public class Discussion {
 
 		XPath xpathSelector = DocumentHelper.createXPath("//opinion/name");
 		List result = xpathSelector.selectNodes(doc);
-		
-		String[] ss = new String[result.size()]; 
+
+		String[] ss = new String[result.size()];
 		int i = 0;
 		for (Object object : result) {
 			Element e = (Element) object;
 			ss[i++] = e.getText();
 		}
-		
+
 		return ss;
 	}
 
 	
-	public String[] getQuotes(String opinion) throws CoreException{
-		
-		int j=0;
+	public Quote[] getQuotes(String opinion) throws CoreException {
+
+		int j = 0;
 		Document doc = readFromXML();
 
-		List result = doc.selectNodes("//opinion[name='"+ opinion + "']/quote/id/text()");
-		Node[] _ids = new Node[result.size()];
-		ListIterator<Node> iterator = result.listIterator();
+		List result = doc.selectNodes("//opinion[name='" + opinion
+				+ "']/quote");
 		
-		while (iterator.hasNext()) {
-			Node element = (Node) iterator.next();
-			_ids[j++] = element;
+		Quote[] quotes = new Quote[result.size()];
+		for (Object object : result) {
+			Element elem = (Element) object;
+			quotes[j++] = new Quote(elem);
 		}
-				
-		String[] ids = new String[_ids.length];
-		for (int i = 0; i < _ids.length; i++) {
-			ids[i] = _ids[i].getText();
-		}
-		
-		return ids;
-		
+		return quotes;
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

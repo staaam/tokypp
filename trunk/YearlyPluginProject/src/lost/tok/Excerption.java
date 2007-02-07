@@ -19,7 +19,7 @@ public class Excerption extends Properties {
 	Integer startPos;
 
 	Integer endPos;
-	
+
 	public Excerption(String path, String text, int start, int end) {
 		this.sourceFilePath = path;
 		this.startPos = start;
@@ -52,13 +52,11 @@ public class Excerption extends Properties {
 	public int hashCode() {
 		return (sourceFilePath + "/" + startPos + "-" + endPos).hashCode();
 	}
-	
+
 	public Excerption(Element excerption) {
-		this(
-				excerption.element("sourceFilePath").getText(),
-				null,
-				Integer.valueOf(excerption.element("startPos").getText()),
-				Integer.valueOf(excerption.element("endPos").getText()));
+		this(excerption.element("sourceFilePath").getText(), null, Integer
+				.valueOf(excerption.element("startPos").getText()), Integer
+				.valueOf(excerption.element("endPos").getText()));
 	}
 
 	public Element toXML() {
@@ -72,5 +70,4 @@ public class Excerption extends Properties {
 	public void setText(String text) {
 		this.text = text;
 	}
-
 }
