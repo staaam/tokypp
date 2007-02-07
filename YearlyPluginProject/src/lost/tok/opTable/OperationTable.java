@@ -76,8 +76,8 @@ public class OperationTable extends TextEditor {
 		ISourceViewer srcview = this.getSourceViewer();
 		assert (srcview != null);
 
-		//srcview.setEditable(true);
-		//srcview.getTextWidget().setWordWrap(true);
+		// srcview.setEditable(true);
+		// srcview.getTextWidget().setWordWrap(true);
 		hookContextMenu(parent);
 
 		refreshDisplay();

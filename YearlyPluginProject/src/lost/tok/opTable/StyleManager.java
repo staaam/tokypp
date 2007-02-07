@@ -27,10 +27,9 @@ public class StyleManager {
 
 	final static public Color CHAPTER_BG_TEXT_COLOR = new Color(Display
 			.getCurrent(), 255, 255, 255);
-	
+
 	final static public Color DISABLED_FG_TEXT_COLOR = new Color(Display
 			.getCurrent(), 127, 127, 127);
-
 
 	/**
 	 * Returns the default style for marked text

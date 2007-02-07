@@ -19,26 +19,30 @@ import org.eclipse.swt.widgets.Text;
 
 public class AddQuoteWizardPage extends WizardPage {
 	private List<Discussion> disussions;
+
 	private String quoteText;
+
 	private HashMap<String, Discussion> discMap = new HashMap<String, Discussion>();
 
 	protected AddQuoteWizardPage(List<Discussion> disussions, String text) {
 		super("Add quote");
-		
-		setTitle("Add quote");		
-		
+
+		setTitle("Add quote");
+
 		this.disussions = disussions;
 		this.quoteText = text;
 	}
-	
-	public void createAddQuoteWizard(List<Discussion> discussions, String comment) {
+
+	public void createAddQuoteWizard(List<Discussion> discussions,
+			String comment) {
 		String[] discs = new String[discussions.size()];
-		int i=0;
+		int i = 0;
 		for (Discussion discussion : discussions) {
-			discs[i] = discussion.getDiscName() + " (" + discussion.getCreatorName() + ")";
+			discs[i] = discussion.getDiscName() + " ("
+					+ discussion.getCreatorName() + ")";
 			discMap.put(discs[i++], discussion);
 		}
-		
+
 		discussionCombo.addSelectionListener(new SelectionListener() {
 			public void widgetDefaultSelected(SelectionEvent e) {
 				widgetSelected(e);
@@ -50,13 +54,13 @@ public class AddQuoteWizardPage extends WizardPage {
 				updateStatus(null);
 			}
 		});
-		
+
 		discussionCombo.setItems(discs);
 		quoteArea.setText(comment);
 
 		updateStatus("Select discussion");
 	}
-	
+
 	private void updateStatus(String message) {
 		setErrorMessage(message);
 		setPageComplete(message == null);
@@ -90,40 +94,38 @@ public class AddQuoteWizardPage extends WizardPage {
 		composite.setLayout(gridLayout);
 		createCombos(composite);
 
-		new Label(composite, SWT.NONE)
-			.setText(Messages.getString("AddQuoteWizard.QuoteText")); //$NON-NLS-1$
+		new Label(composite, SWT.NONE).setText(Messages
+				.getString("AddQuoteWizard.QuoteText")); //$NON-NLS-1$
 		quoteArea = new Text(composite, SWT.MULTI | SWT.WRAP | SWT.V_SCROLL
 				| SWT.BORDER | SWT.READ_ONLY);
 		quoteArea.setLayoutData(gridData);
-		
-		new Label(composite, SWT.NONE)
-			.setText(Messages.getString("AddQuoteWizard.QuoteComment")); //$NON-NLS-1$
+
+		new Label(composite, SWT.NONE).setText(Messages
+				.getString("AddQuoteWizard.QuoteComment")); //$NON-NLS-1$
 		commentArea = new Text(composite, SWT.MULTI | SWT.WRAP | SWT.V_SCROLL
 				| SWT.BORDER);
 		commentArea.setLayoutData(gridData);
-		
+
 		createAddQuoteWizard(disussions, quoteText);
 		setControl(parent);
 	}
 
 	private void createCombos(Composite parent) {
-		GridData gridData = new GridData(
-				GridData.FILL_HORIZONTAL | 
-				GridData.GRAB_HORIZONTAL |
-				GridData.VERTICAL_ALIGN_CENTER);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL
+				| GridData.GRAB_HORIZONTAL | GridData.VERTICAL_ALIGN_CENTER);
 
 		GridLayout gridLayout = new GridLayout(2, false);
 		Composite composite = new Composite(parent, SWT.BORDER);
 		composite.setLayout(gridLayout);
 		composite.setLayoutData(gridData);
 
-		new Label(composite, SWT.NONE)
-			.setText(Messages.getString("AddQuoteWizard.Discussion")); //$NON-NLS-1$
+		new Label(composite, SWT.NONE).setText(Messages
+				.getString("AddQuoteWizard.Discussion")); //$NON-NLS-1$
 		discussionCombo = new Combo(composite, SWT.READ_ONLY);
 		discussionCombo.setLayoutData(gridData);
 
-		new Label(composite, SWT.NONE)
-			.setText(Messages.getString("AddQuoteWizard.Opinion")); //$NON-NLS-1$
+		new Label(composite, SWT.NONE).setText(Messages
+				.getString("AddQuoteWizard.Opinion")); //$NON-NLS-1$
 		opinionCombo = new Combo(composite, SWT.READ_ONLY);
 		opinionCombo.setLayoutData(gridData);
 	}

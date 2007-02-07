@@ -17,6 +17,7 @@ import org.eclipse.core.resources.*;
 import org.eclipse.core.runtime.CoreException;
 import java.io.*;
 
+import lost.tok.Excerption;
 import lost.tok.GeneralFunctions;
 import lost.tok.ToK;
 
@@ -38,12 +39,13 @@ public class NewLinkWizard extends Wizard implements INewWizard {
 	private ISelection selection;
 
 	private ToK tok = null;
-	
+
 	/**
 	 * Constructor for SampleNewWizard.
 	 */
 	public NewLinkWizard() {
 		super();
+		setWindowTitle("Link discussion");
 		setNeedsProgressMonitor(true);
 	}
 
@@ -61,25 +63,16 @@ public class NewLinkWizard extends Wizard implements INewWizard {
 	 * will create an operation and run it using wizard as execution context.
 	 */
 	public boolean performFinish() {
-		
-		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject();
-		IFile links = project.getFile("Links.xml");
-		
-		String path = links.getLocation().toOSString();
-		Document doc = GeneralFunctions.readFromXML(path);
-		Node root = doc.getRootElement();
-		tok = ToK.getProjectToK(project);
 
-//		//TODO
-//		try {
-//			tok.linkDiscussionRoot(disc,source, exp, subject, linkType)
-//		} catch (CoreException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+		IProject tokProject = ResourcesPlugin.getWorkspace().getRoot().getProject(page.getProject());
+		tok = new ToK(tokProject);
+		 //TODO
+		 try {
+		 tok.linkDiscussionRoot(tok.getDiscussion(page.getDiscussion()),page.getSourceFile(),page.getExcerptions(), page.getSubject(),page.getLinkType());
+		 } catch (CoreException e) {
+		 // TODO Auto-generated catch block
+		 e.printStackTrace();
+		 }
 		return true;
 	}
 
@@ -98,4 +91,7 @@ public class NewLinkWizard extends Wizard implements INewWizard {
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		this.selection = selection;
 	}
+	
+	
+	
 }

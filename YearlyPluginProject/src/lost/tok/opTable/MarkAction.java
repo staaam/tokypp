@@ -10,7 +10,7 @@ public class MarkAction extends AbstractEditorAction {
 				|| currentSelection.getLength() == 0)
 			return;
 
-		((OperationTable)activeEditor).mark(currentSelection);
+		((OperationTable) activeEditor).mark(currentSelection);
 	}
 
 }

@@ -20,10 +20,10 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.QualifiedName;
 
 public class GeneralFunctions {
-	
+
 	public static class Properties {
 		HashMap<QualifiedName, Object> properties = new HashMap<QualifiedName, Object>();
-		
+
 		public Object getProperty(QualifiedName key) {
 			return properties.get(key);
 		}
@@ -32,7 +32,7 @@ public class GeneralFunctions {
 			return properties.put(key, value);
 		}
 	}
-	
+
 	public static Document readFromXML(IFile file) {
 		return readFromXML(file.getLocation().toOSString());
 	}
@@ -46,7 +46,7 @@ public class GeneralFunctions {
 		return null;
 
 	}
-	
+
 	public static Document readFromXML(InputStream inputStream) {
 		Document doc = DocumentHelper.createDocument();
 		SAXReader reader = new SAXReader();
@@ -61,9 +61,9 @@ public class GeneralFunctions {
 	}
 
 	public static void writeToXml(IFile file, Document document) {
-		writeToXml(file.getLocation().toOSString(), document);		
+		writeToXml(file.getLocation().toOSString(), document);
 	}
-	
+
 	public static void writeToXml(String path, Document doc) {
 		try {
 			OutputFormat outformat = OutputFormat.createPrettyPrint();
@@ -79,6 +79,5 @@ public class GeneralFunctions {
 			e.printStackTrace();
 		}
 	}
-
 
 }

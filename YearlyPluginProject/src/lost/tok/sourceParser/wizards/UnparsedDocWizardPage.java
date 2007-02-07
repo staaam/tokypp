@@ -36,12 +36,16 @@ import org.eclipse.ui.internal.ide.dialogs.SimpleListContentProvider;
 public class UnparsedDocWizardPage extends WizardPage implements ModifyListener {
 	/** The full name of the source */
 	private Text sourceTitleText;
+
 	/** The name of the source's Author */
 	private Text authorNameText;
+
 	/** The path of the specific source (ie bible\genesis\) */
 	private Text sourcePathText;
+
 	/** The path of the file to be parsed */
 	private Text inputFilePath;
+
 	/** The destanation project */
 	private Text targetProject;
 
@@ -66,7 +70,7 @@ public class UnparsedDocWizardPage extends WizardPage implements ModifyListener 
 		container.setLayout(layout);
 		layout.numColumns = 3;
 		layout.verticalSpacing = 9;
-		
+
 		// Title selection
 		Label label = new Label(container, SWT.NULL);
 		label.setText("&Title:");
@@ -75,9 +79,9 @@ public class UnparsedDocWizardPage extends WizardPage implements ModifyListener 
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		sourceTitleText.setLayoutData(gd);
 		sourceTitleText.addModifyListener(this);
-		
+
 		label = new Label(container, SWT.NULL);
-		
+
 		// Author selection
 		label = new Label(container, SWT.NULL);
 		label.setText("&Author:");
@@ -86,22 +90,24 @@ public class UnparsedDocWizardPage extends WizardPage implements ModifyListener 
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		authorNameText.setLayoutData(gd);
 		authorNameText.addModifyListener(this);
-		
+
 		label = new Label(container, SWT.NULL);
-		
+
 		// Source path selection
 		label = new Label(container, SWT.NULL);
 		label.setText("Source &Path:");
-		label.setToolTipText("The path of this document in the full source text");
+		label
+				.setToolTipText("The path of this document in the full source text");
 
 		sourcePathText = new Text(container, SWT.BORDER | SWT.SINGLE);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		sourcePathText.setLayoutData(gd);
 		sourcePathText.addModifyListener(this);
-		sourcePathText.setToolTipText("The path of this document in the full source text");
-		
+		sourcePathText
+				.setToolTipText("The path of this document in the full source text");
+
 		label = new Label(container, SWT.NULL);
-		
+
 		// Source file selection
 		label = new Label(container, SWT.NULL);
 		label.setText("Source &File:");
@@ -118,7 +124,7 @@ public class UnparsedDocWizardPage extends WizardPage implements ModifyListener 
 				handleBrowseForInputFile();
 			}
 		});
-		
+
 		// Destenation Project Selection
 		label = new Label(container, SWT.NULL);
 		label.setText("P&roject:");
@@ -127,7 +133,7 @@ public class UnparsedDocWizardPage extends WizardPage implements ModifyListener 
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		targetProject.setLayoutData(gd);
 		targetProject.addModifyListener(this);
-		
+
 		button = new Button(container, SWT.PUSH);
 		button.setText("Browse...");
 		button.addSelectionListener(new SelectionAdapter() {
@@ -135,8 +141,8 @@ public class UnparsedDocWizardPage extends WizardPage implements ModifyListener 
 				handleBrowseForTargetProject();
 			}
 		});
-		
-		// Last:		
+
+		// Last:
 		initialize();
 		dialogChanged();
 		setControl(container);
@@ -163,72 +169,67 @@ public class UnparsedDocWizardPage extends WizardPage implements ModifyListener 
 
 	/** Opens a dialog for the user to pick his Unparsed File in the filesystem */
 	private void handleBrowseForInputFile() {
-		final String EXTENSIONS[] = {"*.txt","*.*"};
-		final String DESCRIPTIONS[] = {"Text Files (*.txt)","All Types (*.*)"};
-		
+		final String EXTENSIONS[] = { "*.txt", "*.*" };
+		final String DESCRIPTIONS[] = { "Text Files (*.txt)", "All Types (*.*)" };
+
 		FileDialog dialog = new FileDialog(getShell(), SWT.OPEN);
 		dialog.setFilterExtensions(EXTENSIONS);
 		dialog.setFilterNames(DESCRIPTIONS);
 		String result = dialog.open();
 		inputFilePath.setText(result);
 	}
-	
+
 	/** Opens a dialog for the user to pick his Target Project */
 	private void handleBrowseForTargetProject() {
-		
+
 		ListDialog dialog = new ListDialog(getShell());
-		
+
 		// FIXME(Shay): Doesn't work :(
-		
-		IProject projects[] = ResourcesPlugin.getWorkspace().getRoot().getProjects();
+
+		IProject projects[] = ResourcesPlugin.getWorkspace().getRoot()
+				.getProjects();
 		String projNames[] = new String[projects.length];
 		LinkedList<String> projNameList = new LinkedList<String>();
-		for (int i = 0; i < projects.length; i++)
-		{
+		for (int i = 0; i < projects.length; i++) {
 			projNames[i] = projects[i].getName();
 			projNameList.addLast(projects[i].getName());
 		}
-		
+
 		dialog.setAddCancelButton(true);
 		dialog.setBlockOnOpen(true);
-		
+
 		dialog.setLabelProvider(new LabelProvider() {
-            public String getText(Object element) {
-                // Return the resolution's label.
-                return element == null ? "" : (String)element; //$NON-NLS-1$
-            }
-        });
+			public String getText(Object element) {
+				// Return the resolution's label.
+				return element == null ? "" : (String) element; //$NON-NLS-1$
+			}
+		});
 		/*
-		SimpleListContentProvider scp = new SimpleListContentProvider();
-		scp.setElements(projNames);
-		dialog.setContentProvider(scp);*/
-		
+		 * SimpleListContentProvider scp = new SimpleListContentProvider();
+		 * scp.setElements(projNames); dialog.setContentProvider(scp);
+		 */
+
 		dialog.setInitialElementSelections(projNameList);
-				
+
 		// TODO(Shay): Filter the project and choose only those that are ToK
 		dialog.setTitle("Select Target Project");
 		dialog.setMessage("The document will be added to the selected project");
-		//dialog.setAllowUserToToggleDerived(false);
+		// dialog.setAllowUserToToggleDerived(false);
 
-		if (dialog.open() == ResourceSelectionDialog.OK)
-		{
+		if (dialog.open() == ResourceSelectionDialog.OK) {
 			Object[] result = dialog.getResult();
 			if (result.length == 1)
-				targetProject.setText(((Path) result[0]).toString());				
-		}
-		
-		
-/*		ContainerSelectionDialog dialog = new ContainerSelectionDialog(
-				getShell(), ResourcesPlugin.getWorkspace().getRoot(), false,
-				"Select target project");
-		if (dialog.open() == ContainerSelectionDialog.OK) {
-			Object[] result = dialog.getResult();
-			if (result.length == 1) {
 				targetProject.setText(((Path) result[0]).toString());
-			}
-		}*/
-	}
+		}
 
+		/*
+		 * ContainerSelectionDialog dialog = new ContainerSelectionDialog(
+		 * getShell(), ResourcesPlugin.getWorkspace().getRoot(), false, "Select
+		 * target project"); if (dialog.open() == ContainerSelectionDialog.OK) {
+		 * Object[] result = dialog.getResult(); if (result.length == 1) {
+		 * targetProject.setText(((Path) result[0]).toString()); } }
+		 */
+	}
 
 	/**
 	 * Ensures that both text fields are set.
@@ -236,39 +237,24 @@ public class UnparsedDocWizardPage extends WizardPage implements ModifyListener 
 
 	private void dialogChanged() {
 		// TODO(Shay)
-/*		IResource container = ResourcesPlugin.getWorkspace().getRoot()
-				.findMember(new Path(getContainerName()));
-		String fileName = getFileName();
-
-		if (getContainerName().length() == 0) {
-			updateStatus("File container must be specified");
-			return;
-		}
-		if (container == null
-				|| (container.getType() & (IResource.PROJECT | IResource.FOLDER)) == 0) {
-			updateStatus("File container must exist");
-			return;
-		}
-		if (!container.isAccessible()) {
-			updateStatus("Project must be writable");
-			return;
-		}
-		if (fileName.length() == 0) {
-			updateStatus("File name must be specified");
-			return;
-		}
-		if (fileName.replace('\\', '/').indexOf('/', 1) > 0) {
-			updateStatus("File name must be valid");
-			return;
-		}
-		int dotLoc = fileName.lastIndexOf('.');
-		if (dotLoc != -1) {
-			String ext = fileName.substring(dotLoc + 1);
-			if (ext.equalsIgnoreCase("mpe") == false) {
-				updateStatus("File extension must be \"mpe\"");
-				return;
-			}
-		}*/
+		/*
+		 * IResource container = ResourcesPlugin.getWorkspace().getRoot()
+		 * .findMember(new Path(getContainerName())); String fileName =
+		 * getFileName();
+		 * 
+		 * if (getContainerName().length() == 0) { updateStatus("File container
+		 * must be specified"); return; } if (container == null ||
+		 * (container.getType() & (IResource.PROJECT | IResource.FOLDER)) == 0) {
+		 * updateStatus("File container must exist"); return; } if
+		 * (!container.isAccessible()) { updateStatus("Project must be
+		 * writable"); return; } if (fileName.length() == 0) {
+		 * updateStatus("File name must be specified"); return; } if
+		 * (fileName.replace('\\', '/').indexOf('/', 1) > 0) {
+		 * updateStatus("File name must be valid"); return; } int dotLoc =
+		 * fileName.lastIndexOf('.'); if (dotLoc != -1) { String ext =
+		 * fileName.substring(dotLoc + 1); if (ext.equalsIgnoreCase("mpe") ==
+		 * false) { updateStatus("File extension must be \"mpe\""); return; } }
+		 */
 		updateStatus(null);
 	}
 

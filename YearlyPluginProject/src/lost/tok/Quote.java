@@ -3,11 +3,16 @@
  */
 package lost.tok;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import lost.tok.sourceDocument.SourceDocument;
+
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.ResourcesPlugin;
 
 /**
  * @author Team LOST
@@ -88,5 +93,41 @@ public class Quote {
 		return e;
 
 	}
-
+	
+	@SuppressWarnings("unchecked")
+	public Quote(Element elem){
+		
+		ID = Integer.getInteger(elem.element("id").getText());
+		sourceFilePath = elem.element("sourceFile").getText();
+		comment = elem.element("comment").getText();
+		excerptions = new ArrayList<Excerption>();
+		List<Element> exps = elem.elements("excerption");
+		for (Element exp : exps) {
+			excerptions.add(new Excerption(exp));
+		}
+	}
+	
+	/**
+	 * Returns a prefix of length j of the first excerption of the quote
+	 *	if j == 0 returns the whole excerption
+	 * @param j
+	 * @return
+	 */
+	
+	public String getPrefix(int j) {
+		IFile file = ResourcesPlugin.getWorkspace().getRoot().getProjects()[0].getFile(getSourceFilePath());
+		SourceDocument sourceDoc = new SourceDocument();
+		sourceDoc.set(GeneralFunctions.readFromXML(file));
+		Excerption excerption = getExcerptions().get(0);
+		String text = sourceDoc.getChapterText(excerption.getSourceFilePath()).getText().substring(excerption.getStartPos(), excerption.getEndPos());
+		
+		if (j==0){
+			return text;
+		}
+		else{
+			int i = j > text.length() ? text.length() : j;
+			String expPrefix = text.substring(0, i) + "...";
+			return expPrefix;
+		}
+	}
 }

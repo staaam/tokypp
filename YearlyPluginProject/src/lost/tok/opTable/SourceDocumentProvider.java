@@ -13,7 +13,8 @@ import org.eclipse.ui.editors.text.FileDocumentProvider;
 public class SourceDocumentProvider extends FileDocumentProvider {
 	protected void setDocumentContent(IDocument document,
 			InputStream contentStream, String encoding) throws CoreException {
-		((SourceDocument) document).set(GeneralFunctions.readFromXML(contentStream));
+		((SourceDocument) document).set(GeneralFunctions
+				.readFromXML(contentStream));
 	}
 
 	@Override

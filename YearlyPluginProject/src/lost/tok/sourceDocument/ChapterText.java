@@ -77,24 +77,20 @@ public class ChapterText extends Chapter {
 	public String toString() {
 		return text;
 	}
-	
-	/** 
-	 * Creates a new {chapter,sub chapter,text} ending at that offset  
-	 * Returns the ChapterText with the unparsed text,
-	 *  or itself if no such chap was created
+
+	/**
+	 * Creates a new {chapter,sub chapter,text} ending at that offset Returns
+	 * the ChapterText with the unparsed text, or itself if no such chap was
+	 * created
 	 */
-	public ChapterText createNewChapter(Integer offset, String name)
-	{
+	public ChapterText createNewChapter(Integer offset, String name) {
 		String originalText = text;
-		
-		if (isUnparsed())
-		{
+
+		if (isUnparsed()) {
 			// change the label/name of this chapter to what it should be
 			this.parent.name = name;
 			this.parent.updateLabel();
-		}
-		else
-		{
+		} else {
 			Chapter myOldParent = this.parent;
 			myOldParent.children.clear();
 			Chapter myNewParent = new Chapter("", name);
@@ -102,16 +98,16 @@ public class ChapterText extends Chapter {
 			myNewParent.add(this);
 			myNewParent.updateLabel();
 		}
-		
+
 		this.name = "";
 		this.label = Chapter.UNPARSED_STR;
 		this.text = originalText.substring(0, offset).trim() + "\n";
 		this.excerPath = ""; // FIXME(Shay): Update this!
-		
-		if (!offset.equals(length-1))
-		{
-			Chapter textChapParent = new Chapter("",Chapter.UNPARSED_STR);
-			ChapterText textChap = new ChapterText(Chapter.UNPARSED_STR, originalText.substring(offset).trim() + "\n");
+
+		if (!offset.equals(length - 1)) {
+			Chapter textChapParent = new Chapter("", Chapter.UNPARSED_STR);
+			ChapterText textChap = new ChapterText(Chapter.UNPARSED_STR,
+					originalText.substring(offset).trim() + "\n");
 			textChapParent.add(textChap);
 			this.parent.parent.add(textChapParent);
 			textChapParent.updateLabel();
@@ -121,36 +117,43 @@ public class ChapterText extends Chapter {
 		return this;
 	}
 
-	public boolean isUnparsed()
-	{
+	public boolean isUnparsed() {
 		return label.equals(Chapter.UNPARSED_STR + "/0");
 	}
-	
+
 	/**
 	 * Checks if it is ok to name the chapter's text with this name
-	 * @param name the new name
-	 * @return true if it is ok, false otherwise (ie has brother with the same name)
+	 * 
+	 * @param name
+	 *            the new name
+	 * @return true if it is ok, false otherwise (ie has brother with the same
+	 *         name)
 	 */
-	public boolean isLegalName(String newName)
-	{
+	public boolean isLegalName(String newName) {
 		if (newName.equals(Chapter.UNPARSED_STR))
 			return false;
 
 		if (!this.isUnparsed())
-			return true; // a new sub-level will be created. there are no brothers
-		
+			return true; // a new sub-level will be created. there are no
+							// brothers
+
 		if (this.parent == null)
 			return true;
-		
+
 		Chapter gp = this.parent.parent;
 		if (gp == null)
 			return true;
-		
-		for (Chapter uncle : gp.children)
-		{
+
+		for (Chapter uncle : gp.children) {
 			if (uncle.name.equals(newName))
 				return false;
 		}
 		return true;
+	}
+	
+	
+	
+	public String getText(){
+		return text;
 	}
 }
