@@ -1,12 +1,74 @@
 package lost.tok.disEditor;
 
+import java.awt.Dialog;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
-import lost.tok.GeneralFunctions;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.TreeEvent;
+import org.eclipse.swt.events.TreeListener;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.TextLayout;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Layout;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.TreeItem;
+import org.eclipse.swt.SWT;
+import org.eclipse.ui.editors.text.TextEditor;
+import org.eclipse.ui.part.FileEditorInput;
+
+
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.RowLayout;
+import org.eclipse.swt.widgets.Display;
+
+import javax.swing.event.TreeExpansionListener;
+import javax.xml.XMLConstants;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
 
 import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.dom4j.io.OutputFormat;
+import org.dom4j.io.SAXReader;
+import org.dom4j.io.XMLWriter;
+
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IProjectDescription;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.QualifiedName;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.viewers.TreeViewer;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DragSource;
@@ -17,21 +79,13 @@ import org.eclipse.swt.dnd.DropTargetAdapter;
 import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
-import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
-import org.eclipse.ui.editors.text.TextEditor;
-import org.eclipse.ui.part.FileEditorInput;
 
 public class DiscussionEditor extends TextEditor {
 
@@ -86,12 +140,15 @@ public class DiscussionEditor extends TextEditor {
 		      {
 				    if(e.keyCode == SWT.DEL)
 				    {   
+				    	//deletion of descussion or default opinion is NOT allowed
 				    	if(disTree.getSelection()[0].getData().equals("discussion") ||	
 				    			(disTree.getSelection()[0].getData().equals("opinion") &&
 				    					disTree.getSelection()[0].getText().equalsIgnoreCase("default")))
 				    	{
 				    		return;
 				    	}
+				    	
+				    	//deleting an opinion
 				    	if(disTree.getSelection()[0].getData().equals("opinion"))
 				    	{
 				    		TreeItem defOp = null;
@@ -100,9 +157,16 @@ public class DiscussionEditor extends TextEditor {
 				    		for (int i = 0; i < itmArr.length; i++) {
 								if(itmArr[i].getText().equalsIgnoreCase("default"))
 								{
-									defOp = itmArr[i];
+									defOp = itmArr[i];									
 								}
 							}
+				    		
+				    		if(defOp == null)
+				    		{
+				    			defOp = new TreeItem(disTree.getItem(0),SWT.NONE);
+				    			defOp.setText("default");
+				    			defOp.setData("opinion");
+				    		}
 				    		
 				    		TreeItem itemArr[] = disTree.getSelection()[0].getItems();
 				    		
@@ -113,11 +177,17 @@ public class DiscussionEditor extends TextEditor {
 				    			tempItem.setData(itemArr[i].getData());
 				    			tempItem.setImage(itemArr[i].getImage());
 				    			
+				    			MoveQuoteToDefault(itemArr[i]);
+				    			
 				    			itemArr[i].dispose();				    			 
 							}
+				    		RemoveOpinionFromFile(disTree.getSelection()[0]);
+					    	disTree.getSelection()[0].dispose();
+					    	
+					    	return;
 				    	}
-				    	
-				    	disTree.getSelection()[0].dispose();
+				    	RemoveQuoteFromFile(disTree.getSelection()[0]);
+				    	disTree.getSelection()[0].dispose();				    					    
 				    }
 		      }
 
@@ -134,7 +204,9 @@ public class DiscussionEditor extends TextEditor {
 	    final DragSource source = new DragSource(disTree, operations);
 	    source.setTransfer(types);
 	    final TreeItem[] dragSourceItem = new TreeItem[1];
-	    source.addDragListener(new DragSourceListener() {  public void dragStart(DragSourceEvent event) {
+	    source.addDragListener(new DragSourceListener() {  
+	    	public void dragStart(DragSourceEvent event) 
+	    	{
 	        TreeItem[] selection = disTree.getSelection();
 	        if (selection.length > 0 && selection[0].getItemCount() == 0) {
 	          event.doit = true;
@@ -176,24 +248,29 @@ public class DiscussionEditor extends TextEditor {
 
 	      public void drop(DropTargetEvent event) {
 	    	if (((TreeItem)event.item).getData().equals("quote") ||
-	    			((TreeItem)event.item).getData().equals("discussion")){
+	    			((TreeItem)event.item).getData().equals("discussion"))
+	    	{
 		       event.detail = DND.DROP_NONE;
 		       return;
-		    } 
+		    }
 	        if (event.data == null) {
 	          event.detail = DND.DROP_NONE;
 	          return;
 	        }
 	        String text = (String) event.data;
-	        if (event.item == null) {
+	        if (event.item == null) 
+	        {
 	          TreeItem item = new TreeItem(disTree, SWT.NONE);
 	          item.setText(text);
-	        } else {
+	        } 
+	        else 
+	        {
 	          TreeItem item = (TreeItem) event.item;
 	          Point pt = par.getDisplay().map(null, disTree, event.x, event.y);
 	          Rectangle bounds = item.getBounds();
 	          TreeItem parent = item.getParentItem();
-	          if (parent != null) {
+	          if (parent != null) 
+	          {
 	            TreeItem[] items = parent.getItems();
 	            int index = 0;
 	            for (int i = 0; i < items.length; i++) {
@@ -202,20 +279,26 @@ public class DiscussionEditor extends TextEditor {
 	                break;
 	              }
 	            }
-	            if (pt.y < bounds.y + bounds.height / 3) {
+	            if (pt.y < bounds.y + bounds.height / 3) 
+	            {
 	              TreeItem newItem = new TreeItem(parent, SWT.NONE,
 	                  index);
 	              newItem.setText(text);
-	            } else if (pt.y > bounds.y + 2 * bounds.height / 3) {
+	            } 
+	            else if (pt.y > bounds.y + 2 * bounds.height / 3) 
+	            {
 	              TreeItem newItem = new TreeItem(parent, SWT.NONE,
 	                  index + 1);
 	              newItem.setText(text);
-	            } else {
+	            } 
+	            else 
+	            {
 	              TreeItem newItem = new TreeItem(item, SWT.NONE);
 	              newItem.setText(text);
 	            }
-
-	          } else {
+	          } 
+	          else 
+	          {
 	            TreeItem[] items = disTree.getItems();
 	            int index = 0;
 	            for (int i = 0; i < items.length; i++) {
@@ -224,21 +307,25 @@ public class DiscussionEditor extends TextEditor {
 	                break;
 	              }
 	            }
-	            if (pt.y < bounds.y + bounds.height / 3) {
+	            if (pt.y < bounds.y + bounds.height / 3) 
+	            {
 	              TreeItem newItem = new TreeItem(disTree, SWT.NONE,
 	                  index);
 	              newItem.setText(text);
-	            } else if (pt.y > bounds.y + 2 * bounds.height / 3) {
+	            } 
+	            else if (pt.y > bounds.y + 2 * bounds.height / 3) 
+	            {
 	              TreeItem newItem = new TreeItem(disTree, SWT.NONE,
 	                  index + 1);
 	              newItem.setText(text);
-	            } else {
+	            } 
+	            else 
+	            {
 	              TreeItem newItem = new TreeItem(item, SWT.NONE);
 	              newItem.setText(text);
 	            }
 	          }
-
-	        }
+	    	}
 	      }
 	    });
 		//**************************************************************************************************
@@ -251,12 +338,16 @@ public class DiscussionEditor extends TextEditor {
 			return;
 		}
 
-		FileEditorInput fileEditorInput = (FileEditorInput) getEditorInput();
+		FileEditorInput fileEditorInput = (FileEditorInput)super.getEditorInput();
 		IFile file = fileEditorInput.getFile();
 		
+		Document discussionDocumentObject;
+		File discussionFile = new File(file.getLocationURI());
+		SAXReader discussionReader = new SAXReader();
+
 		try
 		{
-			Document discussionDocumentObject = GeneralFunctions.readFromXML(file);
+			discussionDocumentObject = discussionReader.read(new FileInputStream(discussionFile));
 			
 			Iterator opinionsIterator = discussionDocumentObject.getRootElement().elementIterator("opinion");
 
@@ -279,15 +370,18 @@ public class DiscussionEditor extends TextEditor {
 				opinionItem.setData("opinion");
 				//opinionItem.setImage(imageOpin);
 				
-				for(int i=0; i< 4; i++)
-				{				
+				Iterator quotsIterator = opinionElement.elementIterator("quote");
+				
+				while (quotsIterator.hasNext()) {
+					Element elem = (Element)quotsIterator.next();
+
 					TreeItem quoteItem = new TreeItem(opinionItem,SWT.NONE);
 					//Image imageQuote = new Image(null, new FileInputStream("C:/quote.gif"));
 					
-					quoteItem.setText(opinionElement.element("quote").element("text").getText() + i);	
-					quoteItem.setData("quote");				
+					quoteItem.setText(elem.element("text").getText());
+					quoteItem.setData("quote");						
 					//quoteItem.setImage(imageQuote);
-				}
+				}				
 			}
 		} 
 		catch(Exception e)
@@ -296,6 +390,201 @@ public class DiscussionEditor extends TextEditor {
 			eItem.setText(e.getMessage());
 		}
 		//*************************************************************************************************
+	}
+		
+	//add quote to default opinion
+	public void MoveQuoteToDefault(TreeItem itemToMove)
+	{
+		if (!(super.getEditorInput() instanceof FileEditorInput)) 
+		{
+			//TODO: error message
+			return;
+		}
+
+		try
+		{
+			FileEditorInput fileEditorInput = (FileEditorInput)super.getEditorInput();
+			IFile file = fileEditorInput.getFile();
+			
+			File discussionFile = new File(file.getLocationURI());
+			SAXReader discussionReader = new SAXReader();
+			Document discussionDocumentObject = discussionReader.read(new FileInputStream(discussionFile));
+			
+			Element root = discussionDocumentObject.getRootElement();
+			
+			Iterator opinionsIterator = root.elementIterator("opinion");
+		
+			Element defaultOpinion = null;
+			Element fromOpinion = null;
+			
+			while (opinionsIterator.hasNext()) 
+			{
+				Element element = (Element) opinionsIterator.next();
+				
+				if(element.element("name").getTextTrim().equals("default"))
+				{
+					defaultOpinion = element;
+				}
+				if(element.element("name").getTextTrim().equals(itemToMove.getParentItem().getText()))
+				{
+					fromOpinion = element;
+				}
+			}			
+			
+			if(defaultOpinion == null)
+			{
+				throw new Exception("Default opinion missing in discussion file !!!");
+			}
+
+			Iterator quotesIterator = fromOpinion.elementIterator("quote");
+			Element elemToMove = null;
+			
+			while (quotesIterator.hasNext()) 
+			{
+				Element eleme = (Element) quotesIterator.next();
+				
+				if(eleme.element("text").getText().equals(itemToMove.getText()))
+				{
+					elemToMove = eleme;
+				}
+			}
+						
+			Element newQuote = defaultOpinion.addElement("quote");
+			newQuote.addElement("sourceFile").setText(elemToMove.element("sourceFile").getTextTrim());
+			newQuote.addElement("text").setText(elemToMove.element("text").getTextTrim());
+			newQuote.addElement("comment").setText(elemToMove.element("comment").getTextTrim());
+			newQuote.addElement("excerptions").setText(elemToMove.element("excerptions").getTextTrim()); 
+
+			elemToMove.remove(elemToMove.element("sourceFile"));
+			elemToMove.remove(elemToMove.element("text"));
+			elemToMove.remove(elemToMove.element("comment"));
+			elemToMove.remove(elemToMove.element("excerptions"));
+			elemToMove.detach();
+			
+			OutputFormat outformat = OutputFormat.createPrettyPrint();
+			outformat.setEncoding("UTF-8");
+			IPath res = file.getLocation();
+			FileWriter fw = new FileWriter(res.toOSString());
+			XMLWriter writer = new XMLWriter(fw, outformat);
+			writer.write(discussionDocumentObject);
+			writer.flush();				
+		} 
+		catch(Exception e)
+		{
+			//TODO: handle exception
+		}
+	}
+	
+	public void RemoveOpinionFromFile(TreeItem opinionToRemove)
+	{
+		try
+		{
+			FileEditorInput fileEditorInput = (FileEditorInput)super.getEditorInput();
+			IFile file = fileEditorInput.getFile();
+			
+			File discussionFile = new File(file.getLocationURI());
+			SAXReader discussionReader = new SAXReader();
+			Document discussionDocumentObject = discussionReader.read(new FileInputStream(discussionFile));
+			
+			Element root = discussionDocumentObject.getRootElement();
+			
+			Iterator opinionsIterator = root.elementIterator("opinion");
+		
+			Element dieOpinion = null;
+			
+			while (opinionsIterator.hasNext()) 
+			{
+				Element element = (Element) opinionsIterator.next();
+				
+				if(element.element("name").getTextTrim().equals(opinionToRemove.getText()))
+				{
+					dieOpinion = element;
+				}
+			}			
+			
+			dieOpinion.remove(dieOpinion.element("id"));
+			dieOpinion.remove(dieOpinion.element("name"));
+			dieOpinion.remove(dieOpinion.element("opinionRel"));
+			dieOpinion.detach();
+		
+			OutputFormat outformat = OutputFormat.createPrettyPrint();
+			outformat.setEncoding("UTF-8");
+			IPath res = file.getLocation();
+			FileWriter fw = new FileWriter(res.toOSString());
+			XMLWriter writer = new XMLWriter(fw, outformat);
+			writer.write(discussionDocumentObject);
+			writer.flush();				
+		} 
+		catch(Exception e)
+		{
+			//TODO: handle exception
+		}
+	}
+	
+	public void RemoveQuoteFromFile(TreeItem quoteToRemove)
+	{
+		if (!(super.getEditorInput() instanceof FileEditorInput)) 
+		{
+			//TODO: error message
+			return;
+		}
+
+		try
+		{
+			FileEditorInput fileEditorInput = (FileEditorInput)super.getEditorInput();
+			IFile file = fileEditorInput.getFile();
+			
+			File discussionFile = new File(file.getLocationURI());
+			SAXReader discussionReader = new SAXReader();
+			Document discussionDocumentObject = discussionReader.read(new FileInputStream(discussionFile));
+			
+			Element root = discussionDocumentObject.getRootElement();
+			
+			Iterator opinionsIterator = root.elementIterator("opinion");
+		
+			Element fromOpinion = null;
+			
+			while (opinionsIterator.hasNext()) 
+			{
+				Element element = (Element) opinionsIterator.next();
+				
+				if(element.element("name").getTextTrim().equals(quoteToRemove.getParentItem().getText()))
+				{
+					fromOpinion = element;
+				}
+			}	
+
+			Iterator quotesIterator = fromOpinion.elementIterator("quote");
+			Element elemToMove = null;
+			
+			while (quotesIterator.hasNext()) 
+			{
+				Element eleme = (Element) quotesIterator.next();
+				
+				if(eleme.element("text").getText().equals(quoteToRemove.getText()))
+				{
+					elemToMove = eleme;
+				}
+			}
+						
+			elemToMove.remove(elemToMove.element("sourceFile"));
+			elemToMove.remove(elemToMove.element("text"));
+			elemToMove.remove(elemToMove.element("comment"));
+			elemToMove.remove(elemToMove.element("excerptions"));
+			elemToMove.detach();
+			
+			OutputFormat outformat = OutputFormat.createPrettyPrint();
+			outformat.setEncoding("UTF-8");
+			IPath res = file.getLocation();
+			FileWriter fw = new FileWriter(res.toOSString());
+			XMLWriter writer = new XMLWriter(fw, outformat);
+			writer.write(discussionDocumentObject);
+			writer.flush();				
+		} 
+		catch(Exception e)
+		{
+			//TODO: handle exception
+		}
 	}
 	
 	public void dispose() {
