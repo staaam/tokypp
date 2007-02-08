@@ -1,5 +1,6 @@
 package lost.tok.newDiscussionWizard;
 
+import lost.tok.Messages;
 import lost.tok.ToK;
 
 import org.eclipse.core.resources.IProject;
@@ -25,7 +26,7 @@ public class NewDiscussionWizard extends Wizard implements INewWizard {
 	public NewDiscussionWizard() {
 		super();
 		setNeedsProgressMonitor(true);
-		setWindowTitle("New Discussion Wizard");
+		setWindowTitle(Messages.getString("NewDiscussionWizard.0")); //$NON-NLS-1$
 	}
 
 	/**
