@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import lost.tok.Messages;
 import lost.tok.sourceDocument.SourceDocument;
 
 import org.eclipse.core.runtime.CoreException;
@@ -45,7 +46,7 @@ public class UnparsedDocumentProvider extends FileDocumentProvider {
 		}
 
 		// unused...
-		srcDoc.setUnparsed(sb.toString(), "Anna Banana", "Shay");
+		srcDoc.setUnparsed(sb.toString(), "Anna Banana", "Shay"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	@Override

@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
 
+import lost.tok.Messages;
 import lost.tok.ToK;
 import lost.tok.sourceDocument.Chapter;
 import lost.tok.sourceParser.SourceParser;
@@ -93,7 +94,7 @@ public class UnparsedDocWizard extends Wizard implements INewWizard {
 			return false;
 		} catch (InvocationTargetException e) {
 			Throwable realException = e.getTargetException();
-			MessageDialog.openError(getShell(), "Error", realException.getMessage());
+			MessageDialog.openError(getShell(), "Error", realException.getMessage()); //$NON-NLS-1$
 			return false;
 		}
 		return true;
@@ -110,7 +111,7 @@ public class UnparsedDocWizard extends Wizard implements INewWizard {
 			throws CoreException 
 	{
 		// create a sample file
-		monitor.beginTask("Finding " + title, 2);
+		monitor.beginTask(Messages.getString("SPWizard.1") + title, 2); //$NON-NLS-1$
 		
 		final IFile eclipseFile = getUnparsedTargetIFile(projName, fullFileName);
 		// Check for existance, Create the xml initial file
@@ -129,10 +130,10 @@ public class UnparsedDocWizard extends Wizard implements INewWizard {
 				e.printStackTrace();
 			}
 		}
-		eclipseFile.setPersistentProperty(ToK.isRootQName, isRoot ? "True" : "False");
+		eclipseFile.setPersistentProperty(ToK.isRootQName, isRoot ? "True" : "False"); //$NON-NLS-1$ //$NON-NLS-2$
 		
 		monitor.worked(1);
-		monitor.setTaskName("Opening file for editing...");
+		monitor.setTaskName(Messages.getString("SPWizard.4")); //$NON-NLS-1$
 		getShell().getDisplay().asyncExec(new Runnable() {
 			public void run() {
 				IWorkbenchPage page =
@@ -151,7 +152,7 @@ public class UnparsedDocWizard extends Wizard implements INewWizard {
 		String fileName = getFileNameWithoutExtension(fullFileName);		
 				
 		IProject targetProj = ResourcesPlugin.getWorkspace().getRoot().getProject(projName);
-		return targetProj.getFile(ToK.UNPARSED_SOURCES_FOLDER + "\\" + fileName + ".upsrc");
+		return targetProj.getFile(ToK.UNPARSED_SOURCES_FOLDER + "\\" + fileName + ".upsrc"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
 	static public IFile getParsedTargetIFile(String projName, String fullFileName)
@@ -159,7 +160,7 @@ public class UnparsedDocWizard extends Wizard implements INewWizard {
 		String fileName = getFileNameWithoutExtension(fullFileName);
 				
 		IProject targetProj = ResourcesPlugin.getWorkspace().getRoot().getProject(projName);
-		return targetProj.getFile(ToK.SOURCES_FOLDER + "\\" + fileName + ".src");
+		return targetProj.getFile(ToK.SOURCES_FOLDER + "\\" + fileName + ".src"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
 	/** Returns only the name of the file, without its path or extension */
@@ -186,13 +187,13 @@ public class UnparsedDocWizard extends Wizard implements INewWizard {
 		BufferedReader rdr = 
 			new BufferedReader(
 				new InputStreamReader(
-					new FileInputStream(inputFile),"UTF-8"));
+					new FileInputStream(inputFile),"UTF-8")); //$NON-NLS-1$
 		
 		StringBuffer content = new StringBuffer((int)inputLength);
 		String line = rdr.readLine();
 		while (line != null)
 		{
-			content.append(line + "\n");
+			content.append(line + "\n"); //$NON-NLS-1$
 			line = rdr.readLine();
 		}
 		rdr.close();
@@ -241,20 +242,20 @@ public class UnparsedDocWizard extends Wizard implements INewWizard {
 		*/
 		
 		Document unparsedXML = DocumentHelper.createDocument();
-		unparsedXML.setXMLEncoding("UTF-8");
-		Element source = unparsedXML.addElement("Source");
-		Element sourceName = source.addElement("name");
-		if (srcPath.equals(""))
+		unparsedXML.setXMLEncoding("UTF-8"); //$NON-NLS-1$
+		Element source = unparsedXML.addElement("Source"); //$NON-NLS-1$
+		Element sourceName = source.addElement("name"); //$NON-NLS-1$
+		if (srcPath.equals("")) //$NON-NLS-1$
 			sourceName.addText(title);
 		else
-			sourceName.addText(srcPath + "\\" + title);
-		source.addElement("author").addText(author);
-		Element text = source.addElement("child").addElement("text");
-		text.addElement("name").addText(Chapter.UNPARSED_STR);
-		text.addElement("content").addText(content.toString());
+			sourceName.addText(srcPath + "\\" + title); //$NON-NLS-1$
+		source.addElement("author").addText(author); //$NON-NLS-1$
+		Element text = source.addElement("child").addElement("text"); //$NON-NLS-1$ //$NON-NLS-2$
+		text.addElement("name").addText(Chapter.UNPARSED_STR); //$NON-NLS-1$
+		text.addElement("content").addText(content.toString()); //$NON-NLS-1$
 		
 		String xmlString = unparsedXML.asXML();
-		byte[] bytes = xmlString.getBytes("UTF-8");
+		byte[] bytes = xmlString.getBytes("UTF-8"); //$NON-NLS-1$
 		
 		ByteArrayInputStream bs = new ByteArrayInputStream(bytes);
 		targetFile.create(bs, true, monitor);

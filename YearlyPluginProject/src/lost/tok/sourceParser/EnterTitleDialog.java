@@ -1,5 +1,6 @@
 package lost.tok.sourceParser;
 
+import lost.tok.Messages;
 import lost.tok.opTable.StyleManager;
 import lost.tok.sourceDocument.ChapterText;
 
@@ -42,8 +43,8 @@ public class EnterTitleDialog extends PopupDialog implements KeyListener {
 	EnterTitleDialog(Shell shell, SourceParser myEditor, int offset,
 			ChapterText ct, String defaultName) {
 		super(shell, PopupDialog.INFOPOPUPRESIZE_SHELLSTYLE, true, true, false,
-				false, "New Chapter Name:",
-				"Write the name of the new chapter. Enter to finish, Esc to cancel");
+				false, Messages.getString("EnterTitleDialog.Title"), //$NON-NLS-1$
+				Messages.getString("EnterTitleDialog.Description")); //$NON-NLS-1$
 		editor = myEditor;
 		chapOffset = offset;
 		targetChap = ct;

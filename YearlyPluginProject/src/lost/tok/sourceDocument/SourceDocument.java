@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import lost.tok.GeneralFunctions;
+import lost.tok.Messages;
 import lost.tok.ToK;
 
 import org.dom4j.DocumentHelper;
@@ -43,10 +44,10 @@ public class SourceDocument extends Document {
 		r = new RangeSearch();
 
 		Element root = d.getRootElement();	
-		title = root.elementTextTrim("name");
-		author = root.elementTextTrim("author");
+		title = root.elementTextTrim("name"); //$NON-NLS-1$
+		author = root.elementTextTrim("author"); //$NON-NLS-1$
 
-		rootChapter = new Chapter(getTitle(), "", root, Chapter.CHAPTER_STR + " ");
+		rootChapter = new Chapter(getTitle(), "", root, Chapter.CHAPTER_STR + " "); //$NON-NLS-1$ //$NON-NLS-2$
 		update();
 	}
 	
@@ -81,11 +82,11 @@ public class SourceDocument extends Document {
 		this.title = title;
 		this.author = author;
 		
-		ChapterText ctext= new ChapterText(Chapter.UNPARSED_STR, s.trim() + "\n");
-		Chapter firstChapter = new Chapter(Chapter.CHAPTER_STR + " 1:\t" + 
-					Chapter.UNPARSED_STR + "\n",Chapter.UNPARSED_STR);
+		ChapterText ctext= new ChapterText(Chapter.UNPARSED_STR, s.trim() + "\n"); //$NON-NLS-1$
+		Chapter firstChapter = new Chapter(Chapter.CHAPTER_STR + " 1:\t" +  //$NON-NLS-1$
+					Chapter.UNPARSED_STR + "\n",Chapter.UNPARSED_STR); //$NON-NLS-1$
 		firstChapter.add(ctext);
-		rootChapter = new Chapter(getTitle(), "");
+		rootChapter = new Chapter(getTitle(), ""); //$NON-NLS-1$
 		rootChapter.add(firstChapter);
 		
 		update();
@@ -152,7 +153,7 @@ public class SourceDocument extends Document {
 		
 		//start the iteration on the first level of chapters
 		for (Chapter c: rootChapter.children){ 
-			String currXMLPath = "/source/child";
+			String currXMLPath = "/source/child"; //$NON-NLS-1$
 			preorderFunc(c,currXMLPath);
 		}
 	}
@@ -165,7 +166,7 @@ public class SourceDocument extends Document {
 				// Print the entire xml to the byte array
 				ByteArrayOutputStream baos = new ByteArrayOutputStream(500);
 				OutputFormat outformat = OutputFormat.createPrettyPrint();
-				outformat.setEncoding("UTF-8");
+				outformat.setEncoding("UTF-8"); //$NON-NLS-1$
 				XMLWriter writer = new XMLWriter(baos, outformat);
 				writer.write(sourceSkeleton());
 				writer.flush();
@@ -185,10 +186,10 @@ public class SourceDocument extends Document {
 	private org.dom4j.Document sourceSkeleton() {
 		// Create the Skeleton of the source file
 		org.dom4j.Document sourceDoc = DocumentHelper.createDocument();
-		Element e = sourceDoc.addElement("source");
-		e.addElement("name").addText(title);
-		e.addElement("author").addText(author);
-		e.addElement("child");
+		Element e = sourceDoc.addElement("source"); //$NON-NLS-1$
+		e.addElement("name").addText(title); //$NON-NLS-1$
+		e.addElement("author").addText(author); //$NON-NLS-1$
+		e.addElement("child"); //$NON-NLS-1$
 	
 		return sourceDoc;
 	}
@@ -205,7 +206,7 @@ public class SourceDocument extends Document {
 		else{
 			//this is a regular chapter node
 			treatChapterNode(chapter,currXMLPath);
-			currXMLPath = currXMLPath + "/chapter[name='" + chapter.getName() + "']/child";
+			currXMLPath = currXMLPath + "/chapter[name='" + chapter.getName() + "']/child"; //$NON-NLS-1$ //$NON-NLS-2$
 			for (Chapter c: chapter.children){ 
 				preorderFunc(c,currXMLPath);
 			}
@@ -230,13 +231,13 @@ public class SourceDocument extends Document {
 		List result = xpathSelector.selectNodes(doc);
 		
 		Element chapterElm = (Element) result.get(0);
-		chapterElm.addElement("name").addText(c.getName());			
-		chapterElm.addElement("child");
+		chapterElm.addElement("name").addText(c.getName());			 //$NON-NLS-1$
+		chapterElm.addElement("child"); //$NON-NLS-1$
 	
 		
 		GeneralFunctions.writeToXml(outputFile, doc);
 
-		System.out.println("chapter name is: " + c.getName());
+		System.out.println("chapter name is: " + c.getName()); //$NON-NLS-1$
 	}
 	
 	//entering chapter & text information to the XML
@@ -248,14 +249,14 @@ public class SourceDocument extends Document {
 		List result = xpathSelector.selectNodes(doc);
 		
 		Element chapterElm = (Element) result.get(0);
-		Element textElm = chapterElm.addElement("text");
+		Element textElm = chapterElm.addElement("text"); //$NON-NLS-1$
 		//the name is of the current chapter, while the content is from the son
-		textElm.addElement("name").addText(c.getName());
-		textElm.addElement("content").addText(getTextofChild(c));
+		textElm.addElement("name").addText(c.getName()); //$NON-NLS-1$
+		textElm.addElement("content").addText(getTextofChild(c)); //$NON-NLS-1$
 		
 		GeneralFunctions.writeToXml(outputFile, doc);
 		
-		System.out.println("   text node");
+		System.out.println("   text node"); //$NON-NLS-1$
 		
 	}
 
@@ -268,8 +269,8 @@ public class SourceDocument extends Document {
 
 	/** Returns the title (the upper label) of the source document */
 	protected String getTitle() {
-		return Messages.getString("SourceDocument.TitleLabel") + ":\t" + title + "\n" +
-				Messages.getString("SourceDocument.AuthorLabel") + ":\t" + author + "\n" + 
+		return Messages.getString("SourceDocument.TitleLabel") + ":\t" + title + "\n" + //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				Messages.getString("SourceDocument.AuthorLabel") + ":\t" + author + "\n" +  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				"\n"; //$NON-NLS-1$
 	}
 

@@ -2,6 +2,8 @@ package lost.tok.sourceParser.wizards;
 
 import java.io.File;
 
+import lost.tok.Messages;
+
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -51,9 +53,9 @@ public class UnparsedDocWizardPage extends WizardPage implements ModifyListener 
 	 * Constructor for UnparsedDocWizardPage.
 	 */
 	public UnparsedDocWizardPage(ISelection selection) {
-		super("wizardPage");
-		setTitle("Document Parser Wizard");
-		setDescription("This wizard sets and opens a txt file for parsing");
+		super("wizardPage"); //$NON-NLS-1$
+		setTitle(Messages.getString("SPWizardP.DocumentParserWizardTitle")); //$NON-NLS-1$
+		setDescription(Messages.getString("SPWizardP.DocumentParserWizardDescription")); //$NON-NLS-1$
 		this.selection = selection;
 	}
 
@@ -69,7 +71,7 @@ public class UnparsedDocWizardPage extends WizardPage implements ModifyListener 
 		
 		// Title selection
 		Label label = new Label(container, SWT.NULL);
-		label.setText("&Title:");
+		label.setText(Messages.getString("SPWizardP.FieldTitle")); //$NON-NLS-1$
 
 		sourceTitleText = new Text(container, SWT.BORDER | SWT.SINGLE);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -80,7 +82,7 @@ public class UnparsedDocWizardPage extends WizardPage implements ModifyListener 
 		
 		// Author selection
 		label = new Label(container, SWT.NULL);
-		label.setText("&Author:");
+		label.setText(Messages.getString("SPWizardP.FieldAuthor")); //$NON-NLS-1$
 
 		authorNameText = new Text(container, SWT.BORDER | SWT.SINGLE);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -91,8 +93,8 @@ public class UnparsedDocWizardPage extends WizardPage implements ModifyListener 
 		
 		// Source path selection
 		label = new Label(container, SWT.NULL);
-		label.setText("Source &Path:");
-		label.setToolTipText("The path of this document in the full source text");
+		label.setText(Messages.getString("SPWizardP.FieldSrcPath")); //$NON-NLS-1$
+		label.setToolTipText(Messages.getString("SPWizardP.FieldSrcPathDescription")); //$NON-NLS-1$
 
 		sourcePathText = new Text(container, SWT.BORDER | SWT.SINGLE);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -103,7 +105,7 @@ public class UnparsedDocWizardPage extends WizardPage implements ModifyListener 
 		
 		// Source file selection
 		label = new Label(container, SWT.NULL);
-		label.setText("Source &File:");
+		label.setText(Messages.getString("SPWizardP.FieldSrcInputFile")); //$NON-NLS-1$
 
 		inputFilePath = new Text(container, SWT.BORDER | SWT.SINGLE);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -111,7 +113,7 @@ public class UnparsedDocWizardPage extends WizardPage implements ModifyListener 
 		inputFilePath.addModifyListener(this);
 
 		Button button = new Button(container, SWT.PUSH);
-		button.setText("Browse...");
+		button.setText(Messages.getString("SPWizardP.BrowseButton")); //$NON-NLS-1$
 		button.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				handleBrowseForInputFile();
@@ -120,7 +122,7 @@ public class UnparsedDocWizardPage extends WizardPage implements ModifyListener 
 		
 		// Destenation Project Selection
 		label = new Label(container, SWT.NULL);
-		label.setText("Pro&ject:");
+		label.setText(Messages.getString("SPWizardP.FieldProject")); //$NON-NLS-1$
 
 		targetProject = new Text(container, SWT.BORDER | SWT.SINGLE);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -128,7 +130,7 @@ public class UnparsedDocWizardPage extends WizardPage implements ModifyListener 
 		targetProject.addModifyListener(this);
 		
 		button = new Button(container, SWT.PUSH);
-		button.setText("Browse...");
+		button.setText(Messages.getString("SPWizardP.BrowseButton")); //$NON-NLS-1$
 		button.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				handleBrowseForTargetProject();
@@ -137,8 +139,8 @@ public class UnparsedDocWizardPage extends WizardPage implements ModifyListener 
 		
 		// IsProject CheckBox
 		label = new Label(container, SWT.NULL);
-		label.setText("Is &Root:");
-		label.setToolTipText("Is this document a root or a source");
+		label.setText(Messages.getString("SPWizardP.FieldIsRoot")); //$NON-NLS-1$
+		label.setToolTipText(Messages.getString("SPWizardP.FieldIsRootDescription")); //$NON-NLS-1$
 		
 		isRootButton = new Button(container, SWT.CHECK);
 		isRootButton.addSelectionListener(new SelectionAdapter() {
@@ -178,8 +180,8 @@ public class UnparsedDocWizardPage extends WizardPage implements ModifyListener 
 
 	/** Opens a dialog for the user to pick his Unparsed File in the filesystem */
 	private void handleBrowseForInputFile() {
-		final String EXTENSIONS[] = {"*.txt","*.*"};
-		final String DESCRIPTIONS[] = {"Text Files (*.txt)","All Types (*.*)"};
+		final String EXTENSIONS[] = {"*.txt","*.*"}; //$NON-NLS-1$ //$NON-NLS-2$
+		final String DESCRIPTIONS[] = {Messages.getString("SPWizardP.15"),Messages.getString("SPWizardP.16")}; //$NON-NLS-1$ //$NON-NLS-2$
 		
 		FileDialog dialog = new FileDialog(getShell(), SWT.OPEN);
 		dialog.setFilterExtensions(EXTENSIONS);
@@ -202,8 +204,8 @@ public class UnparsedDocWizardPage extends WizardPage implements ModifyListener 
 		dialog.setInput(iwr);
 				
 		// TODO(Shay): Filter the project and choose only those that are ToK
-		dialog.setTitle("Select Target Project");
-		dialog.setMessage("The document will be added to the selected project");
+		dialog.setTitle(Messages.getString("SPWizardP.ProjectBrowse.title")); //$NON-NLS-1$
+		dialog.setMessage(Messages.getString("SPWizardP.ProjectBrowse.Description")); //$NON-NLS-1$
 
 		if (dialog.open() == ResourceSelectionDialog.OK)
 		{
@@ -223,14 +225,14 @@ public class UnparsedDocWizardPage extends WizardPage implements ModifyListener 
 		/** The full name of the source: sourceTitleText */		
 		if (sourceTitleText.getText().length() == 0)
 		{
-			updateStatus("Title must be specified");
+			updateStatus(Messages.getString("SPWizardP.ErrorMissingTitle")); //$NON-NLS-1$
 			return;
 		}
 		
 		/** The name of the source's Author: authorNameText */
 		if (authorNameText.getText().length() == 0)
 		{
-			updateStatus("Author name must be specified");
+			updateStatus(Messages.getString("SPWizardP.ErrorMissingAuthor")); //$NON-NLS-1$
 			return;
 		}
 		
@@ -238,44 +240,44 @@ public class UnparsedDocWizardPage extends WizardPage implements ModifyListener 
 		String srcPath = sourcePathText.getText(); 
 		if (srcPath.length() != 0 && srcPath.charAt(srcPath.length()-1)=='\\')
 		{
-			updateStatus("Source Path should not end with a slash");
+			updateStatus(Messages.getString("SPWizardP.ErrorSlash")); //$NON-NLS-1$
 			return;
 		}
 		
 		if (srcPath.indexOf('/') != -1)
 		{
-			updateStatus("SrcPath should be seperated by slash and not backslash");
+			updateStatus(Messages.getString("SPWizardP.ErrorBackslash")); //$NON-NLS-1$
 			return;		
 		}
 		
 		/** The path of the file to be parsed: inputFilePath */
 		if (inputFilePath.getText().length() == 0)
 		{
-			updateStatus("Input filename must be specified");
+			updateStatus(Messages.getString("SPWizardP.ErrorMissingInputFile")); //$NON-NLS-1$
 			return;
 		}
 		
 		File f = new File(inputFilePath.getText());
 		if (!f.exists() || !f.isFile())
 		{
-			updateStatus("Input filename is illegal");
+			updateStatus(Messages.getString("SPWizardP.ErrorIllegalFilename")); //$NON-NLS-1$
 			return;
 		}
 		f = null;
 		
 		/** The destanation project: targetProject */
-		Path path = new Path("");
+		Path path = new Path(""); //$NON-NLS-1$
 		
 		if (!path.isValidSegment(targetProject.getText()))
 		{
-			updateStatus("Project Name is invalid");
+			updateStatus(Messages.getString("SPWizardP.ErrorInvalidProject")); //$NON-NLS-1$
 			return;
 		}
 		// TODO(Shay): Verify that the project is a ToK
 		IProject proj = ResourcesPlugin.getWorkspace().getRoot().getProject(targetProject.getText());
 		if ( !proj.exists() )
 		{
-			updateStatus("Project does not exist");
+			updateStatus(Messages.getString("SPWizardP.ErrorMissingProject")); //$NON-NLS-1$
 			return;
 		}
 		
@@ -284,7 +286,7 @@ public class UnparsedDocWizardPage extends WizardPage implements ModifyListener 
 			UnparsedDocWizard.getUnparsedTargetIFile(targetProject.getText(), inputFilePath.getText());
 		if (upFile.exists())
 		{
-			updateStatus("File " + upFile.getName() + " is currently being parsed");
+			updateStatus(Messages.getString("SPWizardP.File") + upFile.getName() + Messages.getString("SPWizardP.ErrorBeingParsed")); //$NON-NLS-1$ //$NON-NLS-2$
 			return;
 		}
 
@@ -293,7 +295,7 @@ public class UnparsedDocWizardPage extends WizardPage implements ModifyListener 
 			UnparsedDocWizard.getParsedTargetIFile(targetProject.getText(), inputFilePath.getText());
 		if (pFile.exists())
 		{
-			updateStatus("File " + pFile.getName() + " already exists");
+			updateStatus(Messages.getString("SPWizardP.File") + pFile.getName() + Messages.getString("SPWizardP.ErrorAlreadyParsed")); //$NON-NLS-1$ //$NON-NLS-2$
 			return;
 		}
 		
