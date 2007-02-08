@@ -7,3 +7,7 @@ action.name.unmarkAll=בטל סימונים
 action.tooltip.unmarkAll=מבטל את כל הסימונים במסמך
 action.name.addQuote=הוסף ציטוט
 action.tooltip.addQuote=יוצר ציטוט חדש מהקטעים המסומנים
+lost.tok.linkDisToRoot=צור קישור ביון דיון לשורש
+lost.tok.createRelation=צור יחס
+lost.tok.excerptionsView=מבט מקטעים
+action.name.link=קשר
