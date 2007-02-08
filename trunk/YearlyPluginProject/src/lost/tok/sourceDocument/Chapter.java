@@ -129,6 +129,17 @@ public class Chapter {
 		return false;
 	}
 	
+	/** Returns true if somewhere under this chapter there is unparsed text */
+	public boolean containsUnparsed()
+	{
+		for (Chapter c : children)
+		{
+			if (c.containsUnparsed())
+				return true;
+		}
+		return false;
+	}
+	
 	static private Chapter addChapter(Element el, String label) {
 		String chapName = el.elementTextTrim("name"); //$NON-NLS-1$
 		String chapLabel = getChapterLabel(label, chapName);

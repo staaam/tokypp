@@ -1,7 +1,9 @@
 package lost.tok.sourceParser;
 
 import java.util.LinkedList;
+import java.util.Map.Entry;
 
+import lost.tok.ToK;
 import lost.tok.opTable.SourceDocumentProvider;
 import lost.tok.opTable.StyleManager;
 import lost.tok.sourceDocument.Chapter;
@@ -22,10 +24,19 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.editors.text.TextEditor;
 
+/**
+ * The source parsrer.
+ * This editor allows the user to parse a document and create from it an xml file
+ */
 public class SourceParser extends TextEditor 
 {
+	/** True if the document is dirty */
 	boolean dirty;
 	
+	/** The last chapter name that was entered */
+	String lastChapterName = null;
+	
+	/** The Editor's id in plugins.xml */
 	public static String EditorID = "lost.tok.sourceParser.SourceParser";
 
 	public SourceParser()
@@ -46,44 +57,66 @@ public class SourceParser extends TextEditor
 	 */
 	public void createPartControl(Composite parent) {
 		super.createPartControl(parent);
+		showChangeInformation(false);
+		
 		ISourceViewer srcview = this.getSourceViewer();
 		assert (srcview != null);
 
-		srcview.setEditable(true);
-		srcview.getTextWidget().setWordWrap(false);
-		
 		// Note(Shay): Bah... looking for this function was tedious!
 		this.getSourceViewerDecorationSupport(srcview).dispose();
 
 		refreshDisplay();
 	}
 
+	/** Colors the needed chapters, and highlight texts accordingly */
 	public void refreshDisplay() {
 	
-		StyleRange chapterTextStyle = StyleManager.getChapterStyle();
+		StyleRange parsedChapterTextStyle = StyleManager.getChapterStyle();
+		StyleRange normalTextStyle = StyleManager.getNormalStyle();
+		StyleRange unparsedChapterTextStyle = StyleManager.getUnparsedChapterStyle();
+		StyleRange unparsedTextStyle = StyleManager.getUnparsedStyle();
 		
 		ISourceViewer srcview = this.getSourceViewer();
 		
 		SourceDocument document = (SourceDocument) srcview.getDocument();
+		Integer docLen = document.getLength();
 		
-		LinkedList<Chapter> allChapters = new LinkedList<Chapter>();
+		int nStyles = document.getAllChapters().size();
+
+		// two arrays - one for the offset,length of the styles
+		int[] styleOffsetSize = new int[nStyles * 2];
+		// and the other for the styles themselves
+		StyleRange[] styles = new StyleRange[nStyles];
+		
+		int i = 0;
 		for (Chapter chapter : document.getAllChapters()) {
+			styleOffsetSize[2 * i] = chapter.getOffset();
+			styleOffsetSize[2 * i + 1] = chapter.getInnerLength();
 			if (!(chapter instanceof ChapterText)) {
-				allChapters.add(chapter);
+				if (chapter.containsUnparsed())
+					styles[i] = unparsedChapterTextStyle;
+				else
+					styles[i] = parsedChapterTextStyle;
 			}
+			else
+			{
+				if (chapter.isUnparsed())
+					styles[i] = unparsedTextStyle;
+				else
+					styles[i] = normalTextStyle;
+			}
+			i++;
 		}
-
-		for (Chapter chapter : allChapters) {
-			StyleRange range = chapterTextStyle;
-			range.start = chapter.getOffset();
-			range.length = chapter.getInnerLength();
-
-			srcview.getTextWidget().setStyleRange(range);
-		}
+		
+		// Note: This call removes all the existing styles, and draws only the
+		// new one
+		srcview.getTextWidget().setStyleRanges(0, docLen - 1, styleOffsetSize,
+				styles);
 
 		srcview.getTextWidget().redraw();
 	}
 
+	/** Opens the "enter new title" dialog, with a certain offset */
 	public void openNewChapterDialog(int offset)
 	{
 		ISourceViewer srcview = this.getSourceViewer();
@@ -94,14 +127,17 @@ public class SourceParser extends TextEditor
 		if (c instanceof ChapterText)
 		{
 			Shell s = srcview.getTextWidget().getShell();
-			EnterTitleDialog di = new EnterTitleDialog(s, this, offset, (ChapterText)c);
+			EnterTitleDialog di = new EnterTitleDialog(s, this, offset, (ChapterText)c, lastChapterName);
 			di.open();
 			// the dialog will call to createNewChapter once the user has entered a name
 		}
 	}
 	
+	/** Creates a new chapter */
 	public void createNewChapter(int offset, String name)
 	{
+		lastChapterName = name;
+		
 		ISourceViewer srcview = this.getSourceViewer();
 		SourceDocument document = (SourceDocument) srcview.getDocument();
 		int oldTopLineIndex = srcview.getTopIndex(); 
@@ -120,6 +156,7 @@ public class SourceParser extends TextEditor
 		}
 	}
 	
+	/** returns the current caret location, in terms of the document */
 	public int getCaretLocation()
 	{
 		ISourceViewer srcview = this.getSourceViewer();
@@ -131,8 +168,8 @@ public class SourceParser extends TextEditor
 	public void close(boolean save)
 	{
 		super.close(save);
+		// call to save
 		
-		// TODO(Shay): Consider calling to save
 		// Get the target unparsed file and delete it
 		IFile iFile = getInputIFile();
 		if (iFile != null)
@@ -159,7 +196,7 @@ public class SourceParser extends TextEditor
 	{
 		dirty = false;
  
-		monitor.beginTask("Finding Location", 3);
+		monitor.beginTask("Finding Location", 4);
 		
 		IFile unParsedIFile = getInputIFile();
 		if (unParsedIFile == null)
@@ -182,7 +219,16 @@ public class SourceParser extends TextEditor
 		document.toXML(tProj, srcName);
 		monitor.worked(1);
 		
-		// TODO(Shay): Set root property
+		monitor.setTaskName("Updating root info");
+		IFile srcIFile = tProj.getFolder(ToK.SOURCES_FOLDER).getFile(srcName);
+		
+		try {
+			String isRootStr = unParsedIFile.getPersistentProperty(ToK.isRootQName);
+			srcIFile.setPersistentProperty(ToK.isRootQName, isRootStr);
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
+		monitor.worked(1);
 		
 		monitor.setTaskName("Deleting old unparsed file");
 		
@@ -193,8 +239,9 @@ public class SourceParser extends TextEditor
 			e.printStackTrace();
 		}
 		monitor.worked(1);
+		monitor.done();
 		
-		firePropertyChange(IEditorPart.PROP_DIRTY);		
+		firePropertyChange(IEditorPart.PROP_DIRTY);
 	}
 	
 	/** Returns the IFile opened in the editor */

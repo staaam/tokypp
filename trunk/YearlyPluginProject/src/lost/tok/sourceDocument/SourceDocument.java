@@ -123,12 +123,7 @@ public class SourceDocument extends Document {
 	/** Returns true if there are any unparsed chapters in the document */
 	public boolean containsUnparsed()
 	{
-		for (Chapter c : chapters)
-		{
-			if (c.isUnparsed())
-				return true;
-		}
-		return false;
+		return rootChapter.containsUnparsed();
 	}
 
 	/**

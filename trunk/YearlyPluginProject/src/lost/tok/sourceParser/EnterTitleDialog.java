@@ -23,6 +23,8 @@ public class EnterTitleDialog extends PopupDialog implements KeyListener {
 	int chapOffset;
 
 	ChapterText targetChap;
+	
+	String defName;
 
 	/**
 	 * Creates a new dialog for entering a new chapter's name
@@ -35,15 +37,17 @@ public class EnterTitleDialog extends PopupDialog implements KeyListener {
 	 *            the offset of the target in the text
 	 * @param ct
 	 *            the chapter text which would be splitted \ renamed
+	 * @param defaultName the name that will be displayed at first
 	 */
 	EnterTitleDialog(Shell shell, SourceParser myEditor, int offset,
-			ChapterText ct) {
+			ChapterText ct, String defaultName) {
 		super(shell, PopupDialog.INFOPOPUPRESIZE_SHELLSTYLE, true, true, false,
 				false, "New Chapter Name:",
 				"Write the name of the new chapter. Enter to finish, Esc to cancel");
 		editor = myEditor;
 		chapOffset = offset;
 		targetChap = ct;
+		defName = defaultName;
 	}
 
 	public Composite createDialogArea(Composite composite) {
@@ -55,7 +59,12 @@ public class EnterTitleDialog extends PopupDialog implements KeyListener {
 		chapNameText.setFont(new Font(Display.getCurrent(), defaultFontName,
 				13, SWT.BOLD));
 		chapNameText.setTextLimit(30);
-		// TODO(Shay): Set the default text to the last one written
+		if (defName != null)
+		{
+			// setting initial text
+			chapNameText.setText(defName);
+			chapNameText.setSelection(0,defName.length());
+		}
 		GridData gd = new GridData(300, 28);
 		chapNameText.setLayoutData(gd);
 

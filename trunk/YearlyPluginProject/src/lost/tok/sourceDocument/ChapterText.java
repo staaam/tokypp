@@ -123,6 +123,11 @@ public class ChapterText extends Chapter {
 		return name.equals(Chapter.UNPARSED_STR);
 	}
 	
+	public boolean containsUnparsed()
+	{
+		return isUnparsed();
+	}
+	
 	/**
 	 * Checks if it is ok to name the chapter's text with this name
 	 * @param name the new name

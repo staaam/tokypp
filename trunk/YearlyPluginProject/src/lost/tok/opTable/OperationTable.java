@@ -34,8 +34,6 @@ import org.eclipse.ui.editors.text.TextEditor;
  */
 public class OperationTable extends TextEditor {
 
-	ToK tok = null;
-
 	/**
 	 * Creates a new instance of the operation table Initialize it with the
 	 * SourceDocumentProvider we wrote
@@ -68,17 +66,14 @@ public class OperationTable extends TextEditor {
 	 * 
 	 */
 	public void createPartControl(Composite parent) {
-		System.out.println("createPartControl");
 		super.createPartControl(parent);
-
 		showChangeInformation(false);
 
 		ISourceViewer srcview = this.getSourceViewer();
 		assert (srcview != null);
 
-		// srcview.setEditable(true);
-		// srcview.getTextWidget().setWordWrap(true);
 		hookContextMenu(parent);
+		this.getSourceViewerDecorationSupport(srcview).dispose();
 
 		refreshDisplay();
 	}
