@@ -69,7 +69,7 @@
              class="lost.tok.newLinkWizard.NewLinkWizard"
              icon="icons/sample.gif"
              id="lost.tok.newLinkWizard.NewLinkWizard"
-             name="Link discussion to root"
+             name="%lost.tok.linkDisToRoot"
              project="false"/>
        <wizard
              category="lost.tok.Categoy"
@@ -83,7 +83,7 @@
              class="lost.tok.newRelationWizard.NewRelationWizard"
              icon="icons/sample.gif"
              id="lost.tok.newRelationWizard.NewRelationWizard"
-             name="Create Relation"
+             name="%lost.tok.createRelation"
              project="false"/>
        <wizard
              category="lost.tok.Categoy"
@@ -206,7 +206,7 @@
                class="lost.tok.linkTable.LinkAction"
                icon="icons/link_ico.gif"
                id="lost.tok.linkTable.LinkAction"
-               label="Link"
+               label="%action.name.link"
                menubarPath="edit/OpTableGroup"
                state="true"
                style="push"
@@ -279,13 +279,13 @@
          point="org.eclipse.ui.views">
       <category
             id="lost.tok.Categoy"
-            name="מידע"/>
+            name="%wizards.catagory"/>
       <view
             allowMultiple="false"
             category="lost.tok.Categoy"
             class="lost.tok.excerptionsView.ExcerptionView"
             icon="icons/sample.gif"
             id="lost.tok.excerptionsView.ExcerptionView"
-            name="Excerptions View"/>
+            name="%lost.tok.excerptionsView"/>
    </extension>
 </plugin>
