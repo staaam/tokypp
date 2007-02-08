@@ -68,11 +68,11 @@ public class ToKTest extends TestCase {
 	// basic project creation test
 	public void testCreateProject() throws CoreException, IOException {
 
-		ToK tok = new ToK();
+		ToK tok;
 		int numProjectsBefore = ResourcesPlugin.getWorkspace().getRoot()
 				.getProjects().length;
 		tok
-				.createToKProject("michalsProj_1", "michalzim",
+				 = new ToK("michalsProj_1", "michalzim",
 						Paths.SOURCE_EXAMPLE);
 
 		assertTrue(ResourcesPlugin.getWorkspace().getRoot().getProjects().length == numProjectsBefore + 1);
@@ -83,9 +83,9 @@ public class ToKTest extends TestCase {
 	// tests to see if the project parameters have been set correctly
 	public void testProjectProperties() throws CoreException, IOException {
 
-		ToK tok = new ToK();
+		ToK tok;
 		tok
-				.createToKProject("michalsProj_2", "michalzim",
+				 = new ToK("michalsProj_2", "michalzim",
 						Paths.SOURCE_EXAMPLE);
 
 		// check project name
@@ -109,32 +109,28 @@ public class ToKTest extends TestCase {
 	// ILLEGAL project creation test
 	public void testIllegalCreateProject() throws CoreException, IOException {
 
-		ToK tok = new ToK();
+		ToK tok;
 
 		// root file not an src file
 		int dotLoc = Paths.SOURCE_EXAMPLE.lastIndexOf('.');
 		String noExt = Paths.SOURCE_EXAMPLE.substring(0, dotLoc - 1);
 		String falseExt = noExt + ".xml";
 
-		tok.createToKProject("michalsProj_3", "michalzim", falseExt);
+		tok = new ToK("michalsProj_3", "michalzim", falseExt);
 		assertTrue(ResourcesPlugin.getWorkspace().getRoot().getProject(
 				"michalsProj_3").getFolder("Sources").getFile(falseExt)
 				.exists() == false);
 
 		// root file not existant
-		tok.createToKProject("michalsProj_99", "michalzim",
+		tok = new ToK("michalsProj_99", "michalzim",
 				Paths.SOURCE_EXAMPLE + "aaa");
 		assertTrue(ResourcesPlugin.getWorkspace().getRoot().getProject(
 				"michalsProj_99").getFolder("Sources").getFile(
 				Paths.SOURCE_EXAMPLE + "aaa").exists() == false);
 
 		// illegal project name
-		try {
-			tok.createToKProject("**michalsProj", "michalzim",
-					Paths.SOURCE_EXAMPLE);
-		} catch (CoreException e) {
-			return;
-		}
+		tok = new ToK("**michalsProj", "michalzim",	Paths.SOURCE_EXAMPLE);
+		
 		assertTrue(ResourcesPlugin.getWorkspace().getRoot().getProject(
 				"michalsProj_99").exists() == false);
 	}
@@ -142,9 +138,9 @@ public class ToKTest extends TestCase {
 	// testing that the two project Folders were created
 	public void testProjectFolders() throws CoreException, IOException {
 
-		ToK tok = new ToK();
+		ToK tok;
 		tok
-				.createToKProject("michalsProj_4", "michalzim",
+				 = new ToK("michalsProj_4", "michalzim",
 						Paths.SOURCE_EXAMPLE);
 
 		// getting the handles to the folders
@@ -162,9 +158,9 @@ public class ToKTest extends TestCase {
 	// testing that the project files were created
 	public void testProjectFiles() throws CoreException, IOException {
 
-		ToK tok = new ToK();
+		ToK tok;
 		tok
-				.createToKProject("michalsProj_5", "michalzim",
+				 = new ToK("michalsProj_5", "michalzim",
 						Paths.SOURCE_EXAMPLE);
 
 		// getting the handles to the files
@@ -186,9 +182,9 @@ public class ToKTest extends TestCase {
 	// testing that the project root were created correctly
 	public void testProjectRoot() throws CoreException, IOException {
 
-		ToK tok = new ToK();
+		ToK tok;
 		tok
-				.createToKProject("michalsProj_6", "michalzim",
+				 = new ToK("michalsProj_6", "michalzim",
 						Paths.SOURCE_EXAMPLE);
 
 		// Root file
@@ -207,16 +203,16 @@ public class ToKTest extends TestCase {
 	}
 
 	public void testAddDiscussion() throws CoreException, IOException {
-		ToK tok = new ToK();
-		tok.createToKProject("AriesProj1", "Arie", Paths.SOURCE_EXAMPLE);
+		ToK tok;
+		tok = new ToK("AriesProj1", "Arie", Paths.SOURCE_EXAMPLE);
 		tok.addDiscussion("test");
 		assertTrue(ResourcesPlugin.getWorkspace().getRoot().getProject(
 				"AriesProj1").getFolder("Discussions").getFile("test.dis") != null);
 	}
 
 	public void testLinkDiscussionRoot() throws CoreException, IOException {
-		ToK tok = new ToK();
-		tok.createToKProject("AriesProj2", "Arie", Paths.SOURCE_EXAMPLE);
+		ToK tok;
+		tok = new ToK("AriesProj2", "Arie", Paths.SOURCE_EXAMPLE);
 		tok.addDiscussion("test");
 		tok.linkDiscussionRoot(tok.getDiscussion("test"), new Excerption(
 				"/Bible/The Begining/The Continue/The First Paragraph", "", 2,
@@ -239,8 +235,8 @@ public class ToKTest extends TestCase {
 	}
 
 	public void testNewLinkDiscussionRoot() throws CoreException, IOException {
-		ToK tok = new ToK();
-		tok.createToKProject("AriesProj3", "Arie", Paths.SOURCE_EXAMPLE);
+		ToK tok;
+		tok = new ToK("AriesProj3", "Arie", Paths.SOURCE_EXAMPLE);
 		tok.linkNewDiscussionRoot("New Discussion", new Excerption(
 				"/Bible/The Begining/The Continue/The First Paragraph", "", 2,
 				22));
@@ -262,6 +258,8 @@ public class ToKTest extends TestCase {
 		assertTrue(link != null);
 	}
 
+	/*
+	// Uncalled... because for some reason it didn't work :(
 	private void recursiveDelete(File dirPath) {
 		String[] ls = dirPath.list();
 
@@ -271,16 +269,16 @@ public class ToKTest extends TestCase {
 				recursiveDelete(file);
 			file.delete();
 		}
-	}
+	}*/
 
 	//Evgeni
 	//Testing valid source with invalid path
 	public void testValidSourceInvalidPath() throws IOException
 	{	
 		System.out.println("\nTest Valid Source Invalid Path \n");
-		ToK tok = new ToK();
+		ToK tok;
 		try {
-			tok.createToKProject("Evgeni_project", "Evgeni", Paths.BASE + "1" + "Bavel_en.src" );			
+			tok = new ToK("Evgeni_project", "Evgeni", Paths.BASE + "1" + "Bavel_en.src" );			
 		} 
 		catch (Exception e){
 			System.out.println("Failed to create a project");
@@ -298,9 +296,9 @@ public class ToKTest extends TestCase {
 	public void testInvalidSourceValidPath() throws IOException
 	{		
 		System.out.println("\nTest Invalid Source Valid Path\n");
-		ToK tok = new ToK();
+		ToK tok;
 		try {
-			tok.createToKProject("Evgeni_project", "Evgeni", Paths.BASE + "2" + "Bavel_en.src" );
+			tok = new ToK("Evgeni_project", "Evgeni", Paths.BASE + "2" + "Bavel_en.src" );
 		} 
 		catch (Exception e){
 			System.out.println("Failed to create a project");
@@ -318,9 +316,9 @@ public class ToKTest extends TestCase {
 	public void testValidSourceValidity() throws IOException
 	{		
 		System.out.println("\nTest Valid Source Validity\n");
-		ToK tok = new ToK();
+		ToK tok;
 		try {
-			tok.createToKProject("Evgeni_project", "Evgeni", Paths.BASE + "4" + "Bavel_en.src" );
+			tok = new ToK("Evgeni_project", "Evgeni", Paths.BASE + "4" + "Bavel_en.src" );
 		} 
 		catch (Exception e){
 			System.out.println("Failed to create a project");
@@ -338,9 +336,9 @@ public class ToKTest extends TestCase {
 	public void testSourceExists() throws IOException
 	{		
 		System.out.println("\nTest Source Exists\n");
-		ToK tok = new ToK();
+		ToK tok;
 		try {
-			tok.createToKProject("Evgeni_project", "Evgeni", Paths.BASE + "5" + "Bavel_en.src" );
+			tok = new ToK("Evgeni_project", "Evgeni", Paths.BASE + "5" + "Bavel_en.src" );
 		} 
 		catch (Exception e){
 			System.out.println("Failed to create a project");
@@ -360,9 +358,9 @@ public class ToKTest extends TestCase {
 	public void testAuthorExists() throws IOException
 	{		
 		System.out.println("\nTest Author Exists\n");
-		ToK tok = new ToK();
+		ToK tok;
 		try {
-			tok.createToKProject("Evgeni_project", "Evgeni", Paths.BASE + "6" + "Bavel_en.src" );
+			tok = new ToK("Evgeni_project", "Evgeni", Paths.BASE + "6" + "Bavel_en.src" );
 		} 
 		catch (Exception e){
 			System.out.println("Failed to create a project");
@@ -382,9 +380,9 @@ public class ToKTest extends TestCase {
 	public void testChangeAuthorRank() throws IOException
 	{		
 		System.out.println("\nTest Change Author Rank\n");
-		ToK tok = new ToK();
+		ToK tok;
 		try {
-			tok.createToKProject("Evgeni_project", "Evgeni", Paths.BASE + "6" + "Bavel_en.src" );
+			tok = new ToK("Evgeni_project", "Evgeni", Paths.BASE + "6" + "Bavel_en.src" );
 		} 
 		catch (Exception e){
 			System.out.println("Failed to create a project");
