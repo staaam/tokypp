@@ -24,19 +24,13 @@ public class Discussion {
 
 	public static final String DEFAULT_OPINION = "Default Opinion";
 
-	public static int NEXT_ID = 1;
-
 	private ToK myToK;
 
 	private String discName;
 
 	private String creatorName;
 
-	private Integer opinionsId = 1;
-
-	private Integer quotesId = 1;
-
-	// private Quote[] quotes;
+	private Integer id = 1;
 
 	public static final String[] relTypes = { "opposition", "interpretation" };
 
@@ -67,6 +61,7 @@ public class Discussion {
 
 	public Discussion(ToK myToK, String filename) {
 		super();
+		int max=0;
 		this.myToK = myToK;
 
 		Document d = GeneralFunctions.readFromXML(filename);
@@ -75,6 +70,15 @@ public class Discussion {
 				.selectSingleNode(d).getText());
 		setCreatorName(DocumentHelper.createXPath("/discussion/user")
 				.selectSingleNode(d).getText());
+		List result = DocumentHelper.createXPath("//id")
+				.selectNodes(d);
+		for (Iterator i = result.iterator(); i.hasNext();) {
+			Element element = (Element) i.next();
+			if (Integer.valueOf(element.getText()) > max)
+				max=Integer.valueOf(element.getText());
+		}
+		this.id=max;
+		
 	}
 
 	// write the document to the XML file
@@ -104,10 +108,9 @@ public class Discussion {
 		}
 
 		// add the opinion
-		opinionsId = opinionsId + 1;
 		Element opinion = doc.getRootElement().addElement("opinion");
 		opinion.addElement("id")
-				.addText(java.lang.Integer.toString(opinionsId));
+				.addText(java.lang.Integer.toString(++id));
 		opinion.addElement("name").addText(opinionName);
 
 		writeToXml(doc);
@@ -237,8 +240,10 @@ public class Discussion {
 	}
 
 	
-	public void createLink(Integer opinion1, Integer quote2,
+	public void createLink(Integer element1, Integer element2,
 			String comment, String type) {
+		Document doc = readFromXML();
+		
 		
 	}
 	
@@ -504,7 +509,7 @@ public class Discussion {
 		}
 		Element defultOpinion = (Element) result.get(0);
 
-		quote.setID(quotesId++);
+		quote.setID(++id);
 		defultOpinion.add(quote.toXML());
 
 		writeToXml(doc);
@@ -535,10 +540,6 @@ public class Discussion {
 
 	public ToK getMyToK() {
 		return myToK;
-	}
-
-	public static int getNextId() {
-		return NEXT_ID++;
 	}
 
 	public String[] getOpinionNames() {
