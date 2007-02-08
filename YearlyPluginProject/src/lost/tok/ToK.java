@@ -643,4 +643,8 @@ public class ToK {
 		}
 		
 	}
+
+	public IFile getSource(String sourceFilePath) {
+		return srcFolder.getFile(sourceFilePath);
+	}
 }

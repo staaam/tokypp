@@ -42,7 +42,7 @@ public class AddQuoteAction extends AbstractEditorAction {
 		IFile file = fileEditorInput.getFile();
 		IProject project = file.getProject();
 
-		Quote q = new Quote(file.getProjectRelativePath().toPortableString(),
+		Quote q = new Quote(file.getName(),
 				excerptions);
 
 		System.out.println(q.getText());

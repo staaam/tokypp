@@ -5,6 +5,11 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.util.Iterator;
 
+import lost.tok.Discussion;
+import lost.tok.GeneralFunctions;
+import lost.tok.Quote;
+import lost.tok.ToK;
+
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.OutputFormat;
@@ -104,7 +109,7 @@ public class DiscussionEditor extends TextEditor {
 				    	{
 				    		TreeItem defOp = null;
 				    		TreeItem itmArr[] = disTree.getItem(0).getItems();
-				    		
+
 				    		for (int i = 0; i < itmArr.length; i++) {
 								if(itmArr[i].getText().equalsIgnoreCase("default"))
 								{
@@ -343,44 +348,32 @@ public class DiscussionEditor extends TextEditor {
 		FileEditorInput fileEditorInput = (FileEditorInput)super.getEditorInput();
 		IFile file = fileEditorInput.getFile();
 		
-		Document discussionDocumentObject;
-		File discussionFile = new File(file.getLocationURI());
-		SAXReader discussionReader = new SAXReader();
-
 		try
 		{
-			discussionDocumentObject = discussionReader.read(new FileInputStream(discussionFile));
+			Discussion d = ToK.getProjectToK(file.getProject()).getDiscussion(Discussion.getNameFromFile(file.getName()));
 			
-			Iterator opinionsIterator = discussionDocumentObject.getRootElement().elementIterator("opinion");
-
 			TreeItem rootItem = new TreeItem(disTree,SWT.NONE);
 
-			rootItem.setText(discussionDocumentObject.getRootElement().element("name").getText());
+			rootItem.setText(d.getDiscName());
 			rootItem.setData("discussion");
 			
 			//Image imageDisc = new Image(null, new FileInputStream("C:/discussion.gif"));
 			
 			//rootItem.setImage(imageDisc);
 			
-			while (opinionsIterator.hasNext()) 
-			{
-				Element opinionElement = (Element) opinionsIterator.next();
+			for (String opinion : d.getOpinionNames()) {
 				TreeItem opinionItem = new TreeItem(rootItem,SWT.NONE);
 				//Image imageOpin = new Image(null, new FileInputStream("C:/opinion.gif"));				
 				
-				opinionItem.setText(opinionElement.element("name").getText());
+				opinionItem.setText(opinion);
 				opinionItem.setData("opinion");
 				//opinionItem.setImage(imageOpin);
 				
-				Iterator quotsIterator = opinionElement.elementIterator("quote");
-				
-				while (quotsIterator.hasNext()) {
-					Element elem = (Element)quotsIterator.next();
-
+				for (Quote quote : d.getQuotes(opinion)) {
 					TreeItem quoteItem = new TreeItem(opinionItem,SWT.NONE);
 					//Image imageQuote = new Image(null, new FileInputStream("C:/quote.gif"));
 					
-					quoteItem.setText(elem.element("text").getText());
+					quoteItem.setText(quote.getText());
 					quoteItem.setData("quote");						
 					//quoteItem.setImage(imageQuote);
 				}				

@@ -72,14 +72,14 @@ public class RootDiscussions extends OperationTable implements
 
 	class DiscussionLink {
 
-		private String discussionFile;
+		private String discussion;
 
 		private String type;
 
 		private String linkSubject;
 
 		public String getDiscussionFile() {
-			return discussionFile;
+			return discussion;
 		}
 
 		public String getLinkSubject() {
@@ -92,7 +92,7 @@ public class RootDiscussions extends OperationTable implements
 
 		public DiscussionLink(String discussionFile, String type,
 				String linkSubject) {
-			this.discussionFile = discussionFile;
+			this.discussion = Discussion.getNameFromFile(discussionFile);
 			this.type = type;
 			this.linkSubject = linkSubject;
 		}
@@ -113,7 +113,7 @@ public class RootDiscussions extends OperationTable implements
 
 		XPath xpathSelector = DocumentHelper
 				.createXPath("//sublink[sourceFile='"
-						+ file.getProjectRelativePath() + "']");
+						+ file.getName() + "']");
 
 		for (Object os : xpathSelector.selectNodes(GeneralFunctions
 				.readFromXML(tok.getLinkFile()))) {
@@ -222,7 +222,7 @@ public class RootDiscussions extends OperationTable implements
 	private void openDiscussionLink(DiscussionLink discussionLink) {
 		Discussion d;
 		try {
-			d = tok.getDiscussion(discussionLink.discussionFile);
+			d = tok.getDiscussion(discussionLink.discussion);
 		} catch (CoreException e) {
 			e.printStackTrace();
 			return;
