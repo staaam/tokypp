@@ -1,6 +1,7 @@
 package lost.tok.newRelationWizard;
 
 import lost.tok.Discussion;
+import lost.tok.Messages;
 import lost.tok.Quote;
 import lost.tok.ToK;
 
@@ -57,8 +58,8 @@ public class NewRelationWizardPage extends WizardPage {
 	 */
 	public NewRelationWizardPage(ISelection selection) {
 		super("wizardPage"); //$NON-NLS-1$
-		setTitle("Create a relation between opinions/quotes"); //$NON-NLS-1$
-		setDescription("Creates a relation between opinions/quotes"); //$NON-NLS-1$
+		setTitle(Messages.getString("NewRelationWizardPage.0")); //$NON-NLS-1$
+		setDescription(Messages.getString("NewRelationWizardPage.1")); //$NON-NLS-1$
 		this.selection = selection;
 	}
 
@@ -76,7 +77,7 @@ public class NewRelationWizardPage extends WizardPage {
 		layout.verticalSpacing = 9;
 
 		Label label = new Label(container, SWT.NULL);
-		label.setText("Relation type:"); //$NON-NLS-1$
+		label.setText(Messages.getString("NewRelationWizardPage.2")); //$NON-NLS-1$
 
 		relType = new Combo(container, SWT.READ_ONLY | SWT.DROP_DOWN);
 		for (int i = 0; i < Discussion.relTypes.length; i++) {
@@ -103,7 +104,7 @@ public class NewRelationWizardPage extends WizardPage {
 		label = new Label(container, SWT.NULL);
 		label.setText(""); //$NON-NLS-1$
 		label = new Label(container, SWT.NULL);
-		label.setText("Comment"); //$NON-NLS-1$
+		label.setText(Messages.getString("NewRelationWizardPage.3")); //$NON-NLS-1$
 		comment = new Text(container, SWT.BORDER | SWT.SINGLE);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		comment.setLayoutData(gd);
@@ -117,7 +118,7 @@ public class NewRelationWizardPage extends WizardPage {
 		label.setText(""); //$NON-NLS-1$		
 		
 		label = new Label(container, SWT.NULL);
-		label.setText("Opinion\\Quote:"); //$NON-NLS-1$
+		label.setText(Messages.getString("NewRelationWizardPage.4")); //$NON-NLS-1$
 		gd = new GridData(GridData.VERTICAL_ALIGN_BEGINNING);
 		label.setLayoutData(gd);
 		
@@ -216,12 +217,12 @@ public class NewRelationWizardPage extends WizardPage {
 
 		
 		if (relType.length() == 0) {
-			updateStatus("Please choose a type of relationship"); //$NON-NLS-1$
+			updateStatus(Messages.getString("NewRelationWizardPage.5")); //$NON-NLS-1$
 			return;
 		}
 		updateStatus(null);
 		if (leftSelected.length + rightSelected.length != 2) {
-			updateStatus("Please choose 2 objects to link between"); //$NON-NLS-1$
+			updateStatus(Messages.getString("NewRelationWizardPage.6")); //$NON-NLS-1$
 			return;
 		}
 	}
