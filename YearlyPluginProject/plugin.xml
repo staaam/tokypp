@@ -14,7 +14,7 @@
       <editor
             class="lost.tok.sourceParser.SourceParser"
             default="true"
-            extensions="txt"
+            extensions="upsrc"
             icon="icons/Mark.bmp"
             id="lost.tok.sourceParser.SourceParser"
             name="Source Parser"/>
@@ -156,21 +156,6 @@
                tooltip="%action.tooltip.addQuote"/>
       </editorContribution>
 
-      <editorContribution
-            id="lost.tok.sourceParser.Contribution"
-            targetID="lost.tok.sourceParser.SourceParser">
-         <action
-               class="lost.tok.sourceParser.EndHereAction"
-               definitionId="lost.tok.sourceParser.command.endHereAction"
-               icon="icons/AddQuote.bmp"
-               id="lost.tok.sourceParser.endHereAction"
-               label="End Chapter Here"
-               menubarPath="edit/SourceParser"
-               state="true"
-               style="push"
-               toolbarPath="SourceParser"
-               tooltip="Clicky here to create a new chapter ending at the current cursor location"/>
-      </editorContribution>
 
       <editorContribution
             id="lost.tok.sourceParser.Contribution"
@@ -253,20 +238,6 @@
       </builder>
    </extension>
    <extension
-         point="org.eclipse.ui.commands">
-      <command
-            category="Source Parser"
-            id="lost.tok.sourceParser.command.endHereAction"
-            name="End Chapter Here"/>
-      <keyBinding
-            commandId="lost.tok.sourceParser.command.endHereAction"
-            contextId="org.eclipse.ui.contexts.window"
-            keyConfigurationId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            keySequence="ALT+Q"
-            scope="org.eclipse.ui.contexts.window"/>
-   </extension>
-
- <extension
          id="NewInvokatronAction"
          name="New Invokatron Document Action"
          point="org.eclipse.ui.actionSets">

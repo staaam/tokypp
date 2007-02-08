@@ -39,8 +39,6 @@ public class NewWizardPage extends WizardPage {
 
 	private ISelection selection;
 
-	private FileDialog dialog;
-
 	/**
 	 * Constructor for SampleNewWizardPage.
 	 * 
