@@ -6,6 +6,7 @@ import java.util.HashMap;
 import lost.tok.Discussion;
 import lost.tok.Excerption;
 import lost.tok.Link;
+import lost.tok.Messages;
 import lost.tok.ToK;
 import lost.tok.excerptionsView.ExcerptionView;
 
@@ -52,7 +53,7 @@ public class NewLinkWizardPage extends WizardPage {
 
 	private Combo projectCombo;
 
-	@SuppressWarnings("unused")
+	@SuppressWarnings("unused") //$NON-NLS-1$
 	private ISelection selection;
 
 	private Text subject;
@@ -135,7 +136,7 @@ public class NewLinkWizardPage extends WizardPage {
 		label.setText(""); //$NON-NLS-1$
 
 		label = new Label(container, SWT.NULL);
-		label.setText("Subject:");
+		label.setText(Messages.getString("NewLinkWizardPage.1")); //$NON-NLS-1$
 
 		subject = new Text(container, SWT.BORDER);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -153,7 +154,7 @@ public class NewLinkWizardPage extends WizardPage {
 		label.setText(""); //$NON-NLS-1$
 
 		label = new Label(container, SWT.NULL);
-		label.setText("Link type:");
+		label.setText(Messages.getString("NewLinkWizardPage.2")); //$NON-NLS-1$
 
 		linkType = new Combo(container, SWT.READ_ONLY | SWT.DROP_DOWN);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -229,28 +230,28 @@ public class NewLinkWizardPage extends WizardPage {
 	 */
 
 	private void dialogChanged() {
-		if (projectCombo.getText() == "") {
-			updateStatus("Please select a project");
+		if (projectCombo.getText() == "") { //$NON-NLS-1$
+			updateStatus(Messages.getString("NewLinkWizardPage.4")); //$NON-NLS-1$
 			return;
 		}
 
-		if (discussionCombo.getText() == "") {
-			updateStatus("Please select a discussion");
+		if (discussionCombo.getText() == "") { //$NON-NLS-1$
+			updateStatus(Messages.getString("NewLinkWizardPage.6")); //$NON-NLS-1$
 			return;
 		}
 
-		if (subject.getText() == "") {
-			updateStatus("Please fill-in a subject for the link");
+		if (subject.getText() == "") { //$NON-NLS-1$
+			updateStatus(Messages.getString("NewLinkWizardPage.8")); //$NON-NLS-1$
 			return;
 		}
 
-		if (linkType.getText() == "") {
-			updateStatus("Please select the type of the link");
+		if (linkType.getText() == "") { //$NON-NLS-1$
+			updateStatus(Messages.getString("NewLinkWizardPage.10")); //$NON-NLS-1$
 			return;
 		}
 
 		if (excerptions.getSelection().length == 0) {
-			updateStatus("Please choose the root file to link to");
+			updateStatus(Messages.getString("NewLinkWizardPage.11")); //$NON-NLS-1$
 			return;
 		}
 
@@ -319,7 +320,7 @@ public class NewLinkWizardPage extends WizardPage {
 				projectCombo.select(chosenProjIndex);
 				projectSelected();
 				
-				String discName = resource.getName().split(".dis")[0];
+				String discName = resource.getName().split(".dis")[0]; //$NON-NLS-1$
 				int chosenDiscIndex = -1;
 				String[] discComboNames = discussionCombo.getItems();
 				for (int i = 0; i < discComboNames.length; i++) {
@@ -338,9 +339,9 @@ public class NewLinkWizardPage extends WizardPage {
 		// TODO Auto-generated method stub
 		String chosenProject = projectCombo.getText();
 
-		ToK tok = new ToK(chosenProject, "Arie", "Babel_he.src");
+		//ToK tok = new ToK(chosenProject, "Arie", "Babel_he.src"); //$NON-NLS-1$ //$NON-NLS-2$
 		// TODO
-		// ToK tok = ToK.getProjectToK(project);
+		ToK tok = ToK.getProjectToK(ResourcesPlugin.getWorkspace().getRoot().getProject(chosenProject));
 		ArrayList<Discussion> discussions = new ArrayList<Discussion>(tok
 				.getDiscussions());
 		String[] discs = new String[discussions.size()];
