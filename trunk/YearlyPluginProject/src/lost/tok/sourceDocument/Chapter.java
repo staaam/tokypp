@@ -4,14 +4,16 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import lost.tok.Messages;
+
 import org.dom4j.Element;
 
 public class Chapter {
 	
 	/** The title before each chapter */
-	static public final String CHAPTER_STR = Messages.getString("SourceDocument.ChapterLabel");
+	static public final String CHAPTER_STR = Messages.getString("SourceDocument.ChapterLabel"); //$NON-NLS-1$
 	/** The name of an unparsed text excerpt */
-	static public final String UNPARSED_STR = "(Unparsed Text)";
+	static public final String UNPARSED_STR = Messages.getString("Chapter.UnparsedTitle"); //$NON-NLS-1$
 	
 	String label;
 
@@ -88,15 +90,15 @@ public class Chapter {
 	
 	public void updateLabel()
 	{
-		String NewLabelBase = "";
+		String NewLabelBase = ""; //$NON-NLS-1$
 		Chapter son = this;
 		while (son.parent != null)
 		{
 			int index = son.parent.children.indexOf(son);
-			NewLabelBase = "." + (index + 1) + NewLabelBase;
+			NewLabelBase = "." + (index + 1) + NewLabelBase; //$NON-NLS-1$
 			son = son.parent;
 		}
-		NewLabelBase = CHAPTER_STR + " " + NewLabelBase.substring(1);
+		NewLabelBase = CHAPTER_STR + " " + NewLabelBase.substring(1); //$NON-NLS-1$
 		this.label = getChapterLabel(NewLabelBase, name);		
 	}
 	
@@ -172,7 +174,7 @@ public class Chapter {
 	}
 
 	public Chapter getChapter(String chapterPath) {
-		int slash = chapterPath.indexOf("/");
+		int slash = chapterPath.indexOf("/"); //$NON-NLS-1$
 		String chapterName = (slash == -1) ? chapterPath : chapterPath.substring(0, slash);
 		
 		for (Chapter chapter : children) {

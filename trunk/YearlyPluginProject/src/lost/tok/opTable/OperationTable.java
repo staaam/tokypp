@@ -8,6 +8,7 @@ import java.util.Vector;
 import java.util.Map.Entry;
 
 import lost.tok.Excerption;
+import lost.tok.Messages;
 import lost.tok.ToK;
 import lost.tok.sourceDocument.Chapter;
 import lost.tok.sourceDocument.ChapterText;
@@ -82,14 +83,14 @@ public class OperationTable extends TextEditor {
 	public void editorContextMenuAboutToShow(IMenuManager menu) {
 		super.editorContextMenuAboutToShow(menu);
 		// System.out.println("editorContextMenuAboutToShow called");
-		addAction(menu, "lost.tok.opTable.MarkPopUpMenu.Action");
+		addAction(menu, "lost.tok.opTable.MarkPopUpMenu.Action"); //$NON-NLS-1$
 	}
 
 	// Shay: this should add the pop up action, but it doesn't work
 	protected void hookContextMenu(Control parent) {
 
-		MenuManager menuMgr = new MenuManager("#PopupMenu");
-		addAction(menuMgr, "lost.tok.opTable.MarkPopUpMenu.Action");
+		MenuManager menuMgr = new MenuManager("#PopupMenu"); //$NON-NLS-1$
+		addAction(menuMgr, "lost.tok.opTable.MarkPopUpMenu.Action"); //$NON-NLS-1$
 		menuMgr.setRemoveAllWhenShown(false);
 		Menu menu = menuMgr.createContextMenu(parent);
 		parent.setMenu(menu);
@@ -274,7 +275,7 @@ public class OperationTable extends TextEditor {
 
 	public void cut(TextSelection t) {
 		throw new UnsupportedOperationException(
-				"Cut not allowed in this version");
+				"Cut not allowed in this version"); //$NON-NLS-1$
 	}
 
 }

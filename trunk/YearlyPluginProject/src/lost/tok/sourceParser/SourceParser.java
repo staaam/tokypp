@@ -3,6 +3,7 @@ package lost.tok.sourceParser;
 import java.util.LinkedList;
 import java.util.Map.Entry;
 
+import lost.tok.Messages;
 import lost.tok.ToK;
 import lost.tok.opTable.SourceDocumentProvider;
 import lost.tok.opTable.StyleManager;
@@ -37,7 +38,7 @@ public class SourceParser extends TextEditor
 	String lastChapterName = null;
 	
 	/** The Editor's id in plugins.xml */
-	public static String EditorID = "lost.tok.sourceParser.SourceParser";
+	public static String EditorID = "lost.tok.sourceParser.SourceParser"; //$NON-NLS-1$
 
 	public SourceParser()
 	{
@@ -196,7 +197,7 @@ public class SourceParser extends TextEditor
 	{
 		dirty = false;
  
-		monitor.beginTask("Finding Location", 4);
+		monitor.beginTask(Messages.getString("SourceParser.1"), 4); //$NON-NLS-1$
 		
 		IFile unParsedIFile = getInputIFile();
 		if (unParsedIFile == null)
@@ -207,7 +208,7 @@ public class SourceParser extends TextEditor
 		
 		// the unparsed file name
 		String upName = unParsedIFile.getFullPath().lastSegment();
-		String srcName = upName.substring(0, upName.lastIndexOf('.')) + ".src";
+		String srcName = upName.substring(0, upName.lastIndexOf('.')) + ".src"; //$NON-NLS-1$
 		
 		IProject tProj = unParsedIFile.getProject();
 		
@@ -215,11 +216,11 @@ public class SourceParser extends TextEditor
 		SourceDocument document = (SourceDocument) srcview.getDocument();
 		monitor.worked(1);
 		
-		monitor.setTaskName("Saving to src file");
+		monitor.setTaskName(Messages.getString("SourceParser.3")); //$NON-NLS-1$
 		document.toXML(tProj, srcName);
 		monitor.worked(1);
 		
-		monitor.setTaskName("Updating root info");
+		monitor.setTaskName(Messages.getString("SourceParser.4")); //$NON-NLS-1$
 		IFile srcIFile = tProj.getFolder(ToK.SOURCES_FOLDER).getFile(srcName);
 		
 		try {
@@ -230,7 +231,7 @@ public class SourceParser extends TextEditor
 		}
 		monitor.worked(1);
 		
-		monitor.setTaskName("Deleting old unparsed file");
+		monitor.setTaskName(Messages.getString("SourceParser.5")); //$NON-NLS-1$
 		
 		try {
 			unParsedIFile.delete(true, null);

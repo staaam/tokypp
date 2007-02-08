@@ -2,6 +2,8 @@ package lost.tok.sourceDocument;
 
 import java.util.Vector;
 
+import lost.tok.Messages;
+
 public class ChapterText extends Chapter {
 	/** The path as defined for the Excerption xml */
 	String excerPath;
@@ -11,7 +13,7 @@ public class ChapterText extends Chapter {
 	Integer pathOffset; // offset in path
 
 	public ChapterText(String name, String text) {
-		super("",name);
+		super("",name); //$NON-NLS-1$
 		this.excerPath = null;
 		this.length = text.length();
 		this.pathOffset = offset;
@@ -36,7 +38,7 @@ public class ChapterText extends Chapter {
 	 */
 	public String getExcerptionPath() {
 		if (excerPath == null) {
-			excerPath = "";
+			excerPath = ""; //$NON-NLS-1$
 			// Lazy Initialization
 			Vector<Chapter> chaps = new Vector<Chapter>(10);
 			Chapter currParent = this.getParent();
@@ -49,7 +51,7 @@ public class ChapterText extends Chapter {
 			for (int i = chaps.size() - 2; i >= 0; i--) {
 				excerPath += chaps.get(i).name;
 				if (i != 0)
-					excerPath += "/";
+					excerPath += "/"; //$NON-NLS-1$
 			}
 		}
 		return excerPath;
@@ -94,21 +96,21 @@ public class ChapterText extends Chapter {
 		{
 			Chapter myOldParent = this.parent;
 			myOldParent.children.clear();
-			Chapter myNewParent = new Chapter("", name);
+			Chapter myNewParent = new Chapter("", name); //$NON-NLS-1$
 			myOldParent.add(myNewParent);
 			myNewParent.add(this);
 			myNewParent.updateLabel();
 		}
 		
 		this.name = name; // _this_ is now considered parsed
-		this.label = "";
-		this.text = originalText.substring(0, offset).trim() + "\n";
+		this.label = ""; //$NON-NLS-1$
+		this.text = originalText.substring(0, offset).trim() + "\n"; //$NON-NLS-1$
 		this.excerPath = null;
 		
 		if (!offset.equals(length-1))
 		{
-			Chapter textChapParent = new Chapter("",Chapter.UNPARSED_STR);
-			ChapterText textChap = new ChapterText(Chapter.UNPARSED_STR, originalText.substring(offset).trim() + "\n");
+			Chapter textChapParent = new Chapter("",Chapter.UNPARSED_STR); //$NON-NLS-1$
+			ChapterText textChap = new ChapterText(Chapter.UNPARSED_STR, originalText.substring(offset).trim() + "\n"); //$NON-NLS-1$
 			textChapParent.add(textChap);
 			this.parent.parent.add(textChapParent);
 			textChapParent.updateLabel();
