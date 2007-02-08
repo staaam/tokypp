@@ -49,7 +49,7 @@ public class AddQuoteWizardPage extends WizardPage {
 			}
 
 			public void widgetSelected(SelectionEvent e) {
-				opinionCombo.setItems(getDiscussion().getOpinions());
+				opinionCombo.setItems(getDiscussion().getOpinionNames());
 				opinionCombo.select(0);
 				updateStatus(null);
 			}
