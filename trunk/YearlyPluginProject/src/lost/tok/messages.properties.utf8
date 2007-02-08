@@ -50,3 +50,7 @@ SourceParser.5=מוחק קובץ קודם
 EnterTitleDialog.Title=שם הפרק החדש:
 EnterTitleDialog.Description=הכנס את שם הפרק החדש. הקש 'הכנס' לסיום ואסקייפ לביטול
 Chapter.UnparsedTitle=(טקסט ללא כותרת)
+NewDiscussionWizardPage.1=אשף דיון חדש
+NewDiscussionWizardPage.2=אשף זה יוצר דיון חדש
+NewDiscussionWizardPage.3=&שם הדיון:
+NewDiscussionWizard.0=אשף דיון חדש
