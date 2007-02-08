@@ -50,7 +50,5 @@ public class LinkAction extends AbstractEditorAction {
 		}
 		expViewer.addExcerptions(fileName, exps);
 		expViewer.setFocus();
-		((LinkageEditor) activeEditor).clearMarked();
 	}
-
 }
