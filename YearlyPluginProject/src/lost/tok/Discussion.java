@@ -246,10 +246,10 @@ public class Discussion {
 		Document doc = readFromXML();
 
 		// Make sure that the 2 elements exist
-		XPath xpathSelector1 = DocumentHelper.createXPath("//[id='"
+		XPath xpathSelector1 = DocumentHelper.createXPath("//*[id='"
 				+ java.lang.Integer.toString(element1) + "']");
 		List op1 = xpathSelector1.selectNodes(doc);
-		XPath xpathSelector2 = DocumentHelper.createXPath("//[id='"
+		XPath xpathSelector2 = DocumentHelper.createXPath("//*[id='"
 				+ java.lang.Integer.toString(element2) + "']");
 		List op2 = xpathSelector2.selectNodes(doc);
 		if (op1.size() != 1 || op2.size() != 1) {
@@ -257,7 +257,7 @@ public class Discussion {
 		}
 
 		// chack that the relation does not exist
-		XPath xpathSelector3 = DocumentHelper.createXPath("//[id='"
+		XPath xpathSelector3 = DocumentHelper.createXPath("//*[id='"
 				+ java.lang.Integer.toString(element1)
 				+ "']/relation[targetId='"
 				+ java.lang.Integer.toString(element2) + "']");
@@ -295,7 +295,7 @@ public class Discussion {
 		// element 2
 		// if there are several relations fix it by removing all of them
 		// if there are no relations does nothing
-		XPath xpathSelector1 = DocumentHelper.createXPath("//[id='"
+		XPath xpathSelector1 = DocumentHelper.createXPath("//*[id='"
 				+ java.lang.Integer.toString(element1)
 				+ "']/relation[targetId='"
 				+ java.lang.Integer.toString(element2) + "']");
@@ -309,7 +309,7 @@ public class Discussion {
 		// element 1
 		// if there are several relations fix it by removing all of them
 		// if there are no relations does nothing
-		XPath xpathSelector2 = DocumentHelper.createXPath("//[id='"
+		XPath xpathSelector2 = DocumentHelper.createXPath("//*[id='"
 				+ java.lang.Integer.toString(element2)
 				+ "']/relation[targetId='"
 				+ java.lang.Integer.toString(element1) + "']");
