@@ -8,21 +8,39 @@ import java.util.List;
 import lost.tok.Excerption;
 import lost.tok.newLinkWizard.NewLinkWizard;
 
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Tree;
-import org.eclipse.ui.part.*;
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.viewers.*;
-import org.eclipse.jface.wizard.WizardDialog;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.jface.action.*;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.ui.*;
-import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.SWT;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.QualifiedName;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IMenuListener;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IBaseLabelProvider;
+import org.eclipse.jface.viewers.IContentProvider;
+import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.ITreeContentProvider;
+import org.eclipse.jface.viewers.ITreeSelection;
+import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerSorter;
+import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Tree;
+import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.IWorkbenchActionConstants;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.part.DrillDownAdapter;
+import org.eclipse.ui.part.ViewPart;
 
 /**
  * This sample class demonstrates how to plug-in a new workbench view. The view
@@ -233,9 +251,9 @@ public class ExcerptionView extends ViewPart {
 
 	private static int nextId = 0;
 
-	private Action linkAction;
-
 	private Action deleteAction;
+
+	private DrillDownAdapter drillDownAdapter;
 
 	/*
 	 * The content provider class is responsible for providing objects to the
@@ -245,9 +263,9 @@ public class ExcerptionView extends ViewPart {
 	 * example).
 	 */
 
-	private Action doubleClickAction;
+	//private Action doubleClickAction;
 
-	private DrillDownAdapter drillDownAdapter;
+	private Action linkAction;
 
 	private List<FileExcerption> objects = new ArrayList<FileExcerption>();
 
@@ -283,15 +301,6 @@ public class ExcerptionView extends ViewPart {
 				.treeBuildAndRefresh();
 	}
 
-	public List<Excerption> getExcerptions(String fileName) {
-		for (FileExcerption element : objects) {
-			if (element.getSourceFileName().compareTo(fileName) == 0) {
-				return element.getExcerptions();
-			}
-		}
-		return null;
-	}
-
 	private void contributeToActionBars() {
 		IActionBars bars = getViewSite().getActionBars();
 		fillLocalPullDown(bars.getMenuManager());
@@ -325,6 +334,31 @@ public class ExcerptionView extends ViewPart {
 
 	private void fillLocalPullDown(IMenuManager manager) {
 		manager.add(linkAction);
+	}
+
+	public IContentProvider getContentProvider() {
+		return viewer.getContentProvider();
+	}
+
+	public List<Excerption> getExcerptions(String fileName) {
+		for (FileExcerption element : objects) {
+			if (element.getSourceFileName().compareTo(fileName) == 0) {
+				return element.getExcerptions();
+			}
+		}
+		return null;
+	}
+
+	public Object getInput() {
+		return viewer.getInput();
+	}
+
+	public IBaseLabelProvider getLabelProvider() {
+		return viewer.getLabelProvider();
+	}
+
+	public Tree getTree() {
+		return viewer.getTree();
 	}
 
 	private void hookContextMenu() {
@@ -446,22 +480,6 @@ public class ExcerptionView extends ViewPart {
 	 */
 	public void setFocus() {
 		viewer.getControl().setFocus();
-	}
-
-	public Tree getTree() {
-		return viewer.getTree();
-	}
-
-	public IContentProvider getContentProvider() {
-		return viewer.getContentProvider();
-	}
-
-	public Object getInput() {
-		return viewer.getInput();
-	}
-
-	public IBaseLabelProvider getLabelProvider() {
-		return viewer.getLabelProvider();
 	}
 
 }

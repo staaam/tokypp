@@ -1,52 +1,30 @@
 package lost.tok.newRelationWizard;
 
-import org.eclipse.core.resources.IContainer;
+import lost.tok.Discussion;
+import lost.tok.Quote;
+import lost.tok.ToK;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.Path;
+import org.eclipse.jface.dialogs.IDialogPage;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.events.TreeEvent;
-import org.eclipse.swt.events.TreeListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
-import org.eclipse.ui.dialogs.ContainerSelectionDialog;
-import org.eclipse.ui.dialogs.SaveAsDialog;
-import org.eclipse.ui.dialogs.SelectionDialog;
-import org.eclipse.swt.widgets.FileDialog;
-import org.eclipse.swt.graphics.Device;
-import org.eclipse.swt.graphics.DeviceData;
-import org.eclipse.swt.graphics.Image;
-import java.awt.*;
-import java.io.File;
-
-import javax.naming.NameParser;
-import javax.swing.JFileChooser;
-
-import lost.tok.Discussion;
-import lost.tok.Excerption;
-import lost.tok.GeneralFunctions;
-import lost.tok.Messages;
-import lost.tok.Quote;
-import lost.tok.ToK;
-import lost.tok.sourceDocument.SourceDocument;
 
 /**
  * The "New" wizard page allows setting the container for the new file as well
@@ -56,19 +34,21 @@ import lost.tok.sourceDocument.SourceDocument;
 
 public class NewRelationWizardPage extends WizardPage {
 
-	private ISelection selection;
-
-	private Combo relType;
-
 	private Text comment;
+
+	private String discName;
 
 	private Tree leftObjects;
 
-	private Tree rightObjects;
-
-	private String discName;
-	
 	private String projectName;
+
+	private Combo relType;
+
+	private Tree rightObjects;
+	
+	private ISelection selection;
+	
+	
 
 	/**
 	 * Constructor for NewWizardPage.
@@ -152,12 +132,12 @@ public class NewRelationWizardPage extends WizardPage {
 		rightObjects.setSize(100, 200);
 
 		IProject project = ResourcesPlugin.getWorkspace().getRoot()
-				.getProject();
+				.getProject(projectName);
 
 		// FOR DEBUGGING ONLY!!!!!!!!
-		ToK tok = new ToK(projectName, "Arie", "Babel_he.src");
+		//ToK tok = new ToK(projectName, "Arie", "Babel_he.src");
 		// @TODO
-		//ToK tok = ToK.getProjectToK(project);
+		ToK tok = ToK.getProjectToK(project);
 
 		Discussion disc = null;
 		try {
@@ -225,27 +205,6 @@ public class NewRelationWizardPage extends WizardPage {
 	}
 
 	/**
-	 * Tests if the current workbench selection is a suitable container to use.
-	 */
-
-	private void initialize() {
-		if (selection != null && selection.isEmpty() == false
-				&& selection instanceof IStructuredSelection) {
-			IStructuredSelection ssel = (IStructuredSelection) selection;
-			if (ssel.size() > 1)
-				return;
-			Object obj = ssel.getFirstElement();
-			if (obj instanceof IResource) {
-				IResource resource = (IResource) obj;
-				discName = resource.getName().split(".dis")[0];
-				projectName = resource.getProject().getName();
-			}
-		}
-	}
-
-	
-	
-	/**
 	 * Ensures that both text fields are set.
 	 */
 
@@ -266,17 +225,18 @@ public class NewRelationWizardPage extends WizardPage {
 			return;
 		}
 	}
-	private void updateStatus(String message) {
-		setErrorMessage(message);
-		setPageComplete(message == null);
+
+	
+	
+	public String getComment() {
+		return comment.getText();
+	}
+	public String getDiscName() {
+		return discName;
 	}
 
 	public String getRelationType() {
 		return relType.getText();
-	}
-
-	public String getComment() {
-		return comment.getText();
 	}
 
 	public Integer[] getSelectedQuotes() {
@@ -289,7 +249,27 @@ public class NewRelationWizardPage extends WizardPage {
 		return selectedText;
 	}
 
-	public String getDiscName() {
-		return discName;
+	/**
+	 * Tests if the current workbench selection is a suitable container to use.
+	 */
+
+	private void initialize() {
+		if (selection != null && selection.isEmpty() == false
+				&& selection instanceof IStructuredSelection) {
+			IStructuredSelection ssel = (IStructuredSelection) selection;
+			if (ssel.size() > 1)
+				return;
+			Object obj = ssel.getFirstElement();
+			if (obj instanceof IResource) {
+				IResource resource = (IResource) obj;
+				discName = resource.getName().split(".dis")[0];
+				projectName = resource.getProject().getName();
+			}
+		}
+	}
+
+	private void updateStatus(String message) {
+		setErrorMessage(message);
+		setPageComplete(message == null);
 	}
 }

@@ -49,6 +49,16 @@ public class NewRelationWizard extends Wizard implements INewWizard {
 	}
 
 	/**
+	 * We will accept the selection in the workbench to see if we can initialize
+	 * from it.
+	 * 
+	 * @see IWorkbenchWizard#init(IWorkbench, IStructuredSelection)
+	 */
+	public void init(IWorkbench workbench, IStructuredSelection selection) {
+		this.selection = selection;
+	}
+
+	/**
 	 * This method is called when 'Finish' button is pressed in the wizard. We
 	 * will create an operation and run it using wizard as execution context.
 	 */
@@ -62,23 +72,12 @@ public class NewRelationWizard extends Wizard implements INewWizard {
 		try {
 			Integer[] ids = page.getSelectedQuotes();
 			Discussion disc = tok.getDiscussion(page.getDiscName());
-			disc
-					.createOpinionLink(ids[0], ids[1], page.getComment(), page
+			disc.createLink(ids[0], ids[1], page.getComment(), page
 							.getRelationType());
 		} catch (CoreException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return true;
-	}
-
-	/**
-	 * We will accept the selection in the workbench to see if we can initialize
-	 * from it.
-	 * 
-	 * @see IWorkbenchWizard#init(IWorkbench, IStructuredSelection)
-	 */
-	public void init(IWorkbench workbench, IStructuredSelection selection) {
-		this.selection = selection;
 	}
 }

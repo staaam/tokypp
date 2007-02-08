@@ -21,12 +21,10 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
@@ -42,22 +40,22 @@ import org.eclipse.ui.PlatformUI;
 
 public class NewLinkWizardPage extends WizardPage {
 
-	@SuppressWarnings("unused")
-	private ISelection selection;
-
-	private Combo projectCombo;
+	private HashMap<String, Discussion> discMap = new HashMap<String, Discussion>();
 
 	private Combo discussionCombo;
 
-	private Combo linkType;
-
-	private Text subject;
-
 	private Tree excerptions;
 
-	private HashMap<String, Discussion> discMap = new HashMap<String, Discussion>();
-
 	private ExcerptionView expViewer;
+
+	private Combo linkType;
+
+	private Combo projectCombo;
+
+	@SuppressWarnings("unused")
+	private ISelection selection;
+
+	private Text subject;
 
 	/**
 	 * Constructor for SampleNewWizardPage.
@@ -227,6 +225,75 @@ public class NewLinkWizardPage extends WizardPage {
 	}
 
 	/**
+	 * Ensures that both text fields are set.
+	 */
+
+	private void dialogChanged() {
+		if (projectCombo.getText() == "") {
+			updateStatus("Please select a project");
+			return;
+		}
+
+		if (discussionCombo.getText() == "") {
+			updateStatus("Please select a discussion");
+			return;
+		}
+
+		if (subject.getText() == "") {
+			updateStatus("Please fill-in a subject for the link");
+			return;
+		}
+
+		if (linkType.getText() == "") {
+			updateStatus("Please select the type of the link");
+			return;
+		}
+
+		if (excerptions.getSelection().length == 0) {
+			updateStatus("Please choose the root file to link to");
+			return;
+		}
+
+		updateStatus(null);
+	}
+
+	public String getDiscussion() {
+		return discussionCombo.getText();
+	}
+
+	public Excerption[] getExcerptions(String fileName) {
+		int i = 0;
+		ArrayList<Excerption> list = (ArrayList<Excerption>) expViewer
+				.getExcerptions(fileName);
+		Excerption[] array = new Excerption[list.size()];
+		for (Excerption excerption : list) {
+			array[i++] = excerption;
+		}
+		return array;
+	}
+
+	public String getLinkType() {
+		return linkType.getText();
+	}
+
+	public String getProject() {
+		return projectCombo.getText();
+	}
+
+	public String[] getSourceFiles() {
+		TreeItem[] selected = excerptions.getSelection();
+		String[] selectedNames = new String[selected.length];
+		for (int i = 0; i < selected.length; i++) {
+			selectedNames[i] = selected[i].getText();
+		}
+		return selectedNames;
+	}
+
+	public String getSubject() {
+		return subject.getText();
+	}
+
+	/**
 	 * Tests if the current workbench selection is a suitable container to use.
 	 */
 
@@ -267,39 +334,6 @@ public class NewLinkWizardPage extends WizardPage {
 		}
 	}
 
-	/**
-	 * Ensures that both text fields are set.
-	 */
-
-	private void dialogChanged() {
-		if (projectCombo.getText() == "") {
-			updateStatus("Please select a project");
-			return;
-		}
-
-		if (discussionCombo.getText() == "") {
-			updateStatus("Please select a discussion");
-			return;
-		}
-
-		if (subject.getText() == "") {
-			updateStatus("Please fill-in a subject for the link");
-			return;
-		}
-
-		if (linkType.getText() == "") {
-			updateStatus("Please select the type of the link");
-			return;
-		}
-
-		if (excerptions.getSelection().length == 0) {
-			updateStatus("Please choose the root file to link to");
-			return;
-		}
-
-		updateStatus(null);
-	}
-
 	private void projectSelected() {
 		// TODO Auto-generated method stub
 		String chosenProject = projectCombo.getText();
@@ -322,42 +356,6 @@ public class NewLinkWizardPage extends WizardPage {
 	private void updateStatus(String message) {
 		setErrorMessage(message);
 		setPageComplete(message == null);
-	}
-
-	public String getDiscussion() {
-		return discussionCombo.getText();
-	}
-
-	public String getProject() {
-		return projectCombo.getText();
-	}
-
-	public Excerption[] getExcerptions(String fileName) {
-		int i = 0;
-		ArrayList<Excerption> list = (ArrayList<Excerption>) expViewer
-				.getExcerptions(fileName);
-		Excerption[] array = new Excerption[list.size()];
-		for (Excerption excerption : list) {
-			array[i++] = excerption;
-		}
-		return array;
-	}
-
-	public String[] getSourceFiles() {
-		TreeItem[] selected = excerptions.getSelection();
-		String[] selectedNames = new String[selected.length];
-		for (int i = 0; i < selected.length; i++) {
-			selectedNames[i] = selected[i].getText();
-		}
-		return selectedNames;
-	}
-
-	public String getLinkType() {
-		return linkType.getText();
-	}
-
-	public String getSubject() {
-		return subject.getText();
 	}
 
 }
