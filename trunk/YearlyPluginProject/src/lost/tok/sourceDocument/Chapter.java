@@ -7,28 +7,22 @@ import java.util.List;
 import org.dom4j.Element;
 
 public class Chapter {
-
+	
 	/** The title before each chapter */
-	static public final String CHAPTER_STR = Messages
-			.getString("SourceDocument.ChapterLabel");
-
+	static public final String CHAPTER_STR = Messages.getString("SourceDocument.ChapterLabel");
 	/** The name of an unparsed text excerpt */
 	static public final String UNPARSED_STR = "(Unparsed Text)";
-
+	
 	String label;
 
 	/** The name of the chapter. Part of its title */
 	String name;
-
-	/** The parent of this chapter. null for root */
+	/** The parent of this chapter. null for root */ 
 	Chapter parent;
-
 	/** The chapters below this one */
 	LinkedList<Chapter> children;
-
 	/** The offset of the chapter from the start of the DISPLAYED document */
 	Integer offset;
-
 	/** The length of the chapter, including its subchapters */
 	Integer length;
 
@@ -41,17 +35,17 @@ public class Chapter {
 		offset = new Integer(0);
 		length = new Integer(label.length());
 	}
-
+	
 	/** Creates a chapter whose children are derived from the root element */
 	public Chapter(String label, String name, Element root, String chapterLabel) {
-		this(label, name);
-
+		this(label,name);
+		
 		Iterator itr = root.elementIterator("child"); //$NON-NLS-1$
-		// Integer sequenceNumber = 1;
+		//Integer sequenceNumber = 1;
 		while (itr.hasNext()) {
 			Element el = (Element) itr.next();
 			Element next = el.element("chapter"); //$NON-NLS-1$
-			String nextLabel = chapterLabel + (children.size() + 1);
+			String nextLabel = chapterLabel + (children.size()+1);
 			Chapter child;
 			if (next != null) {
 				child = addChapter(next, nextLabel);
@@ -91,21 +85,24 @@ public class Chapter {
 			length += c.length;
 		}
 	}
-
-	public void updateLabel() {
+	
+	public void updateLabel()
+	{
 		String NewLabelBase = "";
 		Chapter son = this;
-		while (son.parent != null) {
+		while (son.parent != null)
+		{
 			int index = son.parent.children.indexOf(son);
 			NewLabelBase = "." + (index + 1) + NewLabelBase;
 			son = son.parent;
 		}
 		NewLabelBase = CHAPTER_STR + " " + NewLabelBase.substring(1);
-		this.label = getChapterLabel(NewLabelBase, name);
+		this.label = getChapterLabel(NewLabelBase, name);		
 	}
-
+	
 	/** Returns this chapter and all its offsprings, sorted DFS-wise */
-	public void getTree(List<Chapter> l) {
+	public void getTree(List<Chapter> l)
+	{
 		l.add(this);
 		for (Chapter child : children)
 			child.getTree(l);
@@ -126,11 +123,12 @@ public class Chapter {
 	public String getName() {
 		return name;
 	}
-
-	public boolean isUnparsed() {
+	
+	public boolean isUnparsed()
+	{
 		return false;
 	}
-
+	
 	static private Chapter addChapter(Element el, String label) {
 		String chapName = el.elementTextTrim("name"); //$NON-NLS-1$
 		String chapLabel = getChapterLabel(label, chapName);
@@ -139,7 +137,7 @@ public class Chapter {
 
 		return c;
 	}
-
+	
 	static private Chapter addText(Element el, String label) {
 		String chapName = el.elementTextTrim("name"); //$NON-NLS-1$
 		String chapLabel = getChapterLabel(label, chapName);
@@ -149,12 +147,11 @@ public class Chapter {
 		// Note(Shay): should we really create a new chapter here?
 		Chapter c = new Chapter(chapLabel, chapName);
 
-		c.add(new ChapterText(textElement.getUniquePath(),
-				formatText(textElement)));
+		c.add(new ChapterText(chapName, formatText(textElement)));
 
 		return c;
 	}
-
+	
 	static private String formatText(Element textElement) {
 		return textElement.getStringValue().trim() + "\n"; //$NON-NLS-1$
 	}
@@ -165,13 +162,11 @@ public class Chapter {
 
 	public Chapter getChapter(String chapterPath) {
 		int slash = chapterPath.indexOf("/");
-		String chapterName = (slash == -1) ? chapterPath : chapterPath
-				.substring(0, slash);
-
+		String chapterName = (slash == -1) ? chapterPath : chapterPath.substring(0, slash);
+		
 		for (Chapter chapter : children) {
 			if (chapter.getName().compareTo(chapterName) == 0) {
-				return (slash == -1) ? chapter : chapter.getChapter(chapterPath
-						.substring(slash + 1));
+				return (slash == -1) ? chapter : chapter.getChapter(chapterPath.substring(slash + 1));
 			}
 		}
 		return null;
@@ -182,6 +177,6 @@ public class Chapter {
 		if (c.children.getFirst() instanceof ChapterText) {
 			return (ChapterText) c.children.getFirst();
 		}
-		return null;
+		return  null;
 	}
 }
