@@ -262,7 +262,7 @@ public class NewRelationWizardPage extends WizardPage {
 			Object obj = ssel.getFirstElement();
 			if (obj instanceof IResource) {
 				IResource resource = (IResource) obj;
-				discName = resource.getName().split(".dis")[0];
+				discName = resource.getName().split(".dis")[0]; //$NON-NLS-1$
 				projectName = resource.getProject().getName();
 			}
 		}

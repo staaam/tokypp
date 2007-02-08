@@ -1,6 +1,7 @@
 package lost.tok.newRelationWizard;
 
 import lost.tok.Discussion;
+import lost.tok.Messages;
 import lost.tok.ToK;
 
 import org.eclipse.core.resources.IProject;
@@ -36,7 +37,7 @@ public class NewRelationWizard extends Wizard implements INewWizard {
 		super();
 		setNeedsProgressMonitor(true);
 		setHelpAvailable(false);
-		setWindowTitle("New Relation Wizard");
+		setWindowTitle(Messages.getString("NewRelationWizard.0")); //$NON-NLS-1$
 	}
 
 	/**

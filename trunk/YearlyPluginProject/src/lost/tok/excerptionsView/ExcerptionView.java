@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import lost.tok.Excerption;
+import lost.tok.Messages;
 import lost.tok.newLinkWizard.NewLinkWizard;
 
 import org.eclipse.core.runtime.IAdaptable;
@@ -65,7 +66,7 @@ public class ExcerptionView extends ViewPart {
 		String sourceFileName = new String();
 
 		public void addExcerption(Excerption exp) {
-			exp.setProperty(new QualifiedName("id", "id"), nextId++);
+			exp.setProperty(new QualifiedName("id", "id"), nextId++); //$NON-NLS-1$ //$NON-NLS-2$
 			excerptions.add(exp);
 		}
 
@@ -206,7 +207,7 @@ public class ExcerptionView extends ViewPart {
 		}
 
 		private void treeBuildAndRefresh() {
-			invisibleRoot = new TreeParent("");
+			invisibleRoot = new TreeParent(""); //$NON-NLS-1$
 
 			for (Iterator iter = objects.iterator(); iter.hasNext();) {
 				FileExcerption element = (FileExcerption) iter.next();
@@ -221,7 +222,7 @@ public class ExcerptionView extends ViewPart {
 							: expText.substring(0, 40);
 					TreeObject temp = new TreeObject(expPrefix);
 					temp.setId(Integer.valueOf((Integer) exp
-							.getProperty(new QualifiedName("id", "id"))));
+							.getProperty(new QualifiedName("id", "id")))); //$NON-NLS-1$ //$NON-NLS-2$
 					parentFile.addChild(temp);
 				}
 				invisibleRoot.addChild(parentFile);
@@ -247,7 +248,7 @@ public class ExcerptionView extends ViewPart {
 		}
 	}
 
-	public final static String ID = "lost.tok.excerptionsView.ExcerptionView";
+	public final static String ID = "lost.tok.excerptionsView.ExcerptionView"; //$NON-NLS-1$
 
 	private static int nextId = 0;
 
@@ -362,7 +363,7 @@ public class ExcerptionView extends ViewPart {
 	}
 
 	private void hookContextMenu() {
-		MenuManager menuMgr = new MenuManager("#PopupMenu");
+		MenuManager menuMgr = new MenuManager("#PopupMenu"); //$NON-NLS-1$
 		menuMgr.setRemoveAllWhenShown(true);
 		menuMgr.addMenuListener(new IMenuListener() {
 			public void menuAboutToShow(IMenuManager manager) {
@@ -399,15 +400,15 @@ public class ExcerptionView extends ViewPart {
 				wizard.init(PlatformUI.getWorkbench(),
 						(IStructuredSelection) viewer.getSelection());
 				WizardDialog dialog = new WizardDialog(new Shell(), wizard);
-				dialog.setTitle("Link discussion to root");
+				dialog.setTitle(Messages.getString("ExcerptionView.7")); //$NON-NLS-1$
 				dialog.updateSize();
 				dialog.create();
 				dialog.open();
 			}
 		};
-		linkAction.setText("Link to a discussion");
-		linkAction.setToolTipText("Link this excerption(s) to a root file");
-		linkAction.setImageDescriptor(ImageDescriptor.createFromFile(this.getClass(), "../../../../icons/main_link_ico.gif"));
+		linkAction.setText(Messages.getString("ExcerptionView.8")); //$NON-NLS-1$
+		linkAction.setToolTipText(Messages.getString("ExcerptionView.9")); //$NON-NLS-1$
+		linkAction.setImageDescriptor(ImageDescriptor.createFromFile(this.getClass(), "../../../../icons/main_link_ico.gif")); //$NON-NLS-1$
 		
 		deleteAction = new Action() {
 			public void run() {
@@ -448,7 +449,7 @@ public class ExcerptionView extends ViewPart {
 								int id = Integer
 										.valueOf((Integer) exp
 												.getProperty(new QualifiedName(
-														"id", "id")));
+														"id", "id"))); //$NON-NLS-1$ //$NON-NLS-2$
 								if (element.compareTo(id) == 0){
 									excerptions.remove(exp);
 								}
@@ -462,9 +463,9 @@ public class ExcerptionView extends ViewPart {
 				.treeBuildAndRefresh();
 			}
 		};
-		deleteAction.setText("Delete");
-		deleteAction.setToolTipText("Deletes the chosen excerption");
-		deleteAction.setImageDescriptor(ImageDescriptor.createFromFile(this.getClass(), "../../../../icons/delete.gif"));
+		deleteAction.setText(Messages.getString("ExcerptionView.13")); //$NON-NLS-1$
+		deleteAction.setToolTipText(Messages.getString("ExcerptionView.14")); //$NON-NLS-1$
+		deleteAction.setImageDescriptor(ImageDescriptor.createFromFile(this.getClass(), "../../../../icons/delete.gif")); //$NON-NLS-1$
 //		doubleClickAction = new Action() {
 //			public void run() {
 //				ISelection selection = viewer.getSelection();

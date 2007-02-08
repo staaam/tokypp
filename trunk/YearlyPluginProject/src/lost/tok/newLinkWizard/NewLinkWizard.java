@@ -1,5 +1,6 @@
 package lost.tok.newLinkWizard;
 
+import lost.tok.Messages;
 import lost.tok.ToK;
 
 import org.eclipse.core.resources.IProject;
@@ -35,7 +36,7 @@ public class NewLinkWizard extends Wizard implements INewWizard {
 	 */
 	public NewLinkWizard() {
 		super();
-		setWindowTitle("Link discussion");
+		setWindowTitle(Messages.getString("NewLinkWizard.0")); //$NON-NLS-1$
 		setNeedsProgressMonitor(true);
 		setHelpAvailable(false);
 	}
@@ -81,9 +82,9 @@ public class NewLinkWizard extends Wizard implements INewWizard {
 		return true;
 	}
 
-	@SuppressWarnings("unused")
+	@SuppressWarnings("unused") //$NON-NLS-1$
 	private void throwCoreException(String message) throws CoreException {
-		IStatus status = new Status(IStatus.ERROR, "Yearly_Plugin_Project",
+		IStatus status = new Status(IStatus.ERROR, "Yearly_Plugin_Project", //$NON-NLS-1$
 				IStatus.OK, message, null);
 		throw new CoreException(status);
 	}
