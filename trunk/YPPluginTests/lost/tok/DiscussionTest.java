@@ -147,8 +147,8 @@ public class DiscussionTest extends TestCase {
 		tok.addDiscussion("test");
 		Discussion disc = tok.getDiscussion("test");
 		disc.addOpinion("one");
-		disc.addQuoteTest(1, 1);
-		disc.relocateQuote(1, 2);
+		disc.addQuoteTest(11, 1);
+		disc.relocateQuote(11, 2);
 
 		Document doc = DocumentHelper.createDocument();
 		SAXReader reader = new SAXReader();
@@ -176,9 +176,9 @@ public class DiscussionTest extends TestCase {
 		tok.addDiscussion("test");
 		Discussion disc = tok.getDiscussion("test");
 		disc.addOpinion("one");
-		disc.addQuoteTest(1, 1);
-		disc.relocateQuote(1, 7);
-		disc.relocateQuote(7, 2);
+		disc.addQuoteTest(11, 1);
+		disc.relocateQuote(11, 7);
+		disc.relocateQuote(17, 2);
 
 		Document doc = DocumentHelper.createDocument();
 		SAXReader reader = new SAXReader();
@@ -205,8 +205,8 @@ public class DiscussionTest extends TestCase {
 		ToK tok = creation("testRMQ1");
 		tok.addDiscussion("test");
 		Discussion disc = tok.getDiscussion("test");
-		disc.addQuoteTest(1, 1);
-		disc.removeQuote(1);
+		disc.addQuoteTest(11, 1);
+		disc.removeQuote(11);
 
 		Document doc = DocumentHelper.createDocument();
 		SAXReader reader = new SAXReader();
@@ -229,8 +229,8 @@ public class DiscussionTest extends TestCase {
 		ToK tok = creation("testRMQ2");
 		tok.addDiscussion("test");
 		Discussion disc = tok.getDiscussion("test");
-		disc.addQuoteTest(1, 1);
-		disc.removeQuote(7);
+		disc.addQuoteTest(11, 1);
+		disc.removeQuote(17);
 
 		Document doc = DocumentHelper.createDocument();
 		SAXReader reader = new SAXReader();
@@ -256,9 +256,9 @@ public class DiscussionTest extends TestCase {
 		disc.addOpinion("one");
 		disc.addOpinion("two");
 		disc.addOpinion("three");
-		disc.createOpinionLink(2, 3, "link between 'one' and 'two'",
+		disc.createLink(2, 3, "link between 'one' and 'two'",
 				"opposition");
-		disc.createOpinionLink(2, 4, "link between 'one' and 'three'",
+		disc.createLink(2, 4, "link between 'one' and 'three'",
 				"opposition");
 
 		Document doc = DocumentHelper.createDocument();
@@ -273,13 +273,13 @@ public class DiscussionTest extends TestCase {
 		}
 
 		XPath xpathSelector1 = DocumentHelper
-				.createXPath("//opinion[id='2']/opinionRel");
+				.createXPath("//opinion[id='2']/relation");
 		List result1 = xpathSelector1.selectNodes(doc);
 		XPath xpathSelector2 = DocumentHelper
-				.createXPath("//opinion[id='3']/opinionRel[targetId='2']");
+				.createXPath("//opinion[id='3']/relation[targetId='2']");
 		List result2 = xpathSelector2.selectNodes(doc);
 		XPath xpathSelector3 = DocumentHelper
-				.createXPath("//opinion[id='4']/opinionRel[targetId='2']");
+				.createXPath("//opinion[id='4']/relation[targetId='2']");
 		List result3 = xpathSelector3.selectNodes(doc);
 		assertTrue(result1.size() == 2 && result2.size() == 1
 				&& result3.size() == 1);
@@ -293,9 +293,9 @@ public class DiscussionTest extends TestCase {
 		Discussion disc = tok.getDiscussion("test");
 		disc.addOpinion("one");
 		disc.addOpinion("two");
-		disc.createOpinionLink(2, 3, "good link", "opposition");
-		disc.createOpinionLink(2, 3, "cant link (already exist)", "opposition");
-		disc.createOpinionLink(2, 7, "cant link (opinion doesnt exist)",
+		disc.createLink(2, 3, "good link", "opposition");
+		disc.createLink(2, 3, "cant link (already exist)", "opposition");
+		disc.createLink(2, 7, "cant link (opinion doesnt exist)",
 				"opposition");
 
 		Document doc = DocumentHelper.createDocument();
@@ -309,7 +309,7 @@ public class DiscussionTest extends TestCase {
 			e.printStackTrace();
 		}
 
-		XPath xpathSelector = DocumentHelper.createXPath("//opinionRel");
+		XPath xpathSelector = DocumentHelper.createXPath("//relation");
 		List result = xpathSelector.selectNodes(doc);
 		assertTrue(result.size() == 2);
 	}
@@ -322,11 +322,11 @@ public class DiscussionTest extends TestCase {
 		disc.addOpinion("one");
 		disc.addOpinion("two");
 		disc.addOpinion("three");
-		disc.createOpinionLink(2, 3, "link between 'one' and 'two'",
+		disc.createLink(2, 3, "link between 'one' and 'two'",
 				"opposition");
-		disc.createOpinionLink(2, 4, "link between 'one' and 'three'",
+		disc.createLink(2, 4, "link between 'one' and 'three'",
 				"opposition");
-		disc.removeOpinionLink(4, 2);
+		disc.removeLink(4, 2);
 
 		Document doc = DocumentHelper.createDocument();
 		SAXReader reader = new SAXReader();
@@ -339,7 +339,7 @@ public class DiscussionTest extends TestCase {
 			e.printStackTrace();
 		}
 
-		XPath xpathSelector = DocumentHelper.createXPath("//opinionRel");
+		XPath xpathSelector = DocumentHelper.createXPath("//relation");
 		List result = xpathSelector.selectNodes(doc);
 		assertTrue(result.size() == 2);
 	}
@@ -352,11 +352,11 @@ public class DiscussionTest extends TestCase {
 		disc.addOpinion("one");
 		disc.addOpinion("two");
 		disc.addOpinion("three");
-		disc.createOpinionLink(2, 3, "link between 'one' and 'two'",
+		disc.createLink(2, 3, "link between 'one' and 'two'",
 				"opposition");
-		disc.createOpinionLink(2, 4, "link between 'one' and 'three'",
+		disc.createLink(2, 4, "link between 'one' and 'three'",
 				"opposition");
-		disc.removeOpinionLink(2, 7);
+		disc.removeLink(2, 7);
 
 		Document doc = DocumentHelper.createDocument();
 		SAXReader reader = new SAXReader();
@@ -369,7 +369,7 @@ public class DiscussionTest extends TestCase {
 			e.printStackTrace();
 		}
 
-		XPath xpathSelector = DocumentHelper.createXPath("//opinionRel");
+		XPath xpathSelector = DocumentHelper.createXPath("//relation");
 		List result = xpathSelector.selectNodes(doc);
 		assertTrue(result.size() == 4);
 	}
@@ -382,11 +382,11 @@ public class DiscussionTest extends TestCase {
 		disc.addOpinion("one");
 		disc.addOpinion("two");
 		disc.addOpinion("three");
-		disc.createOpinionLink(2, 3, "should be removed", "opposition");
-		disc.createOpinionLink(2, 4, "should be removed", "opposition");
-		disc.createOpinionLink(3, 4, "shouldn't be removed", "opposition");
-		disc.addQuoteTest(1, 2);
-		disc.addQuoteTest(2, 2);
+		disc.createLink(2, 3, "should be removed", "opposition");
+		disc.createLink(2, 4, "should be removed", "opposition");
+		disc.createLink(3, 4, "shouldn't be removed", "opposition");
+		disc.addQuoteTest(11, 2);
+		disc.addQuoteTest(12, 2);
 		disc.removeOpinion(2);
 
 		Document doc = DocumentHelper.createDocument();
@@ -400,7 +400,7 @@ public class DiscussionTest extends TestCase {
 			e.printStackTrace();
 		}
 
-		XPath xpathSelector1 = DocumentHelper.createXPath("//opinionRel");
+		XPath xpathSelector1 = DocumentHelper.createXPath("//relation");
 		List result1 = xpathSelector1.selectNodes(doc);
 		XPath xpathSelector2 = DocumentHelper.createXPath("//quote");
 		List result2 = xpathSelector2.selectNodes(doc);
@@ -412,12 +412,12 @@ public class DiscussionTest extends TestCase {
 		ToK tok = creation("testCQL1");
 		tok.addDiscussion("test");
 		Discussion disc = tok.getDiscussion("test");
-		disc.addQuoteTest(1, 1);
-		disc.addQuoteTest(2, 1);
-		disc.addQuoteTest(3, 1);
-		disc.createQuoteLink(1, 2, "link between '1' and '2'",
+		disc.addQuoteTest(11, 1);
+		disc.addQuoteTest(12, 1);
+		disc.addQuoteTest(13, 1);
+		disc.createLink(11, 12, "link between '1' and '2'",
 				"opposition");
-		disc.createQuoteLink(1, 3, "link between '1' and '3'",
+		disc.createLink(11, 13, "link between '1' and '3'",
 				"opposition");
 
 		Document doc = DocumentHelper.createDocument();
@@ -432,13 +432,13 @@ public class DiscussionTest extends TestCase {
 		}
 
 		XPath xpathSelector1 = DocumentHelper
-				.createXPath("//quote[id='1']/quoteRel");
+				.createXPath("//quote[id='11']/relation");
 		List result1 = xpathSelector1.selectNodes(doc);
 		XPath xpathSelector2 = DocumentHelper
-				.createXPath("//quote[id='2']/quoteRel[targetId='1']");
+				.createXPath("//quote[id='12']/relation[targetId='11']");
 		List result2 = xpathSelector2.selectNodes(doc);
 		XPath xpathSelector3 = DocumentHelper
-				.createXPath("//quote[id='3']/quoteRel[targetId='1']");
+				.createXPath("//quote[id='13']/relation[targetId='11']");
 		List result3 = xpathSelector3.selectNodes(doc);
 		assertTrue(result1.size() == 2 && result2.size() == 1
 				&& result3.size() == 1);
@@ -450,12 +450,12 @@ public class DiscussionTest extends TestCase {
 		ToK tok = creation("testCQL2");
 		tok.addDiscussion("test");
 		Discussion disc = tok.getDiscussion("test");
-		disc.addQuoteTest(1, 1);
-		disc.addQuoteTest(2, 1);
-		disc.addQuoteTest(3, 1);
-		disc.createQuoteLink(1, 2, "good link", "opposition");
-		disc.createQuoteLink(1, 2, "cant link (already exist)", "opposition");
-		disc.createQuoteLink(1, 7, "cant link (quote doesnt exist)",
+		disc.addQuoteTest(11, 1);
+		disc.addQuoteTest(12, 1);
+		disc.addQuoteTest(13, 1);
+		disc.createLink(11, 12, "good link", "opposition");
+		disc.createLink(11, 12, "cant link (already exist)", "opposition");
+		disc.createLink(11, 17, "cant link (quote doesnt exist)",
 				"opposition");
 
 		Document doc = DocumentHelper.createDocument();
@@ -469,7 +469,7 @@ public class DiscussionTest extends TestCase {
 			e.printStackTrace();
 		}
 
-		XPath xpathSelector = DocumentHelper.createXPath("//quoteRel");
+		XPath xpathSelector = DocumentHelper.createXPath("//relation");
 		List result = xpathSelector.selectNodes(doc);
 		assertTrue(result.size() == 2);
 	}
@@ -479,14 +479,14 @@ public class DiscussionTest extends TestCase {
 		ToK tok = creation("testRQL1");
 		tok.addDiscussion("test");
 		Discussion disc = tok.getDiscussion("test");
-		disc.addQuoteTest(1, 1);
-		disc.addQuoteTest(2, 1);
-		disc.addQuoteTest(3, 1);
-		disc.createQuoteLink(1, 2, "link between '1' and '2'",
+		disc.addQuoteTest(11, 1);
+		disc.addQuoteTest(12, 1);
+		disc.addQuoteTest(13, 1);
+		disc.createLink(11, 12, "link between '1' and '2'",
 				"opposition");
-		disc.createQuoteLink(1, 3, "link between '1' and '3'",
+		disc.createLink(11, 13, "link between '1' and '3'",
 				"opposition");
-		disc.removeQuoteLink(1, 2);
+		disc.removeLink(11, 12);
 
 		Document doc = DocumentHelper.createDocument();
 		SAXReader reader = new SAXReader();
@@ -499,7 +499,7 @@ public class DiscussionTest extends TestCase {
 			e.printStackTrace();
 		}
 
-		XPath xpathSelector = DocumentHelper.createXPath("//quoteRel");
+		XPath xpathSelector = DocumentHelper.createXPath("//relation");
 		List result = xpathSelector.selectNodes(doc);
 		assertTrue(result.size() == 2);
 	}
@@ -509,13 +509,13 @@ public class DiscussionTest extends TestCase {
 		ToK tok = creation("testRQL2");
 		tok.addDiscussion("test");
 		Discussion disc = tok.getDiscussion("test");
-		disc.addQuoteTest(1, 1);
-		disc.addQuoteTest(2, 1);
-		disc.addQuoteTest(3, 1);
-		disc.createQuoteLink(1, 2, "link between '1' and '2'",
+		disc.addQuoteTest(11, 1);
+		disc.addQuoteTest(12, 1);
+		disc.addQuoteTest(13, 1);
+		disc.createLink(11, 12, "link between '1' and '2'",
 				"opposition");
-		disc.removeQuoteLink(1, 3);
-		disc.removeQuoteLink(2, 7);
+		disc.removeLink(11, 13);
+		disc.removeLink(12, 17);
 
 		Document doc = DocumentHelper.createDocument();
 		SAXReader reader = new SAXReader();
@@ -528,7 +528,7 @@ public class DiscussionTest extends TestCase {
 			e.printStackTrace();
 		}
 
-		XPath xpathSelector = DocumentHelper.createXPath("//quoteRel");
+		XPath xpathSelector = DocumentHelper.createXPath("//relation");
 		List result = xpathSelector.selectNodes(doc);
 		assertTrue(result.size() == 2);
 	}
@@ -539,8 +539,8 @@ public class DiscussionTest extends TestCase {
 		tok.addDiscussion("test");
 		Discussion disc = tok.getDiscussion("test");
 		disc.addOpinion("one");
-		disc.addQuoteTest(1, 1);
-		disc.createOpinionQuoteLink(2, 1, "link between 'one' and '1'",
+		disc.addQuoteTest(11, 1);
+		disc.createLink(2, 11, "link between 'one' and '1'",
 				"opposition");
 
 		Document doc = DocumentHelper.createDocument();
@@ -555,10 +555,10 @@ public class DiscussionTest extends TestCase {
 		}
 
 		XPath xpathSelector1 = DocumentHelper
-				.createXPath("//opinion[id='2']/quoteRel");
+				.createXPath("//opinion[id='2']/relation");
 		List result1 = xpathSelector1.selectNodes(doc);
 		XPath xpathSelector2 = DocumentHelper
-				.createXPath("//quote[id='1']/opinionRel");
+				.createXPath("//quote[id='11']/relation");
 		List result2 = xpathSelector2.selectNodes(doc);
 		assertTrue(result1.size() == 1 && result2.size() == 1);
 	}
@@ -570,11 +570,11 @@ public class DiscussionTest extends TestCase {
 		tok.addDiscussion("test");
 		Discussion disc = tok.getDiscussion("test");
 		disc.addOpinion("one");
-		disc.addQuoteTest(1, 1);
-		disc.addQuoteTest(2, 1);
-		disc.createOpinionQuoteLink(2, 1, "good link", "opposition");
-		disc.createOpinionQuoteLink(2, 1, "cant link (already exist)", "opposition");
-		disc.createQuoteLink(1, 7, "cant link (quote doesnt exist)",
+		disc.addQuoteTest(11, 1);
+		disc.addQuoteTest(12, 1);
+		disc.createLink(2, 11, "good link", "opposition");
+		disc.createLink(2, 11, "cant link (already exist)", "opposition");
+		disc.createLink(1, 17, "cant link (quote doesnt exist)",
 				"opposition");
 
 		Document doc = DocumentHelper.createDocument();
@@ -588,11 +588,9 @@ public class DiscussionTest extends TestCase {
 			e.printStackTrace();
 		}
 
-		XPath xpathSelector1 = DocumentHelper.createXPath("//quoteRel");
+		XPath xpathSelector1 = DocumentHelper.createXPath("//relation");
 		List result1 = xpathSelector1.selectNodes(doc);
-		XPath xpathSelector2 = DocumentHelper.createXPath("//opinionRel");
-		List result2 = xpathSelector2.selectNodes(doc);
-		assertTrue(result1.size() == 1 && result2.size() == 1);
+		assertTrue(result1.size() == 2);
 	}
 
 	// test removeOpinionQuoteLink
@@ -601,13 +599,13 @@ public class DiscussionTest extends TestCase {
 		tok.addDiscussion("test");
 		Discussion disc = tok.getDiscussion("test");
 		disc.addOpinion("one");
-		disc.addQuoteTest(1, 1);
-		disc.addQuoteTest(2, 1);
-		disc.createOpinionQuoteLink(2, 1, "link between 'one' and '1'",
+		disc.addQuoteTest(11, 1);
+		disc.addQuoteTest(12, 1);
+		disc.createLink(2, 11, "link between 'one' and '1'",
 				"opposition");
-		disc.createOpinionQuoteLink(2, 2, "link between 'one' and '2'",
+		disc.createLink(2, 12, "link between 'one' and '2'",
 				"opposition");
-		disc.removeOpinionQuoteLink(2, 1);
+		disc.removeLink(2, 11);
 
 		Document doc = DocumentHelper.createDocument();
 		SAXReader reader = new SAXReader();
@@ -620,11 +618,9 @@ public class DiscussionTest extends TestCase {
 			e.printStackTrace();
 		}
 
-		XPath xpathSelector1 = DocumentHelper.createXPath("//quoteRel");
+		XPath xpathSelector1 = DocumentHelper.createXPath("//relation");
 		List result1 = xpathSelector1.selectNodes(doc);
-		XPath xpathSelector2 = DocumentHelper.createXPath("//opinionRel");
-		List result2 = xpathSelector2.selectNodes(doc);
-		assertTrue(result1.size() == 1 && result2.size() == 1);
+		assertTrue(result1.size() == 2);
 	}
 
 	// test removeOpinionQuoteLink, removing a link that doesnt exist
@@ -633,12 +629,12 @@ public class DiscussionTest extends TestCase {
 		tok.addDiscussion("test");
 		Discussion disc = tok.getDiscussion("test");
 		disc.addOpinion("one");
-		disc.addQuoteTest(1, 1);
-		disc.addQuoteTest(2, 1);
-		disc.createOpinionQuoteLink(2, 1, "link between 'one' and '1'",
+		disc.addQuoteTest(11, 1);
+		disc.addQuoteTest(12, 1);
+		disc.createLink(2, 11, "link between 'one' and '1'",
 				"opposition");
-		disc.removeOpinionQuoteLink(2, 2);
-		disc.removeQuoteLink(2, 7);
+		disc.removeLink(2, 12);
+		disc.removeLink(2, 17);
 
 		Document doc = DocumentHelper.createDocument();
 		SAXReader reader = new SAXReader();
@@ -651,11 +647,9 @@ public class DiscussionTest extends TestCase {
 			e.printStackTrace();
 		}
 
-		XPath xpathSelector1 = DocumentHelper.createXPath("//quoteRel");
+		XPath xpathSelector1 = DocumentHelper.createXPath("//relation");
 		List result1 = xpathSelector1.selectNodes(doc);
-		XPath xpathSelector2 = DocumentHelper.createXPath("//opinionRel");
-		List result2 = xpathSelector2.selectNodes(doc);
-		assertTrue(result1.size() == 1 && result2.size() == 1);
+		assertTrue(result1.size() == 2);
 	}
 	
 	// test removeOpinion, opinion with quote relations
@@ -664,11 +658,11 @@ public class DiscussionTest extends TestCase {
 		tok.addDiscussion("test");
 		Discussion disc = tok.getDiscussion("test");
 		disc.addOpinion("one");
-		disc.addQuoteTest(1, 1);
-		disc.addQuoteTest(2, 1);
-		disc.createOpinionQuoteLink(2, 1, "should be removed", "opposition");
-		disc.createOpinionQuoteLink(2, 2, "should be removed", "opposition");
-		disc.createOpinionQuoteLink(1, 1, "shouldn't be removed", "opposition");
+		disc.addQuoteTest(11, 1);
+		disc.addQuoteTest(12, 1);
+		disc.createLink(2, 11, "should be removed", "opposition");
+		disc.createLink(2, 12, "should be removed", "opposition");
+		disc.createLink(1, 11, "shouldn't be removed", "opposition");
 		disc.removeOpinion(2);
 
 		Document doc = DocumentHelper.createDocument();
@@ -682,9 +676,9 @@ public class DiscussionTest extends TestCase {
 			e.printStackTrace();
 		}
 
-		XPath xpathSelector1 = DocumentHelper.createXPath("//opinionRel");
+		XPath xpathSelector1 = DocumentHelper.createXPath("//relation");
 		List result1 = xpathSelector1.selectNodes(doc);
-		assertTrue(result1.size() == 1);
+		assertTrue(result1.size() == 2);
 	}
 	
 	// test removeQuote, quote with opinion relations
@@ -693,12 +687,12 @@ public class DiscussionTest extends TestCase {
 		tok.addDiscussion("test");
 		Discussion disc = tok.getDiscussion("test");
 		disc.addOpinion("one");
-		disc.addQuoteTest(1, 1);
-		disc.addQuoteTest(2, 1);
-		disc.createOpinionQuoteLink(2, 1, "should be removed", "opposition");
-		disc.createOpinionQuoteLink(2, 2, "should be removed", "opposition");
-		disc.createOpinionQuoteLink(1, 1, "shouldn't be removed", "opposition");
-		disc.removeQuote(1);
+		disc.addQuoteTest(11, 1);
+		disc.addQuoteTest(12, 1);
+		disc.createLink(2, 11, "should be removed", "opposition");
+		disc.createLink(2, 12, "shouldn't be removed", "opposition");
+		disc.createLink(1, 11, "should be removed", "opposition");
+		disc.removeQuote(11);
 
 		Document doc = DocumentHelper.createDocument();
 		SAXReader reader = new SAXReader();
@@ -711,9 +705,9 @@ public class DiscussionTest extends TestCase {
 			e.printStackTrace();
 		}
 
-		XPath xpathSelector1 = DocumentHelper.createXPath("//quoteRel");
+		XPath xpathSelector1 = DocumentHelper.createXPath("//relation");
 		List result1 = xpathSelector1.selectNodes(doc);
-		assertTrue(result1.size() == 1);
+		assertTrue(result1.size() == 2);
 	}
 	
 }
