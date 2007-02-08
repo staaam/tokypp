@@ -47,6 +47,7 @@ public class NewLinkWizard extends Wizard implements INewWizard {
 		super();
 		setWindowTitle("Link discussion");
 		setNeedsProgressMonitor(true);
+		setHelpAvailable(false);
 	}
 
 	/**
@@ -66,9 +67,13 @@ public class NewLinkWizard extends Wizard implements INewWizard {
 
 		IProject tokProject = ResourcesPlugin.getWorkspace().getRoot().getProject(page.getProject());
 		tok = new ToK(tokProject);
+		String[] roots = page.getSourceFiles();
 		 //TODO
 		 try {
-		 tok.linkDiscussionRoot(tok.getDiscussion(page.getDiscussion()),page.getSourceFile(),page.getExcerptions(), page.getSubject(),page.getLinkType());
+			for (int i = 0; i < roots.length; i++) {
+				tok.linkDiscussionRoot(tok.getDiscussion(page.getDiscussion()),roots[i],page.getExcerptions(roots[i]), page.getSubject(),page.getLinkType());
+			} 
+		 
 		 } catch (CoreException e) {
 		 // TODO Auto-generated catch block
 		 e.printStackTrace();

@@ -1,53 +1,38 @@
 package lost.tok.newLinkWizard;
 
-import org.eclipse.core.resources.IContainer;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.Path;
-import org.eclipse.jface.viewers.IBaseLabelProvider;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.jface.wizard.WizardPage;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Combo;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Text;
-import org.eclipse.swt.widgets.Tree;
-import org.eclipse.swt.widgets.TreeItem;
-import org.eclipse.ui.IViewPart;
-import org.eclipse.ui.IViewReference;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.dialogs.ContainerSelectionDialog;
-import org.eclipse.ui.dialogs.SaveAsDialog;
-import org.eclipse.ui.dialogs.SelectionDialog;
-import org.eclipse.ui.internal.Workbench;
-import org.eclipse.swt.widgets.FileDialog;
-import java.awt.*;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import javax.swing.JFileChooser;
 
 import lost.tok.Discussion;
 import lost.tok.Excerption;
 import lost.tok.Link;
-import lost.tok.Messages;
 import lost.tok.ToK;
 import lost.tok.excerptionsView.ExcerptionView;
+
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.jface.dialogs.IDialogPage;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.wizard.WizardPage;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Combo;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.TreeItem;
+import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.PlatformUI;
 
 /**
  * The "New" wizard page allows setting the container for the new file as well
@@ -57,21 +42,21 @@ import lost.tok.excerptionsView.ExcerptionView;
 
 public class NewLinkWizardPage extends WizardPage {
 
-
+	@SuppressWarnings("unused")
 	private ISelection selection;
 
 	private Combo projectCombo;
 
 	private Combo discussionCombo;
-	
+
 	private Combo linkType;
-	
+
 	private Text subject;
-	
+
 	private Tree excerptions;
-	
+
 	private HashMap<String, Discussion> discMap = new HashMap<String, Discussion>();
-	
+
 	private ExcerptionView expViewer;
 
 	/**
@@ -96,72 +81,108 @@ public class NewLinkWizardPage extends WizardPage {
 		layout.numColumns = 3;
 		layout.verticalSpacing = 9;
 
-		Label	label = new Label(container, SWT.NULL);
+		Label label = new Label(container, SWT.NULL);
 		label.setText("Project:"); //$NON-NLS-1$
-		
-		IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
+
+		IProject[] projects = ResourcesPlugin.getWorkspace().getRoot()
+				.getProjects();
 		String[] projectNames = new String[projects.length];
-		
+
 		for (int i = 0; i < projects.length; i++) {
 			projectNames[i] = projects[i].getName();
 		}
-		
-		projectCombo = new Combo(container,SWT.NULL);
+
+		projectCombo = new Combo(container, SWT.READ_ONLY | SWT.DROP_DOWN);
 		projectCombo.setItems(projectNames);
-		
+
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		projectCombo.setLayoutData(gd);
 
 		projectCombo.addSelectionListener(new SelectionListener() {
 			public void widgetDefaultSelected(SelectionEvent e) {
-				//widgetSelected(e);
+				// widgetSelected(e);
 			}
 
 			public void widgetSelected(SelectionEvent arg0) {
-				projectSelected(arg0);
-				
+				projectSelected();
+				dialogChanged();
 			}
 
 		});
 
-		
 		label = new Label(container, SWT.NULL);
 		label.setText(""); //$NON-NLS-1$
 
 		label = new Label(container, SWT.NULL);
 		label.setText("Discussion"); //$NON-NLS-1$
 		
-		discussionCombo = new Combo(container,SWT.NULL);
+
+		discussionCombo = new Combo(container, SWT.READ_ONLY | SWT.DROP_DOWN);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		discussionCombo.setLayoutData(gd);
+		discussionCombo.addSelectionListener(new SelectionListener() {
+
+			public void widgetDefaultSelected(SelectionEvent arg0) {
+				// TODO Auto-generated method stub
+
+			}
+
+			public void widgetSelected(SelectionEvent arg0) {
+				dialogChanged();
+			}
+
+		});
 
 		label = new Label(container, SWT.NULL);
 		label.setText(""); //$NON-NLS-1$
 
-		label = new Label(container,SWT.NULL);
+		label = new Label(container, SWT.NULL);
 		label.setText("Subject:");
-		
-		subject = new Text(container,SWT.BORDER);
+
+		subject = new Text(container, SWT.BORDER);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		subject.setLayoutData(gd);
-		
+		subject.addModifyListener(new ModifyListener() {
+
+			public void modifyText(ModifyEvent arg0) {
+				dialogChanged();
+
+			}
+
+		});
+
 		label = new Label(container, SWT.NULL);
 		label.setText(""); //$NON-NLS-1$
-		
 
-		label = new Label(container,SWT.NULL);
+		label = new Label(container, SWT.NULL);
 		label.setText("Link type:");
-		
-		linkType = new Combo(container,SWT.NULL);
+
+		linkType = new Combo(container, SWT.READ_ONLY | SWT.DROP_DOWN);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		linkType.setLayoutData(gd);
 		linkType.setItems(Link.linkTypes);
-		
+		linkType.addSelectionListener(new SelectionListener() {
+
+			public void widgetDefaultSelected(SelectionEvent arg0) {
+				// TODO Auto-generated method stub
+
+			}
+
+			public void widgetSelected(SelectionEvent arg0) {
+				dialogChanged();
+
+			}
+
+		});
+
 		label = new Label(container, SWT.NULL);
 		label.setText(""); //$NON-NLS-1$
 		
-		
-		
+		label = new Label(container, SWT.NULL);
+		label.setText("Root files:"); //$NON-NLS-1$
+		gd = new GridData(GridData.VERTICAL_ALIGN_BEGINNING);
+		label.setLayoutData(gd);
+
 		IViewPart view = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
 				.getActivePage().findView(ExcerptionView.ID);
 
@@ -175,42 +196,42 @@ public class NewLinkWizardPage extends WizardPage {
 		expViewer = (ExcerptionView) view;
 		Tree tree = expViewer.getTree();
 		TreeItem[] files = tree.getItems();
-		
-		excerptions = new Tree(container,SWT.BORDER);
+
+		excerptions = new Tree(container, SWT.BORDER | SWT.MULTI);
 		excerptions.setSize(600, 300);
-	
-//		excerptions.setContentProvider(expViewer.getContentProvider());
-//		excerptions.setLabelProvider(expViewer.getLabelProvider());
-//		excerptions.setInput(expViewer.getInput());
-//		
+		
 		for (int i = 0; i < files.length; i++) {
-			TreeItem file = new TreeItem(excerptions,0);
+			TreeItem file = new TreeItem(excerptions, 0);
 			file.setText(files[i].getText());
-			
-//			for (int j = 0; j < files[i].getItems().length; j++) {
-//				TreeItem exp = new TreeItem(file,0);
-//				exp.setText(files[i].getItem(j).getText());
-//			}
-			//excerptions.add(files[i], files[i].getItems());
 		}
 		gd = new GridData(GridData.FILL_BOTH);
-//		excerptions.getControl().setLayoutData(gd);
-//		excerptions.expandAll();
-//		excerptions.refresh();
-//		
+		excerptions.addSelectionListener(new SelectionListener() {
+
+			public void widgetDefaultSelected(SelectionEvent arg0) {
+				// TODO Auto-generated method stub
+
+			}
+
+			public void widgetSelected(SelectionEvent arg0) {
+				dialogChanged();
+
+			}
+
+		});
+
 		excerptions.setLayoutData(gd);
 		excerptions.redraw();
 		initialize();
 		dialogChanged();
 		setControl(container);
 	}
-	
-	
+
 	/**
 	 * Tests if the current workbench selection is a suitable container to use.
 	 */
 
 	private void initialize() {
+
 		if (selection != null && selection.isEmpty() == false
 				&& selection instanceof IStructuredSelection) {
 			IStructuredSelection ssel = (IStructuredSelection) selection;
@@ -218,12 +239,30 @@ public class NewLinkWizardPage extends WizardPage {
 				return;
 			Object obj = ssel.getFirstElement();
 			if (obj instanceof IResource) {
-				IContainer container;
-				if (obj instanceof IContainer)
-					container = (IContainer) obj;
-				else
-					container = ((IResource) obj).getParent();
-			//	rootText.setText(container.getFullPath().toString());
+				IResource resource = (IResource) obj;
+				String projectName = resource.getProject().getName();
+				int chosenProjIndex = -1;
+				String[] projectComboNames = projectCombo.getItems();
+				for (int i = 0; i < projectComboNames.length; i++) {
+					if (projectComboNames[i].compareTo(projectName) == 0) {
+						chosenProjIndex = i;
+						break;
+					}
+				}
+				projectCombo.select(chosenProjIndex);
+				projectSelected();
+				
+				String discName = resource.getName().split(".dis")[0];
+				int chosenDiscIndex = -1;
+				String[] discComboNames = discussionCombo.getItems();
+				for (int i = 0; i < discComboNames.length; i++) {
+					if (discComboNames[i].compareTo(discName) == 0) {
+						chosenDiscIndex = i;
+						break;
+					}
+				}
+				discussionCombo.select(chosenDiscIndex);
+				discussionCombo.redraw();
 			}
 		}
 	}
@@ -233,44 +272,43 @@ public class NewLinkWizardPage extends WizardPage {
 	 */
 
 	private void dialogChanged() {
-		/*
-		 * String projectName = getProjectName(); String creatorName =
-		 * getCreatorName(); String rootName = getRootName();
-		 * 
-		 * if (projectName.length() == 0) {
-		 * updateStatus(Messages.getString("NewToKWizErrSpecName"));
-		 * //$NON-NLS-1$ return; } if (projectNameExists(projectName)) {
-		 * updateStatus(Messages.getString("NewToKWizErrExist")); //$NON-NLS-1$
-		 * return; } if (projectName.replace('\\', '/').indexOf('/', 1) > 0) {
-		 * updateStatus(Messages.getString("NewToKWizErrNameInvalid"));
-		 * //$NON-NLS-1$ return; }
-		 * 
-		 * if (creatorName.length() == 0) {
-		 * updateStatus(Messages.getString("NewToKWizErrMissingCreator"));
-		 * //$NON-NLS-1$ return; }
-		 * 
-		 * if (rootName.length() == 0) {
-		 * updateStatus(Messages.getString("NewToKWizErrSelectRoot"));
-		 * //$NON-NLS-1$ return; } if (!legalRootExtension(rootName)) {
-		 * updateStatus(Messages.getString("NewToKWizErrRootNotSrc"));
-		 * //$NON-NLS-1$ return; } if (!fileExists(rootName)) {
-		 * updateStatus(Messages.getString("NewToKWizErrRootNotExist"));
-		 * //$NON-NLS-1$ return; }
-		 */
+		if (projectCombo.getText() == "") {
+			updateStatus("Please select a project");
+			return;
+		}
+
+		if (discussionCombo.getText() == "") {
+			updateStatus("Please select a discussion");
+			return;
+		}
+
+		if (subject.getText() == "") {
+			updateStatus("Please fill-in a subject for the link");
+			return;
+		}
+
+		if (linkType.getText() == "") {
+			updateStatus("Please select the type of the link");
+			return;
+		}
+
+		if (excerptions.getSelection().length == 0) {
+			updateStatus("Please choose the root file to link to");
+			return;
+		}
 
 		updateStatus(null);
 	}
 
-	private void projectSelected(SelectionEvent arg0) {
+	private void projectSelected() {
 		// TODO Auto-generated method stub
 		String chosenProject = projectCombo.getText();
-		
-		
-//		 FOR DEBUGGING ONLY!!!!!!!!
+
 		ToK tok = new ToK(chosenProject, "Arie", "Babel_he.src");
-		// @TODO
+		// TODO
 		// ToK tok = ToK.getProjectToK(project);
-		ArrayList<Discussion> discussions = new ArrayList<Discussion>(tok.getDiscussions());
+		ArrayList<Discussion> discussions = new ArrayList<Discussion>(tok
+				.getDiscussions());
 		String[] discs = new String[discussions.size()];
 		int i = 0;
 		for (Discussion discussion : discussions) {
@@ -280,34 +318,38 @@ public class NewLinkWizardPage extends WizardPage {
 		discussionCombo.setItems(discs);
 		discussionCombo.redraw();
 	}
-	
-	
 
 	private void updateStatus(String message) {
 		setErrorMessage(message);
 		setPageComplete(message == null);
 	}
-	
-	public String getDiscussion(){
+
+	public String getDiscussion() {
 		return discussionCombo.getText();
 	}
-	
-	public String getProject(){
+
+	public String getProject() {
 		return projectCombo.getText();
 	}
 
-	public Excerption[] getExcerptions(){
+	public Excerption[] getExcerptions(String fileName) {
 		int i = 0;
-		ArrayList<Excerption> list = (ArrayList<Excerption>)expViewer.getExcerptions(excerptions.getSelection()[0].getText());
+		ArrayList<Excerption> list = (ArrayList<Excerption>) expViewer
+				.getExcerptions(fileName);
 		Excerption[] array = new Excerption[list.size()];
 		for (Excerption excerption : list) {
 			array[i++] = excerption;
 		}
 		return array;
 	}
-	
-	public String getSourceFile(){
-		return excerptions.getSelection()[0].getText();
+
+	public String[] getSourceFiles() {
+		TreeItem[] selected = excerptions.getSelection();
+		String[] selectedNames = new String[selected.length];
+		for (int i = 0; i < selected.length; i++) {
+			selectedNames[i] = selected[i].getText();
+		}
+		return selectedNames;
 	}
 
 	public String getLinkType() {
@@ -317,7 +359,5 @@ public class NewLinkWizardPage extends WizardPage {
 	public String getSubject() {
 		return subject.getText();
 	}
-	
-	
-	
+
 }

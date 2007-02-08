@@ -31,6 +31,9 @@ import org.eclipse.ui.dialogs.ContainerSelectionDialog;
 import org.eclipse.ui.dialogs.SaveAsDialog;
 import org.eclipse.ui.dialogs.SelectionDialog;
 import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.graphics.Device;
+import org.eclipse.swt.graphics.DeviceData;
+import org.eclipse.swt.graphics.Image;
 import java.awt.*;
 import java.io.File;
 
@@ -68,7 +71,7 @@ public class NewRelationWizardPage extends WizardPage {
 	private String projectName;
 
 	/**
-	 * Constructor for SampleNewWizardPage.
+	 * Constructor for NewWizardPage.
 	 * 
 	 * @param pageName
 	 */
@@ -84,6 +87,7 @@ public class NewRelationWizardPage extends WizardPage {
 	 */
 	public void createControl(Composite parent) {
 
+		getShell().setSize(600, 400);
 		initialize();
 		Composite container = new Composite(parent, SWT.NULL);
 		GridLayout layout = new GridLayout();
@@ -94,7 +98,7 @@ public class NewRelationWizardPage extends WizardPage {
 		Label label = new Label(container, SWT.NULL);
 		label.setText("Relation type:"); //$NON-NLS-1$
 
-		relType = new Combo(container, SWT.NULL);
+		relType = new Combo(container, SWT.READ_ONLY | SWT.DROP_DOWN);
 		for (int i = 0; i < Discussion.relTypes.length; i++) {
 			relType.add(Discussion.relTypes[i]);
 		}
@@ -131,6 +135,12 @@ public class NewRelationWizardPage extends WizardPage {
 
 		label = new Label(container, SWT.NULL);
 		label.setText(""); //$NON-NLS-1$		
+		
+		label = new Label(container, SWT.NULL);
+		label.setText("Opinion\\Quote:"); //$NON-NLS-1$
+		gd = new GridData(GridData.VERTICAL_ALIGN_BEGINNING);
+		label.setLayoutData(gd);
+		
 		gd = new GridData(GridData.FILL_BOTH);
 		leftObjects = new Tree(container, SWT.BORDER);
 		leftObjects.setLayoutData(gd);
@@ -156,17 +166,20 @@ public class NewRelationWizardPage extends WizardPage {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		String[] opinions = disc.getOpinions();
+		String[] opinionNames = disc.getOpinionNames();
+		Integer[] opinionIDs = disc.getOpinionIDs();
 
-		for (int i = 0; i < opinions.length; i++) {
+		for (int i = 0; i < opinionNames.length; i++) {
 			TreeItem leftOpinion = new TreeItem(leftObjects, 0);
 			TreeItem rightOpinion = new TreeItem(rightObjects, 0);
-			leftOpinion.setText(opinions[i]);
-			rightOpinion.setText(opinions[i]);
+			leftOpinion.setText(opinionNames[i]);
+			leftOpinion.setData(opinionIDs[i]);
+			rightOpinion.setText(opinionNames[i]);
+			rightOpinion.setData(opinionIDs[i]);
 
 			Quote[] quotes = null;
 			try {
-				quotes = disc.getQuotes(opinions[i]);
+				quotes = disc.getQuotes(opinionNames[i]);
 			} catch (CoreException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -242,15 +255,16 @@ public class NewRelationWizardPage extends WizardPage {
 		TreeItem[] leftSelected = leftObjects.getSelection();
 		TreeItem[] rightSelected = rightObjects.getSelection();
 
+		
+		if (relType.length() == 0) {
+			updateStatus("Please choose a type of relationship"); //$NON-NLS-1$
+			return;
+		}
+		updateStatus(null);
 		if (leftSelected.length + rightSelected.length != 2) {
 			updateStatus("Please choose 2 objects to link between"); //$NON-NLS-1$
 			return;
 		}
-
-		if (relType.length() == 0) {
-			updateStatus("Please choose a type of relationship"); //$NON-NLS-1$
-		}
-		updateStatus(null);
 	}
 	private void updateStatus(String message) {
 		setErrorMessage(message);
