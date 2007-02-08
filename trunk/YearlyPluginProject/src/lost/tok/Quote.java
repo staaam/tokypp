@@ -95,15 +95,26 @@ public class Quote {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public Quote(Element elem){
-		
+	public Quote(Element elem, ToK tok){
+		this(elem.element("sourceFile").getText(),
+				new ArrayList<Excerption>(),
+				elem.element("comment").getText());
 		ID = Integer.valueOf(elem.element("id").getText());
-		sourceFilePath = elem.element("sourceFile").getText();
-		comment = elem.element("comment").getText();
-		excerptions = new ArrayList<Excerption>();
+
+		SourceDocument sd = new SourceDocument();
+		sd.set(GeneralFunctions.readFromXML(tok.getSource(sourceFilePath)));
+		
 		List<Element> exps = elem.elements("excerption");
 		for (Element exp : exps) {
-			excerptions.add(new Excerption(exp));
+			Excerption e = new Excerption(exp);
+			
+			String text = sd.getChapterText(e.getSourceFilePath()).getText();
+			int start = e.getStartPos();
+			int end = e.getEndPos();
+			String exText = text.substring(start, end);
+			e.setText(exText);
+			
+			excerptions.add(e);
 		}
 	}
 	

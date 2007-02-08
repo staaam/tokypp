@@ -573,9 +573,8 @@ public class Discussion {
 		return ss;
 	}
 
-	
 	public Quote[] getQuotes(String opinion) throws CoreException {
-
+		
 		int j = 0;
 		Document doc = readFromXML();
 
@@ -585,8 +584,19 @@ public class Discussion {
 		Quote[] quotes = new Quote[result.size()];
 		for (Object object : result) {
 			Element elem = (Element) object;
-			quotes[j++] = new Quote(elem);
+			quotes[j++] = new Quote(elem, myToK);
 		}
 		return quotes;
+	}
+
+	public static String getNameFromFile(String discussionFile) {
+		int begin = discussionFile.lastIndexOf('/');
+		if (begin == -1) {
+			begin = discussionFile.lastIndexOf('\\');
+		}
+		begin++;
+		int end = discussionFile.lastIndexOf('.');
+		
+		return discussionFile.substring(begin, end);
 	}
 }
