@@ -236,6 +236,13 @@ public class Discussion {
 		writeToXml(doc);
 	}
 
+	
+	public void createLink(Integer opinion1, Integer quote2,
+			String comment, String type) {
+		
+	}
+	
+	
 	public void createOpinionLink(Integer opinion1, Integer opinion2,
 			String comment, String type) {
 
