@@ -447,7 +447,7 @@ public class ExcerptionView extends ViewPart {
 				discWizard.setProject(project);
 				Shell shell = new Shell();
 				WizardDialog discDialog = new WizardDialog(shell,discWizard);
-				discDialog.setTitle("Create New Discussion"); //$NON-NLS-1$
+				discDialog.setTitle(Messages.getString("ExcerptionView.6")); //$NON-NLS-1$
 				discDialog.updateSize();
 				discDialog.create();
 				discDialog.open();
@@ -463,8 +463,8 @@ public class ExcerptionView extends ViewPart {
 				linkDialog.open();
 			}
 		};
-		linkNewAction.setText("Link to a new disccussion"); //$NON-NLS-1$
-		linkNewAction.setToolTipText("Creates tink to a new disccussion"); //$NON-NLS-1$
+		linkNewAction.setText(Messages.getString("ExcerptionView.5")); //$NON-NLS-1$
+		linkNewAction.setToolTipText(Messages.getString("ExcerptionView.4")); //$NON-NLS-1$
 		linkNewAction.setImageDescriptor(ImageDescriptor.createFromFile(this.getClass(), "../../../../icons/link_new_ico.gif")); //$NON-NLS-1$
 		
 		deleteAction = new Action() {

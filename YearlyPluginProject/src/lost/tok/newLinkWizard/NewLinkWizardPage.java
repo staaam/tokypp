@@ -67,8 +67,8 @@ public class NewLinkWizardPage extends WizardPage {
 	 */
 	public NewLinkWizardPage(ISelection selection) {
 		super("wizardPage"); //$NON-NLS-1$
-		setTitle("Link Discussion to Root"); //$NON-NLS-1$
-		setDescription("Links a discussion to excerptions in a root file"); //$NON-NLS-1$
+		setTitle(Messages.getString("NewLinkWizardPage.0")); //$NON-NLS-1$
+		setDescription(Messages.getString("NewLinkWizardPage.12")); //$NON-NLS-1$
 		this.selection = selection;
 	}
 
@@ -83,7 +83,7 @@ public class NewLinkWizardPage extends WizardPage {
 		layout.verticalSpacing = 9;
 
 		Label label = new Label(container, SWT.NULL);
-		label.setText("Project:"); //$NON-NLS-1$
+		label.setText(Messages.getString("NewLinkWizardPage.13")); //$NON-NLS-1$
 
 		IProject[] projects = ResourcesPlugin.getWorkspace().getRoot()
 				.getProjects();
@@ -115,7 +115,7 @@ public class NewLinkWizardPage extends WizardPage {
 		label.setText(""); //$NON-NLS-1$
 
 		label = new Label(container, SWT.NULL);
-		label.setText("Discussion"); //$NON-NLS-1$
+		label.setText(Messages.getString("NewLinkWizardPage.14")); //$NON-NLS-1$
 		
 
 		discussionCombo = new Combo(container, SWT.READ_ONLY | SWT.DROP_DOWN);
@@ -180,7 +180,7 @@ public class NewLinkWizardPage extends WizardPage {
 		label.setText(""); //$NON-NLS-1$
 		
 		label = new Label(container, SWT.NULL);
-		label.setText("Root files:"); //$NON-NLS-1$
+		label.setText(Messages.getString("NewLinkWizardPage.15")); //$NON-NLS-1$
 		gd = new GridData(GridData.VERTICAL_ALIGN_BEGINNING);
 		label.setLayoutData(gd);
 
