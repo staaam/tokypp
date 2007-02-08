@@ -45,9 +45,9 @@ public class NewDiscussionWizardPage extends WizardPage implements ModifyListene
 	 * Constructor for UnparsedDocWizardPage.
 	 */
 	public NewDiscussionWizardPage(ISelection selection) {
-		super("wizardPage");
-		setTitle("New Discussion Wizard");
-		setDescription("This wizard create a new discussion");
+		super("wizardPage"); //$NON-NLS-1$
+		setTitle(Messages.getString("NewDiscussionWizardPage.1")); //$NON-NLS-1$
+		setDescription(Messages.getString("NewDiscussionWizardPage.2")); //$NON-NLS-1$
 		this.selection = selection;
 	}
 
@@ -63,7 +63,7 @@ public class NewDiscussionWizardPage extends WizardPage implements ModifyListene
 
 		// Title selection
 		Label label = new Label(container, SWT.NULL);
-		label.setText("&Discussion name:");
+		label.setText(Messages.getString("NewDiscussionWizardPage.3")); //$NON-NLS-1$
 
 		name = new Text(container, SWT.BORDER | SWT.SINGLE);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
