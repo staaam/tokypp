@@ -53,12 +53,12 @@ public class NewLinkWizardPage extends WizardPage {
 
 	private Combo projectCombo;
 
-	@SuppressWarnings("unused") //$NON-NLS-1$
+	private String projectName;
+
+	@SuppressWarnings("unused")//$NON-NLS-1$
 	private ISelection selection;
 
 	private Text subject;
-	
-	private String projectName;
 
 	/**
 	 * Constructor for SampleNewWizardPage.
@@ -116,7 +116,6 @@ public class NewLinkWizardPage extends WizardPage {
 
 		label = new Label(container, SWT.NULL);
 		label.setText(Messages.getString("NewLinkWizardPage.14")); //$NON-NLS-1$
-		
 
 		discussionCombo = new Combo(container, SWT.READ_ONLY | SWT.DROP_DOWN);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -178,7 +177,7 @@ public class NewLinkWizardPage extends WizardPage {
 
 		label = new Label(container, SWT.NULL);
 		label.setText(""); //$NON-NLS-1$
-		
+
 		label = new Label(container, SWT.NULL);
 		label.setText(Messages.getString("NewLinkWizardPage.15")); //$NON-NLS-1$
 		gd = new GridData(GridData.VERTICAL_ALIGN_BEGINNING);
@@ -200,7 +199,7 @@ public class NewLinkWizardPage extends WizardPage {
 
 		excerptions = new Tree(container, SWT.BORDER | SWT.MULTI);
 		excerptions.setSize(600, 300);
-		
+
 		for (int i = 0; i < files.length; i++) {
 			TreeItem file = new TreeItem(excerptions, 0);
 			file.setText(files[i].getText());
@@ -321,7 +320,7 @@ public class NewLinkWizardPage extends WizardPage {
 				}
 				projectCombo.select(chosenProjIndex);
 				projectSelected();
-				
+
 				String discName = resource.getName().split(".dis")[0]; //$NON-NLS-1$
 				int chosenDiscIndex = -1;
 				String[] discComboNames = discussionCombo.getItems();
@@ -341,9 +340,11 @@ public class NewLinkWizardPage extends WizardPage {
 		// TODO Auto-generated method stub
 		String chosenProject = projectCombo.getText();
 
-		//ToK tok = new ToK(chosenProject, "Arie", "Babel_he.src"); //$NON-NLS-1$ //$NON-NLS-2$
+		// ToK tok = new ToK(chosenProject, "Arie", "Babel_he.src");
+		// //$NON-NLS-1$ //$NON-NLS-2$
 		// TODO
-		ToK tok = ToK.getProjectToK(ResourcesPlugin.getWorkspace().getRoot().getProject(chosenProject));
+		ToK tok = ToK.getProjectToK(ResourcesPlugin.getWorkspace().getRoot()
+				.getProject(chosenProject));
 		ArrayList<Discussion> discussions = new ArrayList<Discussion>(tok
 				.getDiscussions());
 		String[] discs = new String[discussions.size()];
@@ -354,11 +355,6 @@ public class NewLinkWizardPage extends WizardPage {
 		}
 		discussionCombo.setItems(discs);
 		discussionCombo.redraw();
-	}
-
-	private void updateStatus(String message) {
-		setErrorMessage(message);
-		setPageComplete(message == null);
 	}
 
 	public void setProjectName(String projectName) {
@@ -373,6 +369,11 @@ public class NewLinkWizardPage extends WizardPage {
 		}
 		projectCombo.select(chosenProjIndex);
 		projectSelected();
+	}
+
+	private void updateStatus(String message) {
+		setErrorMessage(message);
+		setPageComplete(message == null);
 	}
 
 }
