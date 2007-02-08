@@ -296,6 +296,7 @@ public class ToK {
 				IFile sourceFile = srcFolder.getFile(fileNameVarified);
 				FileInputStream fins = new FileInputStream(filePathVarified);
 				sourceFile.create(fins, true, this.progMonitor);
+				refresh();
 				// System.out.println("Source file was added to ToK ");
 			} catch (Exception e) {
 				System.out.println("FAILED to add source file to ToK ");
@@ -503,6 +504,17 @@ public class ToK {
 	public void addDiscussion(String discName) {
 		getDiscussions().add(new Discussion(this, discName,
 				getProjectCreator()));
+		refresh();
+	}
+
+	private void refresh() {
+		try {
+			discFolder.refreshLocal(IResource.DEPTH_INFINITE, progMonitor);
+			srcFolder.refreshLocal(IResource.DEPTH_INFINITE, progMonitor);
+		} catch (CoreException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**
