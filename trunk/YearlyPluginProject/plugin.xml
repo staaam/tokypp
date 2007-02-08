@@ -23,7 +23,7 @@
             contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
             default="false"
             extensions="src"
-            icon="icons/main_link_ico.gif"
+            icon="icons/link_ico.gif"
             id="lost.tok.linkTable.LinkageEditor"
             name="Link discussion to root"/>
       <editor
@@ -216,7 +216,7 @@
                tooltip="%action.tooltip.unmarkAll"/>
          <action
                class="lost.tok.linkTable.LinkAction"
-               icon="icons/main_link_ico.gif"
+               icon="icons/link_ico.gif"
                id="lost.tok.linkTable.LinkAction"
                label="Link"
                state="true"
