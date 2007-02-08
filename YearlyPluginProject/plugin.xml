@@ -14,7 +14,7 @@
       <editor
             class="lost.tok.sourceParser.SourceParser"
             default="true"
-            extensions="txt"
+            extensions="upsrc"
             icon="icons/Mark.bmp"
             id="lost.tok.sourceParser.SourceParser"
             name="Source Parser"/>
@@ -27,14 +27,14 @@
             id="lost.tok.linkTable.LinkageEditor"
             name="Link discussion to root"/>
       <editor
-            class="lost.tok.opTable.ShowLinkedDiscussions"
+            class="lost.tok.opTable.RootDiscussions"
             contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
             default="false"
             extensions="src"
             icon="icons/sample.gif"
             id="lost.tok.opTable.ShowLinkedDiscussions"
             name="Show Linked Discussions"/>
-      <editor
+       <editor
             class="lost.tok.disEditor.DiscussionEditor"
             contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
             default="true"
@@ -66,13 +66,6 @@
 
        <wizard
              category="lost.tok.Categoy"
-             class="lost.tok.sourceParser.wizards.UnparsedDocWizard"
-             icon="icons/sample.gif"
-             id="lost.tok.unparsedDocWizard"
-             name="Unparsed Source"
-             project="false"/>
-       <wizard
-             category="lost.tok.Categoy"
              class="lost.tok.newLinkWizard.NewLinkWizard"
              icon="icons/sample.gif"
              id="lost.tok.newLinkWizard.NewLinkWizard"
@@ -92,7 +85,13 @@
              id="lost.tok.newRelationWizard.NewRelationWizard"
              name="Create Relation"
              project="false"/>
->>>>>>> .r34
+       <wizard
+             category="lost.tok.Categoy"
+             class="lost.tok.newDiscussionWizard.NewDiscussionWizard"
+             icon="icons/sample.gif"
+             id="lost.tok.newDiscussionWizard.NewDiscussionWizard"
+             name="Ceate new discussion"
+             project="false"/>
    </extension>
    <extension
          point="org.eclipse.ui.popupMenus">
@@ -121,7 +120,7 @@
             nameFilter="*.src"
             objectClass="org.eclipse.core.resources.IFile">
          <action
-               class="lost.tok.opTable.ShowLinkedDiscussions"
+               class="lost.tok.opTable.RootDiscussions"
                enablesFor="+"
                id="lost.tok.opTable.showLinkedDiscussionsAction"
                label="Show Linked Discussions"/>
@@ -164,21 +163,6 @@
                tooltip="%action.tooltip.addQuote"/>
       </editorContribution>
 
-      <editorContribution
-            id="lost.tok.sourceParser.Contribution"
-            targetID="lost.tok.sourceParser.SourceParser">
-         <action
-               class="lost.tok.sourceParser.EndHereAction"
-               definitionId="lost.tok.sourceParser.command.endHereAction"
-               icon="icons/AddQuote.bmp"
-               id="lost.tok.sourceParser.endHereAction"
-               label="End Chapter Here"
-               menubarPath="edit/SourceParser"
-               state="true"
-               style="push"
-               toolbarPath="SourceParser"
-               tooltip="Clicky here to create a new chapter ending at the current cursor location"/>
-      </editorContribution>
 
       <editorContribution
             id="lost.tok.sourceParser.Contribution"
@@ -203,24 +187,30 @@
                icon="icons/Mark.bmp"
                id="lost.tok.opTable.MarkAction"
                label="%action.name.mark"
+               menubarPath="edit/OpTableGroup"
                state="true"
                style="push"
+               toolbarPath="OpTableGroup"
                tooltip="%action.tooltip.mark"/>
          <action
                class="lost.tok.opTable.UnMarkAllAction"
                icon="icons/UnMarkAll.bmp"
                id="lost.tok.opTable.UnMarkAllAction"
                label="%action.name.unmarkAll"
+               menubarPath="edit/OpTableGroup"
                state="true"
                style="push"
+               toolbarPath="OpTableGroup"
                tooltip="%action.tooltip.unmarkAll"/>
          <action
                class="lost.tok.linkTable.LinkAction"
                icon="icons/link_ico.gif"
                id="lost.tok.linkTable.LinkAction"
                label="Link"
+               menubarPath="edit/OpTableGroup"
                state="true"
-               style="push"/>
+               style="push"
+               toolbarPath="OpTableGroup"/>
       </editorContribution>
 
    </extension>
@@ -255,19 +245,6 @@
       </builder>
    </extension>
    <extension
-         point="org.eclipse.ui.commands">
-      <command
-            category="Source Parser"
-            id="lost.tok.sourceParser.command.endHereAction"
-            name="End Chapter Here"/>
-      <keyBinding
-            commandId="lost.tok.sourceParser.command.endHereAction"
-            contextId="org.eclipse.ui.contexts.window"
-            keyConfigurationId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            keySequence="ALT+Q"
-            scope="org.eclipse.ui.contexts.window"/>
-   </extension>
-   <extension
          id="NewInvokatronAction"
          name="New Invokatron Document Action"
          point="org.eclipse.ui.actionSets">
@@ -284,5 +261,31 @@
                toolbarPath="org.eclipse.ui.workbench.file/new.ext"
                tooltip="Starts the New Invokatron Document Wizard."/>
       </actionSet>
+   </extension>
+<extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension targetID="org.eclipse.ui.resourcePerspective">
+         <view
+               closeable="true"
+               id="lost.tok.excerptionsView.ExcerptionView"
+               ratio="0.5"
+               relationship="right"
+               relative="org.eclipse.ui.views.TaskList"
+               showTitle="true"
+               visible="true"/>
+      </perspectiveExtension>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            id="lost.tok.Categoy"
+            name="מידע"/>
+      <view
+            allowMultiple="false"
+            category="lost.tok.Categoy"
+            class="lost.tok.excerptionsView.ExcerptionView"
+            icon="icons/sample.gif"
+            id="lost.tok.excerptionsView.ExcerptionView"
+            name="Excerptions View"/>
    </extension>
 </plugin>
