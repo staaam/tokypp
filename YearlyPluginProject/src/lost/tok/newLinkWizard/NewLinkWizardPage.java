@@ -57,6 +57,8 @@ public class NewLinkWizardPage extends WizardPage {
 	private ISelection selection;
 
 	private Text subject;
+	
+	private String projectName;
 
 	/**
 	 * Constructor for SampleNewWizardPage.
@@ -357,6 +359,20 @@ public class NewLinkWizardPage extends WizardPage {
 	private void updateStatus(String message) {
 		setErrorMessage(message);
 		setPageComplete(message == null);
+	}
+
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+		int chosenProjIndex = -1;
+		String[] projectComboNames = projectCombo.getItems();
+		for (int i = 0; i < projectComboNames.length; i++) {
+			if (projectComboNames[i].compareTo(this.projectName) == 0) {
+				chosenProjIndex = i;
+				break;
+			}
+		}
+		projectCombo.select(chosenProjIndex);
+		projectSelected();
 	}
 
 }

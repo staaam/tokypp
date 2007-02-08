@@ -81,6 +81,10 @@ public class NewLinkWizard extends Wizard implements INewWizard {
 		 }
 		return true;
 	}
+	
+	public void setProjectName(String projectName){
+		page.setProjectName(projectName);
+	}
 
 	@SuppressWarnings("unused") //$NON-NLS-1$
 	private void throwCoreException(String message) throws CoreException {

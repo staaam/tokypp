@@ -17,12 +17,15 @@ public class NewDiscussionWizard extends Wizard implements INewWizard {
 
 	private ToK tok;
 
+	private IProject project = null;
+
 	/**
 	 * Constructor for SampleNewWizard.
 	 */
 	public NewDiscussionWizard() {
 		super();
 		setNeedsProgressMonitor(true);
+		setWindowTitle("New Discussion Wizard");
 	}
 
 	/**
@@ -47,20 +50,26 @@ public class NewDiscussionWizard extends Wizard implements INewWizard {
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		this.selection = selection;
 	}
-	
+
+	public void setProject(IProject project) {
+		this.project = project;
+	}
+
 	private ToK getToK(ISelection selection) {
-		IProject project = null;
-		if (selection != null && selection.isEmpty() == false
-				&& selection instanceof IStructuredSelection) {
-			IStructuredSelection ssel = (IStructuredSelection) selection;
-			if (ssel.size() > 1)
-				return null;
-			Object obj = ssel.getFirstElement();
-			if (obj instanceof IResource) {
-				IResource resource = (IResource) obj;
-				project = resource.getProject();
+		if (project == null) {
+			if (selection != null && selection.isEmpty() == false
+					&& selection instanceof IStructuredSelection) {
+				IStructuredSelection ssel = (IStructuredSelection) selection;
+				if (ssel.size() > 1)
+					return null;
+				Object obj = ssel.getFirstElement();
+				if (obj instanceof IResource) {
+					IResource resource = (IResource) obj;
+					project = resource.getProject();
+				}
 			}
 		}
 		return ToK.getProjectToK(project);
 	}
+
 }
