@@ -46,10 +46,8 @@ public class NewRelationWizardPage extends WizardPage {
 	private Combo relType;
 
 	private Tree rightObjects;
-	
+
 	private ISelection selection;
-	
-	
 
 	/**
 	 * Constructor for NewWizardPage.
@@ -116,12 +114,12 @@ public class NewRelationWizardPage extends WizardPage {
 
 		label = new Label(container, SWT.NULL);
 		label.setText(""); //$NON-NLS-1$		
-		
+
 		label = new Label(container, SWT.NULL);
 		label.setText(Messages.getString("NewRelationWizardPage.4")); //$NON-NLS-1$
 		gd = new GridData(GridData.VERTICAL_ALIGN_BEGINNING);
 		label.setLayoutData(gd);
-		
+
 		gd = new GridData(GridData.FILL_BOTH);
 		leftObjects = new Tree(container, SWT.BORDER);
 		leftObjects.setLayoutData(gd);
@@ -132,11 +130,11 @@ public class NewRelationWizardPage extends WizardPage {
 		rightObjects.setLayoutData(gd);
 		rightObjects.setSize(100, 200);
 
-		IProject project = ResourcesPlugin.getWorkspace().getRoot()
-				.getProject(projectName);
+		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(
+				projectName);
 
 		// FOR DEBUGGING ONLY!!!!!!!!
-		//ToK tok = new ToK(projectName, "Arie", "Babel_he.src");
+		// ToK tok = new ToK(projectName, "Arie", "Babel_he.src");
 		// @TODO
 		ToK tok = ToK.getProjectToK(project);
 
@@ -215,7 +213,6 @@ public class NewRelationWizardPage extends WizardPage {
 		TreeItem[] leftSelected = leftObjects.getSelection();
 		TreeItem[] rightSelected = rightObjects.getSelection();
 
-		
 		if (relType.length() == 0) {
 			updateStatus(Messages.getString("NewRelationWizardPage.5")); //$NON-NLS-1$
 			return;
@@ -227,11 +224,10 @@ public class NewRelationWizardPage extends WizardPage {
 		}
 	}
 
-	
-	
 	public String getComment() {
 		return comment.getText();
 	}
+
 	public String getDiscName() {
 		return discName;
 	}
@@ -245,8 +241,8 @@ public class NewRelationWizardPage extends WizardPage {
 		TreeItem[] leftSelected = leftObjects.getSelection();
 		TreeItem[] rightSelected = rightObjects.getSelection();
 		Integer[] selectedText = new Integer[2];
-		selectedText[0] = (Integer)leftSelected[0].getData();
-		selectedText[1] = (Integer)rightSelected[0].getData();
+		selectedText[0] = (Integer) leftSelected[0].getData();
+		selectedText[1] = (Integer) rightSelected[0].getData();
 		return selectedText;
 	}
 

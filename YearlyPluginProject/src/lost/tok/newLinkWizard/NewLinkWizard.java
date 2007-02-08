@@ -66,33 +66,34 @@ public class NewLinkWizard extends Wizard implements INewWizard {
 	 */
 	public boolean performFinish() {
 
-		IProject tokProject = ResourcesPlugin.getWorkspace().getRoot().getProject(page.getProject());
+		IProject tokProject = ResourcesPlugin.getWorkspace().getRoot()
+				.getProject(page.getProject());
 		tok = new ToK(tokProject);
 		String[] roots = page.getSourceFiles();
-		 //TODO
-		 try {
+		// TODO
+		try {
 			for (int i = 0; i < roots.length; i++) {
-				tok.linkDiscussionRoot(tok.getDiscussion(page.getDiscussion()),roots[i],page.getExcerptions(roots[i]), page.getSubject(),page.getLinkType());
-			} 
-		 
-		 } catch (CoreException e) {
-		 // TODO Auto-generated catch block
-		 e.printStackTrace();
-		 }
+				tok.linkDiscussionRoot(tok.getDiscussion(page.getDiscussion()),
+						roots[i], page.getExcerptions(roots[i]), page
+								.getSubject(), page.getLinkType());
+			}
+
+		} catch (CoreException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return true;
 	}
-	
-	public void setProjectName(String projectName){
+
+	public void setProjectName(String projectName) {
 		page.setProjectName(projectName);
 	}
 
-	@SuppressWarnings("unused") //$NON-NLS-1$
+	@SuppressWarnings("unused")//$NON-NLS-1$
 	private void throwCoreException(String message) throws CoreException {
 		IStatus status = new Status(IStatus.ERROR, "Yearly_Plugin_Project", //$NON-NLS-1$
 				IStatus.OK, message, null);
 		throw new CoreException(status);
 	}
-	
-	
-	
+
 }

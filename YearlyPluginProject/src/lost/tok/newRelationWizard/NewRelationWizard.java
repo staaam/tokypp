@@ -74,7 +74,7 @@ public class NewRelationWizard extends Wizard implements INewWizard {
 			Integer[] ids = page.getSelectedQuotes();
 			Discussion disc = tok.getDiscussion(page.getDiscName());
 			disc.createLink(ids[0], ids[1], page.getComment(), page
-							.getRelationType());
+					.getRelationType());
 		} catch (CoreException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
