@@ -362,7 +362,7 @@ public class Discussion {
 		return NEXT_ID++;
 	}
 
-	public String[] getOpinions() {
+	public String[] getOpinionNames() {
 		Document doc = readFromXML();
 
 		XPath xpathSelector = DocumentHelper.createXPath("//opinion/name");
@@ -373,6 +373,22 @@ public class Discussion {
 		for (Object object : result) {
 			Element e = (Element) object;
 			ss[i++] = e.getText();
+		}
+
+		return ss;
+	}
+	
+	public Integer[] getOpinionIDs() {
+		Document doc = readFromXML();
+
+		XPath xpathSelector = DocumentHelper.createXPath("//opinion/id");
+		List result = xpathSelector.selectNodes(doc);
+
+		Integer[] ss = new Integer[result.size()];
+		int i = 0;
+		for (Object object : result) {
+			Element e = (Element) object;
+			ss[i++] = Integer.valueOf(e.getText());
 		}
 
 		return ss;
