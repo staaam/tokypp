@@ -9,7 +9,7 @@ public class Paths {
 	static public final String FILE_NOT_FOUND_MESSAGE = "File Not Found. Please create a directory called C:/Temp/TestFiles/ and copy the test files to it";
 
 	/** The best folder which should contain all the tests */
-	final static public String BASE = "C:\\temp\\TestFiles\\";
+	final static public String BASE = "/YPPluginTests/TestFiles\\";
 
 	final static public String SOURCE_EXAMPLE = BASE + "source_example.src";
 

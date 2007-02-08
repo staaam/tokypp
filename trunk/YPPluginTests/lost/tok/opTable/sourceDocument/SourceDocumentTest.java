@@ -14,7 +14,7 @@ import lost.tok.sourceDocument.SourceDocument;
 import org.dom4j.DocumentException;
 import org.dom4j.io.SAXReader;
 
-public class SourceDocument_test extends TestCase {
+public class SourceDocumentTest extends TestCase {
 
 	/**
 	 * Reads an English document Verifies that the displayed result is ok
