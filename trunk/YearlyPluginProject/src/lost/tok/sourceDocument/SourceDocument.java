@@ -40,6 +40,7 @@ public class SourceDocument extends Document {
 	
 	private boolean grandsonText;
 	private boolean firstLevel;
+	private boolean firstChild;
 	private int childNum;
 
 	/** Creates a source document from a source xml */
@@ -151,6 +152,7 @@ public class SourceDocument extends Document {
 	public void toXML(IProject tokProj, String sourceName)
 	{
 		childNum = 0;
+		firstChild = true;
 		outputFile = tokProj.getFolder(ToK.SOURCES_FOLDER).getFile(sourceName);
 		
 		//create the XML and fill the name and author tags
@@ -163,6 +165,7 @@ public class SourceDocument extends Document {
 			firstLevel = true;
 			String currXMLPath = "//source/child";  //$NON-NLS-1$
 			preorderFunc(c,currXMLPath);
+			firstChild = false;
 		}
 	}
 	
@@ -207,7 +210,7 @@ public class SourceDocument extends Document {
 	 */
 	private void preorderFunc(Chapter chapter, String currXMLPath){
 		if (nextChapterIsText(chapter)){
-			if (firstLevel){
+			if (firstLevel & !firstChild){
 				currXMLPath = "//source";
 				addElement(currXMLPath,"child");
 				currXMLPath+= "/child[position()="+childNum+ "]";
@@ -300,7 +303,8 @@ public class SourceDocument extends Document {
 		Element textElm = chapterChildElement.addElement("text");
 		//the name is of the current chapter, while the content is from the son
 		textElm.addElement("name").addText(c.getName());
-		textElm.addElement("content").addText(getTextofChild(c));
+		String contentText = getTextofChild(c);
+		textElm.addElement("content").addText(contentText);
 		
 		GeneralFunctions.writeToXml(outputFile, doc);
 		
