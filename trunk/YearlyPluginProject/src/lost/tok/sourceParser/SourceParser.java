@@ -2,7 +2,6 @@ package lost.tok.sourceParser;
 
 import java.util.LinkedList;
 
-import lost.tok.ToK;
 import lost.tok.opTable.SourceDocumentProvider;
 import lost.tok.opTable.StyleManager;
 import lost.tok.sourceDocument.Chapter;
@@ -10,18 +9,22 @@ import lost.tok.sourceDocument.ChapterText;
 import lost.tok.sourceDocument.SourceDocument;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.editors.text.TextEditor;
 
 public class SourceParser extends TextEditor 
 {
-	ToK tok = null;
+	boolean dirty;
 	
 	public static String EditorID = "lost.tok.sourceParser.SourceParser";
 
@@ -30,6 +33,7 @@ public class SourceParser extends TextEditor
 		super();
 		//setDocumentProvider(new UnparsedDocumentProvider());
 		setDocumentProvider(new SourceDocumentProvider());
+		dirty = false;
 	}
 
 	/** Makes the docuemnt uneditable */
@@ -98,9 +102,6 @@ public class SourceParser extends TextEditor
 	
 	public void createNewChapter(int offset, String name)
 	{
-		if (name.equals(Chapter.UNPARSED_STR))
-			return; // Note: the user can't create chapters called (Unparsed Text)
-		
 		ISourceViewer srcview = this.getSourceViewer();
 		SourceDocument document = (SourceDocument) srcview.getDocument();
 		int oldTopLineIndex = srcview.getTopIndex(); 
@@ -110,6 +111,13 @@ public class SourceParser extends TextEditor
 		srcview.getTextWidget().setCaretOffset(newWidgetOffset);
 		srcview.setTopIndex(oldTopLineIndex);
 		refreshDisplay();
+		
+		boolean oldDirty = dirty;
+		dirty = !document.containsUnparsed(); 
+		if ( dirty != oldDirty ) 
+		{
+			firePropertyChange(IEditorPart.PROP_DIRTY);
+		}
 	}
 	
 	public int getCaretLocation()
@@ -118,7 +126,8 @@ public class SourceParser extends TextEditor
 		int cursorWidgetOffset = srcview.getTextWidget().getCaretOffset(); 
 		return widgetOffset2ModelOffset(srcview, cursorWidgetOffset);
 	}
-	
+
+	/*  Doesn't work :(
 	public void close(boolean save)
 	{
 		super.close(save);
@@ -134,6 +143,58 @@ public class SourceParser extends TextEditor
 				e.printStackTrace();
 			}
 		}
+	}*/
+	
+	public boolean isDirty()
+	{
+		return dirty;
+	}
+	
+	/**
+	 * Saves the document as a parsed document.
+	 * This method can only be called if the document is already parsed.
+	 * This method also deletes the temporary unparsed document
+	 */
+	public void doSave(IProgressMonitor monitor)
+	{
+		dirty = false;
+ 
+		monitor.beginTask("Finding Location", 3);
+		
+		IFile unParsedIFile = getInputIFile();
+		if (unParsedIFile == null)
+		{
+			monitor.worked(3);
+			return;
+		}
+		
+		// the unparsed file name
+		String upName = unParsedIFile.getFullPath().lastSegment();
+		String srcName = upName.substring(0, upName.lastIndexOf('.')) + ".src";
+		
+		IProject tProj = unParsedIFile.getProject();
+		
+		ISourceViewer srcview = this.getSourceViewer();
+		SourceDocument document = (SourceDocument) srcview.getDocument();
+		monitor.worked(1);
+		
+		monitor.setTaskName("Saving to src file");
+		document.toXML(tProj, srcName);
+		monitor.worked(1);
+		
+		// TODO(Shay): Set root property
+		
+		monitor.setTaskName("Deleting old unparsed file");
+		
+		try {
+			unParsedIFile.delete(true, null);
+			tProj.refreshLocal(IResource.DEPTH_INFINITE, null);
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
+		monitor.worked(1);
+		
+		firePropertyChange(IEditorPart.PROP_DIRTY);		
 	}
 	
 	/** Returns the IFile opened in the editor */
@@ -148,6 +209,5 @@ public class SourceParser extends TextEditor
 		}
 		return null;
 	}
-	
 
 }
