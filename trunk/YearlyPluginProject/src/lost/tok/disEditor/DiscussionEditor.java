@@ -55,39 +55,39 @@ public class DiscussionEditor extends TextEditor {
 		final Composite par = parent;
 		final Tree disTree = new Tree(parent,SWT.BORDER);		
 		
-		disTree.addListener(SWT.MouseDoubleClick, new Listener()
-						{
-							public void handleEvent(Event event) 
-							{	
-							    Shell s = new Shell(par.getDisplay());
-							    GridLayout gl = new GridLayout();
-							    gl.numColumns = 1;
-							    s.setLayout(gl);						    
-							    Composite gc = new Composite(s,SWT.BORDER);							
-							    GridLayout gla = new GridLayout();
-							    gla.numColumns = 1;
-							    gc.setLayout(gla);
-							    final Text t1 = new Text(gc, SWT.MULTI);
-							    /////////////////////////////////////////////////////////
-							    
-							    Point point = new Point(event.x,event.y);
-							    
-//							    if(event.widget == null)
-							    t1.setText("Item name = \n" + ((TreeItem)((Tree)event.widget).getItem(point)).getText() +
-							    		"\n");
-							    
-							    
-							    /////////////////////////////////////////////////////////
-							    GridData gd = new GridData(GridData.FILL_BOTH);
-							    gd.horizontalSpan = 1;
-							    gc.setLayoutData(gd);
-							    gd = new GridData();
-							    
-							    s.pack();
-							    s.open();
-							}
-						}
-		);
+//		disTree.addListener(SWT.MouseDoubleClick, new Listener()
+//						{
+//							public void handleEvent(Event event) 
+//							{	
+//							    Shell s = new Shell(par.getDisplay());
+//							    GridLayout gl = new GridLayout();
+//							    gl.numColumns = 1;
+//							    s.setLayout(gl);						    
+//							    Composite gc = new Composite(s,SWT.BORDER);							
+//							    GridLayout gla = new GridLayout();
+//							    gla.numColumns = 1;
+//							    gc.setLayout(gla);
+//							    final Text t1 = new Text(gc, SWT.MULTI);
+//							    /////////////////////////////////////////////////////////
+//							    
+//							    Point point = new Point(event.x,event.y);
+//							    
+////							    if(event.widget == null)
+//							    t1.setText("Item name = \n" + ((TreeItem)((Tree)event.widget).getItem(point)).getText() +
+//							    		"\n");
+//							    
+//							    
+//							    /////////////////////////////////////////////////////////
+//							    GridData gd = new GridData(GridData.FILL_BOTH);
+//							    gd.horizontalSpan = 1;
+//							    gc.setLayoutData(gd);
+//							    gd = new GridData();
+//							    
+//							    s.pack();
+//							    s.open();
+//							}
+//						}
+//		);
 		
 		//************************ DELETE QUOTES AND OPINIONS ***********************************
 		disTree.addKeyListener(new KeyListener() 
