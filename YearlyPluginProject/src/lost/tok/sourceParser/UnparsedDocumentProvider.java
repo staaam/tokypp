@@ -12,6 +12,12 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.ui.editors.text.FileDocumentProvider;
 
+/**
+ * This was supposed to be the document provider for unparsed document.
+ * Currnetly however, it is unused.
+ * This was left here for the third iteration, perhaps
+ * @author Shay
+ */
 public class UnparsedDocumentProvider extends FileDocumentProvider {
 
 	protected void setDocumentContent(IDocument document,
@@ -38,19 +44,13 @@ public class UnparsedDocumentProvider extends FileDocumentProvider {
 			// throw new CoreException(new Status()...
 		}
 
-		// TODO(Shay) add a dialog or something to get the names
+		// unused...
 		srcDoc.setUnparsed(sb.toString(), "Anna Banana", "Shay");
 	}
 
 	@Override
 	protected IDocument createEmptyDocument() {
 		return new SourceDocument();
-	}
-
-	@Override
-	protected void doSaveDocument(IProgressMonitor monitor, Object element,
-			IDocument document, boolean overwrite) throws CoreException {
-		monitor.done(); // FIXME(Shay): Allow document export
 	}
 
 }
