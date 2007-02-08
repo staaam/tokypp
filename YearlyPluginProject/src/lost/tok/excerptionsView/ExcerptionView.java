@@ -1,6 +1,7 @@
 package lost.tok.excerptionsView;
 
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.part.*;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.graphics.Image;
@@ -196,10 +198,12 @@ public class ExcerptionView extends ViewPart {
 						.hasNext();) {
 					Excerption exp = (Excerption) iterator.next();
 					String expText = exp.getText();
-					
-					String expPrefix = expText.length() < 40 ? expText: expText.substring(0, 40);
+
+					String expPrefix = expText.length() < 40 ? expText
+							: expText.substring(0, 40);
 					TreeObject temp = new TreeObject(expPrefix);
-					temp.setId(Integer.valueOf((Integer)exp.getProperty(new QualifiedName("id","id"))));
+					temp.setId(Integer.valueOf((Integer) exp
+							.getProperty(new QualifiedName("id", "id"))));
 					parentFile.addChild(temp);
 				}
 				invisibleRoot.addChild(parentFile);
@@ -229,7 +233,9 @@ public class ExcerptionView extends ViewPart {
 
 	private static int nextId = 0;
 
-	private Action action1;
+	private Action linkAction;
+
+	private Action deleteAction;
 
 	/*
 	 * The content provider class is responsible for providing objects to the
@@ -246,7 +252,7 @@ public class ExcerptionView extends ViewPart {
 	private List<FileExcerption> objects = new ArrayList<FileExcerption>();
 
 	private TreeViewer viewer;
-	
+
 	/**
 	 * The constructor.
 	 */
@@ -277,15 +283,15 @@ public class ExcerptionView extends ViewPart {
 				.treeBuildAndRefresh();
 	}
 
-	public List<Excerption> getExcerptions(String fileName){
+	public List<Excerption> getExcerptions(String fileName) {
 		for (FileExcerption element : objects) {
-			if (element.getSourceFileName().compareTo(fileName) == 0){
+			if (element.getSourceFileName().compareTo(fileName) == 0) {
 				return element.getExcerptions();
 			}
 		}
 		return null;
 	}
-	
+
 	private void contributeToActionBars() {
 		IActionBars bars = getViewSite().getActionBars();
 		fillLocalPullDown(bars.getMenuManager());
@@ -309,7 +315,8 @@ public class ExcerptionView extends ViewPart {
 	}
 
 	private void fillContextMenu(IMenuManager manager) {
-		manager.add(action1);
+		manager.add(linkAction);
+		manager.add(deleteAction);
 		manager.add(new Separator());
 		drillDownAdapter.addNavigationActions(manager);
 		// Other plug-ins can contribute there actions here
@@ -317,7 +324,7 @@ public class ExcerptionView extends ViewPart {
 	}
 
 	private void fillLocalPullDown(IMenuManager manager) {
-		manager.add(action1);
+		manager.add(linkAction);
 	}
 
 	private void hookContextMenu() {
@@ -336,44 +343,102 @@ public class ExcerptionView extends ViewPart {
 	private void hookDoubleClickAction() {
 		viewer.addDoubleClickListener(new IDoubleClickListener() {
 			public void doubleClick(DoubleClickEvent event) {
-				doubleClickAction.run();
+				linkAction.run();
 			}
 		});
 	}
 
 	private void makeActions() {
-		action1 = new Action() {
+		linkAction = new Action() {
 			public void run() {
-				
-				ITreeSelection selection = (ITreeSelection)viewer.getSelection();
+
+				ITreeSelection selection = (ITreeSelection) viewer
+						.getSelection();
 				List list = selection.toList();
-				List<Integer> selectedIds = new ArrayList<Integer>(); 
+				List<Integer> selectedIds = new ArrayList<Integer>();
 				for (Iterator iter = list.iterator(); iter.hasNext();) {
 					TreeObject element = (TreeObject) iter.next();
 					selectedIds.add(element.getId());
 				}
-								
+
 				NewLinkWizard wizard = new NewLinkWizard();
-				wizard.init(PlatformUI.getWorkbench(),(IStructuredSelection) viewer.getSelection());
-				WizardDialog dialog= new WizardDialog(new Shell(),wizard);
+				wizard.init(PlatformUI.getWorkbench(),
+						(IStructuredSelection) viewer.getSelection());
+				WizardDialog dialog = new WizardDialog(new Shell(), wizard);
 				dialog.setTitle("Link discussion to root");
 				dialog.updateSize();
 				dialog.create();
 				dialog.open();
 			}
 		};
-		action1.setText("Link to root");
-		action1.setToolTipText("Link this excerption(s) to a root file");
+		linkAction.setText("Link to a discussion");
+		linkAction.setToolTipText("Link this excerption(s) to a root file");
+		linkAction.setImageDescriptor(ImageDescriptor.createFromFile(this.getClass(), "../../../../icons/main_link_ico.gif"));
 		
-
-		doubleClickAction = new Action() {
+		deleteAction = new Action() {
 			public void run() {
-				ISelection selection = viewer.getSelection();
-				Object obj = ((IStructuredSelection) selection)
-						.getFirstElement();
-				showMessage("Double-click detected on " + obj.toString());
+
+				ITreeSelection selection = (ITreeSelection) viewer
+						.getSelection();
+				List list = selection.toList();
+				List<Integer> selectedIds = new ArrayList<Integer>();
+				List<String> selectedFiles = new ArrayList<String>();
+				for (Iterator iter = list.iterator(); iter.hasNext();) {
+					TreeObject element = (TreeObject) iter.next();
+					if (element instanceof TreeParent) {
+						//a whole file is selected
+						selectedFiles.add(element.getName());
+					}
+					selectedIds.add(element.getId());
+				}
+
+				for (Iterator iter = selectedFiles.iterator(); iter.hasNext();) {
+					String fileName = (String) iter.next();
+					try {
+						for (FileExcerption object : objects) {
+							if (object.getSourceFileName().compareTo(fileName) == 0) {
+								objects.remove(object);
+							}
+						}
+					} catch (ConcurrentModificationException e) {
+						// TODO Auto-generated catch block
+					}
+				}
+				
+				for (Iterator iter = selectedIds.iterator(); iter.hasNext();) {
+					Integer element = (Integer) iter.next();
+					for (FileExcerption object : objects) {
+						List<Excerption> excerptions = object.getExcerptions();
+						try {
+							for (Excerption exp : excerptions) {
+								int id = Integer
+										.valueOf((Integer) exp
+												.getProperty(new QualifiedName(
+														"id", "id")));
+								if (element.compareTo(id) == 0){
+									excerptions.remove(exp);
+								}
+							}
+						} catch (ConcurrentModificationException e) {
+							// TODO Auto-generated catch block
+						}
+					}
+				}
+				((ViewContentProvider) viewer.getContentProvider())
+				.treeBuildAndRefresh();
 			}
 		};
+		deleteAction.setText("Delete");
+		deleteAction.setToolTipText("Deletes the chosen excerption");
+		deleteAction.setImageDescriptor(ImageDescriptor.createFromFile(this.getClass(), "../../../../icons/delete.gif"));
+//		doubleClickAction = new Action() {
+//			public void run() {
+//				ISelection selection = viewer.getSelection();
+//				Object obj = ((IStructuredSelection) selection)
+//						.getFirstElement();
+//				showMessage("Double-click detected on " + obj.toString());
+//			}
+//		};
 	}
 
 	/**
@@ -383,24 +448,19 @@ public class ExcerptionView extends ViewPart {
 		viewer.getControl().setFocus();
 	}
 
-	private void showMessage(String message) {
-		MessageDialog.openInformation(viewer.getControl().getShell(),
-				"Excerptions View", message);
-	}
-
-	
-	public Tree getTree(){
+	public Tree getTree() {
 		return viewer.getTree();
 	}
-	
-	public IContentProvider getContentProvider(){
+
+	public IContentProvider getContentProvider() {
 		return viewer.getContentProvider();
 	}
-	public Object getInput(){
-		return	viewer.getInput();
+
+	public Object getInput() {
+		return viewer.getInput();
 	}
-	
-	public IBaseLabelProvider getLabelProvider(){
+
+	public IBaseLabelProvider getLabelProvider() {
 		return viewer.getLabelProvider();
 	}
 

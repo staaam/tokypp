@@ -35,6 +35,7 @@ public class NewRelationWizard extends Wizard implements INewWizard {
 	public NewRelationWizard() {
 		super();
 		setNeedsProgressMonitor(true);
+		setHelpAvailable(false);
 		setWindowTitle("New Relation Wizard");
 	}
 
