@@ -16,7 +16,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.QualifiedName;
 
-public class ToK_test extends TestCase {
+public class ToKTest extends TestCase {
 
 	protected void setUp() throws Exception {
 		super.setUp();

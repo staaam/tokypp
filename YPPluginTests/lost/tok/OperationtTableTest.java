@@ -6,7 +6,7 @@ import junit.framework.TestCase;
  * Due to the difficulties with creating and testing an Editor using the
  * Eclipses Interface, Editor tests will be done manually
  */
-public class OperationtTable_test extends TestCase {
+public class OperationtTableTest extends TestCase {
 
 	public void testStub() {
 		// Nothing to test here
