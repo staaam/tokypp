@@ -14,6 +14,8 @@ import lost.tok.sourceDocument.SourceDocument;
 import org.dom4j.DocumentException;
 import org.dom4j.io.SAXReader;
 
+import com.sun.security.auth.callback.TextCallbackHandler;
+
 public class SourceDocumentTest extends TestCase {
 
 	/**
@@ -37,6 +39,11 @@ public class SourceDocumentTest extends TestCase {
 		}
 	}
 	
+	/** 
+	 * Tests that document creation works as it should, for the source parser
+	 * This method creates a short document, and verifies that it contains 
+	 * a title, a single chpater and the original text 
+	 */
 	public void testCreateDocToParse()
 	{
 		Chapter c = null;
@@ -44,13 +51,14 @@ public class SourceDocumentTest extends TestCase {
 		
 		SourceDocument doc = new SourceDocument();
 		doc.setUnparsed(text,"Source Parser","Shay Nahum");
-		assertEquals("TITLE:\tSource Parser\nBY   :	Shay Nahum\n\n" +
+		assertEquals("Title:\tSource Parser\nBy   :	Shay Nahum\n\n" +
 				"Chapter 1:\t(Unparsed Text)\n" + text + "\n",
 				doc.getChapterFromOffset(0).toString());
 		c = doc.getChapterFromOffset(50);
 		assertEquals("Chapter 1:\t(Unparsed Text)\n" + text + "\n", c.toString());
 	}
 	
+	/** Simple test for the creation of a new chpater */
 	public void testCreateNewChapter()
 	{
 		String text = "This is the story of an unparsed document"; 
@@ -59,6 +67,47 @@ public class SourceDocumentTest extends TestCase {
 		doc.setUnparsed(text,"Source Parser","Shay Nahum");
 		
 		doc.createNewChapter(30, "Document?");
+	}
+	
+	/** 
+	 * ABC parsing text
+	 * Given a list of the abc letters, splits each one to a seperate chapter
+	 * Verifies that they were split correctly
+	 */
+	public void testCreateNewChapter2()
+	{
+		String text = "a b c d e f g h i j k l m n o p q r s t u v w x y z";
+				
+		SourceDocument doc = new SourceDocument();
+		doc.setUnparsed(text,"ABC","Eliezer Ben-Yehuda");
+		
+		int caret_loc = 0;
+		for (int i = 0; i < (text.length()+1)/2; i ++)
+		{
+			boolean isAtChapterStart = (doc.getChapterFromOffset(caret_loc).getOffset() == caret_loc);
+			
+			// 10000 is set to avoid inf loops during the tests
+			while (isAtChapterStart || (doc.createNewChapter(caret_loc, ""+i) == -1 && caret_loc < 10000))
+			{
+				caret_loc ++;
+				isAtChapterStart = (doc.getChapterFromOffset(caret_loc).getOffset() == caret_loc);
+			}
+		}
+		
+		int numChapterTexts = 0;
+		int i = 0;
+		for (Chapter c : doc.getAllChapters())
+		{
+			if (c instanceof ChapterText)
+			{
+				numChapterTexts ++;
+				// verifies that the chapters content is as it should be
+				assertEquals("" + ('a' + i), c.toString()); 
+			}
+			i++;
+		}
+		// verifies that we've passed on all the chapters
+		assertEquals((text.length() + 1) / 2, numChapterTexts);
 	}
 
 	public void testGetChapterFromOffset() {

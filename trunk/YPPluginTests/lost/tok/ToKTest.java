@@ -214,9 +214,9 @@ public class ToKTest extends TestCase {
 		ToK tok;
 		tok = new ToK("AriesProj2", "Arie", Paths.SOURCE_EXAMPLE);
 		tok.addDiscussion("test");
-		tok.linkDiscussionRoot(tok.getDiscussion("test"), new Excerption(
+		/*tok.linkDiscussionRoot(tok.getDiscussion("test"), new Excerption(
 				"/Bible/The Begining/The Continue/The First Paragraph", "", 2,
-				22));
+				22));*/
 
 		IFile links = ResourcesPlugin.getWorkspace().getRoot().getProject(
 				"AriesProj2").getFile("Links.xml");
@@ -237,9 +237,9 @@ public class ToKTest extends TestCase {
 	public void testNewLinkDiscussionRoot() throws CoreException, IOException {
 		ToK tok;
 		tok = new ToK("AriesProj3", "Arie", Paths.SOURCE_EXAMPLE);
-		tok.linkNewDiscussionRoot("New Discussion", new Excerption(
+		/*tok.linkNewDiscussionRoot("New Discussion", new Excerption(
 				"/Bible/The Begining/The Continue/The First Paragraph", "", 2,
-				22));
+				22));*/
 
 		assertTrue(ResourcesPlugin.getWorkspace().getRoot().getProject(
 				"AriesProj3").getFolder("Discussions").getFile("test.dis") != null);
