@@ -85,6 +85,13 @@
              id="lost.tok.newRelationWizard.NewRelationWizard"
              name="Create Relation"
              project="false"/>
+       <wizard
+             category="lost.tok.Categoy"
+             class="lost.tok.newDiscussionWizard.NewDiscussionWizard"
+             icon="icons/sample.gif"
+             id="lost.tok.newDiscussionWizard.NewDiscussionWizard"
+             name="Ceate new discussion"
+             project="false"/>
    </extension>
    <extension
          point="org.eclipse.ui.popupMenus">
