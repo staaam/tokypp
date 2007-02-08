@@ -215,10 +215,20 @@ public class Discussion {
 		// if there are several quotes with the given id, fix it by removing all
 		// of them
 		// if there are no quotes with the given id, do nothing
-		XPath xpathSelector = DocumentHelper.createXPath("//quote[id='"
+		XPath xpathSelector1 = DocumentHelper.createXPath("//quote[id='"
 				+ java.lang.Integer.toString(quoteId) + "']");
-		List result = xpathSelector.selectNodes(doc);
+		List result = xpathSelector1.selectNodes(doc);
 		for (Iterator i = result.iterator(); i.hasNext();) {
+			Element element = (Element) i.next();
+			element.detach();
+		}
+		
+		// Remove all the quote's relations
+		XPath xpathSelector2 = DocumentHelper
+				.createXPath("//quoteRel[targetId='"
+						+ java.lang.Integer.toString(quoteId) + "']");
+		List result2 = xpathSelector2.selectNodes(doc);
+		for (Iterator i = result2.iterator(); i.hasNext();) {
 			Element element = (Element) i.next();
 			element.detach();
 		}
@@ -307,6 +317,168 @@ public class Discussion {
 		writeToXml(doc);
 	}
 
+	public void createQuoteLink(Integer quote1, Integer quote2,
+			String comment, String type) {
+
+		Document doc = readFromXML();
+
+		// Make sure that the 2 quotes exist
+		XPath xpathSelector1 = DocumentHelper.createXPath("//quote[id='"
+				+ java.lang.Integer.toString(quote1) + "']");
+		List q1 = xpathSelector1.selectNodes(doc);
+		XPath xpathSelector2 = DocumentHelper.createXPath("//quote[id='"
+				+ java.lang.Integer.toString(quote2) + "']");
+		List q2 = xpathSelector2.selectNodes(doc);
+		if (q1.size() != 1 || q2.size() != 1) {
+			return;
+		}
+
+		// chack that the relation does not exist
+		XPath xpathSelector3 = DocumentHelper.createXPath("//quote[id='"
+				+ java.lang.Integer.toString(quote1)
+				+ "']/quoteRel[targetId='"
+				+ java.lang.Integer.toString(quote2) + "']");
+		List list = xpathSelector3.selectNodes(doc);
+		if (list.isEmpty() == false) {
+			return;
+		}
+
+		// add the relation to quote 1
+		Element o1 = (Element) q1.get(0);
+		Element link1 = o1.addElement("quoteRel");
+		link1.addElement("targetId").addText(
+				java.lang.Integer.toString(quote2));
+		link1.addElement("comment").addText(comment);
+		link1.addElement("type").addText(type);
+
+		// add the relation to quote 2
+		Element o2 = (Element) q2.get(0);
+		Element link2 = o2.addElement("quoteRel");
+		link2.addElement("targetId").addText(
+				java.lang.Integer.toString(quote1));
+		link2.addElement("comment").addText(comment);
+		link2.addElement("type").addText(type);
+
+		writeToXml(doc);
+	}
+
+	public void removeQuoteLink(Integer quote1, Integer quote2) {
+
+		// create a Document containing the discussion
+		Document doc = readFromXML();
+
+		// Remove all the relations (should be only one) from quote 1 to
+		// quote 2
+		// if there are several relations fix it by removing all of them
+		// if there are no relations does nothing
+		XPath xpathSelector1 = DocumentHelper.createXPath("//quote[id='"
+				+ java.lang.Integer.toString(quote1)
+				+ "']/quoteRel[targetId='"
+				+ java.lang.Integer.toString(quote2) + "']");
+		List ql1 = xpathSelector1.selectNodes(doc);
+		for (Iterator i = ql1.iterator(); i.hasNext();) {
+			Element element = (Element) i.next();
+			element.detach();
+		}
+
+		// Remove all the relations (should be only one) from quote 2 to
+		// quote 1
+		// if there are several relations fix it by removing all of them
+		// if there are no relations does nothing
+		XPath xpathSelector2 = DocumentHelper.createXPath("//quote[id='"
+				+ java.lang.Integer.toString(quote2)
+				+ "']/quoteRel[targetId='"
+				+ java.lang.Integer.toString(quote1) + "']");
+		List ql2 = xpathSelector2.selectNodes(doc);
+		for (Iterator i = ql2.iterator(); i.hasNext();) {
+			Element element = (Element) i.next();
+			element.detach();
+		}
+
+		writeToXml(doc);
+	}
+
+	public void createOpinionQuoteLink(Integer opinion1, Integer quote2,
+			String comment, String type) {
+
+		Document doc = readFromXML();
+
+		// Make sure that the opinion and the quote exist
+		XPath xpathSelector1 = DocumentHelper.createXPath("//opinion[id='"
+				+ java.lang.Integer.toString(opinion1) + "']");
+		List op1 = xpathSelector1.selectNodes(doc);
+		XPath xpathSelector2 = DocumentHelper.createXPath("//quote[id='"
+				+ java.lang.Integer.toString(quote2) + "']");
+		List op2 = xpathSelector2.selectNodes(doc);
+		if (op1.size() != 1 || op2.size() != 1) {
+			return;
+		}
+
+		// chack that the relation does not exist
+		XPath xpathSelector3 = DocumentHelper.createXPath("//opinion[id='"
+				+ java.lang.Integer.toString(opinion1)
+				+ "']/quoteRel[targetId='"
+				+ java.lang.Integer.toString(quote2) + "']");
+		List list = xpathSelector3.selectNodes(doc);
+		if (list.isEmpty() == false) {
+			return;
+		}
+
+		// add the relation to opinion 1
+		Element o1 = (Element) op1.get(0);
+		Element link1 = o1.addElement("quoteRel");
+		link1.addElement("targetId").addText(
+				java.lang.Integer.toString(quote2));
+		link1.addElement("comment").addText(comment);
+		link1.addElement("type").addText(type);
+
+		// add the relation to quote 2
+		Element o2 = (Element) op2.get(0);
+		Element link2 = o2.addElement("opinionRel");
+		link2.addElement("targetId").addText(
+				java.lang.Integer.toString(opinion1));
+		link2.addElement("comment").addText(comment);
+		link2.addElement("type").addText(type);
+
+		writeToXml(doc);
+	}
+
+	public void removeOpinionQuoteLink(Integer opinion1, Integer quote2) {
+
+		// create a Document containing the discussion
+		Document doc = readFromXML();
+
+		// Remove all the relations (should be only one) from opinion 1 to
+		// quote 2
+		// if there are several relations fix it by removing all of them
+		// if there are no relations do nothing
+		XPath xpathSelector1 = DocumentHelper.createXPath("//opinion[id='"
+				+ java.lang.Integer.toString(opinion1)
+				+ "']/quoteRel[targetId='"
+				+ java.lang.Integer.toString(quote2) + "']");
+		List opl1 = xpathSelector1.selectNodes(doc);
+		for (Iterator i = opl1.iterator(); i.hasNext();) {
+			Element element = (Element) i.next();
+			element.detach();
+		}
+
+		// Remove all the relations (should be only one) from quote 2 to
+		// opinion 1
+		// if there are several relations fix it by removing all of them
+		// if there are no relations do nothing
+		XPath xpathSelector2 = DocumentHelper.createXPath("//quote[id='"
+				+ java.lang.Integer.toString(quote2)
+				+ "']/opinionRel[targetId='"
+				+ java.lang.Integer.toString(opinion1) + "']");
+		List opl2 = xpathSelector2.selectNodes(doc);
+		for (Iterator i = opl2.iterator(); i.hasNext();) {
+			Element element = (Element) i.next();
+			element.detach();
+		}
+
+		writeToXml(doc);
+	}
+	
 	public void addQuote(Quote quote, String opinion) throws CoreException {
 
 		if (!myToK.getProject().exists() || quote == null) {
