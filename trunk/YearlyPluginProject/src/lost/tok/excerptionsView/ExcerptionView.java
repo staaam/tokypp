@@ -7,8 +7,11 @@ import java.util.List;
 
 import lost.tok.Excerption;
 import lost.tok.Messages;
+import lost.tok.newDiscussionWizard.NewDiscussionWizard;
 import lost.tok.newLinkWizard.NewLinkWizard;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.jface.action.Action;
@@ -41,6 +44,7 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.DrillDownAdapter;
+import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.part.ViewPart;
 
 /**
@@ -64,6 +68,16 @@ public class ExcerptionView extends ViewPart {
 		List<Excerption> excerptions = new ArrayList<Excerption>();
 
 		String sourceFileName = new String();
+		
+		IFile sourcefile;
+
+		public IFile getSourcefile() {
+			return sourcefile;
+		}
+
+		public void setSourcefile(IFile sourcefile) {
+			this.sourcefile = sourcefile;
+		}
 
 		public void addExcerption(Excerption exp) {
 			exp.setProperty(new QualifiedName("id", "id"), nextId++); //$NON-NLS-1$ //$NON-NLS-2$
@@ -128,6 +142,10 @@ public class ExcerptionView extends ViewPart {
 
 		public String toString() {
 			return getName();
+		}
+
+		public void setName(String name) {
+			this.name = name;
 		}
 	}
 
@@ -252,8 +270,7 @@ public class ExcerptionView extends ViewPart {
 
 	private static int nextId = 0;
 
-	private Action deleteAction;
-
+	
 	private DrillDownAdapter drillDownAdapter;
 
 	/*
@@ -266,7 +283,12 @@ public class ExcerptionView extends ViewPart {
 
 	//private Action doubleClickAction;
 
-	private Action linkAction;
+	private Action linkExistingAction;
+
+	private Action linkNewAction;
+	
+	private Action deleteAction;
+
 
 	private List<FileExcerption> objects = new ArrayList<FileExcerption>();
 
@@ -279,21 +301,21 @@ public class ExcerptionView extends ViewPart {
 
 	}
 
-	public void addExcerptions(String sourceFileName, Excerption[] exp) {
+	public void addExcerptions(String sourceFileName, Excerption[] exp, IFile file) {
 		for (Iterator iter = objects.iterator(); iter.hasNext();) {
 			FileExcerption element = (FileExcerption) iter.next();
 			if (element.getSourceFileName().compareTo(sourceFileName) == 0) {
 				for (int i = 0; i < exp.length; i++) {
 					element.addExcerption(exp[i]);
 				}
-				((ViewContentProvider) viewer.getContentProvider())
-						.treeBuildAndRefresh();
+				((ViewContentProvider) viewer.getContentProvider()).treeBuildAndRefresh();
 				return;
 			}
 		}
 		// new source file
 		FileExcerption temp = new FileExcerption();
 		temp.setSourceFileName(sourceFileName);
+		temp.setSourcefile(file);
 		for (int i = 0; i < exp.length; i++) {
 			temp.addExcerption(exp[i]);
 		}
@@ -325,16 +347,14 @@ public class ExcerptionView extends ViewPart {
 	}
 
 	private void fillContextMenu(IMenuManager manager) {
-		manager.add(linkAction);
+		manager.add(linkNewAction);
+		manager.add(linkExistingAction);
 		manager.add(deleteAction);
-		manager.add(new Separator());
-		drillDownAdapter.addNavigationActions(manager);
-		// Other plug-ins can contribute there actions here
-		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 	}
 
 	private void fillLocalPullDown(IMenuManager manager) {
-		manager.add(linkAction);
+		manager.add(linkNewAction);
+		manager.add(linkExistingAction);
 	}
 
 	public IContentProvider getContentProvider() {
@@ -378,15 +398,19 @@ public class ExcerptionView extends ViewPart {
 	private void hookDoubleClickAction() {
 		viewer.addDoubleClickListener(new IDoubleClickListener() {
 			public void doubleClick(DoubleClickEvent event) {
-				linkAction.run();
+				linkExistingAction.run();
 			}
 		});
 	}
 
 	private void makeActions() {
-		linkAction = new Action() {
+		linkExistingAction = new Action() {
 			public void run() {
 
+				IFile file = getProject();
+				
+				IProject project = file.getProject();
+				
 				ITreeSelection selection = (ITreeSelection) viewer
 						.getSelection();
 				List list = selection.toList();
@@ -403,12 +427,45 @@ public class ExcerptionView extends ViewPart {
 				dialog.setTitle(Messages.getString("ExcerptionView.7")); //$NON-NLS-1$
 				dialog.updateSize();
 				dialog.create();
+				wizard.setProjectName(project.getName());
 				dialog.open();
 			}
 		};
-		linkAction.setText(Messages.getString("ExcerptionView.8")); //$NON-NLS-1$
-		linkAction.setToolTipText(Messages.getString("ExcerptionView.9")); //$NON-NLS-1$
-		linkAction.setImageDescriptor(ImageDescriptor.createFromFile(this.getClass(), "../../../../icons/main_link_ico.gif")); //$NON-NLS-1$
+		linkExistingAction.setText(Messages.getString("ExcerptionView.8")); //$NON-NLS-1$
+		linkExistingAction.setToolTipText(Messages.getString("ExcerptionView.9")); //$NON-NLS-1$
+		linkExistingAction.setImageDescriptor(ImageDescriptor.createFromFile(this.getClass(), "../../../../icons/link_ico.gif")); //$NON-NLS-1$
+		
+		linkNewAction = new Action() {
+			public void run() {
+
+				IFile file = getProject();
+								
+				IProject project = file.getProject();
+
+				NewDiscussionWizard discWizard = new NewDiscussionWizard();
+				discWizard.init(PlatformUI.getWorkbench(), (IStructuredSelection) viewer.getSelection());
+				discWizard.setProject(project);
+				Shell shell = new Shell();
+				WizardDialog discDialog = new WizardDialog(shell,discWizard);
+				discDialog.setTitle("Create New Discussion"); //$NON-NLS-1$
+				discDialog.updateSize();
+				discDialog.create();
+				discDialog.open();
+								
+				NewLinkWizard linkWizard = new NewLinkWizard();
+				linkWizard.init(PlatformUI.getWorkbench(),
+						(IStructuredSelection) viewer.getSelection());
+				WizardDialog linkDialog = new WizardDialog(shell, linkWizard);
+				linkDialog.setTitle(Messages.getString("ExcerptionView.7")); //$NON-NLS-1$
+				linkDialog.updateSize();
+				linkDialog.create();
+				linkWizard.setProjectName(project.getName());
+				linkDialog.open();
+			}
+		};
+		linkNewAction.setText("Link to a new disccussion"); //$NON-NLS-1$
+		linkNewAction.setToolTipText("Creates tink to a new disccussion"); //$NON-NLS-1$
+		linkNewAction.setImageDescriptor(ImageDescriptor.createFromFile(this.getClass(), "../../../../icons/link_new_ico.gif")); //$NON-NLS-1$
 		
 		deleteAction = new Action() {
 			public void run() {
@@ -481,6 +538,28 @@ public class ExcerptionView extends ViewPart {
 	 */
 	public void setFocus() {
 		viewer.getControl().setFocus();
+	}
+
+	/**
+	 * @return
+	 */
+	private IFile getProject() {
+		ITreeSelection selection = (ITreeSelection) viewer.getSelection();
+		List list = selection.toList();
+		IFile file = null;
+		String fileName = ((TreeObject)list.get(0)).getParent().getName();
+		
+			try {
+				for (FileExcerption object : objects) {
+					if (object.getSourceFileName().compareTo(fileName) == 0) {
+						file = object.getSourcefile();
+						break;
+					}
+				}
+			} catch (ConcurrentModificationException e) {
+				// TODO Auto-generated catch block
+			}
+		return file;
 	}
 
 }

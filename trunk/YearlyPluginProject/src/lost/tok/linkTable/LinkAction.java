@@ -38,8 +38,9 @@ public class LinkAction extends AbstractEditorAction {
 
 		IEditorInput input = ((LinkageEditor) activeEditor).getEditorInput();
 		String fileName = null;
+		FileEditorInput fileEditorInput = null;
 		if (input instanceof FileEditorInput) {
-			FileEditorInput fileEditorInput = (FileEditorInput) input;
+			fileEditorInput = (FileEditorInput) input;
 			fileName = fileEditorInput.getFile().getName();
 		}
 		Excerption[] exps = new Excerption[excerptions.size()];
@@ -48,7 +49,7 @@ public class LinkAction extends AbstractEditorAction {
 			Excerption element = (Excerption) iter.next();
 			exps[i++] = element;
 		}
-		expViewer.addExcerptions(fileName, exps);
+		expViewer.addExcerptions(fileName, exps, fileEditorInput.getFile());
 		expViewer.setFocus();
 	}
 }
