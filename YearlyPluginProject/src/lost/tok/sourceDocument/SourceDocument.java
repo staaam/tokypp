@@ -37,6 +37,10 @@ public class SourceDocument extends Document {
 	private RangeSearch r;
 	
 	private IFile outputFile;
+	
+	private boolean grandsonText;
+	private boolean firstLevel;
+	private int childNum;
 
 	/** Creates a source document from a source xml */
 	public void set(org.dom4j.Document d) {
@@ -146,14 +150,18 @@ public class SourceDocument extends Document {
 	/** Converts a SourceDocument object into an XML document */
 	public void toXML(IProject tokProj, String sourceName)
 	{
+		childNum = 0;
 		outputFile = tokProj.getFolder(ToK.SOURCES_FOLDER).getFile(sourceName);
 		
 		//create the XML and fill the name and author tags
 		createXML();
 		
+		
 		//start the iteration on the first level of chapters
-		for (Chapter c: rootChapter.children){ 
-			String currXMLPath = "/source/child"; //$NON-NLS-1$
+		for (Chapter c: rootChapter.children){
+			childNum++;
+			firstLevel = true;
+			String currXMLPath = "//source/child";  //$NON-NLS-1$
 			preorderFunc(c,currXMLPath);
 		}
 	}
@@ -199,14 +207,24 @@ public class SourceDocument extends Document {
 	 */
 	private void preorderFunc(Chapter chapter, String currXMLPath){
 		if (nextChapterIsText(chapter)){
+			if (firstLevel){
+				currXMLPath = "//source";
+				addElement(currXMLPath,"child");
+				currXMLPath+= "/child[position()="+childNum+ "]";
+			}
 			//the son of this node is a text node
 			treatTextNode(chapter,currXMLPath);
 			return;
 		}
 		else{
+			firstLevel = false;
 			//this is a regular chapter node
 			treatChapterNode(chapter,currXMLPath);
-			currXMLPath = currXMLPath + "/chapter[name='" + chapter.getName() + "']/child"; //$NON-NLS-1$ //$NON-NLS-2$
+//			if "grandsone" is not text
+			if (!grandsonText)
+				currXMLPath = currXMLPath + "/chapter[name='" + chapter.getName() + "']/child"; //$NON-NLS-1$ //$NON-NLS-2$
+			else
+				currXMLPath = currXMLPath + "/chapter[name='" + chapter.getName() + "']"; 
 			for (Chapter c: chapter.children){ 
 				preorderFunc(c,currXMLPath);
 			}
@@ -222,6 +240,21 @@ public class SourceDocument extends Document {
 		return false;
 	}
 
+	//add child element
+	private void addElement(String currXMLPath, String elmName){
+		
+		org.dom4j.Document doc = GeneralFunctions.readFromXML(outputFile);
+		XPath xpathSelector = DocumentHelper.createXPath(currXMLPath);
+		List result = xpathSelector.selectNodes(doc);
+		
+		Element chapterElm = (Element) result.get(0);
+		chapterElm.addElement(elmName);
+		GeneralFunctions.writeToXml(outputFile, doc);
+		
+		System.out.println("added element at: " + currXMLPath);
+	}
+	
+	
 	//entering chapter information to the XML
 	private void treatChapterNode(Chapter c, String currXMLPath){
 		//for each node we create the apropriate tags
@@ -231,13 +264,22 @@ public class SourceDocument extends Document {
 		List result = xpathSelector.selectNodes(doc);
 		
 		Element chapterElm = (Element) result.get(0);
-		chapterElm.addElement("name").addText(c.getName());			 //$NON-NLS-1$
-		chapterElm.addElement("child"); //$NON-NLS-1$
+		Element chapterSubElm = chapterElm.addElement("chapter");
+		chapterSubElm.addElement("name").addText(c.getName());			
+		//if "grandsone" is not text
+		if (!nextChapterIsText(c.children.getFirst())) {
+			grandsonText = false;
+			chapterSubElm.addElement("child");
+		}
+		else
+			grandsonText = true;
+		
+			
 	
 		
 		GeneralFunctions.writeToXml(outputFile, doc);
 
-		System.out.println("chapter name is: " + c.getName()); //$NON-NLS-1$
+		System.out.println("chapter name is: " + c.getName());
 	}
 	
 	//entering chapter & text information to the XML
@@ -249,14 +291,20 @@ public class SourceDocument extends Document {
 		List result = xpathSelector.selectNodes(doc);
 		
 		Element chapterElm = (Element) result.get(0);
-		Element textElm = chapterElm.addElement("text"); //$NON-NLS-1$
+		Element chapterChildElement;
+		if (!firstLevel)
+			chapterChildElement = chapterElm.addElement("child");
+		else
+			chapterChildElement = chapterElm;
+		
+		Element textElm = chapterChildElement.addElement("text");
 		//the name is of the current chapter, while the content is from the son
-		textElm.addElement("name").addText(c.getName()); //$NON-NLS-1$
-		textElm.addElement("content").addText(getTextofChild(c)); //$NON-NLS-1$
+		textElm.addElement("name").addText(c.getName());
+		textElm.addElement("content").addText(getTextofChild(c));
 		
 		GeneralFunctions.writeToXml(outputFile, doc);
 		
-		System.out.println("   text node"); //$NON-NLS-1$
+		System.out.println("   text node name: " + c.getName() );
 		
 	}
 
