@@ -97,7 +97,7 @@ public class Quote {
 	@SuppressWarnings("unchecked")
 	public Quote(Element elem){
 		
-		ID = Integer.getInteger(elem.element("id").getText());
+		ID = Integer.valueOf(elem.element("id").getText());
 		sourceFilePath = elem.element("sourceFile").getText();
 		comment = elem.element("comment").getText();
 		excerptions = new ArrayList<Excerption>();

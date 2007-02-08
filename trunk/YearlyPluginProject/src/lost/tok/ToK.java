@@ -530,10 +530,10 @@ public class ToK {
 			newLink.addElement("type").addText(linkType);
 			newLink.addElement("linkSubject").addText(subject);
 		}
-
+		Element subLink = newLink.addElement("sublink");
 		for (int i = 0; i < exp.length; i++) {
-			Element subLink = newLink.addElement("sublink").addElement(
-					"sourceFile").addText(sourceFile);
+			
+			subLink.addElement("sourceFile").addText(sourceFile);
 			subLink.add(exp[i].toXML());
 		}
 
