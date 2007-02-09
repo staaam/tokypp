@@ -17,7 +17,7 @@
             extensions="upsrc"
             icon="icons/Mark.bmp"
             id="lost.tok.sourceParser.SourceParser"
-            name="Source Parser"/>
+            name="%editor.source.parser.name"/>
       <editor
             class="lost.tok.linkTable.LinkageEditor"
             contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
@@ -25,7 +25,7 @@
             extensions="src"
             icon="icons/link_ico.gif"
             id="lost.tok.linkTable.LinkageEditor"
-            name="Link discussion to root"/>
+            name="%editor.discussion.linker"/>
       <editor
             class="lost.tok.opTable.RootDiscussions"
             contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
@@ -33,7 +33,7 @@
             extensions="src"
             icon="icons/sample.gif"
             id="lost.tok.opTable.ShowLinkedDiscussions"
-            name="Show Linked Discussions"/>
+            name="%editor.discussion.links.viewer"/>
        <editor
             class="lost.tok.disEditor.DiscussionEditor"
             contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
@@ -41,7 +41,7 @@
             extensions="dis"
             icon="icons/opinion.gif"
             id="lost.tok.disEditor.DiscussionEditor"
-            name="Discussion Editor"/>
+            name="%editor.discussion"/>
    </extension>
    <extension
          point="org.eclipse.ui.newWizards">
@@ -61,7 +61,7 @@
              class="lost.tok.sourceParser.wizards.UnparsedDocWizard"
              icon="icons/sample.gif"
              id="lost.tok.unparsedDocWizard"
-             name="Unparsed Source"
+             name="%wizard.source.parser.create"
              project="false"/>
 
        <wizard
@@ -76,7 +76,7 @@
              class="lost.tok.opTable.wizards.AddQuoteWizard"
              icon="icons/sample.gif"
              id="lost.tok.opTable.addQuoteWizard"
-             name="Add Quote"
+             name="%wizard.quote.add"
              project="false"/>
        <wizard
              category="lost.tok.Categoy"
@@ -90,7 +90,7 @@
              class="lost.tok.newDiscussionWizard.NewDiscussionWizard"
              icon="icons/sample.gif"
              id="lost.tok.newDiscussionWizard.NewDiscussionWizard"
-             name="Ceate new discussion"
+             name="%wizard.discussion.create"
              project="false"/>
    </extension>
    <extension
@@ -109,7 +109,7 @@
                style="push"/>
          <menu
                id="lost.tok.opTable.MarkPopUpMenu.Menu"
-               label="OpTable Menu"
+               label="%menu.label.opTable"
                path="additions">
             <separator name="group1"/>
          </menu>
@@ -123,7 +123,7 @@
                class="lost.tok.opTable.RootDiscussions"
                enablesFor="+"
                id="lost.tok.opTable.showLinkedDiscussionsAction"
-               label="Show Linked Discussions"/>
+               label="%action.label.discussions.show"/>
       </objectContribution>
    </extension>
    <extension
@@ -172,12 +172,12 @@
                definitionId="lost.tok.sourceParser.command.endHereAction"
                icon="icons/AddQuote.bmp"
                id="lost.tok.sourceParser.endHereAction"
-               label="End Chapter Here"
+               label="%action.label.end.chapter"
                menubarPath="edit/SourceParser"
                state="true"
                style="push"
                toolbarPath="SourceParser"
-               tooltip="Clicky here to create a new chapter ending at the current cursor location"/>
+               tooltip="%action.tooltip.end.chapter"/>
       </editorContribution>
       <editorContribution
             id="lost.tok.linkTable.Contribution"
@@ -220,7 +220,7 @@
       <command
             category="Source Parser"
             id="lost.tok.sourceParser.command.endHereAction"
-            name="End Chapter Here"/>
+            name="%command.name.end.chapter"/>
       <keyBinding
             commandId="lost.tok.sourceParser.command.endHereAction"
             contextId="org.eclipse.ui.contexts.window"
