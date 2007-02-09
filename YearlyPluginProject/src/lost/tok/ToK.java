@@ -266,11 +266,16 @@ public class ToK {
 
 	private String getRootName(String rootPath) {
 		int slashLoc = rootPath.lastIndexOf('\\');
-		if (slashLoc == -1) {
-			return rootPath;
-		} else {
-			return rootPath.substring(slashLoc + 1);
+		if (slashLoc != -1) {
+			rootPath = rootPath.substring(slashLoc + 1);
 		}
+
+		slashLoc = rootPath.lastIndexOf('/');
+		if (slashLoc != -1) {
+			rootPath = rootPath.substring(slashLoc + 1);
+		}
+		
+		return rootPath;
 	}
 
 	// Evgeni

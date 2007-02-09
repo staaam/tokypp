@@ -27,7 +27,7 @@
             id="lost.tok.linkTable.LinkageEditor"
             name="%editor.discussion.linker"/>
       <editor
-            class="lost.tok.opTable.RootDiscussions"
+            class="lost.tok.rootDiscussions.RootDiscussions"
             contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
             default="false"
             extensions="src"
@@ -113,7 +113,7 @@
             nameFilter="*.src"
             objectClass="org.eclipse.core.resources.IFile">
          <action
-               class="lost.tok.opTable.RootDiscussions"
+               class="lost.tok.rootDiscussions.RootDiscussions"
                enablesFor="+"
                id="lost.tok.opTable.showLinkedDiscussionsAction"
                label="%action.label.discussions.show"/>
