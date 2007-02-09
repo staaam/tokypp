@@ -42,7 +42,7 @@ public class AddQuoteAction extends AbstractEditorAction {
 		IFile file = fileEditorInput.getFile();
 		IProject project = file.getProject();
 
-		Quote q = new Quote(file.getName(),	excerptions);
+		Quote q = new Quote(file.getName(), excerptions);
 
 		System.out.println(q.getText());
 
@@ -55,7 +55,7 @@ public class AddQuoteAction extends AbstractEditorAction {
 			return;
 
 			// TODO: First iteration only
-			//tok.addDiscussion("Test Discussion"); //$NON-NLS-1$
+			// tok.addDiscussion("Test Discussion"); //$NON-NLS-1$
 		}
 
 		AddQuoteWizard w = new AddQuoteWizard(tok.getDiscussions(), q);

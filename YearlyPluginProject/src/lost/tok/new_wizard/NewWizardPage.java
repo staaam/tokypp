@@ -135,15 +135,17 @@ public class NewWizardPage extends WizardPage {
 		if (selection != null && selection.isEmpty() == false
 				&& selection instanceof IStructuredSelection) {
 			IStructuredSelection ssel = (IStructuredSelection) selection;
-			if (ssel.size() > 1)
+			if (ssel.size() > 1) {
 				return;
+			}
 			Object obj = ssel.getFirstElement();
 			if (obj instanceof IResource) {
 				IContainer container;
-				if (obj instanceof IContainer)
+				if (obj instanceof IContainer) {
 					container = (IContainer) obj;
-				else
+				} else {
 					container = ((IResource) obj).getParent();
+				}
 				rootText.setText(container.getFullPath().toString());
 			}
 		}
@@ -196,18 +198,19 @@ public class NewWizardPage extends WizardPage {
 	private boolean fileExists(String rootName) {
 		// checking file exists
 		File tempFile = new File(rootName);
-		if (tempFile.exists())
+		if (tempFile.exists()) {
 			return true;
-		else
+		} else {
 			return false;
+		}
 
 	}
 
 	private boolean legalRootExtension(String fileName) {
 		int dotLoc = fileName.lastIndexOf('.');
-		if (dotLoc == -1)
+		if (dotLoc == -1) {
 			return false;
-		else {
+		} else {
 			String ext = fileName.substring(dotLoc + 1);
 			if (ext.equalsIgnoreCase("src") == false) { //$NON-NLS-1$
 				return false;

@@ -7,8 +7,9 @@ public class MarkAction extends AbstractEditorAction {
 	public void run(IAction action) {
 		assert (activeEditor != null);
 		if (currentSelection == null || currentSelection.isEmpty()
-				|| currentSelection.getLength() == 0)
+				|| currentSelection.getLength() == 0) {
 			return;
+		}
 
 		((OperationTable) activeEditor).mark(currentSelection);
 	}

@@ -1,12 +1,7 @@
 package lost.tok.new_wizard;
 
-import java.io.IOException;
-
 import lost.tok.ToK;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
@@ -27,8 +22,6 @@ public class NewWizard extends Wizard implements INewWizard {
 	private NewWizardPage page;
 
 	private ISelection selection;
-
-	private ToK tok;
 
 	/**
 	 * Constructor for SampleNewWizard.
@@ -52,15 +45,9 @@ public class NewWizard extends Wizard implements INewWizard {
 	 * will create an operation and run it using wizard as execution context.
 	 */
 	public boolean performFinish() {
-		tok = new ToK(page.getProjectName(), page.getCreatorName(), page
+		new ToK(page.getProjectName(), page.getCreatorName(), page
 				.getRootName());
 		return true;
-	}
-
-	private void throwCoreException(String message) throws CoreException {
-		IStatus status = new Status(IStatus.ERROR, "Yearly_Plugin_Project",
-				IStatus.OK, message, null);
-		throw new CoreException(status);
 	}
 
 	/**

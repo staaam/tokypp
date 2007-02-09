@@ -30,7 +30,7 @@ public class AddQuoteWizardPage extends WizardPage {
 		setTitle("Add quote");
 
 		this.disussions = disussions;
-		this.quoteText = text;
+		quoteText = text;
 	}
 
 	public void createAddQuoteWizard(List<Discussion> discussions,

@@ -29,8 +29,9 @@ import org.eclipse.swt.widgets.TreeItem;
 
 /**
  * A page in the creation of relation wizard
+ * 
  * @author Team Lost
- *
+ * 
  */
 public class NewRelationWizardPage extends WizardPage {
 
@@ -76,8 +77,8 @@ public class NewRelationWizardPage extends WizardPage {
 		label.setText(Messages.getString("NewRelationWizardPage.2")); //$NON-NLS-1$
 
 		relType = new Combo(container, SWT.READ_ONLY | SWT.DROP_DOWN);
-		for (int i = 0; i < Discussion.relTypes.length; i++) {
-			relType.add(Discussion.relTypes[i]);
+		for (String element : Discussion.relTypes) {
+			relType.add(element);
 		}
 
 		relType.addSelectionListener(new SelectionListener() {
@@ -157,13 +158,13 @@ public class NewRelationWizardPage extends WizardPage {
 			Quote[] quotes = null;
 			quotes = disc.getQuotes(opinionNames[i]);
 
-			for (int j = 0; j < quotes.length; j++) {
+			for (Quote element : quotes) {
 				TreeItem leftQuote = new TreeItem(leftOpinion, 0);
 				TreeItem rightQuote = new TreeItem(rightOpinion, 0);
-				leftQuote.setText(quotes[j].getPrefix(40,projectName));
-				leftQuote.setData(quotes[j].getID());
-				rightQuote.setText(quotes[j].getPrefix(40,projectName));
-				rightQuote.setData(quotes[j].getID());
+				leftQuote.setText(element.getPrefix(40, projectName));
+				leftQuote.setData(element.getID());
+				rightQuote.setText(element.getPrefix(40, projectName));
+				rightQuote.setData(element.getID());
 			}
 		}
 		leftObjects.addSelectionListener(new SelectionListener() {
@@ -248,8 +249,9 @@ public class NewRelationWizardPage extends WizardPage {
 		if (selection != null && selection.isEmpty() == false
 				&& selection instanceof IStructuredSelection) {
 			IStructuredSelection ssel = (IStructuredSelection) selection;
-			if (ssel.size() > 1)
+			if (ssel.size() > 1) {
 				return;
+			}
 			Object obj = ssel.getFirstElement();
 			if (obj instanceof IResource) {
 				IResource resource = (IResource) obj;

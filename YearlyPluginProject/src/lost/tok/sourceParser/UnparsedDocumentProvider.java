@@ -5,18 +5,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import lost.tok.Messages;
 import lost.tok.sourceDocument.SourceDocument;
 
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.ui.editors.text.FileDocumentProvider;
 
 /**
  * This was supposed to be the document provider for unparsed document.
- * Currnetly however, it is unused.
- * This was left here for the third iteration, perhaps
+ * Currnetly however, it is unused. This was left here for the third iteration,
+ * perhaps
+ * 
  * @author Shay
  */
 public class UnparsedDocumentProvider extends FileDocumentProvider {
@@ -29,11 +28,12 @@ public class UnparsedDocumentProvider extends FileDocumentProvider {
 
 		try {
 			BufferedReader br = null;
-			if (encoding == null)
+			if (encoding == null) {
 				br = new BufferedReader(new InputStreamReader(contentStream));
-			else
+			} else {
 				br = new BufferedReader(new InputStreamReader(contentStream,
 						encoding));
+			}
 
 			int c = br.read();
 			while (c != -1) {

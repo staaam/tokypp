@@ -34,7 +34,7 @@ import org.eclipse.ui.part.FileEditorInput;
 
 public class DiscussionEditor extends TextEditor {
 
-	//	Tree disTree;
+	// Tree disTree;
 
 	private static final String DISCUSSION = "discussion";
 
@@ -45,34 +45,36 @@ public class DiscussionEditor extends TextEditor {
 	public static final String EDITOR_ID = "lost.tok.disEditor.DiscussionEditor";
 
 	private Discussion discussion = null;
+
 	private TreeItem rootItem = null;
 
 	public void createPartControl(Composite parent) {
 		final Composite par = parent;
 		final Tree disTree = new Tree(parent, SWT.BORDER);
 
-		//************************ DELETE QUOTES AND OPINIONS ***********************************
+		// ************************ DELETE QUOTES AND OPINIONS
+		// ***********************************
 		disTree.addKeyListener(new KeyListener() {
 			public void keyPressed(KeyEvent e) {
 				if (e.keyCode == SWT.DEL) {
-					//deletion of descussion or default opinion is NOT allowed
-					if (disTree.getSelection()[0].getData()
-							.equals(DISCUSSION)
+					// deletion of descussion or default opinion is NOT allowed
+					if (disTree.getSelection()[0].getData().equals(DISCUSSION)
 							|| (disTree.getSelection()[0].getData().equals(
 									OPINION) && disTree.getSelection()[0]
-									.getText().equalsIgnoreCase(Discussion.DEFAULT_OPINION))) {
+									.getText().equalsIgnoreCase(
+											Discussion.DEFAULT_OPINION))) {
 						return;
 					}
 
-					//deleting an opinion
+					// deleting an opinion
 					if (disTree.getSelection()[0].getData().equals(OPINION)) {
 						TreeItem defOp = null;
 						TreeItem itmArr[] = disTree.getItem(0).getItems();
 
-						for (int i = 0; i < itmArr.length; i++) {
-							if (itmArr[i].getText().equalsIgnoreCase(
+						for (TreeItem element : itmArr) {
+							if (element.getText().equalsIgnoreCase(
 									Discussion.DEFAULT_OPINION)) {
-								defOp = itmArr[i];
+								defOp = element;
 							}
 						}
 
@@ -109,58 +111,62 @@ public class DiscussionEditor extends TextEditor {
 			public void keyReleased(KeyEvent e) {
 			}
 		});
-		//*********************************************************************************************
+		// *********************************************************************************************
 
 		disTree.addMouseListener(new MouseListener() {
 
 			public void mouseDoubleClick(MouseEvent e) {
-				if (e.widget == null)
+				if (e.widget == null) {
 					return;
-				
+				}
+
 				Tree tree = (Tree) e.widget;
 				TreeItem treeItem = tree.getSelection()[0];
-				if (treeItem.getData(QUOTE) == null)
+				if (treeItem.getData(QUOTE) == null) {
 					return;
+				}
 				if (treeItem.getData(QUOTE) instanceof Quote) {
 					Quote quote = (Quote) treeItem.getData(QUOTE);
-					
+
 					IWorkbenchWindow ww = getSite().getWorkbenchWindow();
 					String editorId = OperationTable.EDITOR_ID;
-					
+
 					FileEditorInput fileEditorInput = (FileEditorInput) getEditorInput();
-					ToK tok = ToK.getProjectToK(fileEditorInput.getFile().getProject());
-					
+					ToK tok = ToK.getProjectToK(fileEditorInput.getFile()
+							.getProject());
+
 					IFile source = tok.getSource(quote.getSourceFilePath());
 
 					try {
-						ww.getActivePage().openEditor(new FileEditorInput(source),
-								editorId);
+						ww.getActivePage().openEditor(
+								new FileEditorInput(source), editorId);
 					} catch (PartInitException e1) {
-						//e1.printStackTrace();
+						// e1.printStackTrace();
 					}
-					}
-				
+				}
+
 			}
 
 			public void mouseDown(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			public void mouseUp(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 		});
-		
-		//***************** DRAG AND DROP ******************************************************************
+
+		// ***************** DRAG AND DROP
+		// ******************************************************************
 		Transfer[] types = new Transfer[] { TextTransfer.getInstance() };
 		int operations = DND.DROP_MOVE | DND.DROP_COPY | DND.DROP_LINK;
 
 		final DragSource source = new DragSource(disTree, operations);
 		source.setTransfer(types);
-		
+
 		final TreeItem[] dragSourceItem = new TreeItem[1];
 
 		source.addDragListener(new DragSourceListener() {
@@ -181,7 +187,7 @@ public class DiscussionEditor extends TextEditor {
 
 			public void dragFinished(DragSourceEvent event) {
 				if (event.detail == DND.DROP_MOVE) {
-					//RemoveQuoteFromOpinion(dragSourceItem[0]);
+					// RemoveQuoteFromOpinion(dragSourceItem[0]);
 					dragSourceItem[0].dispose();
 				}
 				dragSourceItem[0] = null;
@@ -210,8 +216,7 @@ public class DiscussionEditor extends TextEditor {
 
 			public void drop(DropTargetEvent event) {
 				if (((TreeItem) event.item).getData().equals(QUOTE)
-						|| ((TreeItem) event.item).getData().equals(
-								DISCUSSION)) {
+						|| ((TreeItem) event.item).getData().equals(DISCUSSION)) {
 					event.detail = DND.DROP_NONE;
 					return;
 				}
@@ -219,8 +224,8 @@ public class DiscussionEditor extends TextEditor {
 					event.detail = DND.DROP_NONE;
 					return;
 				}
-				
-				Quote quote = (Quote) dragSourceItem[0].getData(QUOTE); 
+
+				Quote quote = (Quote) dragSourceItem[0].getData(QUOTE);
 				if (event.item == null) {
 					TreeItem item = new TreeItem(disTree, SWT.NONE);
 					item.setText("basa");
@@ -241,7 +246,8 @@ public class DiscussionEditor extends TextEditor {
 						}
 						if (pt.y < bounds.y + bounds.height / 3) {
 							if (((String) parent.getData()).equals(OPINION)) {
-								TreeItem newItem = new TreeItem(parent, SWT.NONE, index);
+								TreeItem newItem = new TreeItem(parent,
+										SWT.NONE, index);
 								setTreeQuote(quote, newItem);
 								moveQuoteToOpinion(newItem);
 								return;
@@ -249,7 +255,8 @@ public class DiscussionEditor extends TextEditor {
 							event.detail = DND.DROP_NONE;
 						} else if (pt.y > bounds.y + 2 * bounds.height / 3) {
 							if (((String) parent.getData()).equals(OPINION)) {
-								TreeItem newItem = new TreeItem(parent, SWT.NONE, index + 1);
+								TreeItem newItem = new TreeItem(parent,
+										SWT.NONE, index + 1);
 								setTreeQuote(quote, newItem);
 								moveQuoteToOpinion(newItem);
 								return;
@@ -304,9 +311,10 @@ public class DiscussionEditor extends TextEditor {
 				}
 			}
 		});
-		//**************************************************************************************************
+		// **************************************************************************************************
 
-		//*************************** FROM XML TO TREE ****************************************************
+		// *************************** FROM XML TO TREE
+		// ****************************************************
 
 		discussion = getDiscussion();
 
@@ -315,9 +323,10 @@ public class DiscussionEditor extends TextEditor {
 		rootItem.setText(discussion.getDiscName());
 		rootItem.setData(DISCUSSION);
 
-		//Image imageDisc = new Image(null, new FileInputStream("C:/discussion.gif"));
+		// Image imageDisc = new Image(null, new
+		// FileInputStream("C:/discussion.gif"));
 
-		//rootItem.setImage(imageDisc);
+		// rootItem.setImage(imageDisc);
 
 		for (Opinion opinion : discussion.getOpinions()) {
 			TreeItem opinionItem = addTreeOpinion(rootItem, opinion);
@@ -327,12 +336,13 @@ public class DiscussionEditor extends TextEditor {
 			}
 		}
 
-		//*************************************************************************************************
+		// *************************************************************************************************
 	}
 
 	private TreeItem addTreeOpinion(TreeItem treeItem, Opinion opinion) {
 		TreeItem opinionItem = new TreeItem(treeItem, SWT.NONE);
-		//Image imageOpin = new Image(null, new FileInputStream("C:/opinion.gif"));				
+		// Image imageOpin = new Image(null, new
+		// FileInputStream("C:/opinion.gif"));
 
 		setTreeOpinion(opinion, opinionItem);
 		return opinionItem;
@@ -342,22 +352,23 @@ public class DiscussionEditor extends TextEditor {
 		opinionItem.setText(opinion.getName());
 		opinionItem.setData(OPINION, opinion);
 		opinionItem.setData(OPINION);
-		//opinionItem.setImage(imageOpin);
+		// opinionItem.setImage(imageOpin);
 	}
 
 	private TreeItem addTreeQuote(TreeItem treeItem, Quote quote) {
 		TreeItem quoteItem = new TreeItem(treeItem, SWT.NONE);
-		//Image imageQuote = new Image(null, new FileInputStream("C:/quote.gif"));
+		// Image imageQuote = new Image(null, new
+		// FileInputStream("C:/quote.gif"));
 
 		setTreeQuote(quote, quoteItem);
 		return quoteItem;
 	}
-	
+
 	private void setTreeQuote(Quote quote, TreeItem quoteItem) {
 		quoteItem.setText(quote.getText());
 		quoteItem.setData(QUOTE, quote);
 		quoteItem.setData(QUOTE);
-		//quoteItem.setImage(imageQuote);
+		// quoteItem.setImage(imageQuote);
 	}
 
 	public void moveQuoteToDefault(TreeItem itemToMove) {
@@ -387,7 +398,7 @@ public class DiscussionEditor extends TextEditor {
 		}
 
 		if (!(super.getEditorInput() instanceof FileEditorInput)) {
-			//TODO: error message
+			// TODO: error message
 			return null;
 		}
 
@@ -417,10 +428,11 @@ public class DiscussionEditor extends TextEditor {
 
 	public void addOpinion(String opinionName) {
 		discussion.addOpinion(opinionName);
-		addTreeOpinion(rootItem, new Opinion(opinionName, discussion.getOpinionsId(opinionName)));
+		addTreeOpinion(rootItem, new Opinion(opinionName, discussion
+				.getOpinionsId(opinionName)));
 	}
 
-	//*************************************************************************************************
+	// *************************************************************************************************
 	public void dispose() {
 		super.dispose();
 	}

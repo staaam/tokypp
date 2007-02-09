@@ -17,8 +17,9 @@ import org.eclipse.ui.IWorkbenchWizard;
 
 /**
  * A wizard that creates link between discussion and roots
+ * 
  * @author Team Lost
- *
+ * 
  */
 
 public class NewLinkWizard extends Wizard implements INewWizard {
@@ -69,9 +70,9 @@ public class NewLinkWizard extends Wizard implements INewWizard {
 		String[] roots = page.getSourceFiles();
 		// TODO
 		try {
-			for (int i = 0; i < roots.length; i++) {
+			for (String element : roots) {
 				tok.linkDiscussionRoot(tok.getDiscussion(page.getDiscussion()),
-						roots[i], page.getExcerptions(roots[i]), page
+						element, page.getExcerptions(element), page
 								.getSubject(), page.getLinkType());
 			}
 
@@ -86,7 +87,7 @@ public class NewLinkWizard extends Wizard implements INewWizard {
 		page.setProjectName(projectName);
 	}
 
-	@SuppressWarnings("unused")//$NON-NLS-1$
+	@SuppressWarnings("unused")
 	private void throwCoreException(String message) throws CoreException {
 		IStatus status = new Status(IStatus.ERROR, "Yearly_Plugin_Project", //$NON-NLS-1$
 				IStatus.OK, message, null);

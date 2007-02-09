@@ -33,7 +33,6 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.Status;
 
-
 /**
  * @author Team LOST
  * 
@@ -50,15 +49,23 @@ public class ToK {
 
 	private List<Discussion> discussions = null;
 
-	public final static QualifiedName tokQName = new QualifiedName(null, "ToK Object");
-	public final static QualifiedName creatorQName = new QualifiedName("lost.tok", "Creator");
-	public final static QualifiedName isRootQName = new QualifiedName("lost.tok","isRoot");
+	public final static QualifiedName tokQName = new QualifiedName(null,
+			"ToK Object");
+
+	public final static QualifiedName creatorQName = new QualifiedName(
+			"lost.tok", "Creator");
+
+	public final static QualifiedName isRootQName = new QualifiedName(
+			"lost.tok", "isRoot");
 
 	public static final int MIN_AUTHOR_GROUP = 1;
+
 	public static final int MAX_AUTHOR_GROUP = 5;
-	
+
 	static public final String SOURCES_FOLDER = "Sources";
+
 	static public final String DISCUSSION_FOLDER = "Discussions";
+
 	static public final String UNPARSED_SOURCES_FOLDER = "UnparsedSources";
 
 	public ToK(IProject project) {
@@ -74,12 +81,13 @@ public class ToK {
 	}
 
 	public ToK(String projectName, String creator, String root) {
-		if (!checkProjectName(projectName))
+		if (!checkProjectName(projectName)) {
 			return;
+		}
 
-		createToKFromProject(
-				ResourcesPlugin.getWorkspace().getRoot().getProject(projectName));
-		
+		createToKFromProject(ResourcesPlugin.getWorkspace().getRoot()
+				.getProject(projectName));
+
 		try {
 			treeOfKnowledgeProj.setPersistentProperty(creatorQName, creator);
 		} catch (CoreException e) {
@@ -91,7 +99,7 @@ public class ToK {
 
 	private void createToKFromProject(IProject project) {
 		System.out.println("createToKFromProject");
-		
+
 		treeOfKnowledgeProj = project;
 		progMonitor = new NullProgressMonitor();
 
@@ -116,13 +124,13 @@ public class ToK {
 		}
 
 		ToKNature.setNature(treeOfKnowledgeProj);
-		
+
 		try {
 			createToKLibraries();
 		} catch (CoreException e) {
 			e.printStackTrace();
 		}
-		
+
 		createToKFiles();
 	}
 
@@ -130,22 +138,25 @@ public class ToK {
 		if (projectName.replace('\\', '/').indexOf('/', 1) > 0) {
 			// File name must be valid
 			return false;
-		} else
+		} else {
 			return true;
+		}
 
 	}
 
 	public boolean createToKLibraries() throws CoreException {
 		srcFolder = treeOfKnowledgeProj.getFolder(SOURCES_FOLDER);
 		discFolder = treeOfKnowledgeProj.getFolder(DISCUSSION_FOLDER);
-		unparsedSrcFolder = treeOfKnowledgeProj.getFolder(UNPARSED_SOURCES_FOLDER);
+		unparsedSrcFolder = treeOfKnowledgeProj
+				.getFolder(UNPARSED_SOURCES_FOLDER);
 
-		if (!srcFolder.exists())
+		if (!srcFolder.exists()) {
 			srcFolder.create(IResource.NONE, true, progMonitor);
-		if (!discFolder.exists())
+		}
+		if (!discFolder.exists()) {
 			discFolder.create(IResource.NONE, true, progMonitor);
-		if (!unparsedSrcFolder.exists())
-		{
+		}
+		if (!unparsedSrcFolder.exists()) {
 			unparsedSrcFolder.create(IResource.NONE, true, progMonitor);
 			ResourceAttributes r = new ResourceAttributes();
 			r.setHidden(true);
@@ -159,7 +170,7 @@ public class ToK {
 		// creating the files
 
 		createAuthorsFile();
-		
+
 		createLinksFile();
 
 		return true;
@@ -193,13 +204,16 @@ public class ToK {
 
 		// Create the Skeleton of the authors file
 		Element authElm = authDoc.addElement("authors");
-		
+
 		for (int i = MIN_AUTHOR_GROUP; i <= MAX_AUTHOR_GROUP; i++) {
 			Element inAuthElm = authElm.addElement("authorsGroup");
 			inAuthElm.addElement("id").addText(String.valueOf(i));
-			inAuthElm.addElement("name").addText("author group " + String.valueOf(i));
-			inAuthElm.addElement("nextGroupId").addText(String.valueOf(nextOf(i)));
-			inAuthElm.addElement("prevGroupId").addText(String.valueOf(prevOf(i)));
+			inAuthElm.addElement("name").addText(
+					"author group " + String.valueOf(i));
+			inAuthElm.addElement("nextGroupId").addText(
+					String.valueOf(nextOf(i)));
+			inAuthElm.addElement("prevGroupId").addText(
+					String.valueOf(prevOf(i)));
 		}
 		return authDoc;
 	}
@@ -209,20 +223,19 @@ public class ToK {
 		return (i > MAX_AUTHOR_GROUP) ? MIN_AUTHOR_GROUP : i;
 	}
 
-
 	private int prevOf(int i) {
 		i = i - 1;
 		return (i < MIN_AUTHOR_GROUP) ? MAX_AUTHOR_GROUP : i;
 	}
-	
+
 	public boolean setTokRoot(String rootPath) {
 		// getting the root name
 		String rootName = getRootName(rootPath);
 
 		// This should add the new root file to sources folder
 		try {
-			srcFolder.getFile(rootName).create(
-					new FileInputStream(rootPath), true, progMonitor);
+			srcFolder.getFile(rootName).create(new FileInputStream(rootPath),
+					true, progMonitor);
 		} catch (FileNotFoundException e) {
 			System.out.println("file is none existant or extention not src");
 			return false;
@@ -232,17 +245,17 @@ public class ToK {
 
 		// not relevant, since there may be several sources
 		// setting the root atribute
-//		QualifiedName name = new QualifiedName("TOK Root File", "Is Root");
-//		rootFile.setPersistentProperty(name, "true");
+		// QualifiedName name = new QualifiedName("TOK Root File", "Is Root");
+		// rootFile.setPersistentProperty(name, "true");
 
 		return true;
 	}
 
 	private boolean isExtentionLegel(String rootPath, String ext) {
 		int dotLoc = rootPath.lastIndexOf('.');
-		if (dotLoc == -1)
+		if (dotLoc == -1) {
 			return false;
-		else {
+		} else {
 			String extension = rootPath.substring(dotLoc + 1);
 			if (extension.equalsIgnoreCase(ext) == false) {
 				return false;
@@ -253,10 +266,11 @@ public class ToK {
 
 	private String getRootName(String rootPath) {
 		int slashLoc = rootPath.lastIndexOf('\\');
-		if (slashLoc == -1)
+		if (slashLoc == -1) {
 			return rootPath;
-		else
+		} else {
 			return rootPath.substring(slashLoc + 1);
+		}
 	}
 
 	// Evgeni
@@ -295,7 +309,7 @@ public class ToK {
 				// This should add the new source file to sources folder
 				IFile sourceFile = srcFolder.getFile(fileNameVarified);
 				FileInputStream fins = new FileInputStream(filePathVarified);
-				sourceFile.create(fins, true, this.progMonitor);
+				sourceFile.create(fins, true, progMonitor);
 				refresh();
 				// System.out.println("Source file was added to ToK ");
 			} catch (Exception e) {
@@ -315,7 +329,8 @@ public class ToK {
 
 		try {
 			// Open source file and get author name
-			Document sourceDocumentObject = GeneralFunctions.readFromXML(filePathVarified);
+			Document sourceDocumentObject = GeneralFunctions
+					.readFromXML(filePathVarified);
 			sourceAuthor.name = sourceDocumentObject.getRootElement().element(
 					"author").getText();
 			// System.out.println("Source's author is " + sourceAuthor.name);
@@ -327,7 +342,8 @@ public class ToK {
 
 		try {
 			// Open authors XML file
-			Document authorsDocumentObject = GeneralFunctions.readFromXML(getAuthorFile());
+			Document authorsDocumentObject = GeneralFunctions
+					.readFromXML(getAuthorFile());
 
 			Iterator groupsIterator = authorsDocumentObject.getRootElement()
 					.elementIterator("authorsGroup");
@@ -358,8 +374,8 @@ public class ToK {
 				sourceAuthor.rank = authorDefaultRank;
 				AddAuthorToFile(sourceAuthor);
 			}
-			//RankChangeByUser(sourceAuthor);
-			 System.out.println("Author's rank changed");
+			// RankChangeByUser(sourceAuthor);
+			System.out.println("Author's rank changed");
 		} catch (Exception e) {
 			System.out.println("FAILED to open Aouthors file \n"
 					+ e.getMessage());
@@ -370,7 +386,8 @@ public class ToK {
 	// Evgeni
 	private void AddAuthorToFile(Author author) {
 		try {
-			Document authorsDocumentObject = GeneralFunctions.readFromXML(getAuthorFile());
+			Document authorsDocumentObject = GeneralFunctions
+					.readFromXML(getAuthorFile());
 
 			Iterator groupsIterator = authorsDocumentObject.getRootElement()
 					.elementIterator("authorsGroup");
@@ -380,7 +397,8 @@ public class ToK {
 				if (Integer.parseInt(element.element("id").getTextTrim()) == author.rank) {
 					Element newAuthorElem = element.addElement("author");
 					newAuthorElem.addText(author.name);
-					GeneralFunctions.writeToXml(getAuthorFile(), authorsDocumentObject);
+					GeneralFunctions.writeToXml(getAuthorFile(),
+							authorsDocumentObject);
 				}
 			}
 			System.out.println("Added new author tag to " + author.rank
@@ -394,7 +412,8 @@ public class ToK {
 	// Evgeni
 	private void RemoveAuthorFromFile(Author author) {
 		try {
-			Document authorsDocumentObject = GeneralFunctions.readFromXML(getAuthorFile());
+			Document authorsDocumentObject = GeneralFunctions
+					.readFromXML(getAuthorFile());
 			Iterator groupsIterator = authorsDocumentObject.getRootElement()
 					.elementIterator("authorsGroup");
 
@@ -406,7 +425,8 @@ public class ToK {
 					Element authorElement = (Element) authorsIterator.next();
 					if (authorElement.getTextTrim().equals(author.name)) {
 						groupElement.remove(authorElement);
-						GeneralFunctions.writeToXml(getAuthorFile(), authorsDocumentObject);
+						GeneralFunctions.writeToXml(getAuthorFile(),
+								authorsDocumentObject);
 						break;
 					}
 				}
@@ -422,7 +442,8 @@ public class ToK {
 	// Evgeni
 	private void ChangeAuthorRank(Author author, int rank) {
 		try {
-			Document authorsDocumentObject = GeneralFunctions.readFromXML(getAuthorFile());
+			Document authorsDocumentObject = GeneralFunctions
+					.readFromXML(getAuthorFile());
 			Iterator groupsIterator = authorsDocumentObject.getRootElement()
 					.elementIterator("authorsGroup");
 			int authorDefaultRank = 3;
@@ -502,8 +523,8 @@ public class ToK {
 	 *            the name of the discussion to be created
 	 */
 	public void addDiscussion(String discName) {
-		getDiscussions().add(new Discussion(this, discName,
-				getProjectCreator()));
+		getDiscussions().add(
+				new Discussion(this, discName, getProjectCreator()));
 		refresh();
 	}
 
@@ -523,19 +544,20 @@ public class ToK {
 	 * @param disc
 	 *            an object representing an existing discussion
 	 */
-	public void linkDiscussionRoot(Discussion disc, String sourceFile, Excerption[] exp, String subject, String linkType) {
+	public void linkDiscussionRoot(Discussion disc, String sourceFile,
+			Excerption[] exp, String subject, String linkType) {
 
 		String discName = disc.getDiscName();
 
 		// Open the Links file
 		Document doc = GeneralFunctions.readFromXML(getLinkFile());
-		
-		Node link = doc.selectSingleNode("//link/discussionFile[text()=\"" + discName + ".dis\"]");
+
+		Node link = doc.selectSingleNode("//link/discussionFile[text()=\""
+				+ discName + ".dis\"]");
 		Element newLink = null;
-		if (link != null){ 
-			newLink  = link.getParent();
-		}
-		else{
+		if (link != null) {
+			newLink = link.getParent();
+		} else {
 
 			Element links = doc.getRootElement();
 			newLink = links.addElement("link");
@@ -544,17 +566,15 @@ public class ToK {
 			newLink.addElement("linkSubject").addText(subject);
 		}
 
-		
-
 		Element subLink = newLink.addElement("sublink");
 
-		for (int i = 0; i < exp.length; i++) {
+		for (Excerption element : exp) {
 
 			subLink.addElement("sourceFile").addText(sourceFile);
-			subLink.add(exp[i].toXML());
+			subLink.add(element.toXML());
 
 		}
-		
+
 		GeneralFunctions.writeToXml(getLinkFile(), doc);
 	}
 
@@ -565,11 +585,13 @@ public class ToK {
 	 * @param discName
 	 *            the name of the discussion
 	 */
-	public void linkNewDiscussionRoot(String discName, String sourceName, Excerption[] exp, String subject, String linkType) {
+	public void linkNewDiscussionRoot(String discName, String sourceName,
+			Excerption[] exp, String subject, String linkType) {
 
 		addDiscussion(discName);
 		try {
-			linkDiscussionRoot(getDiscussion(discName),sourceName, exp, subject, linkType);
+			linkDiscussionRoot(getDiscussion(discName), sourceName, exp,
+					subject, linkType);
 		} catch (CoreException e) {
 			e.printStackTrace();
 		}
@@ -594,7 +616,7 @@ public class ToK {
 			return treeOfKnowledgeProj.getPersistentProperty(creatorQName);
 		} catch (CoreException e) {
 			e.printStackTrace();
-			return null; 
+			return null;
 		}
 	}
 
@@ -638,14 +660,15 @@ public class ToK {
 
 	private void loadDiscussions() {
 		discussions = new LinkedList<Discussion>();
-		
+
 		try {
 			IResource[] files = getDiscussionFolder().members();
 			for (IResource resource : files) {
 				if (resource instanceof IFile) {
 					IFile file = (IFile) resource;
 					if (isExtentionLegel(file.getName(), "dis")) {
-						discussions.add(new Discussion(this, file.getLocation().toOSString()));
+						discussions.add(new Discussion(this, file.getLocation()
+								.toOSString()));
 					}
 				}
 			}
@@ -653,7 +676,7 @@ public class ToK {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	public IFile getSource(String sourceFilePath) {

@@ -35,8 +35,9 @@ import org.eclipse.ui.PlatformUI;
 
 /**
  * A page in the link root - discussion wizard
+ * 
  * @author Team Lost
- *
+ * 
  */
 public class NewLinkWizardPage extends WizardPage {
 
@@ -54,7 +55,7 @@ public class NewLinkWizardPage extends WizardPage {
 
 	private String projectName;
 
-	@SuppressWarnings("unused")//$NON-NLS-1$
+	@SuppressWarnings("unused")
 	private ISelection selection;
 
 	private Text subject;
@@ -199,9 +200,9 @@ public class NewLinkWizardPage extends WizardPage {
 		excerptions = new Tree(container, SWT.BORDER | SWT.MULTI);
 		excerptions.setSize(600, 300);
 
-		for (int i = 0; i < files.length; i++) {
+		for (TreeItem element : files) {
 			TreeItem file = new TreeItem(excerptions, 0);
-			file.setText(files[i].getText());
+			file.setText(element.getText());
 		}
 		gd = new GridData(GridData.FILL_BOTH);
 		excerptions.addSelectionListener(new SelectionListener() {
@@ -227,7 +228,7 @@ public class NewLinkWizardPage extends WizardPage {
 
 	/**
 	 * Ensures that all fields are set
-	 *
+	 * 
 	 */
 	private void dialogChanged() {
 		if (projectCombo.getText() == "") { //$NON-NLS-1$
@@ -303,8 +304,9 @@ public class NewLinkWizardPage extends WizardPage {
 		if (selection != null && selection.isEmpty() == false
 				&& selection instanceof IStructuredSelection) {
 			IStructuredSelection ssel = (IStructuredSelection) selection;
-			if (ssel.size() > 1)
+			if (ssel.size() > 1) {
 				return;
+			}
 			Object obj = ssel.getFirstElement();
 			if (obj instanceof IResource) {
 				IResource resource = (IResource) obj;
@@ -355,8 +357,10 @@ public class NewLinkWizardPage extends WizardPage {
 		discussionCombo.setItems(discs);
 		discussionCombo.redraw();
 	}
+
 	/**
 	 * Sets the project in which context the linkage occurs
+	 * 
 	 * @param projectName
 	 */
 	public void setProjectName(String projectName) {

@@ -4,13 +4,14 @@ import org.eclipse.jface.wizard.Wizard;
 
 public class AddOpinionWizard extends Wizard {
 	private AddOpinionWizardPage page;
+
 	private DiscussionEditor discussionEditor;
 
 	public AddOpinionWizard(DiscussionEditor discussionEditor) {
 		super();
-		
+
 		this.discussionEditor = discussionEditor;
-		
+
 		setWindowTitle("Add Opinion");
 
 		page = new AddOpinionWizardPage(discussionEditor);

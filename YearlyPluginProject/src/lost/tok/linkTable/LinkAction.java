@@ -1,6 +1,5 @@
 package lost.tok.linkTable;
 
-import java.util.Iterator;
 import java.util.List;
 
 import lost.tok.Excerption;
@@ -15,8 +14,9 @@ import org.eclipse.ui.part.FileEditorInput;
 
 /**
  * An action that sends the selected excerptions to the Excerptions Viewer
+ * 
  * @author Team Lost
- *
+ * 
  */
 public class LinkAction extends AbstractEditorAction {
 
@@ -35,8 +35,9 @@ public class LinkAction extends AbstractEditorAction {
 
 		assert (activeEditor != null);
 		if (currentSelection == null || currentSelection.isEmpty()
-				|| currentSelection.getLength() == 0)
+				|| currentSelection.getLength() == 0) {
 			return;
+		}
 
 		List<Excerption> excerptions = ((LinkageEditor) activeEditor)
 				.getMarked();
@@ -50,8 +51,8 @@ public class LinkAction extends AbstractEditorAction {
 		}
 		Excerption[] exps = new Excerption[excerptions.size()];
 		int i = 0;
-		for (Iterator iter = excerptions.iterator(); iter.hasNext();) {
-			Excerption element = (Excerption) iter.next();
+		for (Object element0 : excerptions) {
+			Excerption element = (Excerption) element0;
 			exps[i++] = element;
 		}
 		expViewer.addExcerptions(fileName, exps, fileEditorInput.getFile());

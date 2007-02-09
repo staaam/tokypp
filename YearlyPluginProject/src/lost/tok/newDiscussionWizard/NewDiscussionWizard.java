@@ -61,8 +61,9 @@ public class NewDiscussionWizard extends Wizard implements INewWizard {
 			if (selection != null && selection.isEmpty() == false
 					&& selection instanceof IStructuredSelection) {
 				IStructuredSelection ssel = (IStructuredSelection) selection;
-				if (ssel.size() > 1)
+				if (ssel.size() > 1) {
 					return null;
+				}
 				Object obj = ssel.getFirstElement();
 				if (obj instanceof IResource) {
 					IResource resource = (IResource) obj;

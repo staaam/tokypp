@@ -14,16 +14,17 @@ import org.eclipse.swt.widgets.Text;
 
 public class AddOpinionWizardPage extends WizardPage implements ModifyListener {
 	DiscussionEditor discussionEditor;
-	
+
 	HashSet<String> opinions = new HashSet<String>();
 
 	public AddOpinionWizardPage(DiscussionEditor discussionEditor) {
 		super("Add Opinion");
 		this.discussionEditor = discussionEditor;
-		
+
 		setTitle("Add Opinion");
-		
-		for (String opinion : discussionEditor.getDiscussion().getOpinionNames()) {
+
+		for (String opinion : discussionEditor.getDiscussion()
+				.getOpinionNames()) {
 			opinions.add(opinion);
 		}
 	}
@@ -49,25 +50,23 @@ public class AddOpinionWizardPage extends WizardPage implements ModifyListener {
 		new Label(composite, SWT.NONE).setText("Opinion");
 		opinionArea = new Text(composite, SWT.SINGLE | SWT.BORDER);
 		opinionArea.setLayoutData(gridData);
-		
+
 		opinionArea.addModifyListener(this);
-		
+
 		dialogChanged();
 		setControl(parent);
 	}
-	
+
 	public void modifyText(ModifyEvent e) {
 		dialogChanged();
 	}
-	
+
 	private void dialogChanged() {
 		if (opinionArea.getText().length() == 0) {
 			updateStatus("Opinion name should not be empty");
-		}
-		else if (opinions.contains(opinionArea.getText())) {
+		} else if (opinions.contains(opinionArea.getText())) {
 			updateStatus("Opinion already exists");
-		} 
-		else {
+		} else {
 			updateStatus(null);
 		}
 	}
