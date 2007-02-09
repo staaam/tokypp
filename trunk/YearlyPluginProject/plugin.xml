@@ -73,13 +73,6 @@
              project="false"/>
        <wizard
              category="lost.tok.Categoy"
-             class="lost.tok.opTable.wizards.AddQuoteWizard"
-             icon="icons/sample.gif"
-             id="lost.tok.opTable.addQuoteWizard"
-             name="%wizard.quote.add"
-             project="false"/>
-       <wizard
-             category="lost.tok.Categoy"
              class="lost.tok.newRelationWizard.NewRelationWizard"
              icon="icons/sample.gif"
              id="lost.tok.newRelationWizard.NewRelationWizard"
@@ -207,6 +200,19 @@
                icon="icons/link_ico.gif"
                id="lost.tok.linkTable.LinkAction"
                label="%action.name.link"
+               menubarPath="edit/OpTableGroup"
+               state="true"
+               style="push"
+               toolbarPath="OpTableGroup"/>
+      </editorContribution>
+      <editorContribution
+            id="lost.tok.disEditor.Contributor"
+            targetID="lost.tok.disEditor.DiscussionEditor">
+         <action
+               class="lost.tok.disEditor.AddOpinionAction"
+               icon="icons/link_ico.gif"
+               id="lost.tok.disEditor.addOpinion"
+               label="Add Opinion"
                menubarPath="edit/OpTableGroup"
                state="true"
                style="push"

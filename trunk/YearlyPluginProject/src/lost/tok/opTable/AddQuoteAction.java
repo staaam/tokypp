@@ -42,33 +42,21 @@ public class AddQuoteAction extends AbstractEditorAction {
 		IFile file = fileEditorInput.getFile();
 		IProject project = file.getProject();
 
-		Quote q = new Quote(file.getName(),
-				excerptions);
+		Quote q = new Quote(file.getName(),	excerptions);
 
 		System.out.println(q.getText());
 
 		addQuote(ToK.getProjectToK(project), q);
-		// d.
 	}
 
 	private void addQuote(ToK tok, Quote q) {
 		if (tok.getDiscussions().isEmpty()) {
-			// messageBox("Error", "No discuttions found");
-			// return;
+			messageBox("Error", "No discussions found");
+			return;
 
 			// TODO: First iteration only
-			tok.addDiscussion("Test Discussion"); //$NON-NLS-1$
+			//tok.addDiscussion("Test Discussion"); //$NON-NLS-1$
 		}
-
-		// List<String> discStrings = new LinkedList<String>();
-		// for (Discussion discussion : discussions) {
-		// discStrings.add(discussion.getDiscName());
-		// }
-		//
-		// List<String> opinStrings = new LinkedList<String>();
-		// // tok.getOpinions(); - all opinions
-		// // TODO: First iteration only
-		// opinStrings.add(Discussion.DEFAULT_OPINION);
 
 		AddQuoteWizard w = new AddQuoteWizard(tok.getDiscussions(), q);
 

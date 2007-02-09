@@ -157,12 +157,8 @@ public class NewRelationWizardPage extends WizardPage {
 			rightOpinion.setData(opinionIDs[i]);
 
 			Quote[] quotes = null;
-			try {
-				quotes = disc.getQuotes(opinionNames[i]);
-			} catch (CoreException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			quotes = disc.getQuotes(opinionNames[i]);
+
 			for (int j = 0; j < quotes.length; j++) {
 				TreeItem leftQuote = new TreeItem(leftOpinion, 0);
 				TreeItem rightQuote = new TreeItem(rightOpinion, 0);

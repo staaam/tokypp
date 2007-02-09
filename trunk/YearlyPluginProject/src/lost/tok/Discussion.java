@@ -70,6 +70,7 @@ public class Discussion {
 				.selectSingleNode(d).getText());
 		setCreatorName(DocumentHelper.createXPath("/discussion/user")
 				.selectSingleNode(d).getText());
+		
 		List result = DocumentHelper.createXPath("//id")
 				.selectNodes(d);
 		for (Iterator i = result.iterator(); i.hasNext();) {
@@ -87,8 +88,7 @@ public class Discussion {
 	}
 
 	private String getFullFileName() {
-		return myToK.getDiscussionFolder().getFile(discName + ".dis")
-				.getLocation().toOSString();
+		return getFile().getLocation().toOSString();
 	}
 
 	private Document readFromXML() {
@@ -617,38 +617,30 @@ public class Discussion {
 	}
 
 	public String[] getOpinionNames() {
-		Document doc = readFromXML();
-
-		XPath xpathSelector = DocumentHelper.createXPath("//opinion/name");
-		List result = xpathSelector.selectNodes(doc);
-
-		String[] ss = new String[result.size()];
-		int i = 0;
-		for (Object object : result) {
-			Element e = (Element) object;
-			ss[i++] = e.getText();
+		Opinion[] ops = getOpinions();
+		
+		String[] ss = new String[ops.length];
+		
+		for (int i = 0; i < ops.length; i++) {
+			ss[i] = ops[i].getName();
 		}
 
 		return ss;
 	}
 	
 	public Integer[] getOpinionIDs() {
-		Document doc = readFromXML();
-
-		XPath xpathSelector = DocumentHelper.createXPath("//opinion/id");
-		List result = xpathSelector.selectNodes(doc);
-
-		Integer[] ss = new Integer[result.size()];
-		int i = 0;
-		for (Object object : result) {
-			Element e = (Element) object;
-			ss[i++] = Integer.valueOf(e.getText());
+		Opinion[] ops = getOpinions();
+		
+		Integer[] ss = new Integer[ops.length];
+		
+		for (int i = 0; i < ops.length; i++) {
+			ss[i] = ops[i].getId();
 		}
 
 		return ss;
 	}
-
-	public Quote[] getQuotes(String opinion) throws CoreException {
+	
+	public Quote[] getQuotes(String opinion) {
 		
 		int j = 0;
 		Document doc = readFromXML();
@@ -673,5 +665,31 @@ public class Discussion {
 		int end = discussionFile.lastIndexOf('.');
 		
 		return discussionFile.substring(begin, end);
+	}
+
+	public Opinion[] getOpinions() {
+		Document doc = readFromXML();
+
+		XPath xpathSelector = DocumentHelper.createXPath("//opinion");
+		List result = xpathSelector.selectNodes(doc);
+
+		Opinion[] ss = new Opinion[result.size()];
+		int i = 0;
+		for (Object object : result) {
+			Element e = (Element) object;
+			ss[i++] = new Opinion(e);
+		}
+
+		return ss;
+	}
+	
+	public Integer getOpinionsId(String opinionName) {
+		for (Opinion opinion : getOpinions()) {
+			if (opinionName.equals(opinion.getName())) {
+				return opinion.getId();
+			}
+		}
+
+		return null;
 	}
 }

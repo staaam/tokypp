@@ -12,51 +12,25 @@ import org.dom4j.Element;
  * @author Team LOST
  */
 public class Excerption extends Properties {
-	String sourceFilePath;
+	Integer endPos;
 
-	String text;
+	String sourceFilePath;
 
 	Integer startPos;
 
-	Integer endPos;
+	String text;
+
+	public Excerption(Element excerption) {
+		this(excerption.element("sourceFilePath").getText(), null, Integer
+				.valueOf(excerption.element("startPos").getText()), Integer
+				.valueOf(excerption.element("endPos").getText()));
+	}
 
 	public Excerption(String path, String text, int start, int end) {
 		this.sourceFilePath = path;
 		this.startPos = start;
 		this.endPos = end;
 		this.text = text;
-	}
-
-	// for debug and fun
-	public String toString() {
-		return sourceFilePath + "[" + startPos + ":" + endPos + "]";
-	}
-
-	public String getSourceFilePath() {
-		return sourceFilePath;
-	}
-
-	public int getStartPos() {
-		return startPos;
-	}
-
-	public int getEndPos() {
-		return endPos;
-	}
-
-	public String getText() {
-		return text;
-	}
-
-	@Override
-	public int hashCode() {
-		return (sourceFilePath + "/" + startPos + "-" + endPos).hashCode();
-	}
-
-	public Excerption(Element excerption) {
-		this(excerption.element("sourceFilePath").getText(), null, Integer
-				.valueOf(excerption.element("startPos").getText()), Integer
-				.valueOf(excerption.element("endPos").getText()));
 	}
 
 	public Element toXML() {
@@ -67,7 +41,31 @@ public class Excerption extends Properties {
 		return e;
 	}
 
+	public int getEndPos() {
+		return endPos;
+	}
+
+	public String getSourceFilePath() {
+		return sourceFilePath;
+	}
+
+	public int getStartPos() {
+		return startPos;
+	}
+
+	public String getText() {
+		return text;
+	}
+
+	public int hashCode() {
+		return (sourceFilePath + "/" + startPos + "-" + endPos).hashCode();
+	}
+
 	public void setText(String text) {
 		this.text = text;
+	}
+
+	public String toString() {
+		return sourceFilePath + "[" + startPos + ":" + endPos + "]";
 	}
 }

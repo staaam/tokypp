@@ -32,51 +32,36 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.FileEditorInput;
 
+
+/**
+ * 
+ * 
+ * 
+ * @author Michael Gelfand
+ *
+ */
 public class RootDiscussions extends OperationTable implements
 		IObjectActionDelegate, ITextDoubleClickStrategy, ITextHover {
-
-	ToK tok = null;
-
-	private ISelection selection;
-
-	private IWorkbenchPart targetPart;
-
-	public RootDiscussions() {
-		super();
-		setSourceViewerConfiguration(new RootDisussionsSourceViewerConfiguration(
-				this));
-		System.out.println("ShowLinkedDiscussions");
-	}
-
-	protected void hookContextMenu(Control parent) {
-	}
-
-	@Override
-	public void refreshDisplay() {
-		IEditorInput input = getEditorInput();
-		if (input instanceof FileEditorInput) {
-			FileEditorInput fileEditorInput = (FileEditorInput) input;
-			IFile file = fileEditorInput.getFile();
-			tok = ToK.getProjectToK(file.getProject());
-			getRootDiscussiosn(file);
-		}
-
-		super.refreshDisplay();
-	}
-
-	private static QualifiedName discussionLinkQName = new QualifiedName(
-			"lost.tok.opTable.ShowRootDiscussions", "excerptionSource");
-
-	private static QualifiedName textOffsetQName = new QualifiedName(
-			"lost.tok.opTable.ShowRootDiscussions", "textOffset");
 
 	class DiscussionLink {
 
 		private String discussion;
 
+		private String linkSubject;
+
 		private String type;
 
-		private String linkSubject;
+		public DiscussionLink(Element e) {
+			this(e.element("discussionFile").getText(), e.element("type")
+					.getText(), e.element("linkSubject").getText());
+		}
+
+		public DiscussionLink(String discussionFile, String type,
+				String linkSubject) {
+			this.discussion = Discussion.getNameFromFile(discussionFile);
+			this.type = type;
+			this.linkSubject = linkSubject;
+		}
 
 		public String getDiscussionFile() {
 			return discussion;
@@ -90,30 +75,103 @@ public class RootDiscussions extends OperationTable implements
 			return type;
 		}
 
-		public DiscussionLink(String discussionFile, String type,
-				String linkSubject) {
-			this.discussion = Discussion.getNameFromFile(discussionFile);
-			this.type = type;
-			this.linkSubject = linkSubject;
-		}
-
-		public DiscussionLink(Element e) {
-			this(e.element("discussionFile").getText(), e.element("type")
-					.getText(), e.element("linkSubject").getText());
-		}
-
 	}
+
+	private static QualifiedName discussionLinkQName = new QualifiedName(
+			"lost.tok.opTable.ShowRootDiscussions", "excerptionSource");
+
+	private static QualifiedName textOffsetQName = new QualifiedName(
+			"lost.tok.opTable.ShowRootDiscussions", "textOffset");
 
 	List<Excerption> rootExcerptions = null;
 
-	private void getRootDiscussiosn(IFile file) {
+	private ISelection selection;
+
+	private IWorkbenchPart targetPart;
+
+	ToK tok = null;
+
+	public RootDiscussions() {
+		super();
+		setSourceViewerConfiguration(new RootDisussionsSourceViewerConfiguration(
+				this));
+		System.out.println("ShowLinkedDiscussions");
+	}
+
+	/**
+	 * 
+	 * Event of Double Click
+	 * 
+	 * If double clicked position has no linked discussions nothing happens
+	 * Else opens all linked discussions 
+	 * 
+	 */
+	public void doubleClicked(ITextViewer viewer) {
+		List<Excerption> exs = getLinks(viewer.getSelectedRange().x);
+
+		for (Excerption excerption : exs) {
+			openDiscussionLink((DiscussionLink) excerption
+					.getProperty(discussionLinkQName));
+		}
+	}
+
+	/**
+	 * 
+	 * Event of mouse hovering the text
+	 * 
+	 * If hovered area has no linked discussions nothing happens
+	 * Else tooltip apears showing all linked discussions
+	 * 
+	 */
+	public String getHoverInfo(ITextViewer textViewer, IRegion hoverRegion) {
+		List<Excerption> exs = getLinks(hoverRegion.getOffset());
+		String s = new String();
+		for (Excerption excerption : exs) {
+			DiscussionLink discussionLink = (DiscussionLink) excerption
+					.getProperty(discussionLinkQName);
+			s += "Discussion: " + discussionLink.getDiscussionFile() + "\n"
+					+ "Type: " + discussionLink.getType() + "\n" + "Subject: "
+					+ discussionLink.getLinkSubject() + "\n" + "\n";
+		}
+		return s.trim();
+	}
+
+	public IRegion getHoverRegion(ITextViewer textViewer, int offset) {
+		return new Region(offset, 0);
+	}
+
+	/**
+	 * 
+	 * @param position - position in text
+	 * @return All the excerptions that includes given position 
+	 */
+	private List<Excerption> getLinks(int position) {
+		List<Excerption> exs = new LinkedList<Excerption>();
+		for (Excerption excerption : rootExcerptions) {
+			int excerptionOffset = (Integer) excerption
+					.getProperty(textOffsetQName);
+			int excerptionLength = excerption.getEndPos()
+					- excerption.getStartPos();
+			if (excerptionOffset <= position
+					&& position <= excerptionOffset + excerptionLength)
+				exs.add(excerption);
+		}
+		return exs;
+	}
+	
+	/**
+	 * 
+	 * Creates all required data structures
+	 * 
+	 * @param file - the source(root) file
+	 */
+	private void getRootDiscussions(IFile file) {
 		rootExcerptions = new LinkedList<Excerption>();
 
 		ToK tok = ToK.getProjectToK(file.getProject());
 
 		XPath xpathSelector = DocumentHelper
-				.createXPath("//sublink[sourceFile='"
-						+ file.getName() + "']");
+				.createXPath("//sublink[sourceFile='" + file.getName() + "']");
 
 		for (Object os : xpathSelector.selectNodes(GeneralFunctions
 				.readFromXML(tok.getLinkFile()))) {
@@ -150,15 +208,43 @@ public class RootDiscussions extends OperationTable implements
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.ui.IObjectActionDelegate#setActivePart(org.eclipse.jface.action.IAction,
-	 *      org.eclipse.ui.IWorkbenchPart)
-	 */
-	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
-		this.targetPart = targetPart;
-		System.out.println("setActivePart");
+	@Override
+	protected void hookContextMenu(Control parent) {
+	}
+
+	private void openDiscussionLink(DiscussionLink discussionLink) {
+		Discussion d;
+		try {
+			d = tok.getDiscussion(discussionLink.discussion);
+		} catch (CoreException e) {
+			e.printStackTrace();
+			return;
+		}
+
+		try {
+			IWorkbenchWindow ww = getSite().getWorkbenchWindow();
+			String editorId = ww.getWorkbench().getEditorRegistry()
+					.getDefaultEditor(d.getFile().getName()).getId();
+
+			ww.getActivePage().openEditor(new FileEditorInput(d.getFile()),
+					editorId);
+		} catch (PartInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void refreshDisplay() {
+		IEditorInput input = getEditorInput();
+		if (input instanceof FileEditorInput) {
+			FileEditorInput fileEditorInput = (FileEditorInput) input;
+			IFile file = fileEditorInput.getFile();
+			tok = ToK.getProjectToK(file.getProject());
+			getRootDiscussions(file);
+		}
+
+		super.refreshDisplay();
 	}
 
 	public void run(IAction action) {
@@ -185,90 +271,13 @@ public class RootDiscussions extends OperationTable implements
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.ui.IActionDelegate#selectionChanged(org.eclipse.jface.action.IAction,
-	 *      org.eclipse.jface.viewers.ISelection)
-	 */
 	public void selectionChanged(IAction action, ISelection selection) {
 		this.selection = selection;
 		System.out.println("selectionChanged");
 	}
 
-	public void doubleClicked(ITextViewer viewer) {
-		List<Excerption> exs = getLinks(viewer.getSelectedRange().x);
-
-		for (Excerption excerption : exs) {
-			openDiscussionLink((DiscussionLink) excerption
-					.getProperty(discussionLinkQName));
-		}
-
-		// if (exs.size() == 0) {
-		// System.out.println("not found");
-		// return;
-		// }
-		// if (exs.size() > 1) {
-		// System.out.println("multiple found, not supported");
-		// return;
-		// }
-		// System.out.println("found single");
-		// DiscussionLink discussionLink = (DiscussionLink)
-		// exs.get(0).getProperty(discussionLinkQName);
-		// openDiscussionLink(discussionLink);
-
-	}
-
-	private void openDiscussionLink(DiscussionLink discussionLink) {
-		Discussion d;
-		try {
-			d = tok.getDiscussion(discussionLink.discussion);
-		} catch (CoreException e) {
-			e.printStackTrace();
-			return;
-		}
-
-		try {
-			IWorkbenchWindow ww = getSite().getWorkbenchWindow();
-			String editorId = ww.getWorkbench().getEditorRegistry()
-					.getDefaultEditor(d.getFile().getName()).getId();
-
-			ww.getActivePage().openEditor(new FileEditorInput(d.getFile()),
-					editorId);
-		} catch (PartInitException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	private List<Excerption> getLinks(int position) {
-		List<Excerption> exs = new LinkedList<Excerption>();
-		for (Excerption excerption : rootExcerptions) {
-			int excerptionOffset = (Integer) excerption
-					.getProperty(textOffsetQName);
-			int excerptionLength = excerption.getEndPos()
-					- excerption.getStartPos();
-			if (excerptionOffset <= position
-					&& position <= excerptionOffset + excerptionLength)
-				exs.add(excerption);
-		}
-		return exs;
-	}
-
-	public String getHoverInfo(ITextViewer textViewer, IRegion hoverRegion) {
-		List<Excerption> exs = getLinks(hoverRegion.getOffset());
-		String s = new String();
-		for (Excerption excerption : exs) {
-			DiscussionLink discussionLink = (DiscussionLink) excerption
-					.getProperty(discussionLinkQName);
-			s += "Discussion: " + discussionLink.getDiscussionFile() + "\n"
-					+ "Type: " + discussionLink.getType() + "\n" + "Subject: "
-					+ discussionLink.getLinkSubject() + "\n" + "\n";
-		}
-		return s.trim();
-	}
-
-	public IRegion getHoverRegion(ITextViewer textViewer, int offset) {
-		return new Region(offset, 0);
+	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
+		this.targetPart = targetPart;
+		System.out.println("setActivePart");
 	}
 }
