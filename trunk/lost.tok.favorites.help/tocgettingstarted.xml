@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<toc label="ToK Guide" link_to="toc.xml#gettingstarted"> 
+	<topic label="General"  href="gettingstarted/General.html" /> 
+	<topic label="Getting Started" href="gettingstarted/GettingStarted.html" /> 
+	<topic label="Sources" href="gettingstarted/Sources.html" /> 
+	<topic label="Discussion" href="gettingstarted/Discussion.html" /> 
+	<topic label="Operation Table" href="gettingstarted/OperationTable.html" /> 
+	<topic label="Source Parser" href="gettingstarted/SourceParser.html" /> 
+</toc>
