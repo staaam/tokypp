@@ -44,30 +44,24 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.DrillDownAdapter;
 import org.eclipse.ui.part.ViewPart;
 
-/**
- * This sample class demonstrates how to plug-in a new workbench view. The view
- * shows data obtained from the model. The sample creates a dummy model on the
- * fly, but a real implementation would connect to the model available either in
- * this or another plug-in (e.g. the workspace). The view is connected to the
- * model using a content provider.
- * <p>
- * The view uses a label provider to define how model objects should be
- * presented in the view. Each view can present the same model objects using
- * different labels and icons, if needed. Alternatively, a single label provider
- * can be shared between views in order to ensure that objects of the same type
- * are presented in the same way everywhere.
- * <p>
- */
 
+/**
+ * 
+ * The Excerption View collects all the excerptions created by the Linkage Editor
+ * It provides a visual feedback to the user of the current excerptions
+ *
+ */
 public class ExcerptionView extends ViewPart {
 	class FileExcerption {
 
+		
 		List<Excerption> excerptions = new ArrayList<Excerption>();
 
 		IFile sourcefile;
 
 		String sourceFileName = new String();
 
+		
 		public void addExcerption(Excerption exp) {
 			exp.setProperty(new QualifiedName("id", "id"), nextId++); //$NON-NLS-1$ //$NON-NLS-2$
 			excerptions.add(exp);
@@ -295,7 +289,12 @@ public class ExcerptionView extends ViewPart {
 	public ExcerptionView() {
 
 	}
-
+	/**
+	 * Adds a list of excerptions from one rrot file to the view
+	 * @param sourceFileName the root file name
+	 * @param exp excerptions
+	 * @param file Resource representing the file
+	 */
 	public void addExcerptions(String sourceFileName, Excerption[] exp,
 			IFile file) {
 		for (Iterator iter = objects.iterator(); iter.hasNext();) {
@@ -358,6 +357,9 @@ public class ExcerptionView extends ViewPart {
 		return viewer.getContentProvider();
 	}
 
+	/**
+	 * Returns the excerptions from the given file name
+	 */
 	public List<Excerption> getExcerptions(String fileName) {
 		for (FileExcerption element : objects) {
 			if (element.getSourceFileName().compareTo(fileName) == 0) {
@@ -375,9 +377,7 @@ public class ExcerptionView extends ViewPart {
 		return viewer.getLabelProvider();
 	}
 
-	/**
-	 * @return
-	 */
+
 	private IFile getProject() {
 		ITreeSelection selection = (ITreeSelection) viewer.getSelection();
 		List list = selection.toList();
@@ -543,14 +543,6 @@ public class ExcerptionView extends ViewPart {
 		deleteAction.setToolTipText(Messages.getString("ExcerptionView.14")); //$NON-NLS-1$
 		deleteAction.setImageDescriptor(ImageDescriptor.createFromFile(this
 				.getClass(), "../../../../icons/delete.gif")); //$NON-NLS-1$
-		// doubleClickAction = new Action() {
-		// public void run() {
-		// ISelection selection = viewer.getSelection();
-		// Object obj = ((IStructuredSelection) selection)
-		// .getFirstElement();
-		// showMessage("Double-click detected on " + obj.toString());
-		// }
-		// };
 	}
 
 	/**
