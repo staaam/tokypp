@@ -74,6 +74,11 @@ public class SourceDocument extends Document {
 		set(rootChapter.toString());
 	}
 	
+	public String toString()
+	{
+		return rootChapter.toString();
+	}
+	
 	/**
 	 * Creates an unparsed document from the given string
 	 * @param s the string to be parsed (the document's text)
