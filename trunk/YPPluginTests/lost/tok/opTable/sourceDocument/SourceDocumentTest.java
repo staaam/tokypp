@@ -4,15 +4,26 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Collection;
 
 import junit.framework.TestCase;
+import lost.tok.GeneralFunctions;
 import lost.tok.Paths;
+import lost.tok.ToK;
 import lost.tok.sourceDocument.Chapter;
 import lost.tok.sourceDocument.ChapterText;
 import lost.tok.sourceDocument.SourceDocument;
 
+import org.dom4j.Document;
 import org.dom4j.DocumentException;
+import org.dom4j.DocumentHelper;
 import org.dom4j.io.SAXReader;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProduct;
+import org.eclipse.ui.internal.services.SourceProviderService;
 
 import com.sun.security.auth.callback.TextCallbackHandler;
 
@@ -77,6 +88,7 @@ public class SourceDocumentTest extends TestCase {
 	public void testCreateNewChapter2()
 	{
 		String text = "a b c d e f g h i j k l m n o p q r s t u v w x y z";
+		String letters = "abcdefghijklmnopqrstuvwxyz";
 				
 		SourceDocument doc = new SourceDocument();
 		doc.setUnparsed(text,"ABC","Eliezer Ben-Yehuda");
@@ -102,14 +114,71 @@ public class SourceDocumentTest extends TestCase {
 			{
 				numChapterTexts ++;
 				// verifies that the chapters content is as it should be
-				assertEquals("" + ('a' + i), c.toString()); 
+				assertEquals("" + letters.charAt(i), c.toString().trim());
+				i++;
 			}
-			i++;
 		}
 		// verifies that we've passed on all the chapters
 		assertEquals((text.length() + 1) / 2, numChapterTexts);
 	}
+	
+	/** 
+	 * Checks the preverified abc parsing can be parsed and loaded
+	 */
+	public void testToXml()
+	{
+		/* create the initial abc document */
+		String text = "a b c d e f g h i j k l m n o p q r s t u v w x y z";
+		
+		SourceDocument baseDoc = new SourceDocument();
+		baseDoc.setUnparsed(text,"ABC","Eliezer Ben-Yehuda");
+		
+		int caret_loc = 0;
+		for (int i = 0; i < (text.length()+1)/2; i ++)
+		{
+			boolean isAtChapterStart = (baseDoc.getChapterFromOffset(caret_loc).getOffset() == caret_loc);
+			
+			// 10000 is set to avoid inf loops during the tests
+			while (isAtChapterStart || (baseDoc.createNewChapter(caret_loc, ""+i) == -1 && caret_loc < 10000))
+			{
+				caret_loc ++;
+				isAtChapterStart = (baseDoc.getChapterFromOffset(caret_loc).getOffset() == caret_loc);
+			}
+		}
+		
+		/* Write that document to a file, read it back, and compare */
+		IFile srcFile;
+		
+		IProject proj = ResourcesPlugin.getWorkspace().getRoot().getProject("tmlTemp");
+		if (!proj.exists())
+		{
+			new ToK("tmlTemp", "tml", "none");
+		}
+		srcFile = proj.getFile(ToK.SOURCES_FOLDER + "\\mesrc.src");
+		if (srcFile.exists())
+		{
+			try {
+				srcFile.delete(true, null);
+			} catch (CoreException e) {
+				e.printStackTrace();
+			}
+		}
+				
+		baseDoc.toXML(proj, "mesrc.src");
+		
+		Document secDoc = GeneralFunctions.readFromXML(srcFile);
+		
+		SourceDocument doc2 = new SourceDocument();
+		doc2.set(secDoc);
+		
+		assertEqualDocuments(baseDoc, doc2);
+	}
 
+	/** 
+	 * Checks the getChapterFromOffset method.
+	 * Calls the function with various interesting
+	 * inputs and verifies correctness
+	 */
 	public void testGetChapterFromOffset() {
 		SourceDocument doc = loadDoc(Paths.OR_AHAIM_EN);
 		Chapter c = null;
@@ -152,6 +221,12 @@ public class SourceDocumentTest extends TestCase {
 		assertTrue(c instanceof ChapterText);
 		assertEquals("Genesis/chapter 11/Verse 9", ((ChapterText) c)
 				.getExcerptionPath());
+	}
+	
+	protected void assertEqualDocuments(SourceDocument d1, SourceDocument d2)
+	{
+		
+		assertEquals(d1.toString(), d2.toString());
 	}
 
 	protected SourceDocument loadDoc(String sourceFilename) {
