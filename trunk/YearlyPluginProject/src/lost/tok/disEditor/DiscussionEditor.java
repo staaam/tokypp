@@ -4,6 +4,7 @@ import lost.tok.Discussion;
 import lost.tok.Opinion;
 import lost.tok.Quote;
 import lost.tok.ToK;
+import lost.tok.opTable.OperationTable;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
@@ -19,11 +20,15 @@ import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.part.FileEditorInput;
 
@@ -36,6 +41,8 @@ public class DiscussionEditor extends TextEditor {
 	private static final String QUOTE = "Quote";
 
 	private static final String OPINION = "Opinion";
+
+	public static final String EDITOR_ID = "lost.tok.disEditor.DiscussionEditor";
 
 	private Discussion discussion = null;
 	private TreeItem rootItem = null;
@@ -104,6 +111,49 @@ public class DiscussionEditor extends TextEditor {
 		});
 		//*********************************************************************************************
 
+		disTree.addMouseListener(new MouseListener() {
+
+			public void mouseDoubleClick(MouseEvent e) {
+				if (e.widget == null)
+					return;
+				
+				Tree tree = (Tree) e.widget;
+				TreeItem treeItem = tree.getSelection()[0];
+				if (treeItem.getData(QUOTE) == null)
+					return;
+				if (treeItem.getData(QUOTE) instanceof Quote) {
+					Quote quote = (Quote) treeItem.getData(QUOTE);
+					
+					IWorkbenchWindow ww = getSite().getWorkbenchWindow();
+					String editorId = OperationTable.EDITOR_ID;
+					
+					FileEditorInput fileEditorInput = (FileEditorInput) getEditorInput();
+					ToK tok = ToK.getProjectToK(fileEditorInput.getFile().getProject());
+					
+					IFile source = tok.getSource(quote.getSourceFilePath());
+
+					try {
+						ww.getActivePage().openEditor(new FileEditorInput(source),
+								editorId);
+					} catch (PartInitException e1) {
+						//e1.printStackTrace();
+					}
+					}
+				
+			}
+
+			public void mouseDown(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			public void mouseUp(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+		
 		//***************** DRAG AND DROP ******************************************************************
 		Transfer[] types = new Transfer[] { TextTransfer.getInstance() };
 		int operations = DND.DROP_MOVE | DND.DROP_COPY | DND.DROP_LINK;

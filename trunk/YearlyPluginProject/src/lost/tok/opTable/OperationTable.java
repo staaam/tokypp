@@ -35,6 +35,8 @@ import org.eclipse.ui.editors.text.TextEditor;
  */
 public class OperationTable extends TextEditor {
 
+	public static final String EDITOR_ID = "lost.tok.opTable.OperationTable";
+
 	/**
 	 * Creates a new instance of the operation table Initialize it with the
 	 * SourceDocumentProvider we wrote
