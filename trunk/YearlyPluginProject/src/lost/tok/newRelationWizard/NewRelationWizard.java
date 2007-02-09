@@ -16,8 +16,9 @@ import org.eclipse.ui.IWorkbenchWizard;
 
 /**
  * New relation creation wizard
+ * 
  * @author Team Lost
- *
+ * 
  */
 
 public class NewRelationWizard extends Wizard implements INewWizard {

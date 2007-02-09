@@ -8,8 +8,6 @@ import java.util.Vector;
 import java.util.Map.Entry;
 
 import lost.tok.Excerption;
-import lost.tok.Messages;
-import lost.tok.ToK;
 import lost.tok.sourceDocument.Chapter;
 import lost.tok.sourceDocument.ChapterText;
 import lost.tok.sourceDocument.SourceDocument;
@@ -72,11 +70,11 @@ public class OperationTable extends TextEditor {
 		super.createPartControl(parent);
 		showChangeInformation(false);
 
-		ISourceViewer srcview = this.getSourceViewer();
+		ISourceViewer srcview = getSourceViewer();
 		assert (srcview != null);
 
 		hookContextMenu(parent);
-		this.getSourceViewerDecorationSupport(srcview).dispose();
+		getSourceViewerDecorationSupport(srcview).dispose();
 
 		refreshDisplay();
 	}
@@ -84,7 +82,6 @@ public class OperationTable extends TextEditor {
 	// Shay: this should add the pop up action, but it doesn't work :(
 	public void editorContextMenuAboutToShow(IMenuManager menu) {
 		super.editorContextMenuAboutToShow(menu);
-		// System.out.println("editorContextMenuAboutToShow called");
 		addAction(menu, "lost.tok.opTable.MarkPopUpMenu.Action"); //$NON-NLS-1$
 	}
 
@@ -126,7 +123,7 @@ public class OperationTable extends TextEditor {
 		StyleRange markedTextStyle = StyleManager.getMarkedStyle();
 		StyleRange chapterTextStyle = StyleManager.getChapterStyle();
 
-		ISourceViewer srcview = this.getSourceViewer();
+		ISourceViewer srcview = getSourceViewer();
 
 		/*
 		 * CursorLinePainter a = new CursorLinePainter(srcview);
@@ -175,8 +172,7 @@ public class OperationTable extends TextEditor {
 	}
 
 	public void mark(TextSelection t) {
-		SourceDocument doc = (SourceDocument) this.getSourceViewer()
-				.getDocument();
+		SourceDocument doc = (SourceDocument) getSourceViewer().getDocument();
 
 		Chapter cStart = doc.getChapterFromOffset(t.getOffset());
 		Chapter cEnd = doc.getChapterFromOffset(t.getOffset() + t.getLength());

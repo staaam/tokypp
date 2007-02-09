@@ -27,9 +27,9 @@ public class Excerption extends Properties {
 	}
 
 	public Excerption(String path, String text, int start, int end) {
-		this.sourceFilePath = path;
-		this.startPos = start;
-		this.endPos = end;
+		sourceFilePath = path;
+		startPos = start;
+		endPos = end;
 		this.text = text;
 	}
 

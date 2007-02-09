@@ -4,8 +4,9 @@ import org.dom4j.Element;
 
 public class Opinion {
 	String name;
+
 	int id;
-	
+
 	public Opinion(String name, int id) {
 		super();
 		this.name = name;
@@ -13,10 +14,10 @@ public class Opinion {
 	}
 
 	public Opinion(Element e) {
-		this(e.element("name").getText(),
-				Integer.valueOf(e.element("id").getText()));
+		this(e.element("name").getText(), Integer.valueOf(e.element("id")
+				.getText()));
 	}
-	
+
 	public int getId() {
 		return id;
 	}

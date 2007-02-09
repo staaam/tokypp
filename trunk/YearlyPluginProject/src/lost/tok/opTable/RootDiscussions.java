@@ -33,17 +33,16 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.FileEditorInput;
 
-
 /**
  * 
  * 
  * 
  * @author Michael Gelfand
- *
+ * 
  */
 public class RootDiscussions extends OperationTable implements
 		IObjectActionDelegate, ITextDoubleClickStrategy, ITextHover {
-	
+
 	public static final String EDITOR_ID = "lost.tok.opTable.ShowLinkedDiscussions";
 
 	class DiscussionLink {
@@ -61,7 +60,7 @@ public class RootDiscussions extends OperationTable implements
 
 		public DiscussionLink(String discussionFile, String type,
 				String linkSubject) {
-			this.discussion = Discussion.getNameFromFile(discussionFile);
+			discussion = Discussion.getNameFromFile(discussionFile);
 			this.type = type;
 			this.linkSubject = linkSubject;
 		}
@@ -105,8 +104,8 @@ public class RootDiscussions extends OperationTable implements
 	 * 
 	 * Event of Double Click
 	 * 
-	 * If double clicked position has no linked discussions nothing happens
-	 * Else opens all linked discussions 
+	 * If double clicked position has no linked discussions nothing happens Else
+	 * opens all linked discussions
 	 * 
 	 */
 	public void doubleClicked(ITextViewer viewer) {
@@ -122,8 +121,8 @@ public class RootDiscussions extends OperationTable implements
 	 * 
 	 * Event of mouse hovering the text
 	 * 
-	 * If hovered area has no linked discussions nothing happens
-	 * Else tooltip apears showing all linked discussions
+	 * If hovered area has no linked discussions nothing happens Else tooltip
+	 * apears showing all linked discussions
 	 * 
 	 */
 	public String getHoverInfo(ITextViewer textViewer, IRegion hoverRegion) {
@@ -145,8 +144,9 @@ public class RootDiscussions extends OperationTable implements
 
 	/**
 	 * 
-	 * @param position - position in text
-	 * @return All the excerptions that includes given position 
+	 * @param position -
+	 *            position in text
+	 * @return All the excerptions that includes given position
 	 */
 	private List<Excerption> getLinks(int position) {
 		List<Excerption> exs = new LinkedList<Excerption>();
@@ -156,17 +156,19 @@ public class RootDiscussions extends OperationTable implements
 			int excerptionLength = excerption.getEndPos()
 					- excerption.getStartPos();
 			if (excerptionOffset <= position
-					&& position <= excerptionOffset + excerptionLength)
+					&& position <= excerptionOffset + excerptionLength) {
 				exs.add(excerption);
+			}
 		}
 		return exs;
 	}
-	
+
 	/**
 	 * 
 	 * Creates all required data structures
 	 * 
-	 * @param file - the source(root) file
+	 * @param file -
+	 *            the source(root) file
 	 */
 	private void getRootDiscussions(IFile file) {
 		rootExcerptions = new LinkedList<Excerption>();
@@ -226,8 +228,8 @@ public class RootDiscussions extends OperationTable implements
 
 		try {
 			IWorkbenchWindow ww = getSite().getWorkbenchWindow();
-//			String editorId = ww.getWorkbench().getEditorRegistry()
-//					.getDefaultEditor(d.getFile().getName()).getId();
+			// String editorId = ww.getWorkbench().getEditorRegistry()
+			// .getDefaultEditor(d.getFile().getName()).getId();
 			String editorId = DiscussionEditor.EDITOR_ID;
 
 			ww.getActivePage().openEditor(new FileEditorInput(d.getFile()),

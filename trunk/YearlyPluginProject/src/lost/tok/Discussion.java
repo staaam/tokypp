@@ -16,7 +16,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
-
 public class Discussion {
 
 	public static final String DEFAULT_OPINION = "Default Opinion";
@@ -32,7 +31,8 @@ public class Discussion {
 	public static final String[] relTypes = { "opposition", "interpretation" };
 
 	/**
-	 * first constructor for discussion 
+	 * first constructor for discussion
+	 * 
 	 * @param myToK
 	 * @param discName
 	 * @param creatorName
@@ -64,12 +64,13 @@ public class Discussion {
 
 	/**
 	 * constructor for discussion from an XML file
+	 * 
 	 * @param myToK
 	 * @param filename
 	 */
 	public Discussion(ToK myToK, String filename) {
 		super();
-		int max=0;
+		int max = 0;
 		this.myToK = myToK;
 
 		Document d = GeneralFunctions.readFromXML(filename);
@@ -78,16 +79,16 @@ public class Discussion {
 				.selectSingleNode(d).getText());
 		setCreatorName(DocumentHelper.createXPath("/discussion/user")
 				.selectSingleNode(d).getText());
-		
-		List result = DocumentHelper.createXPath("//id")
-				.selectNodes(d);
+
+		List result = DocumentHelper.createXPath("//id").selectNodes(d);
 		for (Iterator i = result.iterator(); i.hasNext();) {
 			Element element = (Element) i.next();
-			if (Integer.valueOf(element.getText()) > max)
-				max=Integer.valueOf(element.getText());
+			if (Integer.valueOf(element.getText()) > max) {
+				max = Integer.valueOf(element.getText());
+			}
 		}
-		this.id=max;
-		
+		id = max;
+
 	}
 
 	// write the document to the XML file
@@ -105,6 +106,7 @@ public class Discussion {
 
 	/**
 	 * add an opinion to the discussion
+	 * 
 	 * @param opinionName
 	 */
 	public void addOpinion(String opinionName) {
@@ -121,8 +123,7 @@ public class Discussion {
 
 		// add the opinion
 		Element opinion = doc.getRootElement().addElement("opinion");
-		opinion.addElement("id")
-				.addText(java.lang.Integer.toString(++id));
+		opinion.addElement("id").addText(java.lang.Integer.toString(++id));
 		opinion.addElement("name").addText(opinionName);
 
 		writeToXml(doc);
@@ -134,6 +135,7 @@ public class Discussion {
 
 	/**
 	 * remove the given opinion from the discussion
+	 * 
 	 * @param opinionId
 	 */
 	public void removeOpinion(Integer opinionId) {
@@ -203,8 +205,9 @@ public class Discussion {
 	}
 
 	/**
-	 * take the quote from the opinion with the target id and 
-	 * put it in the opinion with the target id 
+	 * take the quote from the opinion with the target id and put it in the
+	 * opinion with the target id
+	 * 
 	 * @param quoteId
 	 * @param targetId
 	 */
@@ -234,6 +237,7 @@ public class Discussion {
 
 	/**
 	 * remove the given quote from the discussion
+	 * 
 	 * @param quoteId
 	 */
 	public void removeQuote(Integer quoteId) {
@@ -251,7 +255,7 @@ public class Discussion {
 			Element element = (Element) i.next();
 			element.detach();
 		}
-		
+
 		// Remove all the quote's relations
 		XPath xpathSelector2 = DocumentHelper
 				.createXPath("//relation[targetId='"
@@ -265,16 +269,16 @@ public class Discussion {
 		writeToXml(doc);
 	}
 
-	
 	/**
 	 * create a relation between the 2 elements
+	 * 
 	 * @param element1
 	 * @param element2
 	 * @param comment
 	 * @param type
 	 */
-	public void createLink(Integer element1, Integer element2,
-			String comment, String type) {
+	public void createLink(Integer element1, Integer element2, String comment,
+			String type) {
 
 		Document doc = readFromXML();
 
@@ -316,11 +320,12 @@ public class Discussion {
 		link2.addElement("type").addText(type);
 
 		writeToXml(doc);
-		
+
 	}
-	
+
 	/**
 	 * remove a relation between 2 elements
+	 * 
 	 * @param element1
 	 * @param element2
 	 */
@@ -359,7 +364,7 @@ public class Discussion {
 
 		writeToXml(doc);
 	}
-	
+
 	public void addQuote(Quote quote, String opinion) throws CoreException {
 
 		if (!myToK.getProject().exists() || quote == null) {
@@ -413,36 +418,36 @@ public class Discussion {
 
 	public String[] getOpinionNames() {
 		Opinion[] ops = getOpinions();
-		
+
 		String[] ss = new String[ops.length];
-		
+
 		for (int i = 0; i < ops.length; i++) {
 			ss[i] = ops[i].getName();
 		}
 
 		return ss;
 	}
-	
+
 	public Integer[] getOpinionIDs() {
 		Opinion[] ops = getOpinions();
-		
+
 		Integer[] ss = new Integer[ops.length];
-		
+
 		for (int i = 0; i < ops.length; i++) {
 			ss[i] = ops[i].getId();
 		}
 
 		return ss;
 	}
-	
+
 	public Quote[] getQuotes(String opinion) {
-		
+
 		int j = 0;
 		Document doc = readFromXML();
 
-		List result = doc.selectNodes("//opinion[name='" + opinion
-				+ "']/quote");
-		
+		List result = doc
+				.selectNodes("//opinion[name='" + opinion + "']/quote");
+
 		Quote[] quotes = new Quote[result.size()];
 		for (Object object : result) {
 			Element elem = (Element) object;
@@ -458,7 +463,7 @@ public class Discussion {
 		}
 		begin++;
 		int end = discussionFile.lastIndexOf('.');
-		
+
 		return discussionFile.substring(begin, end);
 	}
 
@@ -477,7 +482,7 @@ public class Discussion {
 
 		return ss;
 	}
-	
+
 	public Integer getOpinionsId(String opinionName) {
 		for (Opinion opinion : getOpinions()) {
 			if (opinionName.equals(opinion.getName())) {

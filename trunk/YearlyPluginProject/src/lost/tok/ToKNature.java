@@ -21,8 +21,8 @@ public class ToKNature implements IProjectNature {
 		IProjectDescription desc = project.getDescription();
 		ICommand[] commands = desc.getBuildSpec();
 
-		for (int i = 0; i < commands.length; ++i) {
-			if (commands[i].getBuilderName().equals(ToKBuilder.BUILDER_ID)) {
+		for (ICommand element : commands) {
+			if (element.getBuilderName().equals(ToKBuilder.BUILDER_ID)) {
 				return;
 			}
 		}
@@ -67,8 +67,8 @@ public class ToKNature implements IProjectNature {
 			IProjectDescription description = project.getDescription();
 			String[] natures = description.getNatureIds();
 
-			for (int i = 0; i < natures.length; ++i) {
-				if (NATURE_ID.equals(natures[i])) {
+			for (String element : natures) {
+				if (NATURE_ID.equals(element)) {
 					// nature already exists
 					return;
 				}

@@ -93,50 +93,53 @@ public class Quote {
 		return e;
 
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	public Quote(Element elem, ToK tok){
-		this(elem.element("sourceFile").getText(),
-				new ArrayList<Excerption>(),
+	public Quote(Element elem, ToK tok) {
+		this(elem.element("sourceFile").getText(), new ArrayList<Excerption>(),
 				elem.element("comment").getText());
 		ID = Integer.valueOf(elem.element("id").getText());
 
 		SourceDocument sd = new SourceDocument();
 		sd.set(GeneralFunctions.readFromXML(tok.getSource(sourceFilePath)));
-		
+
 		List<Element> exps = elem.elements("excerption");
 		for (Element exp : exps) {
 			Excerption e = new Excerption(exp);
-			
+
 			String text = sd.getChapterText(e.getSourceFilePath()).getText();
 			int start = e.getStartPos();
 			int end = e.getEndPos();
 			String exText = text.substring(start, end);
 			e.setText(exText);
-			
+
 			excerptions.add(e);
 		}
 	}
-	
+
 	/**
-	 * Returns a prefix of length j of the first excerption of the quote
-	 *	if j == 0 returns the whole excerption
+	 * Returns a prefix of length j of the first excerption of the quote if j ==
+	 * 0 returns the whole excerption
+	 * 
 	 * @param j
-	 * @param projectName 
+	 * @param projectName
 	 * @return
 	 */
-	
+
 	public String getPrefix(int j, String projectName) {
-		IFile file = (ToK.getProjectToK(ResourcesPlugin.getWorkspace().getRoot().getProject(projectName))).getSource(getSourceFilePath());
+		IFile file = (ToK.getProjectToK(ResourcesPlugin.getWorkspace()
+				.getRoot().getProject(projectName)))
+				.getSource(getSourceFilePath());
 		SourceDocument sourceDoc = new SourceDocument();
 		sourceDoc.set(GeneralFunctions.readFromXML(file));
 		Excerption excerption = getExcerptions().get(0);
-		String text = sourceDoc.getChapterText(excerption.getSourceFilePath()).getText().substring(excerption.getStartPos(), excerption.getEndPos());
-		
-		if (j==0){
+		String text = sourceDoc.getChapterText(excerption.getSourceFilePath())
+				.getText().substring(excerption.getStartPos(),
+						excerption.getEndPos());
+
+		if (j == 0) {
 			return text;
-		}
-		else{
+		} else {
 			int i = j > text.length() ? text.length() : j;
 			String expPrefix = text.substring(0, i) + "...";
 			return expPrefix;

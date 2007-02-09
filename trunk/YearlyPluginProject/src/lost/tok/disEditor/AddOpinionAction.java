@@ -24,8 +24,8 @@ public class AddOpinionAction implements IEditorActionDelegate {
 		wd.setBlockOnOpen(true);
 
 		wd.open();
-		
-//		targetEditor.updatePartControl(targetEditor.getEditorInput());
+
+		// targetEditor.updatePartControl(targetEditor.getEditorInput());
 	}
 
 	public void selectionChanged(IAction action, ISelection selection) {

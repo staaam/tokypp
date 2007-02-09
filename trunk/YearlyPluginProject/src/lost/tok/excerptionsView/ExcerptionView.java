@@ -44,24 +44,21 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.DrillDownAdapter;
 import org.eclipse.ui.part.ViewPart;
 
-
 /**
  * 
- * The Excerption View collects all the excerptions created by the Linkage Editor
- * It provides a visual feedback to the user of the current excerptions
- *
+ * The Excerption View collects all the excerptions created by the Linkage
+ * Editor It provides a visual feedback to the user of the current excerptions
+ * 
  */
 public class ExcerptionView extends ViewPart {
 	class FileExcerption {
 
-		
 		List<Excerption> excerptions = new ArrayList<Excerption>();
 
 		IFile sourcefile;
 
 		String sourceFileName = new String();
 
-		
 		public void addExcerption(Excerption exp) {
 			exp.setProperty(new QualifiedName("id", "id"), nextId++); //$NON-NLS-1$ //$NON-NLS-2$
 			excerptions.add(exp);
@@ -154,8 +151,7 @@ public class ExcerptionView extends ViewPart {
 		}
 
 		public TreeObject[] getChildren() {
-			return (TreeObject[]) children.toArray(new TreeObject[children
-					.size()]);
+			return children.toArray(new TreeObject[children.size()]);
 		}
 
 		public boolean hasChildren() {
@@ -184,8 +180,9 @@ public class ExcerptionView extends ViewPart {
 
 		public Object[] getElements(Object parent) {
 			if (parent.equals(getViewSite())) {
-				if (invisibleRoot == null)
+				if (invisibleRoot == null) {
 					initialize();
+				}
 				return getChildren(invisibleRoot);
 			}
 			return getChildren(parent);
@@ -199,8 +196,9 @@ public class ExcerptionView extends ViewPart {
 		}
 
 		public boolean hasChildren(Object parent) {
-			if (parent instanceof TreeParent)
+			if (parent instanceof TreeParent) {
 				return ((TreeParent) parent).hasChildren();
+			}
 			return false;
 		}
 
@@ -218,13 +216,12 @@ public class ExcerptionView extends ViewPart {
 		private void treeBuildAndRefresh() {
 			invisibleRoot = new TreeParent(""); //$NON-NLS-1$
 
-			for (Iterator iter = objects.iterator(); iter.hasNext();) {
-				FileExcerption element = (FileExcerption) iter.next();
+			for (Object element0 : objects) {
+				FileExcerption element = (FileExcerption) element0;
 				TreeParent parentFile = new TreeParent(element
 						.getSourceFileName());
-				for (Iterator iterator = element.getExcerptions().iterator(); iterator
-						.hasNext();) {
-					Excerption exp = (Excerption) iterator.next();
+				for (Object element1 : element.getExcerptions()) {
+					Excerption exp = (Excerption) element1;
 					String expText = exp.getText();
 
 					String expPrefix = expText.length() < 40 ? expText
@@ -246,8 +243,9 @@ public class ExcerptionView extends ViewPart {
 
 		public Image getImage(Object obj) {
 			String imageKey = ISharedImages.IMG_OBJ_ELEMENT;
-			if (obj instanceof TreeParent)
+			if (obj instanceof TreeParent) {
 				imageKey = ISharedImages.IMG_OBJ_FOLDER;
+			}
 			return PlatformUI.getWorkbench().getSharedImages().getImage(
 					imageKey);
 		}
@@ -289,19 +287,24 @@ public class ExcerptionView extends ViewPart {
 	public ExcerptionView() {
 
 	}
+
 	/**
 	 * Adds a list of excerptions from one rrot file to the view
-	 * @param sourceFileName the root file name
-	 * @param exp excerptions
-	 * @param file Resource representing the file
+	 * 
+	 * @param sourceFileName
+	 *            the root file name
+	 * @param exp
+	 *            excerptions
+	 * @param file
+	 *            Resource representing the file
 	 */
 	public void addExcerptions(String sourceFileName, Excerption[] exp,
 			IFile file) {
-		for (Iterator iter = objects.iterator(); iter.hasNext();) {
-			FileExcerption element = (FileExcerption) iter.next();
+		for (Object element0 : objects) {
+			FileExcerption element = (FileExcerption) element0;
 			if (element.getSourceFileName().compareTo(sourceFileName) == 0) {
-				for (int i = 0; i < exp.length; i++) {
-					element.addExcerption(exp[i]);
+				for (Excerption element1 : exp) {
+					element.addExcerption(element1);
 				}
 				((ViewContentProvider) viewer.getContentProvider())
 						.treeBuildAndRefresh();
@@ -312,8 +315,8 @@ public class ExcerptionView extends ViewPart {
 		FileExcerption temp = new FileExcerption();
 		temp.setSourceFileName(sourceFileName);
 		temp.setSourcefile(file);
-		for (int i = 0; i < exp.length; i++) {
-			temp.addExcerption(exp[i]);
+		for (Excerption element : exp) {
+			temp.addExcerption(element);
 		}
 		objects.add(temp);
 		((ViewContentProvider) viewer.getContentProvider())
@@ -376,7 +379,6 @@ public class ExcerptionView extends ViewPart {
 	public IBaseLabelProvider getLabelProvider() {
 		return viewer.getLabelProvider();
 	}
-
 
 	private IFile getProject() {
 		ITreeSelection selection = (ITreeSelection) viewer.getSelection();
@@ -506,8 +508,8 @@ public class ExcerptionView extends ViewPart {
 					selectedIds.add(element.getId());
 				}
 
-				for (Iterator iter = selectedFiles.iterator(); iter.hasNext();) {
-					String fileName = (String) iter.next();
+				for (Object element : selectedFiles) {
+					String fileName = (String) element;
 					try {
 						for (FileExcerption object : objects) {
 							if (object.getSourceFileName().compareTo(fileName) == 0) {
@@ -518,8 +520,8 @@ public class ExcerptionView extends ViewPart {
 					}
 				}
 
-				for (Iterator iter = selectedIds.iterator(); iter.hasNext();) {
-					Integer element = (Integer) iter.next();
+				for (Object element0 : selectedIds) {
+					Integer element = (Integer) element0;
 					for (FileExcerption object : objects) {
 						List<Excerption> excerptions = object.getExcerptions();
 						try {
