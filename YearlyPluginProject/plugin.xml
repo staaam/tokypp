@@ -50,7 +50,7 @@
             name="%wizards.catagory"/>
       	<wizard 
 	        category="lost.tok.Categoy"   
-			class= "lost.tok.new_wizard.NewWizard"
+			class= "lost.tok.newProjectWizard.NewWizard"
             icon="icons/sample.gif"
             id="lost.tok.newTokWizard"
             name="%wizards.wizard.tok"
