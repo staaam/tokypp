@@ -1,4 +1,4 @@
-package lost.tok.opTable;
+package lost.tok.rootDiscussions;
 
 import org.eclipse.jface.text.ITextDoubleClickStrategy;
 import org.eclipse.jface.text.ITextHover;

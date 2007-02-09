@@ -1,4 +1,4 @@
-package lost.tok.opTable;
+package lost.tok.rootDiscussions;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -8,6 +8,7 @@ import lost.tok.Excerption;
 import lost.tok.GeneralFunctions;
 import lost.tok.ToK;
 import lost.tok.disEditor.DiscussionEditor;
+import lost.tok.opTable.OperationTable;
 import lost.tok.sourceDocument.ChapterText;
 import lost.tok.sourceDocument.SourceDocument;
 

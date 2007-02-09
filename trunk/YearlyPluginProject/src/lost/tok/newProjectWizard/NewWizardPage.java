@@ -1,4 +1,4 @@
-package lost.tok.new_wizard;
+package lost.tok.newProjectWizard;
 
 import java.io.File;
 
