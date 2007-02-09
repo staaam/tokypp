@@ -13,6 +13,11 @@ import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
 
+/**
+ * An action that sends the selected excerptions to the Excerptions Viewer
+ * @author Team Lost
+ *
+ */
 public class LinkAction extends AbstractEditorAction {
 
 	public void run(IAction action) {

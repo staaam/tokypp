@@ -28,11 +28,10 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 
 /**
- * The "New" wizard page allows setting the container for the new file as well
- * as the file name. The page will only accept file name without the extension
- * OR with the extension that matches the expected one (mpe).
+ * A page in the creation of relation wizard
+ * @author Team Lost
+ *
  */
-
 public class NewRelationWizardPage extends WizardPage {
 
 	private Text comment;
@@ -50,9 +49,8 @@ public class NewRelationWizardPage extends WizardPage {
 	private ISelection selection;
 
 	/**
-	 * Constructor for NewWizardPage.
+	 * Constructor for NewRelationWizardPage.
 	 * 
-	 * @param pageName
 	 */
 	public NewRelationWizardPage(ISelection selection) {
 		super("wizardPage"); //$NON-NLS-1$

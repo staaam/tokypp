@@ -34,11 +34,10 @@ import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.PlatformUI;
 
 /**
- * The "New" wizard page allows setting the container for the new file as well
- * as the file name. The page will only accept file name without the extension
- * OR with the extension that matches the expected one (mpe).
+ * A page in the link root - discussion wizard
+ * @author Team Lost
+ *
  */
-
 public class NewLinkWizardPage extends WizardPage {
 
 	private HashMap<String, Discussion> discMap = new HashMap<String, Discussion>();
@@ -61,7 +60,7 @@ public class NewLinkWizardPage extends WizardPage {
 	private Text subject;
 
 	/**
-	 * Constructor for SampleNewWizardPage.
+	 * Constructor for NewLinkWizardPage.
 	 * 
 	 * @param pageName
 	 */
@@ -227,9 +226,9 @@ public class NewLinkWizardPage extends WizardPage {
 	}
 
 	/**
-	 * Ensures that both text fields are set.
+	 * Ensures that all fields are set
+	 *
 	 */
-
 	private void dialogChanged() {
 		if (projectCombo.getText() == "") { //$NON-NLS-1$
 			updateStatus(Messages.getString("NewLinkWizardPage.4")); //$NON-NLS-1$
@@ -356,7 +355,10 @@ public class NewLinkWizardPage extends WizardPage {
 		discussionCombo.setItems(discs);
 		discussionCombo.redraw();
 	}
-
+	/**
+	 * Sets the project in which context the linkage occurs
+	 * @param projectName
+	 */
 	public void setProjectName(String projectName) {
 		this.projectName = projectName;
 		int chosenProjIndex = -1;
