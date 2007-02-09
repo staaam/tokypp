@@ -7,6 +7,7 @@ import lost.tok.Discussion;
 import lost.tok.Excerption;
 import lost.tok.GeneralFunctions;
 import lost.tok.ToK;
+import lost.tok.disEditor.DiscussionEditor;
 import lost.tok.sourceDocument.ChapterText;
 import lost.tok.sourceDocument.SourceDocument;
 
@@ -42,6 +43,8 @@ import org.eclipse.ui.part.FileEditorInput;
  */
 public class RootDiscussions extends OperationTable implements
 		IObjectActionDelegate, ITextDoubleClickStrategy, ITextHover {
+	
+	public static final String EDITOR_ID = "lost.tok.opTable.ShowLinkedDiscussions";
 
 	class DiscussionLink {
 
@@ -223,8 +226,9 @@ public class RootDiscussions extends OperationTable implements
 
 		try {
 			IWorkbenchWindow ww = getSite().getWorkbenchWindow();
-			String editorId = ww.getWorkbench().getEditorRegistry()
-					.getDefaultEditor(d.getFile().getName()).getId();
+//			String editorId = ww.getWorkbench().getEditorRegistry()
+//					.getDefaultEditor(d.getFile().getName()).getId();
+			String editorId = DiscussionEditor.EDITOR_ID;
 
 			ww.getActivePage().openEditor(new FileEditorInput(d.getFile()),
 					editorId);
