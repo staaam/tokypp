@@ -122,11 +122,12 @@ public class Quote {
 	 * Returns a prefix of length j of the first excerption of the quote
 	 *	if j == 0 returns the whole excerption
 	 * @param j
+	 * @param projectName 
 	 * @return
 	 */
 	
-	public String getPrefix(int j) {
-		IFile file = ResourcesPlugin.getWorkspace().getRoot().getProjects()[0].getFile(getSourceFilePath());
+	public String getPrefix(int j, String projectName) {
+		IFile file = (ToK.getProjectToK(ResourcesPlugin.getWorkspace().getRoot().getProject(projectName))).getSource(getSourceFilePath());
 		SourceDocument sourceDoc = new SourceDocument();
 		sourceDoc.set(GeneralFunctions.readFromXML(file));
 		Excerption excerption = getExcerptions().get(0);
