@@ -166,9 +166,9 @@ public class NewRelationWizardPage extends WizardPage {
 			for (int j = 0; j < quotes.length; j++) {
 				TreeItem leftQuote = new TreeItem(leftOpinion, 0);
 				TreeItem rightQuote = new TreeItem(rightOpinion, 0);
-				leftQuote.setText(quotes[j].getPrefix(40));
+				leftQuote.setText(quotes[j].getPrefix(40,projectName));
 				leftQuote.setData(quotes[j].getID());
-				rightQuote.setText(quotes[j].getPrefix(40));
+				rightQuote.setText(quotes[j].getPrefix(40,projectName));
 				rightQuote.setData(quotes[j].getID());
 			}
 		}
