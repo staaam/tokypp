@@ -250,24 +250,6 @@
          <run class="lost.tok.ToKBuilder"/>
       </builder>
    </extension>
-   <extension
-         id="NewInvokatronAction"
-         name="New Invokatron Document Action"
-         point="org.eclipse.ui.actionSets">
-      <actionSet
-            id="lost.tok.disImportExport"
-            label="Invokatron Actions"
-            visible="true">
-         <action
-               class="lost.tok.disImportExport.DiscussionImportExport"
-               icon="icons/import.gif"
-               id="lost.tok.disImportExport"
-               label="YearlyPluginProject.action1"
-               style="push"
-               toolbarPath="org.eclipse.ui.workbench.file/new.ext"
-               tooltip="Starts the New Invokatron Document Wizard."/>
-      </actionSet>
-   </extension>
 <extension
          point="org.eclipse.ui.perspectiveExtensions">
       <perspectiveExtension targetID="org.eclipse.ui.resourcePerspective">
