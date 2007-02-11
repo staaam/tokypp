@@ -68,6 +68,7 @@ public class GeneralFunctions {
 		try {
 			OutputFormat outformat = OutputFormat.createPrettyPrint();
 			outformat.setEncoding("UTF-8");
+			outformat.setTrimText(false);
 
 			BufferedWriter wrtr = new BufferedWriter(new OutputStreamWriter(
 					new FileOutputStream(path), "UTF-8"));
