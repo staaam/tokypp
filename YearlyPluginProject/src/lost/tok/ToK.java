@@ -492,10 +492,16 @@ public class ToK {
 		try {
 			// Didn't validated the input because author rank will be
 			// a combo box option (no validation needed)
+//			System.out.println("Author name = " + author.name
+//					+ " , Current rank = " + author.rank
+//					+ "\nType new rank (1 - 5):  8");
+//			char inputRank = (char) System.in.read();
+			
 			System.out.println("Author name = " + author.name
 					+ " , Current rank = " + author.rank
-					+ "\nType new rank (1 - 5): ");
-			char inputRank = (char) System.in.read();
+					+ "\nUser enters new rank: 8");
+			
+			char inputRank = '8';
 			int newRank = Character.digit(inputRank, Character.MAX_RADIX);
 			if (newRank < 1 || newRank > 5) {
 				System.out.println(newRank + " is bad rank input !!");
