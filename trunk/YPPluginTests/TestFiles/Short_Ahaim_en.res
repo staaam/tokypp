@@ -1,5 +1,5 @@
-﻿TITLE:	Or Ahaim's Torah interpretation
-BY   :	Or Ahaim
+﻿Title:	Or Ahaim's Torah interpretation
+By   :	Or Ahaim
 
 Chapter 1:	chapter 11
 Chapter 1.1:	Verse 1
