@@ -19,14 +19,6 @@
             id="lost.tok.sourceParser.SourceParser"
             name="%editor.source.parser.name"/>
       <editor
-            class="lost.tok.linkTable.LinkageEditor"
-            contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
-            default="false"
-            extensions="src"
-            icon="icons/link_ico.gif"
-            id="lost.tok.linkTable.LinkageEditor"
-            name="%editor.discussion.linker"/>
-      <editor
             class="lost.tok.rootDiscussions.RootDiscussions"
             contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
             default="false"
