@@ -40,6 +40,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.DrillDownAdapter;
 import org.eclipse.ui.part.ViewPart;
@@ -322,6 +323,12 @@ public class ExcerptionView extends ViewPart {
 		((ViewContentProvider) viewer.getContentProvider())
 				.treeBuildAndRefresh();
 	}
+	
+	public void clear() {
+		objects.clear();
+		((ViewContentProvider) viewer.getContentProvider())
+			.treeBuildAndRefresh();
+	}
 
 	private void contributeToActionBars() {
 		IActionBars bars = getViewSite().getActionBars();
@@ -552,6 +559,33 @@ public class ExcerptionView extends ViewPart {
 	 */
 	public void setFocus() {
 		viewer.getControl().setFocus();
+	}
+	
+	public void setExcerptions(String fileName, Excerption[] exps, IFile file) {
+		Iterator<FileExcerption> i;
+		for (i = objects.iterator(); i.hasNext(); ) {
+			if (i.next().getSourceFileName().compareTo(fileName) != 0)
+				continue;
+
+			i.remove();
+
+			break;
+		}
+		addExcerptions(fileName, exps, file);
+	}
+
+	public static ExcerptionView getView() {
+		IViewPart view = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
+			.getActivePage().findView(ExcerptionView.ID);
+
+		if (view == null) {
+			PlatformUI.getWorkbench().getActiveWorkbenchWindow()
+					.getActivePage().activate(new ExcerptionView());
+			view = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
+					.getActivePage().findView(ExcerptionView.ID);
+		}
+		
+		return (ExcerptionView)view;
 	}
 
 }
