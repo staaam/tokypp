@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<queries>
+  <query sortDescending="false" assignedByEnabled="false" resolution="resolved" query="author.id:AfanasyevA AND NOT resolution:######NULL AND project.id:test_project severity" name="tracker" createdBy="AfanasyevA" sortType="severity" createdByEnabled="true" searchFor="" useGuru="false"/>
+</queries>

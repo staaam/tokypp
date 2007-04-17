@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<enumeration>
+    <option id="open" name="Open" description="The issue is open and ready for the assignee to start work on it." iconURL="images/polarion/enums/status_open.gif" sortOrder="1"/>
+    <option id="accepted" name="Accepted" description="The assignee has understood the item and accepted it to his/her tasklist." iconURL="images/polarion/enums/status_open.gif" sortOrder="2"/>
+    <option id="inprogress" name="In Progress" description="This issue is being actively worked on at the moment by the assignee." iconURL="images/polarion/enums/status_inprogress.gif" sortOrder="3"/>
+    <option id="reopened" name="Reopened" description="This issue was once resolved, but the resolution was deemed incorrect. From here issues are either marked assigned or resolved." iconURL="images/polarion/enums/status_reopened.gif" sortOrder="4"/>
+    <option id="resolved" name="Resolved" description="A resolution has been taken, and it is awaiting verification by reporter. From here issues are either reopened, or are closed." iconURL="images/polarion/enums/status_resolved.gif" sortOrder="5"/>
+    <option id="closed" name="Closed" description="The issue is considered finished, the resolution is correct. Issues which are not closed can be reopened." iconURL="images/polarion/enums/status_closed.gif" sortOrder="6"/>
+</enumeration>

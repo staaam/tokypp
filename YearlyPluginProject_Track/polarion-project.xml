@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project>
+    <field id="finish">2007-05-15</field>
+    <field id="start">2007-04-20</field>
+    <field id="description"/>
+    <field id="name">YearlyPluginProject_Track</field>
+    <field id="trackerPrefix">WI</field>
+</project>

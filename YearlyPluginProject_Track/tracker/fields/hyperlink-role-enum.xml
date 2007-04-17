@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<enumeration>
+    <option id="ref_int" name="refers internally to" oppositeName="is referred by" iconURL="" sortOrder="1"/>
+    <option id="ref_ext" name="refers externally to" oppositeName="is referred by" iconURL="" sortOrder="2"/>
+</enumeration>

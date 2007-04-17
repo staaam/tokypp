@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<work-item>
+    <field id="initialEstimate">15h</field>
+    <field id="type">task</field>
+    <field id="timeSpent">11h</field>
+    <field id="author">ZIMERMAN MOTI</field>
+    <field id="title">test work item</field>
+    <field id="created">2007-04-17 19:08:11.640 +0300</field>
+    <field id="priority">33.0</field>
+    <field id="description">this it a demo task</field>
+    <field id="dueDate">2007-04-18</field>
+    <field id="remainingEstimate">2h</field>
+    <field id="status">accepted</field>
+    <field id="assignee">Michal</field>
+    <field id="severity">normal</field>
+    <field id="previousStatus">inprogress</field>
+</work-item>

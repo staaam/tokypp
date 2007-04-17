@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<enumeration>
+    <option id="relates_to" name="relates to" oppositeName="is related to" description="A generic relation type, more concrete link should be used where possible" iconURL="" sortOrder="1"/>
+    <option id="depends_on" name="depends on" oppositeName="is depended on by" iconURL="" sortOrder="2"/>
+    <option id="duplicates" name="duplicates" oppositeName="is duplicated by" iconURL="" sortOrder="3"/>
+    <option id="parent" name="parent" oppositeName="contains" iconURL="" sortOrder="4"/>
+    <option id="follow_up" name="has follow-up" oppositeName="is follow-up of" iconURL="" sortOrder="5"/>
+</enumeration>

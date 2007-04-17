@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<enumeration>
+    <option id="fixed" name="Fixed" description="" iconURL="" sortOrder="1"/>
+    <option id="wontfix" name="Won't Fix" description="" iconURL="" sortOrder="2"/>
+    <option id="duplicate" name="Duplicate" description="" iconURL="" sortOrder="3"/>
+    <option id="incomplete" name="Incomplete" description="" iconURL="" sortOrder="4"/>
+    <option id="cannotreproduce" name="Cannot Reproduce" description="" iconURL="" sortOrder="5"/>
+    <option id="invalid" name="Invalid" description="" iconURL="" sortOrder="6"/>
+    <option id="later" name="Later" description="" iconURL="" sortOrder="7"/>
+</enumeration>
