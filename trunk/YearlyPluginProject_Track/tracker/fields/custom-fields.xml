@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fields>
+    <field id="risk" type="enum:risk" name="Risk" description="Risk of the work item. Usually determined from overall spread and impact and estimate inaccuracy." />
+    <field id="appliesTo" type="enum:opsystem" name="Applies To" multi="true" description="" /> 
+</fields>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<enumeration>
+    <option id="highest" name="Highest" description="" color="#ee0000" iconURL="images/polarion/enums/priority_highest.gif" sortOrder="1"/>
+    <option id="high" name="High" description="" color="#cc0000" iconURL="images/polarion/enums/priority_high.gif" sortOrder="2"/>
+    <option id="medium" name="Medium" description="" iconURL="images/polarion/enums/priority_medium.gif" sortOrder="3" default="true"/>
+    <option id="low" name="Low" description="" color="#222222" iconURL="images/polarion/enums/priority_low.gif" sortOrder="4"/>
+    <option id="lowest" name="Lowest" description="" color="#555555" iconURL="images/polarion/enums/priority_lowest.gif" sortOrder="5"/>
+</enumeration>

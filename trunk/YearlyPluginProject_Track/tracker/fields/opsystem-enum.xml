@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<enumeration>
+    <option id="winxp" name="Windows XP" description=""  sortOrder="1"/>
+    <option id="win2000" name="Windows 2000" description=""  sortOrder="2"/>
+    <option id="win2003" name="Windows 2003" description=""  sortOrder="3"/>
+    <option id="linux" name="Linux" description=""  sortOrder="4"/>
+    <option id="freebsd" name="FreeeBSD" description=""  sortOrder="5"/>
+</enumeration>
