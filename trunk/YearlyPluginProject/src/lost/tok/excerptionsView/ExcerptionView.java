@@ -41,6 +41,8 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.DrillDownAdapter;
 import org.eclipse.ui.part.ViewPart;
@@ -575,14 +577,18 @@ public class ExcerptionView extends ViewPart {
 	}
 
 	public static ExcerptionView getView() {
-		IViewPart view = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
-			.getActivePage().findView(ExcerptionView.ID);
+		IWorkbenchPage activePage = 
+			PlatformUI.getWorkbench()
+				.getActiveWorkbenchWindow()
+				.getActivePage();
+		
+		IViewPart view = activePage.findView(ExcerptionView.ID);
 
-		if (view == null) {
-			PlatformUI.getWorkbench().getActiveWorkbenchWindow()
-					.getActivePage().activate(new ExcerptionView());
-			view = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
-					.getActivePage().findView(ExcerptionView.ID);
+		try {
+			if (view == null) {
+				view = activePage.showView(ExcerptionView.ID);
+			}
+		} catch (PartInitException e) {
 		}
 		
 		return (ExcerptionView)view;
