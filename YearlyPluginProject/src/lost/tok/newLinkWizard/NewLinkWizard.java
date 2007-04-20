@@ -72,8 +72,10 @@ public class NewLinkWizard extends Wizard implements INewWizard {
 		try {
 			for (String element : roots) {
 				tok.linkDiscussionRoot(tok.getDiscussion(page.getDiscussion()),
-						element, page.getExcerptions(element), page
-								.getSubject(), page.getLinkType());
+						element,
+						page.getExcerptions(element), 
+						page.getSubject(),
+						page.getLinkType());
 			}
 
 		} catch (CoreException e) {

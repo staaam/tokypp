@@ -1,4 +1,4 @@
-package lost.tok.rootDiscussions;
+package lost.tok.opTable;
 
 import org.eclipse.jface.text.ITextDoubleClickStrategy;
 import org.eclipse.jface.text.ITextHover;
@@ -15,27 +15,27 @@ import org.eclipse.jface.text.source.SourceViewerConfiguration;
  */
 public class RootDisussionsSourceViewerConfiguration extends
 		SourceViewerConfiguration {
-	private RootDiscussions showRootDiscussions;
+	private RootDiscussionsView rootDiscussions;
 
 	public RootDisussionsSourceViewerConfiguration(
-			RootDiscussions showRootDiscussions) {
-		this.showRootDiscussions = showRootDiscussions;
+			RootDiscussionsView rootDiscussions) {
+		this.rootDiscussions = rootDiscussions;
 	}
 
 	public ITextDoubleClickStrategy getDoubleClickStrategy(
 			ISourceViewer sourceViewer, String contentType) {
-		return showRootDiscussions;
+		return rootDiscussions;
 	}
 
 	@Override
 	public ITextHover getTextHover(ISourceViewer sourceViewer,
 			String contentType, int stateMask) {
-		return showRootDiscussions;
+		return rootDiscussions;
 	}
 
 	@Override
 	public ITextHover getTextHover(ISourceViewer sourceViewer,
 			String contentType) {
-		return showRootDiscussions;
+		return rootDiscussions;
 	}
 }

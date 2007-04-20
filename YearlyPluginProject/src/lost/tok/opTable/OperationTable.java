@@ -8,19 +8,24 @@ import java.util.Vector;
 import java.util.Map.Entry;
 
 import lost.tok.Excerption;
+import lost.tok.excerptionsView.ExcerptionView;
 import lost.tok.sourceDocument.Chapter;
 import lost.tok.sourceDocument.ChapterText;
 import lost.tok.sourceDocument.SourceDocument;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.text.source.ISourceViewer;
+import org.eclipse.jface.text.source.SourceViewerConfiguration;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.editors.text.TextEditor;
+import org.eclipse.ui.part.FileEditorInput;
 
 /**
  * The operation table is an extension of the Eclipse editor. It displays source
@@ -34,6 +39,8 @@ import org.eclipse.ui.editors.text.TextEditor;
 public class OperationTable extends TextEditor {
 
 	public static final String EDITOR_ID = "lost.tok.opTable.OperationTable";
+	private RootDiscussionsView rootDiscussions = null;
+	private boolean rootDiscussionsView = false;
 
 	/**
 	 * Creates a new instance of the operation table Initialize it with the
@@ -42,6 +49,7 @@ public class OperationTable extends TextEditor {
 	public OperationTable() {
 		super();
 
+		rootDiscussions = new RootDiscussionsView(this);
 		setDocumentProvider(new SourceDocumentProvider());
 		markedExcerptions = new TreeMap<Integer, Excerption>();
 		markedText = new TreeMap<Integer, Integer>();
@@ -87,6 +95,9 @@ public class OperationTable extends TextEditor {
 
 	// Shay: this should add the pop up action, but it doesn't work
 	protected void hookContextMenu(Control parent) {
+		if (rootDiscussionsView ) {
+			return;
+		}
 
 		MenuManager menuMgr = new MenuManager("#PopupMenu"); //$NON-NLS-1$
 		addAction(menuMgr, "lost.tok.opTable.MarkPopUpMenu.Action"); //$NON-NLS-1$
@@ -119,7 +130,27 @@ public class OperationTable extends TextEditor {
 	 */
 	SortedMap<Integer, Integer> markedText;
 
+	private void updateExcerptionView() {
+		FileEditorInput fileEditorInput = 
+			(FileEditorInput)getEditorInput();
+		IFile file = fileEditorInput.getFile();
+		String fileName = file.getName();
+
+		try {
+			ExcerptionView.getView().setExcerptions(fileName, getMarked(), file.getProject());
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		//expViewer.setFocus();
+	}
+	
 	public void refreshDisplay() {
+		if (rootDiscussionsView) {
+			rootDiscussions.refreshDisplay();
+		}
+		
+		updateExcerptionView();
+		
 		StyleRange markedTextStyle = StyleManager.getMarkedStyle();
 		StyleRange chapterTextStyle = StyleManager.getChapterStyle();
 
@@ -276,4 +307,40 @@ public class OperationTable extends TextEditor {
 				"Cut not allowed in this version"); //$NON-NLS-1$
 	}
 
+	public SourceDocument getDocument() {
+		return (SourceDocument) getSourceViewer().getDocument();
+	}
+
+	private SourceViewerConfiguration oldSourceViewerConfiguration = null;
+
+	public void showDiscussions() {
+		if (oldSourceViewerConfiguration == null)
+			oldSourceViewerConfiguration = getSourceViewerConfiguration();
+		
+		rootDiscussionsView = true;
+
+		setSourceViewerConfiguration(
+				new RootDisussionsSourceViewerConfiguration(rootDiscussions));
+		
+		getSourceViewer().setTextDoubleClickStrategy(
+				rootDiscussions, IDocument.DEFAULT_CONTENT_TYPE);
+		getSourceViewer().setTextHover(
+				rootDiscussions, IDocument.DEFAULT_CONTENT_TYPE);
+		
+		clearMarked();
+	}
+
+	public void hideDisucssions() {
+		if (oldSourceViewerConfiguration != null)
+			setSourceViewerConfiguration(oldSourceViewerConfiguration);
+		
+		rootDiscussionsView = false;
+
+		getSourceViewer().setTextDoubleClickStrategy(
+				oldSourceViewerConfiguration.getDoubleClickStrategy(getSourceViewer(), IDocument.DEFAULT_CONTENT_TYPE), IDocument.DEFAULT_CONTENT_TYPE);
+		getSourceViewer().setTextHover(
+				oldSourceViewerConfiguration.getTextHover(getSourceViewer(), IDocument.DEFAULT_CONTENT_TYPE), IDocument.DEFAULT_CONTENT_TYPE);
+
+		clearMarked();
+	}
 }
