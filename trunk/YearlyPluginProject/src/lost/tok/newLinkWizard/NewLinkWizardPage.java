@@ -30,8 +30,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
-import org.eclipse.ui.IViewPart;
-import org.eclipse.ui.PlatformUI;
 
 /**
  * A page in the link root - discussion wizard
@@ -183,17 +181,7 @@ public class NewLinkWizardPage extends WizardPage {
 		gd = new GridData(GridData.VERTICAL_ALIGN_BEGINNING);
 		label.setLayoutData(gd);
 
-		IViewPart view = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
-				.getActivePage().findView(ExcerptionView.ID);
-
-		if (view == null) {
-			PlatformUI.getWorkbench().getActiveWorkbenchWindow()
-					.getActivePage().activate(new ExcerptionView());
-			view = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
-					.getActivePage().findView(ExcerptionView.ID);
-		}
-
-		expViewer = (ExcerptionView) view;
+		expViewer = ExcerptionView.getView();
 		Tree tree = expViewer.getTree();
 		TreeItem[] files = tree.getItems();
 

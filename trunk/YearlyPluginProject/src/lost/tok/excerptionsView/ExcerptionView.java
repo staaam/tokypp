@@ -1,7 +1,7 @@
 package lost.tok.excerptionsView;
 
 import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 
@@ -30,7 +30,6 @@ import org.eclipse.jface.viewers.ITreeSelection;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
@@ -54,6 +53,17 @@ import org.eclipse.ui.part.ViewPart;
  * 
  */
 public class ExcerptionView extends ViewPart {
+	//private List<FileExcerption> objects = new ArrayList<FileExcerption>();
+//	private Hashtable<IFile, List<Excerption> > 
+//		fileToExcerption = new Hashtable<IFile, List<Excerption>>();
+	
+	private Hashtable<String, List<Excerption>>
+		nameToExcerption = new Hashtable<String, List<Excerption>>();
+	
+	private Hashtable<String, IProject>
+		nameToProject = new Hashtable<String, IProject>();
+
+	
 	class FileExcerption {
 
 		List<Excerption> excerptions = new ArrayList<Excerption>();
@@ -93,8 +103,8 @@ public class ExcerptionView extends ViewPart {
 
 	}
 
-	class NameSorter extends ViewerSorter {
-	}
+//	class NameSorter extends ViewerSorter {
+//	}
 
 	class TreeObject implements IAdaptable {
 		private int id;
@@ -167,6 +177,8 @@ public class ExcerptionView extends ViewPart {
 		}
 	}
 
+	private QualifiedName idQName = new QualifiedName("id", "id");
+
 	class ViewContentProvider implements IStructuredContentProvider,
 			ITreeContentProvider {
 		private TreeParent invisibleRoot;
@@ -219,22 +231,24 @@ public class ExcerptionView extends ViewPart {
 		private void treeBuildAndRefresh() {
 			invisibleRoot = new TreeParent(""); //$NON-NLS-1$
 
-			for (Object element0 : objects) {
-				FileExcerption element = (FileExcerption) element0;
-				TreeParent parentFile = new TreeParent(element
-						.getSourceFileName());
-				for (Object element1 : element.getExcerptions()) {
-					Excerption exp = (Excerption) element1;
+			for (String filename : nameToExcerption.keySet()) {
+				TreeParent parentFile = new TreeParent(filename);
+				for (Excerption exp : nameToExcerption.get(filename)) {
 					String expText = exp.getText();
 
 					String expPrefix = expText.length() < 40 ? expText
 							: expText.substring(0, 40);
 					TreeObject temp = new TreeObject(expPrefix);
 					temp.setId(Integer.valueOf((Integer) exp
-							.getProperty(new QualifiedName("id", "id")))); //$NON-NLS-1$ //$NON-NLS-2$
+							.getProperty(idQName))); //$NON-NLS-1$ //$NON-NLS-2$
 					parentFile.addChild(temp);
 				}
-				invisibleRoot.addChild(parentFile);
+				if (!parentFile.hasChildren()) {
+					nameToExcerption.remove(filename);
+					nameToProject.remove(filename);
+				} else {
+					invisibleRoot.addChild(parentFile);
+				}
 			}
 			viewer.add(viewer.getTree(), invisibleRoot);
 			viewer.refresh();
@@ -280,8 +294,6 @@ public class ExcerptionView extends ViewPart {
 
 	private Action linkNewAction;
 
-	private List<FileExcerption> objects = new ArrayList<FileExcerption>();
-
 	private TreeViewer viewer;
 
 	/**
@@ -301,35 +313,22 @@ public class ExcerptionView extends ViewPart {
 	 * @param file
 	 *            Resource representing the file
 	 */
-	public void addExcerptions(String sourceFileName, Excerption[] exp,
-			IFile file) {
-		for (Object element0 : objects) {
-			FileExcerption element = (FileExcerption) element0;
-			if (element.getSourceFileName().compareTo(sourceFileName) == 0) {
-				for (Excerption element1 : exp) {
-					element.addExcerption(element1);
-				}
-				((ViewContentProvider) viewer.getContentProvider())
-						.treeBuildAndRefresh();
-				return;
-			}
-		}
-		// new source file
-		FileExcerption temp = new FileExcerption();
-		temp.setSourceFileName(sourceFileName);
-		temp.setSourcefile(file);
-		for (Excerption element : exp) {
-			temp.addExcerption(element);
-		}
-		objects.add(temp);
-		((ViewContentProvider) viewer.getContentProvider())
-				.treeBuildAndRefresh();
-	}
+//	public void addExcerptions(String filename, List<Excerption> exp) {
+//		if (!nameToExcerption.containsKey(filename)) {
+//			nameToExcerption.put(filename, new LinkedList<Excerption>());
+//		}
+//		nameToExcerption.get(filename).addAll(exp);
+//
+//		refresh();
+//	}
 	
 	public void clear() {
-		objects.clear();
-		((ViewContentProvider) viewer.getContentProvider())
-			.treeBuildAndRefresh();
+		nameToExcerption.clear();
+		refresh();
+	}
+
+	private void refresh() {
+		((ViewContentProvider) viewer.getContentProvider()).treeBuildAndRefresh();
 	}
 
 	private void contributeToActionBars() {
@@ -346,7 +345,7 @@ public class ExcerptionView extends ViewPart {
 		drillDownAdapter = new DrillDownAdapter(viewer);
 		viewer.setContentProvider(new ViewContentProvider());
 		viewer.setLabelProvider(new ViewLabelProvider());
-		viewer.setSorter(new NameSorter());
+		//viewer.setSorter(new NameSorter());
 		viewer.setInput(getViewSite());
 		makeActions();
 		hookContextMenu();
@@ -372,11 +371,9 @@ public class ExcerptionView extends ViewPart {
 	/**
 	 * Returns the excerptions from the given file name
 	 */
-	public List<Excerption> getExcerptions(String fileName) {
-		for (FileExcerption element : objects) {
-			if (element.getSourceFileName().compareTo(fileName) == 0) {
-				return element.getExcerptions();
-			}
+	public List<Excerption> getExcerptions(String filename) {
+		if (nameToExcerption.containsKey(filename)) {
+			return nameToExcerption.get(filename);
 		}
 		return null;
 	}
@@ -389,22 +386,15 @@ public class ExcerptionView extends ViewPart {
 		return viewer.getLabelProvider();
 	}
 
-	private IFile getProject() {
+	private IProject getProject() {
 		ITreeSelection selection = (ITreeSelection) viewer.getSelection();
-		List list = selection.toList();
-		IFile file = null;
-		String fileName = ((TreeObject) list.get(0)).getParent().getName();
 
-		try {
-			for (FileExcerption object : objects) {
-				if (object.getSourceFileName().compareTo(fileName) == 0) {
-					file = object.getSourcefile();
-					break;
-				}
-			}
-		} catch (ConcurrentModificationException e) {
-		}
-		return file;
+		TreeObject treeObject = (TreeObject) selection.getFirstElement();
+		
+		String filename = treeObject.getName();
+
+		return nameToProject.get(
+				(nameToProject.containsKey(filename)) ? filename : treeObject.getParent().getName()); 
 	}
 
 	public Tree getTree() {
@@ -435,10 +425,7 @@ public class ExcerptionView extends ViewPart {
 	private void makeActions() {
 		linkExistingAction = new Action() {
 			public void run() {
-
-				IFile file = getProject();
-
-				IProject project = file.getProject();
+				IProject project = getProject();
 
 				ITreeSelection selection = (ITreeSelection) viewer
 						.getSelection();
@@ -468,10 +455,7 @@ public class ExcerptionView extends ViewPart {
 
 		linkNewAction = new Action() {
 			public void run() {
-
-				IFile file = getProject();
-
-				IProject project = file.getProject();
+				IProject project = getProject();
 
 				NewDiscussionWizard discWizard = new NewDiscussionWizard();
 				discWizard.init(PlatformUI.getWorkbench(),
@@ -517,37 +501,23 @@ public class ExcerptionView extends ViewPart {
 					selectedIds.add(element.getId());
 				}
 
-				for (Object element : selectedFiles) {
-					String fileName = (String) element;
-					try {
-						for (FileExcerption object : objects) {
-							if (object.getSourceFileName().compareTo(fileName) == 0) {
-								objects.remove(object);
-							}
-						}
-					} catch (ConcurrentModificationException e) {
-					}
+				for (String filename : selectedFiles) {
+					nameToExcerption.remove(filename);
 				}
 
-				for (Object element0 : selectedIds) {
-					Integer element = (Integer) element0;
-					for (FileExcerption object : objects) {
-						List<Excerption> excerptions = object.getExcerptions();
-						try {
-							for (Excerption exp : excerptions) {
-								int id = Integer.valueOf((Integer) exp
-										.getProperty(new QualifiedName(
-												"id", "id"))); //$NON-NLS-1$ //$NON-NLS-2$
-								if (element.compareTo(id) == 0) {
-									excerptions.remove(exp);
-								}
-							}
-						} catch (ConcurrentModificationException e) {
+				for (Integer id : selectedIds) {
+					for (String filename : nameToExcerption.keySet()) {
+						List<Excerption> excerptions = nameToExcerption.get(filename);
+						for (Iterator<Excerption> iter = excerptions.iterator(); iter.hasNext();) {
+							if (((Integer) iter.next().getProperty(idQName)).compareTo(id) != 0)
+								continue;
+
+							iter.remove();
+							break;
 						}
 					}
 				}
-				((ViewContentProvider) viewer.getContentProvider())
-						.treeBuildAndRefresh();
+				refresh();
 			}
 		};
 		deleteAction.setText(Messages.getString("ExcerptionView.13")); //$NON-NLS-1$
@@ -563,26 +533,33 @@ public class ExcerptionView extends ViewPart {
 		viewer.getControl().setFocus();
 	}
 	
-	public void setExcerptions(String fileName, Excerption[] exps, IFile file) {
-		Iterator<FileExcerption> i;
-		for (i = objects.iterator(); i.hasNext(); ) {
-			if (i.next().getSourceFileName().compareTo(fileName) != 0)
-				continue;
-
-			i.remove();
-
-			break;
+	public void setExcerptions(String fileName, List<Excerption> exps, IProject project) {
+		nameToExcerption.put(fileName, exps);
+		nameToProject.put(fileName, project);
+		for (Excerption exp : exps) {
+			exp.setProperty(idQName, nextId++);
 		}
-		addExcerptions(fileName, exps, file);
+		refresh();
 	}
 
+	/**
+	 * Returns the ExcerptionView object. If the view not shown
+	 * in current perspective, function shows it
+	 *  
+	 * @return ExceptionView object
+	 */
 	public static ExcerptionView getView() {
 		IWorkbenchPage activePage = 
 			PlatformUI.getWorkbench()
 				.getActiveWorkbenchWindow()
 				.getActivePage();
 		
+		if (activePage == null) {
+			return null;
+		}
+		
 		IViewPart view = activePage.findView(ExcerptionView.ID);
+		
 
 		try {
 			if (view == null) {
@@ -594,4 +571,7 @@ public class ExcerptionView extends ViewPart {
 		return (ExcerptionView)view;
 	}
 
+	public IStructuredSelection getRoots() {
+		return (IStructuredSelection) viewer.getSelection();
+	}
 }

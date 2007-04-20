@@ -1,4 +1,4 @@
-package lost.tok.rootDiscussions;
+package lost.tok.opTable;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -8,7 +8,6 @@ import lost.tok.Excerption;
 import lost.tok.GeneralFunctions;
 import lost.tok.ToK;
 import lost.tok.disEditor.DiscussionEditor;
-import lost.tok.opTable.OperationTable;
 import lost.tok.sourceDocument.ChapterText;
 import lost.tok.sourceDocument.SourceDocument;
 
@@ -26,9 +25,7 @@ import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.Region;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
@@ -41,44 +38,10 @@ import org.eclipse.ui.part.FileEditorInput;
  * @author Michael Gelfand
  * 
  */
-public class RootDiscussions extends OperationTable implements
-		IObjectActionDelegate, ITextDoubleClickStrategy, ITextHover {
+public class RootDiscussionsView extends AbstractEditorAction
+		implements ITextDoubleClickStrategy, ITextHover {
 
 	public static final String EDITOR_ID = "lost.tok.opTable.ShowLinkedDiscussions";
-
-	class DiscussionLink {
-
-		private String discussion;
-
-		private String linkSubject;
-
-		private String type;
-
-		public DiscussionLink(Element e) {
-			this(e.element("discussionFile").getText(), e.element("type")
-					.getText(), e.element("linkSubject").getText());
-		}
-
-		public DiscussionLink(String discussionFile, String type,
-				String linkSubject) {
-			discussion = Discussion.getNameFromFile(discussionFile);
-			this.type = type;
-			this.linkSubject = linkSubject;
-		}
-
-		public String getDiscussionFile() {
-			return discussion;
-		}
-
-		public String getLinkSubject() {
-			return linkSubject;
-		}
-
-		public String getType() {
-			return type;
-		}
-
-	}
 
 	private static QualifiedName discussionLinkQName = new QualifiedName(
 			"lost.tok.opTable.ShowRootDiscussions", "excerptionSource");
@@ -92,13 +55,14 @@ public class RootDiscussions extends OperationTable implements
 
 	private IWorkbenchPart targetPart;
 
-	ToK tok = null;
+	private OperationTable operationTable;
 
-	public RootDiscussions() {
+	private ToK tok;
+
+	public RootDiscussionsView(OperationTable ot) {
 		super();
-		setSourceViewerConfiguration(new RootDisussionsSourceViewerConfiguration(
-				this));
-		System.out.println("ShowLinkedDiscussions");
+		
+		operationTable = ot;
 	}
 
 	/**
@@ -189,8 +153,7 @@ public class RootDiscussions extends OperationTable implements
 				Excerption e = new Excerption((Element) oe);
 				e.setProperty(discussionLinkQName, discussionLink);
 
-				SourceDocument document = (SourceDocument) getSourceViewer()
-						.getDocument();
+				SourceDocument document = operationTable.getDocument();
 
 				ChapterText ct = document.getChapterText(e.getSourceFilePath());
 				if (ct == null) {
@@ -207,15 +170,11 @@ public class RootDiscussions extends OperationTable implements
 
 				rootExcerptions.add(e);
 
-				markChapterExcerption(ct.getOffset() + e.getStartPos(), e
+				operationTable.markChapterExcerption(ct.getOffset() + e.getStartPos(), e
 						.getEndPos()
 						- e.getStartPos(), ct);
 			}
 		}
-	}
-
-	@Override
-	protected void hookContextMenu(Control parent) {
 	}
 
 	private void openDiscussionLink(DiscussionLink discussionLink) {
@@ -228,7 +187,7 @@ public class RootDiscussions extends OperationTable implements
 		}
 
 		try {
-			IWorkbenchWindow ww = getSite().getWorkbenchWindow();
+			IWorkbenchWindow ww = operationTable.getSite().getWorkbenchWindow();
 			// String editorId = ww.getWorkbench().getEditorRegistry()
 			// .getDefaultEditor(d.getFile().getName()).getId();
 			String editorId = DiscussionEditor.EDITOR_ID;
@@ -241,17 +200,14 @@ public class RootDiscussions extends OperationTable implements
 		}
 	}
 
-	@Override
 	public void refreshDisplay() {
-		IEditorInput input = getEditorInput();
+		IEditorInput input = operationTable.getEditorInput();
 		if (input instanceof FileEditorInput) {
 			FileEditorInput fileEditorInput = (FileEditorInput) input;
 			IFile file = fileEditorInput.getFile();
 			tok = ToK.getProjectToK(file.getProject());
 			getRootDiscussions(file);
 		}
-
-		super.refreshDisplay();
 	}
 
 	public void run(IAction action) {
@@ -280,11 +236,9 @@ public class RootDiscussions extends OperationTable implements
 
 	public void selectionChanged(IAction action, ISelection selection) {
 		this.selection = selection;
-		System.out.println("selectionChanged");
 	}
 
 	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
 		this.targetPart = targetPart;
-		System.out.println("setActivePart");
 	}
 }
