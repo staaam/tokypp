@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<work-item>
+<field id="created">2007-04-23 02:04:51.656 +0300</field>
+<field id="title">28. Translation, i18n</field>
+<field id="severity">normal</field>
+<field id="remainingEstimate">3h</field>
+<field id="timeSpent">0h</field>
+<field id="assignee">Shay</field>
+<field id="priority">25.0</field>
+<field id="type">task</field>
+<field id="dueDate">2007-05-15</field>
+<field id="status">open</field>
+<field id="description"><![CDATA[<P>Make sure all the messages are already translated</P>
+<P>&nbsp;</P>
+<P>28.2 was solved before, so my initial estimate for it is 0</P>
+<P>28.1 might take a bit more time (it's a dirty job :P )</P>
+<P>&nbsp;</P>]]></field>
+<field id="initialEstimate">7h</field>
+<field id="author">Shay</field>
+</work-item>

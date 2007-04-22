@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<work-item>
+<field id="created">2007-04-23 02:02:56.640 +0300</field>
+<field id="title">18. Updating Editors</field>
+<field id="severity">normal</field>
+<field id="remainingEstimate">5h</field>
+<field id="timeSpent">5h</field>
+<field id="assignee">Shay</field>
+<field id="priority">25.0</field>
+<field id="type">task</field>
+<field id="dueDate">2007-05-15 00:00:00.000 +0300</field>
+<field id="status">open</field>
+<field id="description"><![CDATA[<P>When updating a file, the editors must update its contents accordingly</P>
+<P>&nbsp;</P>
+<P>23/4/07 -&nbsp;5 hours</P>]]></field>
+<field id="initialEstimate">20h</field>
+<field id="author">Shay</field>
+</work-item>
