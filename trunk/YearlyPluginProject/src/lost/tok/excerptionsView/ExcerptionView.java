@@ -8,13 +8,14 @@ import java.util.List;
 import lost.tok.Excerption;
 import lost.tok.Messages;
 import lost.tok.newDiscussionWizard.NewDiscussionWizard;
-import lost.tok.newLinkWizard.NewLinkWizard;
+import lost.tok.opTable.wizards.NewLinkWizard;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
@@ -276,7 +277,7 @@ public class ExcerptionView extends ViewPart {
 
 	private static int nextId = 0;
 
-	private Action deleteAction;
+	private IAction deleteAction;
 
 	/*
 	 * The content provider class is responsible for providing objects to the
@@ -290,9 +291,9 @@ public class ExcerptionView extends ViewPart {
 	@SuppressWarnings("unused")
 	private DrillDownAdapter drillDownAdapter;
 
-	private Action linkExistingAction;
+	private IAction linkExistingAction;
 
-	private Action linkNewAction;
+	private IAction linkNewAction;
 
 	private TreeViewer viewer;
 

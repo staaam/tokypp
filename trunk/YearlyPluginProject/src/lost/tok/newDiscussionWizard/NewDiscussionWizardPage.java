@@ -18,6 +18,7 @@ public class NewDiscussionWizardPage extends WizardPage implements
 		ModifyListener {
 	/** The full name of the source */
 	private Text name;
+	private String discussionName;
 
 	/**
 	 * Constructor for UnparsedDocWizardPage.
@@ -58,8 +59,7 @@ public class NewDiscussionWizardPage extends WizardPage implements
 
 	private void dialogChanged() {
 
-		String discussionName = getDiscussionName();
-
+		discussionName = updateDiscussionName();
 		if (discussionName.length() == 0) {
 			updateStatus("Discussion name must be specified"); //$NON-NLS-1$
 			return;
@@ -77,8 +77,12 @@ public class NewDiscussionWizardPage extends WizardPage implements
 		dialogChanged();
 	}
 
-	public String getDiscussionName() {
+	public String updateDiscussionName() {
 		return name.getText();
+	}
+	
+	public String getDiscussionName() {
+		return discussionName;
 	}
 
 }

@@ -1,6 +1,6 @@
 package lost.tok.sourceParser;
 
-import lost.tok.opTable.AbstractEditorAction;
+import lost.tok.opTable.actions.AbstractEditorAction;
 
 import org.eclipse.jface.action.IAction;
 

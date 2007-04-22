@@ -1,8 +1,10 @@
-package lost.tok.opTable;
+package lost.tok.opTable.actions;
+
+import lost.tok.opTable.OperationTable;
 
 import org.eclipse.jface.action.IAction;
 
-public class SwitchOpTableView extends AbstractEditorAction {
+public class SwitchOpTableViewAction extends AbstractEditorAction {
 
 	public void run(IAction action) {
 		assert (activeEditor != null);

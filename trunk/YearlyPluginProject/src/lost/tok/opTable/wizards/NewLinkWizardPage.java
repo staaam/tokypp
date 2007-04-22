@@ -1,4 +1,4 @@
-package lost.tok.newLinkWizard;
+package lost.tok.opTable.wizards;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,6 +10,7 @@ import lost.tok.Link;
 import lost.tok.Messages;
 import lost.tok.ToK;
 import lost.tok.excerptionsView.ExcerptionView;
+import lost.tok.newDiscussionWizard.NewDiscussionWizard;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -17,17 +18,21 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.dialogs.IDialogPage;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
@@ -78,14 +83,13 @@ public class NewLinkWizardPage extends WizardPage {
 		Composite container = new Composite(parent, SWT.NULL);
 		GridLayout layout = new GridLayout();
 		container.setLayout(layout);
-		layout.numColumns = 3;
+		layout.numColumns = 2;
 		layout.verticalSpacing = 9;
 
 		Label label = new Label(container, SWT.NULL);
 		label.setText(Messages.getString("NewLinkWizardPage.13")); //$NON-NLS-1$
 
-		IProject[] projects = ResourcesPlugin.getWorkspace().getRoot()
-				.getProjects();
+		IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
 		String[] projectNames = new String[projects.length];
 
 		for (int i = 0; i < projects.length; i++) {
@@ -94,7 +98,7 @@ public class NewLinkWizardPage extends WizardPage {
 
 		projectCombo = new Combo(container, SWT.READ_ONLY | SWT.DROP_DOWN);
 		projectCombo.setItems(projectNames);
-
+		
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		projectCombo.setLayoutData(gd);
 
@@ -111,12 +115,17 @@ public class NewLinkWizardPage extends WizardPage {
 		});
 
 		label = new Label(container, SWT.NULL);
-		label.setText(""); //$NON-NLS-1$
-
-		label = new Label(container, SWT.NULL);
 		label.setText(Messages.getString("NewLinkWizardPage.14")); //$NON-NLS-1$
+		
+		Composite c = new Composite(container, SWT.NONE);
+		GridLayout layout2 = new GridLayout();
+		c.setLayout(layout2);
+		layout2.numColumns = 2;
+		layout2.marginWidth = 0;
+		layout2.marginHeight = 0;
+		c.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_FILL | GridData.FILL_HORIZONTAL));
 
-		discussionCombo = new Combo(container, SWT.READ_ONLY | SWT.DROP_DOWN);
+		discussionCombo = new Combo(c, SWT.READ_ONLY | SWT.DROP_DOWN);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		discussionCombo.setLayoutData(gd);
 		discussionCombo.addSelectionListener(new SelectionListener() {
@@ -132,9 +141,34 @@ public class NewLinkWizardPage extends WizardPage {
 
 		});
 
-		label = new Label(container, SWT.NULL);
-		label.setText(""); //$NON-NLS-1$
+		Button newPrjButton = new Button(c, SWT.NONE);
+		newPrjButton.setText("New...");
+		
+		newPrjButton.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				NewDiscussionWizard w = new NewDiscussionWizard();
+				w.setProject(ResourcesPlugin.getWorkspace().getRoot().getProject(projectCombo.getText()));
 
+				WizardDialog wd = new WizardDialog(new Shell(), w);
+				wd.setBlockOnOpen(true);
+
+				wd.open();
+				
+				if (wd.getReturnCode() != WizardDialog.OK)
+					return;
+
+				String newDiscussion = w.getDiscussionName();
+				projectSelected();
+				for (int i=0; i<discussionCombo.getItemCount(); i++) {
+					if (newDiscussion.compareTo(discussionCombo.getItem(i)) != 0)
+						continue;
+					
+					discussionCombo.select(i);
+					break;
+				}
+			}
+		});
+		
 		label = new Label(container, SWT.NULL);
 		label.setText(Messages.getString("NewLinkWizardPage.1")); //$NON-NLS-1$
 
@@ -149,9 +183,6 @@ public class NewLinkWizardPage extends WizardPage {
 			}
 
 		});
-
-		label = new Label(container, SWT.NULL);
-		label.setText(""); //$NON-NLS-1$
 
 		label = new Label(container, SWT.NULL);
 		label.setText(Messages.getString("NewLinkWizardPage.2")); //$NON-NLS-1$
@@ -173,9 +204,6 @@ public class NewLinkWizardPage extends WizardPage {
 			}
 
 		});
-
-		label = new Label(container, SWT.NULL);
-		label.setText(""); //$NON-NLS-1$
 
 		label = new Label(container, SWT.NULL);
 		label.setText(Messages.getString("NewLinkWizardPage.15")); //$NON-NLS-1$

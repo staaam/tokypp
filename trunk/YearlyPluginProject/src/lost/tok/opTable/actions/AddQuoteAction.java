@@ -1,10 +1,12 @@
-package lost.tok.opTable;
+package lost.tok.opTable.actions;
 
 import java.util.List;
 
 import lost.tok.Excerption;
 import lost.tok.Quote;
 import lost.tok.ToK;
+import lost.tok.opTable.Messages;
+import lost.tok.opTable.OperationTable;
 import lost.tok.opTable.wizards.AddQuoteWizard;
 
 import org.eclipse.core.resources.IFile;

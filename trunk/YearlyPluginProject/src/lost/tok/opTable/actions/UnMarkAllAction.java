@@ -1,4 +1,6 @@
-package lost.tok.opTable;
+package lost.tok.opTable.actions;
+
+import lost.tok.opTable.OperationTable;
 
 import org.eclipse.jface.action.IAction;
 
