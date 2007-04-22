@@ -1,5 +1,6 @@
 package lost.tok.disEditor;
 
+import java.util.TreeMap;
 import lost.tok.Discussion;
 import lost.tok.Opinion;
 import lost.tok.Quote;
@@ -42,7 +43,7 @@ public class DiscussionEditor extends TextEditor {
 
 	private static final String OPINION = "Opinion";
 
-	public static final String EDITOR_ID = "lost.tok.disEditor.DiscussionEditor";
+	public static final String EDITOR_ID = "lost.tok.disEditor.DiscussionEditor"; 
 
 	private Discussion discussion = null;
 
@@ -335,8 +336,29 @@ public class DiscussionEditor extends TextEditor {
 				addTreeQuote(opinionItem, quote);
 			}
 		}
+		
+		// expends the root and it's opinions, but not the quotes
+		expendToDepth(rootItem, 2); 
 
 		// *************************************************************************************************
+	}
+	
+	/**
+	 * Expends the tree till it dies
+	 * 
+	 * This function will expend the Item and its children,
+	 *  up to depthLeft levels
+	 *  
+	 * @param treeItem the item to expend
+	 * @param depthLeft the number of levels to expend (1 means only this level)
+	 */
+	private void expendToDepth(TreeItem treeItem, int depthLeft)
+	{
+		if (depthLeft <= 0)
+			return;
+		treeItem.setExpanded(true);
+		for (TreeItem child : treeItem.getItems())
+			expendToDepth(child, depthLeft - 1);
 	}
 
 	private TreeItem addTreeOpinion(TreeItem treeItem, Opinion opinion) {
@@ -431,10 +453,126 @@ public class DiscussionEditor extends TextEditor {
 		addTreeOpinion(rootItem, new Opinion(opinionName, discussion
 				.getOpinionsId(opinionName)));
 	}
-
-	// *************************************************************************************************
-	public void dispose() {
-		super.dispose();
+	
+	
+	/**
+	 * This method allows us to update the displayed information, when the
+	 * files on the disk change.
+	 * It updates the treeItems to match the file's content
+	 * Note: Additions to the xml file will be added after the existing entries
+	 */
+	@Override
+	protected void handleEditorInputChanged() {
+		
+		discussion = null; // lose the previous discussion		
+		discussion = getDiscussion(); // update all the data
+		
+		synchronizeOpinions();
+		// now the opinions should be synchronized with the file		
+		synchronizeQuotes();
+	}
+	
+	/**
+	 * Synchronizes the opinions with a modified discussion file
+	 * 
+	 * Assumption: The discussion member is pointing to the new discussion
+	 * 				and doesn't change
+	 */
+	private void synchronizeOpinions()
+	{
+		TreeMap<Integer, Opinion> existingOpinions =
+			new TreeMap<Integer, Opinion>();
+		
+		// find all the opinions existing in the discussion (not the tree)
+		for (Opinion opinion : discussion.getOpinions()) {
+			int id = opinion.getId();
+			existingOpinions.put(id, opinion);
+		}
+		
+		// for each opinion in the tree, find its status (belongs, doesn't belong)
+		for (TreeItem opinionItem : rootItem.getItems())
+		{
+			int id = getOpinion(opinionItem).getId();
+			if (!existingOpinions.containsKey(id))
+			{
+				// remove the opinion from the view
+				opinionItem.dispose();
+			}
+			else
+			{
+				// mark that the opinion is already in the view
+				existingOpinions.remove(id);
+			}
+		}
+		
+		// add the opinions which weren't found in the tree
+		//  new opinions are expended by default
+		for (Integer opinionId : existingOpinions.keySet())
+		{
+			TreeItem opItem = addTreeOpinion(rootItem, existingOpinions.get(opinionId));
+			opItem.setExpanded(true);
+		}
 	}
 
+	/**
+	 * Synchronizes the opinions with a modified discussion file
+	 * 
+	 * Assumption: The discussion member is pointing to the new discussion
+	 * 				and doesn't change.
+	 * 			   The opinions are already synchronized
+	 *
+	 */
+	private void synchronizeQuotes() {
+		TreeMap<Integer, TreeItem> treeOpinions =
+			new TreeMap<Integer, TreeItem>();
+		
+		// map the opinions in the tree:  id->treeItem
+		for (TreeItem opinionItem : rootItem.getItems())
+		{
+			int id = getOpinion(opinionItem).getId();
+			treeOpinions.put(id, opinionItem);
+		}
+		
+		// for each opinion, update its quotes
+		for (Opinion opin : discussion.getOpinions())
+		{
+			int opinionId = opin.getId();
+			
+			TreeMap<Integer, Quote> existingQuotes =
+				new TreeMap<Integer, Quote>();
+			
+			// find all the quotes existing in the opinion (not the tree)
+			for (Quote quote : discussion.getQuotes(opin.getName()) ) {
+				int id = quote.getID();
+				existingQuotes.put(id, quote);
+			}
+			
+			TreeItem opItem = treeOpinions.get(opinionId);
+			
+			// for each quote in the tree, find its status (belongs, doesn't belong)
+			for (TreeItem quoteItem : opItem.getItems())
+			{
+				int id = getQuote(quoteItem).getID();
+				if (!existingQuotes.containsKey(id))
+				{
+					// remove the opinion from the view
+					quoteItem.dispose();
+				}
+				else
+				{
+					// mark that the opinion is already in the view
+					existingQuotes.remove(id);
+				}
+			}
+			
+			// add the quotes which weren't found in the tree
+			//  and expend them and their opinions
+			for (Integer quoteId : existingQuotes.keySet())
+			{
+				TreeItem qItem = addTreeQuote(opItem, existingQuotes.get(quoteId));
+				opItem.setExpanded(true);
+				qItem.setExpanded(true);
+			}
+		}
+	}
 }
