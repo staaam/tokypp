@@ -235,12 +235,23 @@
             id="lost.tok.excerptionsView.ExcerptionView"
             name="%lost.tok.excerptionsView"/>
    </extension>
-   <extension
+	<extension
          point="org.eclipse.ui.exportWizards">
       <wizard
             category="lost.tok.Categoy"
             class="lost.tok.wizards.ExportDiscussionWizard"
             id="lost.tok.exportDiscussion.ExportDiscussionWizard"
             name="Export Discussion"/>
+   </extension>
+   <extension
+         id="TOKPerspective"
+         name="TOK perspective"
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            class="lost.tok.perspective.Perspective"
+            fixed="false"
+            icon="icons/tree.jpg"
+            id="YearlyPluginProject.TOKperspective1"
+            name="Tree of Knowledge"/>
    </extension>
 </plugin>
