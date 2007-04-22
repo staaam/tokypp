@@ -13,11 +13,8 @@ import lost.tok.excerptionsView.ExcerptionView;
 import lost.tok.wizards.NewDiscussion;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.dialogs.IDialogPage;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -55,25 +52,23 @@ public class NewLinkWizardPage extends WizardPage {
 
 	private Combo linkType;
 
-	private Combo projectCombo;
-
-	private String projectName;
-
 	@SuppressWarnings("unused")
 	private ISelection selection;
 
 	private Text subject;
+
+	private IProject project;
 
 	/**
 	 * Constructor for NewLinkWizardPage.
 	 * 
 	 * @param pageName
 	 */
-	public NewLinkWizardPage(ISelection selection) {
+	public NewLinkWizardPage() {
 		super("wizardPage"); //$NON-NLS-1$
 		setTitle(Messages.getString("NewLinkWizardPage.0")); //$NON-NLS-1$
 		setDescription(Messages.getString("NewLinkWizardPage.12")); //$NON-NLS-1$
-		this.selection = selection;
+		project = ExcerptionView.getView().getProject();
 	}
 
 	/**
@@ -87,34 +82,6 @@ public class NewLinkWizardPage extends WizardPage {
 		layout.verticalSpacing = 9;
 
 		Label label = new Label(container, SWT.NULL);
-		label.setText(Messages.getString("NewLinkWizardPage.13")); //$NON-NLS-1$
-
-		IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
-		String[] projectNames = new String[projects.length];
-
-		for (int i = 0; i < projects.length; i++) {
-			projectNames[i] = projects[i].getName();
-		}
-
-		projectCombo = new Combo(container, SWT.READ_ONLY | SWT.DROP_DOWN);
-		projectCombo.setItems(projectNames);
-		
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		projectCombo.setLayoutData(gd);
-
-		projectCombo.addSelectionListener(new SelectionListener() {
-			public void widgetDefaultSelected(SelectionEvent e) {
-				// widgetSelected(e);
-			}
-
-			public void widgetSelected(SelectionEvent arg0) {
-				projectSelected();
-				dialogChanged();
-			}
-
-		});
-
-		label = new Label(container, SWT.NULL);
 		label.setText(Messages.getString("NewLinkWizardPage.14")); //$NON-NLS-1$
 		
 		Composite c = new Composite(container, SWT.NONE);
@@ -126,8 +93,9 @@ public class NewLinkWizardPage extends WizardPage {
 		c.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_FILL | GridData.FILL_HORIZONTAL));
 
 		discussionCombo = new Combo(c, SWT.READ_ONLY | SWT.DROP_DOWN);
-		gd = new GridData(GridData.FILL_HORIZONTAL);
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		discussionCombo.setLayoutData(gd);
+		projectSelected();
 		discussionCombo.addSelectionListener(new SelectionListener() {
 
 			public void widgetDefaultSelected(SelectionEvent arg0) {
@@ -147,7 +115,7 @@ public class NewLinkWizardPage extends WizardPage {
 		newPrjButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				NewDiscussion w = new NewDiscussion();
-				w.setProject(ResourcesPlugin.getWorkspace().getRoot().getProject(projectCombo.getText()));
+				w.setProject(project);
 
 				WizardDialog wd = new WizardDialog(new Shell(), w);
 				wd.setBlockOnOpen(true);
@@ -164,6 +132,7 @@ public class NewLinkWizardPage extends WizardPage {
 						continue;
 					
 					discussionCombo.select(i);
+					dialogChanged();
 					break;
 				}
 			}
@@ -248,11 +217,6 @@ public class NewLinkWizardPage extends WizardPage {
 	 * 
 	 */
 	private void dialogChanged() {
-		if (projectCombo.getText() == "") { //$NON-NLS-1$
-			updateStatus(Messages.getString("NewLinkWizardPage.4")); //$NON-NLS-1$
-			return;
-		}
-
 		if (discussionCombo.getText() == "") { //$NON-NLS-1$
 			updateStatus(Messages.getString("NewLinkWizardPage.6")); //$NON-NLS-1$
 			return;
@@ -292,7 +256,7 @@ public class NewLinkWizardPage extends WizardPage {
 	}
 
 	public String getProject() {
-		return projectCombo.getText();
+		return project.getName();
 	}
 
 	public String[] getSourceFiles() {
@@ -314,51 +278,46 @@ public class NewLinkWizardPage extends WizardPage {
 
 	private void initialize() {
 
-		if (selection != null && selection.isEmpty() == false
-				&& selection instanceof IStructuredSelection) {
-			IStructuredSelection ssel = (IStructuredSelection) selection;
-			if (ssel.size() > 1) {
-				return;
-			}
-			Object obj = ssel.getFirstElement();
-			if (obj instanceof IResource) {
-				IResource resource = (IResource) obj;
-				String projectName = resource.getProject().getName();
-				int chosenProjIndex = -1;
-				String[] projectComboNames = projectCombo.getItems();
-				for (int i = 0; i < projectComboNames.length; i++) {
-					if (projectComboNames[i].compareTo(projectName) == 0) {
-						chosenProjIndex = i;
-						break;
-					}
-				}
-				projectCombo.select(chosenProjIndex);
-				projectSelected();
-
-				String discName = resource.getName().split(".dis")[0]; //$NON-NLS-1$
-				int chosenDiscIndex = -1;
-				String[] discComboNames = discussionCombo.getItems();
-				for (int i = 0; i < discComboNames.length; i++) {
-					if (discComboNames[i].compareTo(discName) == 0) {
-						chosenDiscIndex = i;
-						break;
-					}
-				}
-				discussionCombo.select(chosenDiscIndex);
-				discussionCombo.redraw();
-			}
-		}
+//		if (selection != null && selection.isEmpty() == false
+//				&& selection instanceof IStructuredSelection) {
+//			IStructuredSelection ssel = (IStructuredSelection) selection;
+//			if (ssel.size() > 1) {
+//				return;
+//			}
+//			Object obj = ssel.getFirstElement();
+//			if (obj instanceof IResource) {
+//				IResource resource = (IResource) obj;
+//				String projectName = resource.getProject().getName();
+//				int chosenProjIndex = -1;
+//				String[] projectComboNames = projectCombo.getItems();
+//				for (int i = 0; i < projectComboNames.length; i++) {
+//					if (projectComboNames[i].compareTo(projectName) == 0) {
+//						chosenProjIndex = i;
+//						break;
+//					}
+//				}
+//				projectCombo.select(chosenProjIndex);
+//				projectSelected();
+//
+//				String discName = resource.getName().split(".dis")[0]; //$NON-NLS-1$
+//				int chosenDiscIndex = -1;
+//				String[] discComboNames = discussionCombo.getItems();
+//				for (int i = 0; i < discComboNames.length; i++) {
+//					if (discComboNames[i].compareTo(discName) == 0) {
+//						chosenDiscIndex = i;
+//						break;
+//					}
+//				}
+//				discussionCombo.select(chosenDiscIndex);
+//				discussionCombo.redraw();
+//			}
+//		}
 	}
 
 	private void projectSelected() {
-		// TODO Auto-generated method stub
-		String chosenProject = projectCombo.getText();
-
-		// ToK tok = new ToK(chosenProject, "Arie", "Babel_he.src");
 		// //$NON-NLS-1$ //$NON-NLS-2$
 		// TODO
-		ToK tok = ToK.getProjectToK(ResourcesPlugin.getWorkspace().getRoot()
-				.getProject(chosenProject));
+		ToK tok = ToK.getProjectToK(project);
 		ArrayList<Discussion> discussions = new ArrayList<Discussion>(tok
 				.getDiscussions());
 		String[] discs = new String[discussions.size()];
@@ -376,19 +335,18 @@ public class NewLinkWizardPage extends WizardPage {
 	 * 
 	 * @param projectName
 	 */
-	public void setProjectName(String projectName) {
-		this.projectName = projectName;
-		int chosenProjIndex = -1;
-		String[] projectComboNames = projectCombo.getItems();
-		for (int i = 0; i < projectComboNames.length; i++) {
-			if (projectComboNames[i].compareTo(this.projectName) == 0) {
-				chosenProjIndex = i;
-				break;
-			}
-		}
-		projectCombo.select(chosenProjIndex);
-		projectSelected();
-	}
+//	public void setProjectName(String projectName) {
+//		int chosenProjIndex = -1;
+//		String[] projectComboNames = projectCombo.getItems();
+//		for (int i = 0; i < projectComboNames.length; i++) {
+//			if (projectComboNames[i].compareTo(this.projectName) == 0) {
+//				chosenProjIndex = i;
+//				break;
+//			}
+//		}
+//		projectCombo.select(chosenProjIndex);
+//		projectSelected();
+//	}
 
 	private void updateStatus(String message) {
 		setErrorMessage(message);

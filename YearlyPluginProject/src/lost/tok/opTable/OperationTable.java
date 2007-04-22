@@ -9,11 +9,12 @@ import java.util.Map.Entry;
 
 import lost.tok.Excerption;
 import lost.tok.excerptionsView.ExcerptionView;
+import lost.tok.opTable.actions.MarkAction;
 import lost.tok.sourceDocument.Chapter;
 import lost.tok.sourceDocument.ChapterText;
 import lost.tok.sourceDocument.SourceDocument;
 
-import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.text.IDocument;
@@ -37,6 +38,12 @@ import org.eclipse.ui.part.FileEditorInput;
  * 
  */
 public class OperationTable extends TextEditor {
+
+	@Override
+	public void setFocus() {
+		super.setFocus();
+		ExcerptionView.getView().updateMonitoredEditor(this);
+	}
 
 	public static final String EDITOR_ID = "lost.tok.opTable.OperationTable";
 	private RootDiscussionsPart rootDiscussions = null;
@@ -90,7 +97,7 @@ public class OperationTable extends TextEditor {
 	// Shay: this should add the pop up action, but it doesn't work :(
 	public void editorContextMenuAboutToShow(IMenuManager menu) {
 		super.editorContextMenuAboutToShow(menu);
-		addAction(menu, "lost.tok.opTable.MarkPopUpMenu.Action"); //$NON-NLS-1$
+		addAction(menu, MarkAction.ACTION_ID);
 	}
 
 	// Shay: this should add the pop up action, but it doesn't work
@@ -100,7 +107,7 @@ public class OperationTable extends TextEditor {
 		}
 
 		MenuManager menuMgr = new MenuManager("#PopupMenu"); //$NON-NLS-1$
-		addAction(menuMgr, "lost.tok.opTable.MarkPopUpMenu.Action"); //$NON-NLS-1$
+		addAction(menuMgr, MarkAction.ACTION_ID);
 		menuMgr.setRemoveAllWhenShown(false);
 		Menu menu = menuMgr.createContextMenu(parent);
 		parent.setMenu(menu);
@@ -131,18 +138,22 @@ public class OperationTable extends TextEditor {
 	SortedMap<Integer, Integer> markedText;
 
 	private void updateExcerptionView() {
-		FileEditorInput fileEditorInput = 
-			(FileEditorInput)getEditorInput();
-		IFile file = fileEditorInput.getFile();
-		String fileName = file.getName();
-
-		try {
-			ExcerptionView.getView().setExcerptions(fileName, getMarked(), file.getProject());
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-		//expViewer.setFocus();
+		ExcerptionView.getView().updateMonitoredEditor(this);
 	}
+	
+//	private void updateExcerptionView() {
+//		FileEditorInput fileEditorInput = 
+//			(FileEditorInput)getEditorInput();
+//		IFile file = fileEditorInput.getFile();
+//		String fileName = file.getName();
+//
+//		try {
+//			ExcerptionView.getView().setExcerptions(fileName, getMarked(), file.getProject());
+//		} catch (Exception e) {
+//			// TODO: handle exception
+//		}
+//		//expViewer.setFocus();
+//	}
 	
 	public void refreshDisplay() {
 		if (rootDiscussionsView) {
@@ -292,6 +303,10 @@ public class OperationTable extends TextEditor {
 		markedExcerptions.put(mergedBegin, e);
 	}
 
+	public SortedMap<Integer, Excerption> getExcerptions() {
+		return markedExcerptions;
+	}
+	
 	public List<Excerption> getMarked() {
 		return new Vector<Excerption>(markedExcerptions.values());
 	}
@@ -342,5 +357,17 @@ public class OperationTable extends TextEditor {
 				oldSourceViewerConfiguration.getTextHover(getSourceViewer(), IDocument.DEFAULT_CONTENT_TYPE), IDocument.DEFAULT_CONTENT_TYPE);
 
 		clearMarked();
+	}
+
+	public IProject getProject() {
+		FileEditorInput fileEditorInput = 
+			(FileEditorInput)getEditorInput();
+		
+		return fileEditorInput.getFile().getProject();
+	}
+
+	public void removeExcerption(int i) {
+		markedExcerptions.remove(i);
+		markedText.remove(i);
 	}
 }
