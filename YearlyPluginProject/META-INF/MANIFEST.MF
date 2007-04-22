@@ -19,9 +19,12 @@ Eclipse-LazyStart: true
 Bundle-Vendor: Team LOST
 Export-Package: lost.tok,
  lost.tok.activator,
- lost.tok.newProjectWizard,
+ lost.tok.disEditor,
+ lost.tok.excerptionsView,
  lost.tok.opTable,
  lost.tok.sourceDocument,
+ lost.tok.sourceParser,
+ lost.tok.wizards,
  org.dom4j,
  org.dom4j.bean,
  org.dom4j.datatype,
