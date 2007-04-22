@@ -1,4 +1,4 @@
-package lost.tok.newDiscussionWizard;
+package lost.tok.wizards;
 
 import lost.tok.Messages;
 import lost.tok.ToK;
@@ -11,8 +11,8 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 
-public class NewDiscussionWizard extends Wizard implements INewWizard {
-	private NewDiscussionWizardPage page;
+public class NewDiscussion extends Wizard implements INewWizard {
+	private NewDiscussionPage page;
 
 	private ISelection selection;
 
@@ -23,7 +23,7 @@ public class NewDiscussionWizard extends Wizard implements INewWizard {
 	/**
 	 * Constructor for SampleNewWizard.
 	 */
-	public NewDiscussionWizard() {
+	public NewDiscussion() {
 		super();
 		setNeedsProgressMonitor(true);
 		setWindowTitle(Messages.getString("NewDiscussionWizard.0")); //$NON-NLS-1$
@@ -34,7 +34,7 @@ public class NewDiscussionWizard extends Wizard implements INewWizard {
 	 */
 
 	public void addPages() {
-		page = new NewDiscussionWizardPage(selection);
+		page = new NewDiscussionPage(selection);
 		addPage(page);
 	}
 

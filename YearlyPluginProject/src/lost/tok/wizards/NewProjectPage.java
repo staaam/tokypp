@@ -1,4 +1,4 @@
-package lost.tok.newProjectWizard;
+package lost.tok.wizards;
 
 import java.io.File;
 
@@ -30,7 +30,7 @@ import org.eclipse.swt.widgets.Text;
  * OR with the extension that matches the expected one (mpe).
  */
 
-public class NewWizardPage extends WizardPage {
+public class NewProjectPage extends WizardPage {
 	private Text rootText;
 
 	private Text fileText;
@@ -44,7 +44,7 @@ public class NewWizardPage extends WizardPage {
 	 * 
 	 * @param pageName
 	 */
-	public NewWizardPage(ISelection selection) {
+	public NewProjectPage(ISelection selection) {
 		super("wizardPage"); //$NON-NLS-1$
 		setTitle(Messages.getString("NewToKWizTitle")); //$NON-NLS-1$
 		setDescription(Messages.getString("NewToKWizDescription")); //$NON-NLS-1$
