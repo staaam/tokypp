@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<work-item>
+<field id="created">2007-04-23 01:49:34.578 +0300</field>
+<field id="title">Personal Role</field>
+<field id="severity">normal</field>
+<field id="remainingEstimate">3h</field>
+<field id="timeSpent">1h</field>
+<field id="assignee">Shay</field>
+<field id="priority">25.0</field>
+<field id="type">task</field>
+<field id="dueDate">2007-05-15</field>
+<field id="status">open</field>
+<field id="description"><![CDATA[<P>Coaching</P>
+<P>Set meetings</P>
+<P>Contact People</P>
+<P>Fill Work Item Properties</P>
+<P>Make Diagrams</P>]]></field>
+<field id="initialEstimate">4h</field>
+<field id="author">Shay</field>
+</work-item>
