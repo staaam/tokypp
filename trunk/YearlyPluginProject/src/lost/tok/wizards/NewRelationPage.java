@@ -1,4 +1,4 @@
-package lost.tok.newRelationWizard;
+package lost.tok.wizards;
 
 import lost.tok.Discussion;
 import lost.tok.Messages;
@@ -33,7 +33,7 @@ import org.eclipse.swt.widgets.TreeItem;
  * @author Team Lost
  * 
  */
-public class NewRelationWizardPage extends WizardPage {
+public class NewRelationPage extends WizardPage {
 
 	private Text comment;
 
@@ -53,7 +53,7 @@ public class NewRelationWizardPage extends WizardPage {
 	 * Constructor for NewRelationWizardPage.
 	 * 
 	 */
-	public NewRelationWizardPage(ISelection selection) {
+	public NewRelationPage(ISelection selection) {
 		super("wizardPage"); //$NON-NLS-1$
 		setTitle(Messages.getString("NewRelationWizardPage.0")); //$NON-NLS-1$
 		setDescription(Messages.getString("NewRelationWizardPage.1")); //$NON-NLS-1$

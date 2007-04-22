@@ -10,7 +10,7 @@ import lost.tok.Link;
 import lost.tok.Messages;
 import lost.tok.ToK;
 import lost.tok.excerptionsView.ExcerptionView;
-import lost.tok.newDiscussionWizard.NewDiscussionWizard;
+import lost.tok.wizards.NewDiscussion;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -146,7 +146,7 @@ public class NewLinkWizardPage extends WizardPage {
 		
 		newPrjButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				NewDiscussionWizard w = new NewDiscussionWizard();
+				NewDiscussion w = new NewDiscussion();
 				w.setProject(ResourcesPlugin.getWorkspace().getRoot().getProject(projectCombo.getText()));
 
 				WizardDialog wd = new WizardDialog(new Shell(), w);

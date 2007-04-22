@@ -1,4 +1,4 @@
-package lost.tok.newRelationWizard;
+package lost.tok.wizards;
 
 import lost.tok.Discussion;
 import lost.tok.Messages;
@@ -21,8 +21,8 @@ import org.eclipse.ui.IWorkbenchWizard;
  * 
  */
 
-public class NewRelationWizard extends Wizard implements INewWizard {
-	private NewRelationWizardPage page;
+public class NewRelation extends Wizard implements INewWizard {
+	private NewRelationPage page;
 
 	private ISelection selection;
 
@@ -31,7 +31,7 @@ public class NewRelationWizard extends Wizard implements INewWizard {
 	/**
 	 * Constructor for NewRelationWizard.
 	 */
-	public NewRelationWizard() {
+	public NewRelation() {
 		super();
 		setNeedsProgressMonitor(true);
 		setHelpAvailable(false);
@@ -43,7 +43,7 @@ public class NewRelationWizard extends Wizard implements INewWizard {
 	 */
 
 	public void addPages() {
-		page = new NewRelationWizardPage(selection);
+		page = new NewRelationPage(selection);
 		addPage(page);
 	}
 

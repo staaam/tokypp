@@ -1,4 +1,4 @@
-package lost.tok.newDiscussionWizard;
+package lost.tok.wizards;
 
 import lost.tok.Messages;
 
@@ -14,7 +14,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-public class NewDiscussionWizardPage extends WizardPage implements
+public class NewDiscussionPage extends WizardPage implements
 		ModifyListener {
 	/** The full name of the source */
 	private Text name;
@@ -23,7 +23,7 @@ public class NewDiscussionWizardPage extends WizardPage implements
 	/**
 	 * Constructor for UnparsedDocWizardPage.
 	 */
-	public NewDiscussionWizardPage(ISelection selection) {
+	public NewDiscussionPage(ISelection selection) {
 		super("wizardPage"); //$NON-NLS-1$
 		setTitle(Messages.getString("NewDiscussionWizardPage.1")); //$NON-NLS-1$
 		setDescription(Messages.getString("NewDiscussionWizardPage.2")); //$NON-NLS-1$

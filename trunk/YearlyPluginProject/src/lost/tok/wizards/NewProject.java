@@ -1,4 +1,4 @@
-package lost.tok.newProjectWizard;
+package lost.tok.wizards;
 
 import lost.tok.ToK;
 
@@ -18,15 +18,15 @@ import org.eclipse.ui.IWorkbenchWizard;
  * same extension, it will be able to open it.
  */
 
-public class NewWizard extends Wizard implements INewWizard {
-	private NewWizardPage page;
+public class NewProject extends Wizard implements INewWizard {
+	private NewProjectPage page;
 
 	private ISelection selection;
 
 	/**
 	 * Constructor for SampleNewWizard.
 	 */
-	public NewWizard() {
+	public NewProject() {
 		super();
 		setNeedsProgressMonitor(true);
 	}
@@ -36,7 +36,7 @@ public class NewWizard extends Wizard implements INewWizard {
 	 */
 
 	public void addPages() {
-		page = new NewWizardPage(selection);
+		page = new NewProjectPage(selection);
 		addPage(page);
 	}
 

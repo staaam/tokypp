@@ -7,8 +7,8 @@ import java.util.List;
 
 import lost.tok.Excerption;
 import lost.tok.Messages;
-import lost.tok.newDiscussionWizard.NewDiscussionWizard;
 import lost.tok.opTable.wizards.NewLinkWizard;
+import lost.tok.wizards.NewDiscussion;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -458,7 +458,7 @@ public class ExcerptionView extends ViewPart {
 			public void run() {
 				IProject project = getProject();
 
-				NewDiscussionWizard discWizard = new NewDiscussionWizard();
+				NewDiscussion discWizard = new NewDiscussion();
 				discWizard.init(PlatformUI.getWorkbench(),
 						(IStructuredSelection) viewer.getSelection());
 				discWizard.setProject(project);
