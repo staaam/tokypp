@@ -8,6 +8,7 @@ import lost.tok.Excerption;
 import lost.tok.GeneralFunctions;
 import lost.tok.ToK;
 import lost.tok.disEditor.DiscussionEditor;
+import lost.tok.opTable.actions.AbstractEditorAction;
 import lost.tok.sourceDocument.ChapterText;
 import lost.tok.sourceDocument.SourceDocument;
 
@@ -38,7 +39,7 @@ import org.eclipse.ui.part.FileEditorInput;
  * @author Michael Gelfand
  * 
  */
-public class RootDiscussionsView extends AbstractEditorAction
+public class RootDiscussionsPart extends AbstractEditorAction
 		implements ITextDoubleClickStrategy, ITextHover {
 
 	public static final String EDITOR_ID = "lost.tok.opTable.ShowLinkedDiscussions";
@@ -59,7 +60,7 @@ public class RootDiscussionsView extends AbstractEditorAction
 
 	private ToK tok;
 
-	public RootDiscussionsView(OperationTable ot) {
+	public RootDiscussionsPart(OperationTable ot) {
 		super();
 		
 		operationTable = ot;

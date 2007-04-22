@@ -15,10 +15,10 @@ import org.eclipse.jface.text.source.SourceViewerConfiguration;
  */
 public class RootDisussionsSourceViewerConfiguration extends
 		SourceViewerConfiguration {
-	private RootDiscussionsView rootDiscussions;
+	private RootDiscussionsPart rootDiscussions;
 
 	public RootDisussionsSourceViewerConfiguration(
-			RootDiscussionsView rootDiscussions) {
+			RootDiscussionsPart rootDiscussions) {
 		this.rootDiscussions = rootDiscussions;
 	}
 

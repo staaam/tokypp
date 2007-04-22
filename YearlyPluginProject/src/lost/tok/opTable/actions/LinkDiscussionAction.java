@@ -1,8 +1,8 @@
-package lost.tok.opTable;
+package lost.tok.opTable.actions;
 
 import lost.tok.Messages;
 import lost.tok.excerptionsView.ExcerptionView;
-import lost.tok.newLinkWizard.NewLinkWizard;
+import lost.tok.opTable.wizards.NewLinkWizard;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;

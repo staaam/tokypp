@@ -44,7 +44,7 @@ public class NewDiscussionWizard extends Wizard implements INewWizard {
 	 */
 	public boolean performFinish() {
 		tok = getToK(selection);
-		tok.addDiscussion(page.getDiscussionName());
+		tok.addDiscussion(page.updateDiscussionName());
 		return true;
 	}
 
@@ -73,5 +73,8 @@ public class NewDiscussionWizard extends Wizard implements INewWizard {
 		}
 		return ToK.getProjectToK(project);
 	}
-
+	
+	public String getDiscussionName() {
+		return page.getDiscussionName();
+	}
 }

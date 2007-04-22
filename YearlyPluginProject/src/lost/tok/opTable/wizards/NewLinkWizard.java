@@ -1,4 +1,4 @@
-package lost.tok.newLinkWizard;
+package lost.tok.opTable.wizards;
 
 import lost.tok.Messages;
 import lost.tok.ToK;

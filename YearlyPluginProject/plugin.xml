@@ -50,7 +50,7 @@
 
        <wizard
              category="lost.tok.Categoy"
-             class="lost.tok.newLinkWizard.NewLinkWizard"
+             class="lost.tok.opTable.wizards.NewLinkWizard"
              icon="icons/sample.gif"
              id="lost.tok.newLinkWizard.NewLinkWizard"
              name="%lost.tok.linkDisToRoot"
@@ -76,7 +76,7 @@
             id="lost.tok.opTable.MarkPopUpMenu"
             targetID="lost.tok.opTable.OperationTable">
          <action
-               class="lost.tok.opTable.MarkAction"
+               class="lost.tok.opTable.actions.MarkAction"
                enablesFor="1"
                icon="icons/sample.gif"
                id="lost.tok.opTable.MarkPopUpMenu.Action"
@@ -98,7 +98,7 @@
             id="lost.tok.opTable.Contribution"
             targetID="lost.tok.opTable.OperationTable">
          <action
-               class="lost.tok.opTable.MarkAction"
+               class="lost.tok.opTable.actions.MarkAction"
                icon="icons/Mark.bmp"
                id="lost.tok.opTable.MarkAction"
                label="%action.name.mark"
@@ -108,7 +108,7 @@
                toolbarPath="OpTableGroup"
                tooltip="%action.tooltip.mark"/>
          <action
-               class="lost.tok.opTable.UnMarkAllAction"
+               class="lost.tok.opTable.actions.UnMarkAllAction"
                icon="icons/UnMarkAll.bmp"
                id="lost.tok.opTable.UnMarkAllAction"
                label="%action.name.unmarkAll"
@@ -118,7 +118,7 @@
                toolbarPath="OpTableGroup"
                tooltip="%action.tooltip.unmarkAll"/>
          <action
-               class="lost.tok.opTable.AddQuoteAction"
+               class="lost.tok.opTable.actions.AddQuoteAction"
                icon="icons/AddQuote.bmp"
                id="lost.tok.opTable.AddQuoteAction"
                label="%action.name.addQuote"
@@ -128,7 +128,7 @@
                toolbarPath="OpTableGroup"
                tooltip="%action.tooltip.addQuote"/>
          <action
-               class="lost.tok.opTable.LinkDiscussionAction"
+               class="lost.tok.opTable.actions.LinkDiscussionAction"
                icon="icons/main_link_ico.gif"
                id="lost.tok.opTable.LinkDiscussionAction"
                label="%action.name.linkDiscussion"
@@ -138,7 +138,7 @@
                toolbarPath="OpTableGroup"
                tooltip="%action.tooltip.linkDiscussion"/>
          <action
-               class="lost.tok.opTable.SwitchOpTableView"
+               class="lost.tok.opTable.actions.SwitchOpTableViewAction"
                icon="icons/sample.gif"
                id="lost.tok.opTable.switchView"
                label="Show Linked Discussions"

@@ -39,7 +39,7 @@ import org.eclipse.ui.part.FileEditorInput;
 public class OperationTable extends TextEditor {
 
 	public static final String EDITOR_ID = "lost.tok.opTable.OperationTable";
-	private RootDiscussionsView rootDiscussions = null;
+	private RootDiscussionsPart rootDiscussions = null;
 	private boolean rootDiscussionsView = false;
 
 	/**
@@ -49,7 +49,7 @@ public class OperationTable extends TextEditor {
 	public OperationTable() {
 		super();
 
-		rootDiscussions = new RootDiscussionsView(this);
+		rootDiscussions = new RootDiscussionsPart(this);
 		setDocumentProvider(new SourceDocumentProvider());
 		markedExcerptions = new TreeMap<Integer, Excerption>();
 		markedText = new TreeMap<Integer, Integer>();

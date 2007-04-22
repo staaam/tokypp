@@ -1,4 +1,4 @@
-package lost.tok.opTable;
+package lost.tok.opTable.actions;
 
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.text.TextSelection;
