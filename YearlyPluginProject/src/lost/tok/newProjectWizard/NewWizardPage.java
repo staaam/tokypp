@@ -180,21 +180,25 @@ public class NewWizardPage extends WizardPage {
 		}
 
 		if (rootName.length() == 0) {
-			updateStatus(Messages.getString("NewToKWizErrSelectRoot")); //$NON-NLS-1$
+			warningStatus("Pay attention, you haven't chosen a root file! \nIt is recommended to choose a root file");
+			//updateStatus(Messages.getString("NewToKWizErrSelectRoot")); //$NON-NLS-1$
 			return;
 		}
+		
 		if (!legalRootExtension(rootName)) {
 			updateStatus(Messages.getString("NewToKWizErrRootNotSrc")); //$NON-NLS-1$
 			return;
 		}
+		
 		if (!fileExists(rootName)) {
 			updateStatus(Messages.getString("NewToKWizErrRootNotExist")); //$NON-NLS-1$
 			return;
 		}
-
+		
 		updateStatus(null);
 	}
 
+	
 	private boolean fileExists(String rootName) {
 		// checking file exists
 		File tempFile = new File(rootName);
@@ -224,7 +228,13 @@ public class NewWizardPage extends WizardPage {
 				.exists();
 	}
 
+	private void warningStatus(String message) {
+		setMessage(message,WARNING);
+		setPageComplete(true);
+	}
+	
 	private void updateStatus(String message) {
+		setMessage(null);
 		setErrorMessage(message);
 		setPageComplete(message == null);
 	}

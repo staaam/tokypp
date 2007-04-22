@@ -93,8 +93,9 @@ public class ToK {
 		} catch (CoreException e) {
 			e.printStackTrace();
 		}
-
-		setTokRoot(root);
+		
+		if(root.length() != 0)
+			setTokRoot(root);
 	}
 
 	private void createToKFromProject(IProject project) {
