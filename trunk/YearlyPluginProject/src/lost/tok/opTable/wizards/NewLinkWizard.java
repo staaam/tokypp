@@ -8,7 +8,6 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
@@ -24,8 +23,6 @@ import org.eclipse.ui.IWorkbenchWizard;
 
 public class NewLinkWizard extends Wizard implements INewWizard {
 	private NewLinkWizardPage page;
-
-	private ISelection selection;
 
 	private ToK tok = null;
 
@@ -44,7 +41,7 @@ public class NewLinkWizard extends Wizard implements INewWizard {
 	 */
 
 	public void addPages() {
-		page = new NewLinkWizardPage(selection);
+		page = new NewLinkWizardPage();
 		addPage(page);
 	}
 
@@ -55,7 +52,6 @@ public class NewLinkWizard extends Wizard implements INewWizard {
 	 * @see IWorkbenchWizard#init(IWorkbench, IStructuredSelection)
 	 */
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
-		this.selection = selection;
 	}
 
 	/**
@@ -83,10 +79,6 @@ public class NewLinkWizard extends Wizard implements INewWizard {
 			e.printStackTrace();
 		}
 		return true;
-	}
-
-	public void setProjectName(String projectName) {
-		page.setProjectName(projectName);
 	}
 
 	@SuppressWarnings("unused")

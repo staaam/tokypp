@@ -42,8 +42,6 @@ import org.eclipse.ui.part.FileEditorInput;
 public class RootDiscussionsPart extends AbstractEditorAction
 		implements ITextDoubleClickStrategy, ITextHover {
 
-	public static final String EDITOR_ID = "lost.tok.opTable.ShowLinkedDiscussions";
-
 	private static QualifiedName discussionLinkQName = new QualifiedName(
 			"lost.tok.opTable.ShowRootDiscussions", "excerptionSource");
 
@@ -224,7 +222,7 @@ public class RootDiscussionsPart extends AbstractEditorAction
 								.getWorkbenchWindow()
 								.getActivePage()
 								.openEditor(new FileEditorInput(file),
-										"lost.tok.opTable.ShowLinkedDiscussions");
+										OperationTable.EDITOR_ID);
 					} catch (PartInitException e) {
 						e.printStackTrace();
 					}
