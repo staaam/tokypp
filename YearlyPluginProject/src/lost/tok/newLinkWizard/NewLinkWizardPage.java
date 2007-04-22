@@ -2,6 +2,7 @@ package lost.tok.newLinkWizard;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import lost.tok.Discussion;
 import lost.tok.Excerption;
@@ -252,14 +253,10 @@ public class NewLinkWizardPage extends WizardPage {
 	}
 
 	public Excerption[] getExcerptions(String fileName) {
-		int i = 0;
-		ArrayList<Excerption> list = (ArrayList<Excerption>) expViewer
-				.getExcerptions(fileName);
-		Excerption[] array = new Excerption[list.size()];
-		for (Excerption excerption : list) {
-			array[i++] = excerption;
-		}
-		return array;
+		List<Excerption> excerptions = expViewer.getExcerptions(fileName);
+		Excerption[] exs = new Excerption[excerptions.size()];
+		excerptions.toArray(exs);
+		return exs;
 	}
 
 	public String getLinkType() {
