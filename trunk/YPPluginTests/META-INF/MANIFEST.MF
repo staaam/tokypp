@@ -5,9 +5,11 @@ Bundle-SymbolicName: YPPluginTests
 Bundle-Version: 1.0.0
 Bundle-Activator: lost.tok.Activator
 Bundle-Localization: plugin
-Require-Bundle: org.eclipse.core.runtime,
+Require-Bundle: Yearly_Plugin_Project,
+ org.eclipse.core.runtime,
  org.junit,
- Yearly_Plugin_Project,
  org.eclipse.core.resources,
- org.eclipse.ui
+ org.eclipse.ui,
+ org.eclipse.ui.editors,
+ org.eclipse.ui.workbench.texteditor
 Eclipse-LazyStart: true

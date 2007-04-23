@@ -1,6 +1,7 @@
 package lost.tok.disEditor;
 
 import java.util.TreeMap;
+
 import lost.tok.Discussion;
 import lost.tok.Opinion;
 import lost.tok.Quote;
@@ -336,11 +337,11 @@ public class DiscussionEditor extends TextEditor {
 				addTreeQuote(opinionItem, quote);
 			}
 		}
+
+		// *************************************************************************************************
 		
 		// expends the root and it's opinions, but not the quotes
 		expendToDepth(rootItem, 2); 
-
-		// *************************************************************************************************
 	}
 	
 	/**
@@ -454,12 +455,61 @@ public class DiscussionEditor extends TextEditor {
 				.getOpinionsId(opinionName)));
 	}
 	
+	/**
+	 * Returns all the displayed opinions
+	 */
+	public Opinion[] getDisplayedOpinions()
+	{
+		Opinion[] retVal = new Opinion[rootItem.getItemCount()]; 
+		
+		int i = 0;
+		for (TreeItem opItem : rootItem.getItems())
+		{
+			retVal[i] = getOpinion(opItem);
+			i++;			
+		}
+		return retVal;
+	}
+	
+	/**
+	 * Returns the quotes displayed in the tree
+	 * Written for testing
+	 * 
+	 * @param opinionId the opinion whose quotes are to be returned 
+	 * @return the quotes which are displayed under the given opinion id
+	 */
+	public Quote[] getDisplayedQuotes(Integer opinionId)
+	{
+		TreeItem[] opItems = rootItem.getItems();
+		int i = 0;
+		
+		// move i to the opinion we are looking for
+		while (i < opItems.length && getOpinion(opItems[i]).getId() != opinionId)
+		{
+			i++;		
+		}
+		
+		if (i == opItems.length)
+			return null; // dude, your opinion id doesn't even exist!
+		// else
+		
+		TreeItem[] qItems = rootItem.getItem(i).getItems();
+		Quote[] quotes = new Quote[ qItems.length ];
+		
+		for (int j = 0; j < quotes.length ; j++)
+		{
+			quotes[j] = getQuote(qItems[j]); 
+		}
+		
+		return quotes;		
+	}
+		
 	
 	/**
 	 * This method allows us to update the displayed information, when the
 	 * files on the disk change.
 	 * It updates the treeItems to match the file's content
-	 * Note: Additions to the xml file will be added after the existing entries
+	 * Note: Additions to the xml file will be displayed after the existing entries
 	 */
 	@Override
 	protected void handleEditorInputChanged() {

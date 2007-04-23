@@ -15,18 +15,12 @@ import org.eclipse.core.runtime.CoreException;
 
 public class DiscussionTest extends TestCase {
 
-	/*
-	 * Shay: I've made an attempt to clean all the files on exit, but it doesn't
-	 * work public void tearDown() { IWorkspace ws =
-	 * ResourcesPlugin.getWorkspace(); String wsRoot =
-	 * ws.getRoot().getLocation().toOSString(); File f = new File(wsRoot); for
-	 * (String s : f.list()) { deleteFileOrFolder(new File(s)); } }
-	 * 
-	 * private void deleteFileOrFolder(File file) { if (file.isDirectory()) {
-	 * for (String s : file.list()) { deleteFileOrFolder(new File(s)); } }
-	 * file.deleteOnExit(); }
+	/**
+	 * Creates a new Tree Of Knowledge
+	 * @param projectName The name of the new project
+	 * @return the new ToK which was created
 	 */
-	private ToK creation(String projectName) throws CoreException,
+	static public ToK creation(String projectName) throws CoreException,
 			IOException {
 		ToK tok = new ToK(projectName, "Guy", Paths.SOURCE_EXAMPLE);
 		return tok;
