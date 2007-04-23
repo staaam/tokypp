@@ -15,6 +15,8 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.part.FileEditorInput;
 
 public class Discussion {
 
@@ -131,6 +133,11 @@ public class Discussion {
 
 	public IFile getFile() {
 		return myToK.getDiscussionFolder().getFile(discName + ".dis");
+	}
+	
+	/** Returns the file associated with this as an IEditorInput */
+	public IEditorInput getIEditorInput() {
+		return new FileEditorInput(getFile());
 	}
 
 	/**
