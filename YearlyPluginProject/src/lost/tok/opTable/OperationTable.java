@@ -45,6 +45,7 @@ public class OperationTable extends TextEditor {
 		ExcerptionView.getView().updateMonitoredEditor(this);
 	}
 
+	/** The ID of the operation table editor */
 	public static final String EDITOR_ID = "lost.tok.opTable.OperationTable";
 	private RootDiscussionsPart rootDiscussions = null;
 	private boolean rootDiscussionsView = false;
@@ -155,6 +156,9 @@ public class OperationTable extends TextEditor {
 //		//expViewer.setFocus();
 //	}
 	
+	/**
+	 * Updates the colored lines and the general display of the editor
+	 */
 	public void refreshDisplay() {
 		if (rootDiscussionsView) {
 			rootDiscussions.refreshDisplay();
@@ -213,6 +217,10 @@ public class OperationTable extends TextEditor {
 		srcview.getTextWidget().redraw();
 	}
 
+	/** 
+	 * Adds the selected text to the marked text set
+	 * @param t the current selection, which should be added
+	 */
 	public void mark(TextSelection t) {
 		SourceDocument doc = (SourceDocument) getSourceViewer().getDocument();
 
@@ -303,31 +311,49 @@ public class OperationTable extends TextEditor {
 		markedExcerptions.put(mergedBegin, e);
 	}
 
+	/**
+	 * Returns the selected excerptions in the editor
+	 */
 	public SortedMap<Integer, Excerption> getExcerptions() {
 		return markedExcerptions;
 	}
 	
+	/**
+	 * Returns the selected excerptions in the editor
+	 */
 	public List<Excerption> getMarked() {
 		return new Vector<Excerption>(markedExcerptions.values());
 	}
 
+	/**
+	 * Clears all the marked excerptions from the editor
+	 */
 	public void clearMarked() {
 		markedText.clear();
 		markedExcerptions.clear();
 		refreshDisplay();
 	}
 
+	/**
+	 * Cuts text from the source. Currently is an Unsupported Operation
+	 */
 	public void cut(TextSelection t) {
 		throw new UnsupportedOperationException(
 				"Cut not allowed in this version"); //$NON-NLS-1$
 	}
 
+	/**
+	 * Returns the Source Document displayed by the editor
+	 */
 	public SourceDocument getDocument() {
 		return (SourceDocument) getSourceViewer().getDocument();
 	}
 
 	private SourceViewerConfiguration oldSourceViewerConfiguration = null;
 
+	/**
+	 * Highlights the discussion links in the editor 
+	 */
 	public void showDiscussions() {
 		if (oldSourceViewerConfiguration == null)
 			oldSourceViewerConfiguration = getSourceViewerConfiguration();
@@ -344,7 +370,10 @@ public class OperationTable extends TextEditor {
 		
 		clearMarked();
 	}
-
+	
+	/**
+	 * Hide the discussion links from the editor
+	 */
 	public void hideDisucssions() {
 		if (oldSourceViewerConfiguration != null)
 			setSourceViewerConfiguration(oldSourceViewerConfiguration);
@@ -359,6 +388,9 @@ public class OperationTable extends TextEditor {
 		clearMarked();
 	}
 
+	/**
+	 * Returns the project associated with the currently displayed file
+	 */
 	public IProject getProject() {
 		FileEditorInput fileEditorInput = 
 			(FileEditorInput)getEditorInput();
@@ -366,6 +398,10 @@ public class OperationTable extends TextEditor {
 		return fileEditorInput.getFile().getProject();
 	}
 
+	/**
+	 * Removes a specific excerptions from the marked text
+	 * @param i the index of the excerption (in terms of start offset in the text)
+	 */
 	public void removeExcerption(int i) {
 		markedExcerptions.remove(i);
 		markedText.remove(i);

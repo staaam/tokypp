@@ -21,6 +21,10 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.Document;
 
+/**
+ * A document which can be displayed to the user
+ * From this document the user creates quotes or links discussions
+ */
 public class SourceDocument extends Document {
 	/** The root chapter of the sourceDocument */
 	private Chapter rootChapter;
@@ -322,10 +326,10 @@ public class SourceDocument extends Document {
 
 	}
 
-	// retrieve the text from the child node
+	/** retrieve the text from the child node */
 	private String getTextofChild(Chapter c) {
 		ChapterText textC = (ChapterText) c.children.getFirst();
-		return textC.text;
+		return textC.getText();
 
 	}
 
