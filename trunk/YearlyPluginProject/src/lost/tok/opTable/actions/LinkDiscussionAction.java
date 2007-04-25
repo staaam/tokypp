@@ -11,6 +11,9 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
 
+/**
+ * The action of linking a discussion to the currently marked text
+ */
 public class LinkDiscussionAction extends AbstractEditorAction {
 	public void run(IAction action) {
 		assert (activeEditor != null);

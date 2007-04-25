@@ -10,30 +10,39 @@ import org.eclipse.swt.widgets.Display;
  */
 public class StyleManager {
 
+	/** The Foreground color for marked text */
 	final static public Color MARKED_FG_TEXT_COLOR = new Color(Display
 			.getCurrent(), 20, 170, 40);
 
+	/** The Background color for marked text */
 	final static public Color MARKED_BG_TEXT_COLOR = new Color(Display
 			.getCurrent(), 240, 255, 240);
 
+	/** The normal foreground color */
 	final static public Color NORMAL_FG_TEXT_COLOR = new Color(Display
 			.getCurrent(), 0, 0, 0);
 
+	/** The foreground color of an unparsed text */
 	final static public Color UNPARSED_TEXT_FG_COLOR = new Color(Display
 			.getCurrent(), 140, 140, 140);
 
+	/** The background color of a normal text */
 	final static public Color NORMAL_BG_TEXT_COLOR = new Color(Display
 			.getCurrent(), 255, 255, 255);
 
+	/** The foreground color of a chapter's title */
 	final static public Color CHAPTER_FG_TEXT_COLOR = new Color(Display
 			.getCurrent(), 0, 0, 192);
 
+	/** The foreground color of an unparsed chapter */
 	final static public Color UNPARSED_CHAPTER_FG_TEXT_COLOR = new Color(
 			Display.getCurrent(), 192, 0, 0);
 
+	/** The background color of a chapter */
 	final static public Color CHAPTER_BG_TEXT_COLOR = new Color(Display
 			.getCurrent(), 255, 255, 255);
 
+	/** The forground color of disabled text */
 	final static public Color DISABLED_FG_TEXT_COLOR = new Color(Display
 			.getCurrent(), 127, 127, 127);
 

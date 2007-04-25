@@ -17,6 +17,9 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.part.FileEditorInput;
 
+/**
+ * The action of adding a new quote from the chosen excerptions
+ */
 public class AddQuoteAction extends AbstractEditorAction {
 	public void run(IAction action) {
 		List<Excerption> excerptions = ((OperationTable) activeEditor)

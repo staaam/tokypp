@@ -10,6 +10,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.ui.editors.text.FileDocumentProvider;
 
+/**
+ * Provides Source Documents to the Operation Table editor
+ */
 public class SourceDocumentProvider extends FileDocumentProvider {
 	protected void setDocumentContent(IDocument document,
 			InputStream contentStream, String encoding) throws CoreException {
@@ -21,16 +24,6 @@ public class SourceDocumentProvider extends FileDocumentProvider {
 	protected IDocument createEmptyDocument() {
 		return new SourceDocument();
 	}
-
-	// @Override
-	// protected boolean setDocumentContent(IDocument document, IEditorInput
-	// editorInput, String encoding) throws CoreException {
-	// if (editorInput instanceof FileEditorInput) {
-	// FileEditorInput fileEditorInput = (FileEditorInput) editorInput;
-	// fileEditorInput.g
-	// }
-	// return super.setDocumentContent(document, editorInput, encoding);
-	// }
 
 	@Override
 	protected void doSaveDocument(IProgressMonitor monitor, Object element,

@@ -31,6 +31,14 @@ import org.eclipse.ui.dialogs.ListDialog;
 import org.eclipse.ui.model.BaseWorkbenchContentProvider;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
 
+/**
+ * The (only) page of the wizard of the source parser
+ * 
+ * Supports choosing the project of the file, the file to parse
+ * and filling details regarding the new source.
+ * 
+ * Performs basic checks regarding the validity of the data
+ */
 public class UnparsedDocWizardPage extends WizardPage implements ModifyListener {
 	/** The full name of the source */
 	private Text sourceTitleText;

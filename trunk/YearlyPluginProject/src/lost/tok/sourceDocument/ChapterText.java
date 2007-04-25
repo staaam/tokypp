@@ -2,14 +2,22 @@ package lost.tok.sourceDocument;
 
 import java.util.Vector;
 
+/**
+ * A chapter which is composed of only text
+ */
 public class ChapterText extends Chapter {
 	/** The path as defined for the Excerption xml */
-	String excerPath;
+	private String excerPath;
 
-	String text;
+	private String text;
 
-	Integer pathOffset; // offset in path
+	private Integer pathOffset; // offset in path
 
+	/**
+	 * Creates a chapterText using it's name and text
+	 * @param name The name of the text paragraph
+	 * @param text The text itself
+	 */
 	public ChapterText(String name, String text) {
 		super("", name); //$NON-NLS-1$
 		excerPath = null;
@@ -17,13 +25,6 @@ public class ChapterText extends Chapter {
 		pathOffset = offset;
 		this.text = text;
 	}
-
-	/*
-	 * Shay: This was written in Iteration 1 in order to allow cut operations
-	 * public ChapterText(String text, Integer offset) { super("", "");
-	 * this.excerPath = null; this.length = text.length(); this.pathOffset =
-	 * offset; this.text = text; }
-	 */
 
 	public Integer getInnerLength() {
 		return text.length();
@@ -124,7 +125,7 @@ public class ChapterText extends Chapter {
 	/**
 	 * Checks if it is ok to name the chapter's text with this name
 	 * 
-	 * @param name
+	 * @param newName
 	 *            the new name
 	 * @return true if it is ok, false otherwise (ie has brother with the same
 	 *         name)
@@ -160,6 +161,7 @@ public class ChapterText extends Chapter {
 		return true;
 	}
 
+	/** Returns the text itself */
 	public String getText() {
 		return text;
 	}

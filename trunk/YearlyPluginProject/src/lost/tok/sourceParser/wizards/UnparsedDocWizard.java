@@ -146,6 +146,12 @@ public class UnparsedDocWizard extends Wizard implements INewWizard {
 		monitor.worked(1);
 	}
 
+	/**
+	 * Returns the name of the unparsed file sitting in the project's dir
+	 * @param projName The project of the file
+	 * @param fullFileName the full path of the unparsed file outside of the project
+	 * @return where the file should be copied to in the project
+	 */
 	static public IFile getUnparsedTargetIFile(String projName,
 			String fullFileName) {
 		String fileName = getFileNameWithoutExtension(fullFileName);
@@ -156,6 +162,12 @@ public class UnparsedDocWizard extends Wizard implements INewWizard {
 				+ "\\" + fileName + ".upsrc"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
+	/**
+	 * Returns the name of the parsed file in the project
+	 * @param projName The project of the file
+	 * @param fullFileName the full path of the unparsed file outside of the project
+	 * @return where the file should be copied to in the project
+	 */
 	static public IFile getParsedTargetIFile(String projName,
 			String fullFileName) {
 		String fileName = getFileNameWithoutExtension(fullFileName);
@@ -195,31 +207,6 @@ public class UnparsedDocWizard extends Wizard implements INewWizard {
 			line = rdr.readLine();
 		}
 		rdr.close();
-
-		/*
-		 * File target = new File(targetFile); target.createNewFile(); // a
-		 * writer, for the xml unparsed file BufferedWriter wrtr = new
-		 * BufferedWriter( new OutputStreamWriter( new
-		 * FileOutputStream(targetFile),"UTF-8"));
-		 */
-
-		/*
-		 * // Shay: Since the Dom4j code in this case turned out // to be longer
-		 * and more comlicated, // I chose to stick to the manual version
-		 * StringBuffer sb = new StringBuffer(500); sb.append("<?xml
-		 * version=\"1.0\" encoding=\"UTF-8\"?>\n"); sb.append("<source>\n");
-		 * if (srcPath.equals("")) sb.append("\t<name>" + title + "</name>\n");
-		 * else sb.append("\t<name>" + srcPath + "\\" + title + "</name>\n");
-		 * sb.append("\t<author>" + author + "</author>\n"); sb.append("\t<child>\n");
-		 * sb.append("\t\t<text>\n"); sb.append("\t\t\t<name>" +
-		 * Chapter.UNPARSED_STR + "</name>\n"); sb.append("\t\t\t<content>\n");
-		 *  // write the actual text String line = rdr.readLine(); while (line !=
-		 * null) { // BUG: string was not escaped :( sb.append(line + "\n");
-		 * line = rdr.readLine(); } rdr.close();
-		 *  // close the open tags sb.append("</content>\n"); sb.append("\t\t</text>\n");
-		 * sb.append("\t</child>\n"); sb.append("</source>\n"); byte[] bytes =
-		 * sb.toString().getBytes("UTF-8");
-		 */
 
 		Document unparsedXML = DocumentHelper.createDocument();
 		unparsedXML.setXMLEncoding("UTF-8"); //$NON-NLS-1$

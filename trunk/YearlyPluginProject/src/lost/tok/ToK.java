@@ -52,20 +52,24 @@ public class ToK {
 	public final static QualifiedName tokQName = new QualifiedName(null,
 			"ToK Object");
 
+	/** The QualifiedName of the creatorQName property */
 	public final static QualifiedName creatorQName = new QualifiedName(
 			"lost.tok", "Creator");
 
+	/** The QualifiedName of the isRoot file property */
+	// TODO(Shay): if we implement new dir structure, remove this
 	public final static QualifiedName isRootQName = new QualifiedName(
 			"lost.tok", "isRoot");
 
+	/** The minimal ranking of authors */
 	public static final int MIN_AUTHOR_GROUP = 1;
-
+	/** The maximal ranking of authoers */
 	public static final int MAX_AUTHOR_GROUP = 5;
-
+	/** The name of folder of our sources */
 	static public final String SOURCES_FOLDER = "Sources";
-
+	/** The name of the discussions folder */
 	static public final String DISCUSSION_FOLDER = "Discussions";
-
+	/** The name of the folder in which we store our unparsed sources */
 	static public final String UNPARSED_SOURCES_FOLDER = "UnparsedSources";
 
 	public ToK(IProject project) {

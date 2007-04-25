@@ -3,6 +3,9 @@ package lost.tok.sourceDocument;
 import java.util.Arrays;
 import java.util.LinkedList;
 
+/**
+ * Allows easily finding where a certain index falls, from previously declared ranges
+ */
 public class RangeSearch {
 	LinkedList<LabeledPosition> ps;
 

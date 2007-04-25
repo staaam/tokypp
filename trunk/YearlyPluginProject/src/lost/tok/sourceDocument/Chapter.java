@@ -8,6 +8,9 @@ import lost.tok.Messages;
 
 import org.dom4j.Element;
 
+/**
+ * A chapter in the SourceDocument
+ */
 public class Chapter {
 
 	/** The title before each chapter */
@@ -18,6 +21,7 @@ public class Chapter {
 	static public final String UNPARSED_STR = Messages
 			.getString("Chapter.UnparsedTitle"); //$NON-NLS-1$
 
+	/** The displayed label of the chapter */
 	String label;
 
 	/** The name of the chapter. Part of its title */
@@ -76,15 +80,21 @@ public class Chapter {
 		return s;
 	}
 
+	/** Adds a new subchapter to (this) */
 	public void add(Chapter child) {
 		child.parent = this;
 		children.addLast(child);
 	}
 
+	/** Returns the length of this chapter only (without its sons) */
 	public Integer getInnerLength() {
 		return label.length();
 	}
 
+	/**
+	 * Fixes the offsets and lengths of this chapter and its sons
+	 * @param offset the offset of this chapter in the greater document
+	 */
 	public void fixOffsetLength(Integer offset) {
 		this.offset = offset;
 		length = getInnerLength();
@@ -95,6 +105,9 @@ public class Chapter {
 		}
 	}
 
+	/**
+	 * Updates the label of the current chapter
+	 */
 	public void updateLabel() {
 		String NewLabelBase = ""; //$NON-NLS-1$
 		Chapter son = this;
@@ -115,22 +128,30 @@ public class Chapter {
 		}
 	}
 
+	/** Returns the chapter's parent */
 	public Chapter getParent() {
 		return parent;
 	}
 
-	public void setParent(Chapter parrent) {
-		parent = parrent;
+	/**
+	 * Sets the chapter's parent anew
+	 * @param parent the name of the new parent
+	 */ 
+	public void setParent(Chapter parent) {
+		this.parent = parent;
 	}
 
+	/** Returns the offset of this chapter in the greater document */
 	public Integer getOffset() {
 		return offset;
 	}
 
+	/** Returns the name of this chapter */
 	public String getName() {
 		return name;
 	}
 
+	/** Returns true if this chapter contains unparsed text */
 	public boolean isUnparsed() {
 		return false;
 	}
@@ -176,6 +197,11 @@ public class Chapter {
 		return label + ":\t" + name + "\n"; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
+	/**
+	 * Returns the chapter according to the chapter path
+	 * @param chapterPath a slash-seperated list of names of chapters' names pointing to a chapter
+	 * @return the chpater pointed by the list
+	 */
 	public Chapter getChapter(String chapterPath) {
 		int slash = chapterPath.indexOf("/"); //$NON-NLS-1$
 		String chapterName = (slash == -1) ? chapterPath : chapterPath
@@ -190,6 +216,11 @@ public class Chapter {
 		return null;
 	}
 
+	/**
+	 * Returns the text of a chapter according to its chapter path
+	 * @param chapterPath a slash-seperated list of names of chapters' names pointing to a chapter
+	 * @return The text of the pointed chapter
+	 */
 	public ChapterText getChapterText(String chapterPath) {
 		Chapter c = getChapter(chapterPath);
 		if (c.children.getFirst() instanceof ChapterText) {

@@ -8,13 +8,13 @@ import org.osgi.framework.BundleContext;
  */
 public class Activator extends AbstractUIPlugin {
 
-	// The plug-in ID
+	/** The plug-in ID */
 	public static final String PLUGIN_ID = "Yearly_Plugin_Project";
 
 	// The shared instance
 	private static Activator plugin;
 
-	// The path of source.xsd file
+	/** The path of source.xsd file */
 	public static final String sourceXsdPath = "C:\\temp\\TestFiles\\";
 
 	/**
