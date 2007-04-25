@@ -13,7 +13,8 @@
 <field id="description"><![CDATA[<P>When updating a file, the editors must update its contents accordingly</P>
 <P>&nbsp;</P>
 <P>22/4/07 -&nbsp;5 hours</P>
-<P>23/4/07 -&nbsp;1 hour (tried to make tests)</P>]]></field>
+<P>23/4/07 -&nbsp;1 hour (tried to make tests)</P>
+<P>25/4/07 - 0.25 hour&nbsp;- Still no luck in making tests</P>]]></field>
 <field id="initialEstimate">20h</field>
 <field id="author">Shay</field>
 </work-item>
