@@ -18,62 +18,12 @@ import org.eclipse.core.runtime.QualifiedName;
 
 public class ToKTest extends TestCase {
 
-	protected void setUp() throws Exception {
-		super.setUp();
-		// ResourcesPlugin.getWorkspace().
-		// delete((IResource[])ResourcesPlugin.getWorkspace().getRoot().getProjects(),true,
-		// null);
-		// IProgressMonitor progMonitor = null;
-		// IProject[] projects =
-		// ResourcesPlugin.getWorkspace().getRoot().getProjects();
-		//
-		// for (int i = projects.length-1; i >=0; i--) {
-		// IProject project = projects[i];
-		// project.delete(true, progMonitor);
-		// //String path = project.getLocation().toOSString();
-		// //File file = new File(path);
-		// //recursiveDelete(file);
-		// }
-	}
-
-	protected void tearDown() throws Exception {
-		super.tearDown();
-		// IProject[] projects = ResourcesPlugin.getWorkspace().getRoot()
-		// .getProjects();
-		//
-		// for (int i = 0; i < projects.length; i++) {
-		// IProject project = projects[i];
-		// String path = project.getLocation().toOSString();
-		// File file = new File(path);
-		// recursiveDelete(file);
-		// }
-		// IProgressMonitor progMonitor = null;
-		// IProject[] projectss =
-		// ResourcesPlugin.getWorkspace().getRoot().getProjects();
-		//
-		// if (projectss.length>0){
-		// for (int i = projects.length-1; i >=0; i--) {
-		// IProject project = projects[i];
-		// project.delete(true, progMonitor);
-		// //String path = project.getLocation().toOSString();
-		// //File file = new File(path);
-		// //recursiveDelete(file);
-		// }
-		// }
-		// ResourcesPlugin.getWorkspace().getRoot().refreshLocal(10, null);
-		//		
-		// System.out.println("Finished Deleting!");
-	}
-
 	// basic project creation test
 	public void testCreateProject() throws CoreException, IOException {
 
-		ToK tok;
 		int numProjectsBefore = ResourcesPlugin.getWorkspace().getRoot()
 				.getProjects().length;
-		tok
-				 = new ToK("michalsProj_1", "michalzim",
-						Paths.SOURCE_EXAMPLE);
+		new ToK("michalsProj_1", "michalzim", Paths.SOURCE_EXAMPLE);
 
 		assertTrue(ResourcesPlugin.getWorkspace().getRoot().getProjects().length == numProjectsBefore + 1);
 		assertTrue(ResourcesPlugin.getWorkspace().getRoot().getProject(
@@ -83,10 +33,7 @@ public class ToKTest extends TestCase {
 	// tests to see if the project parameters have been set correctly
 	public void testProjectProperties() throws CoreException, IOException {
 
-		ToK tok;
-		tok
-				 = new ToK("michalsProj_2", "michalzim",
-						Paths.SOURCE_EXAMPLE);
+		new ToK("michalsProj_2", "michalzim", Paths.SOURCE_EXAMPLE);
 
 		// check project name
 		assertTrue(ResourcesPlugin.getWorkspace().getRoot().getProject(
@@ -108,28 +55,25 @@ public class ToKTest extends TestCase {
 
 	// ILLEGAL project creation test
 	public void testIllegalCreateProject() throws CoreException, IOException {
-
-		ToK tok;
-
 		// root file not an src file
 		int dotLoc = Paths.SOURCE_EXAMPLE.lastIndexOf('.');
 		String noExt = Paths.SOURCE_EXAMPLE.substring(0, dotLoc - 1);
 		String falseExt = noExt + ".xml";
 
-		tok = new ToK("michalsProj_3", "michalzim", falseExt);
+		new ToK("michalsProj_3", "michalzim", falseExt);
 		assertTrue(ResourcesPlugin.getWorkspace().getRoot().getProject(
 				"michalsProj_3").getFolder("Sources").getFile(falseExt)
 				.exists() == false);
 
 		// root file not existant
-		tok = new ToK("michalsProj_99", "michalzim",
+		new ToK("michalsProj_99", "michalzim",
 				Paths.SOURCE_EXAMPLE + "aaa");
 		assertTrue(ResourcesPlugin.getWorkspace().getRoot().getProject(
 				"michalsProj_99").getFolder("Sources").getFile(
 				Paths.SOURCE_EXAMPLE + "aaa").exists() == false);
 
 		// illegal project name
-		tok = new ToK("**michalsProj", "michalzim",	Paths.SOURCE_EXAMPLE);
+		new ToK("**michalsProj", "michalzim",	Paths.SOURCE_EXAMPLE);
 		
 		assertTrue(ResourcesPlugin.getWorkspace().getRoot().getProject(
 				"michalsProj_99").exists() == false);
@@ -138,10 +82,7 @@ public class ToKTest extends TestCase {
 	// testing that the two project Folders were created
 	public void testProjectFolders() throws CoreException, IOException {
 
-		ToK tok;
-		tok
-				 = new ToK("michalsProj_4", "michalzim",
-						Paths.SOURCE_EXAMPLE);
+		new ToK("michalsProj_4", "michalzim",Paths.SOURCE_EXAMPLE);
 
 		// getting the handles to the folders
 		IFolder srcFolder = ResourcesPlugin.getWorkspace().getRoot()
@@ -158,10 +99,7 @@ public class ToKTest extends TestCase {
 	// testing that the project files were created
 	public void testProjectFiles() throws CoreException, IOException {
 
-		ToK tok;
-		tok
-				 = new ToK("michalsProj_5", "michalzim",
-						Paths.SOURCE_EXAMPLE);
+		new ToK("michalsProj_5", "michalzim",Paths.SOURCE_EXAMPLE);
 
 		// getting the handles to the files
 		// Authors file
@@ -182,10 +120,7 @@ public class ToKTest extends TestCase {
 	// testing that the project root were created correctly
 	public void testProjectRoot() throws CoreException, IOException {
 
-		ToK tok;
-		tok
-				 = new ToK("michalsProj_6", "michalzim",
-						Paths.SOURCE_EXAMPLE);
+		new ToK("michalsProj_6", "michalzim",Paths.SOURCE_EXAMPLE);
 
 		// Root file
 		IFolder srcFolder = ResourcesPlugin.getWorkspace().getRoot()
@@ -235,8 +170,7 @@ public class ToKTest extends TestCase {
 	}
 
 	public void testNewLinkDiscussionRoot() throws CoreException, IOException {
-		ToK tok;
-		tok = new ToK("AriesProj3", "Arie", Paths.SOURCE_EXAMPLE);
+		new ToK("AriesProj3", "Arie", Paths.SOURCE_EXAMPLE);
 		/*tok.linkNewDiscussionRoot("New Discussion", new Excerption(
 				"/Bible/The Begining/The Continue/The First Paragraph", "", 2,
 				22));*/
@@ -257,19 +191,6 @@ public class ToKTest extends TestCase {
 				.selectSingleNode("//link/discussionFile[text()=\"New Discussion.dis\"]");
 		assertTrue(link != null);
 	}
-
-	/*
-	// Uncalled... because for some reason it didn't work :(
-	private void recursiveDelete(File dirPath) {
-		String[] ls = dirPath.list();
-
-		for (int idx = 0; idx < ls.length; idx++) {
-			File file = new File(dirPath, ls[idx]);
-			if (file.isDirectory())
-				recursiveDelete(file);
-			file.delete();
-		}
-	}*/
 
 	//Evgeni
 	//Testing valid source with invalid path
