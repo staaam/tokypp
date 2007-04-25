@@ -3,8 +3,8 @@
 <field id="created">2007-04-23 01:49:34.578 +0300</field>
 <field id="title">Personal Role</field>
 <field id="severity">normal</field>
-<field id="remainingEstimate">3h</field>
-<field id="timeSpent">1h</field>
+<field id="remainingEstimate">2h</field>
+<field id="timeSpent">2h</field>
 <field id="assignee">Shay</field>
 <field id="priority">25.0</field>
 <field id="type">task</field>
@@ -17,7 +17,8 @@
 <P>Make Diagrams</P>
 <P>&nbsp;</P>
 <P>22/4 - 1 hour</P>
-<P>23/4 - 0.25 hour</P>]]></field>
+<P>23/4 - 0.25 hour</P>
+<P>25/4&nbsp;- 0.5 hour</P>]]></field>
 <field id="initialEstimate">4h</field>
 <field id="author">Shay</field>
 </work-item>

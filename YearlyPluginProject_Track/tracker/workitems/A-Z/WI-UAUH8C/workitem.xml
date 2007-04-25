@@ -4,7 +4,7 @@
 <field id="title">28. Translation, i18n</field>
 <field id="severity">normal</field>
 <field id="remainingEstimate">3h</field>
-<field id="timeSpent">0h</field>
+<field id="timeSpent">1h</field>
 <field id="assignee">Shay</field>
 <field id="priority">25.0</field>
 <field id="type">task</field>
@@ -14,7 +14,9 @@
 <P>&nbsp;</P>
 <P>28.2 was solved before, so my initial estimate for it is 0</P>
 <P>28.1 might take a bit more time (it's a dirty job :P )</P>
-<P>&nbsp;</P>]]></field>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>25/4/07 - Big problems. I can't make my Eclipse work in Hebrew :(</P>]]></field>
 <field id="initialEstimate">7h</field>
 <field id="author">Shay</field>
 </work-item>
