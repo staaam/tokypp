@@ -4,8 +4,6 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Collection;
-
 import junit.framework.TestCase;
 import lost.tok.GeneralFunctions;
 import lost.tok.Paths;
@@ -16,16 +14,12 @@ import lost.tok.sourceDocument.SourceDocument;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
-import org.dom4j.DocumentHelper;
+
 import org.dom4j.io.SAXReader;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProduct;
-import org.eclipse.ui.internal.services.SourceProviderService;
-
-import com.sun.security.auth.callback.TextCallbackHandler;
 
 public class SourceDocumentTest extends TestCase {
 
@@ -223,12 +217,19 @@ public class SourceDocumentTest extends TestCase {
 				.getExcerptionPath());
 	}
 	
+	/**
+	 * Verifies that the two docs are equal
+	 * @param d1 first doc to compare
+	 * @param d2 second doc to compare
+	 */
 	protected void assertEqualDocuments(SourceDocument d1, SourceDocument d2)
-	{
-		
+	{	
 		assertEquals(d1.toString(), d2.toString());
 	}
 
+	/**
+	 * Reads and creates a SourceDocument object
+	 */
 	protected SourceDocument loadDoc(String sourceFilename) {
 		SAXReader reader = new SAXReader();
 		reader.setEncoding("UTF-8");
@@ -242,7 +243,10 @@ public class SourceDocumentTest extends TestCase {
 		}
 		return doc;
 	}
-
+	
+	/**
+	 * Reads a file from the disk
+	 */
 	protected String readFile(String filename) {
 		StringBuffer buff = new StringBuffer();
 		try {

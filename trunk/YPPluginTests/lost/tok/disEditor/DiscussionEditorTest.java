@@ -1,6 +1,6 @@
 package lost.tok.disEditor;
 
-import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.part.FileEditorInput;
 import java.io.IOException;
@@ -26,6 +26,7 @@ public class DiscussionEditorTest extends TestCase {
 	 * I can't figure a work around.
 	 * I can't manage to create Editors.
 	 * I've just wasted over an hour of my life for this shi...
+	 * 25/4/07 wasted 20 more min... asking other teams how to do it
 	 * 
 	 * This method verifies that the bits in the computer are still working
 	 */
@@ -37,11 +38,13 @@ public class DiscussionEditorTest extends TestCase {
 		
 		// create the editor
 		Discussion disc = tok.getDiscussion("shay");
-		//IFile discFile = disc.getFile();
-		//FileEditorInput input = new FileEditorInput(discFile);
-		//DiscussionEditor editor = new DiscussionEditor();
-		//IEditorInput input = disc.getIEditorInput();
-		//editor.setInput(input);
+		// IFile discFile = disc.getFile();
+		// FileEditorInput input = new FileEditorInput(discFile);
+		DiscussionEditor editor = new DiscussionEditor();
+		// IEditorInput input = disc.getIEditorInput();
+		// editor.init(null, input);
+
+		// editor.setInput(input);
 		
 		// modify the discussion
 		disc.addOpinion("Yossi");
