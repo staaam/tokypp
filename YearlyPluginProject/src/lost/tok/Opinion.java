@@ -14,7 +14,7 @@ public class Opinion {
 	}
 
 	public Opinion(Element e) {
-		this(e.element("name").getText(), Integer.valueOf(e.element("id")
+		this(e.element("name").getText(), Integer.valueOf(e.element("id") //$NON-NLS-1$ //$NON-NLS-2$
 				.getText()));
 	}
 
