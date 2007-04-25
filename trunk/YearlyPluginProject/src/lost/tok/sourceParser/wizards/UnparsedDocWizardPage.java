@@ -4,7 +4,6 @@ import java.io.File;
 
 import lost.tok.Messages;
 
-import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -178,13 +177,8 @@ public class UnparsedDocWizardPage extends WizardPage implements ModifyListener 
 			}
 			Object obj = ssel.getFirstElement();
 			if (obj instanceof IResource) {
-				IContainer container;
-				if (obj instanceof IContainer) {
-					container = (IContainer) obj;
-				} else {
-					container = ((IResource) obj).getParent();
-				}
-				targetProject.setText(container.getName());
+				IProject proj = ((IResource)obj).getProject();
+				targetProject.setText(proj.getName());
 			}
 		}
 	}
@@ -232,7 +226,6 @@ public class UnparsedDocWizardPage extends WizardPage implements ModifyListener 
 	/**
 	 * Ensures that both text fields are set.
 	 */
-
 	private void dialogChanged() {
 		/** The full name of the source: sourceTitleText */
 		if (sourceTitleText.getText().length() == 0) {

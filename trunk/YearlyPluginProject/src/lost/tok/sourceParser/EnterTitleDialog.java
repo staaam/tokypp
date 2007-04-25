@@ -15,16 +15,22 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+/**
+ * A small dialog in which the user can enter the name of the new chapter he creates
+ * The dialog allows only legal names to be entered
+ * And supports default names which are automatically dispalyed
+ */
 public class EnterTitleDialog extends PopupDialog implements KeyListener {
 
+	/** The text box part of the dialog */
 	Text chapNameText = null;
-
+	/** The editor which we are connected to */
 	SourceParser editor;
-
+	/** The offset of the target in the text */
 	int chapOffset;
-
+	/** The chapter to split or rename */
 	ChapterText targetChap;
-
+	/** The default name displayed to the user */
 	String defName;
 
 	/**
@@ -52,6 +58,9 @@ public class EnterTitleDialog extends PopupDialog implements KeyListener {
 		defName = defaultName;
 	}
 
+	/**
+	 * Creates the dialog and its fields
+	 */
 	public Composite createDialogArea(Composite composite) {
 		Composite diComposite = (Composite) super.createDialogArea(composite);
 
@@ -73,11 +82,17 @@ public class EnterTitleDialog extends PopupDialog implements KeyListener {
 		return diComposite;
 	}
 
+	/** this function is currently on a strike (empty implementation) */
 	public void keyPressed(KeyEvent e) {
 		// nothing to do here :(
 
 	}
 
+	/**
+	 * Receives keys typed by the user
+	 * Verifies that the current input is legal (disable the box if it is not)
+	 * If the user types enter, closes the dialog and creates the new chapter
+	 */
 	public void keyReleased(KeyEvent e) {
 		if (!targetChap.isLegalName(chapNameText.getText())) {
 			chapNameText.setForeground(StyleManager.DISABLED_FG_TEXT_COLOR);
