@@ -29,7 +29,7 @@ public class Quote {
 	private String comment;
 
 	public Quote(String sourceFilePath, List<Excerption> excerptions) {
-		this(sourceFilePath, excerptions, "");
+		this(sourceFilePath, excerptions, ""); //$NON-NLS-1$
 	}
 
 	public Quote(String sourceFilePath, List<Excerption> excerptions,
@@ -76,17 +76,17 @@ public class Quote {
 		while (i.hasNext()) {
 			s += ((Excerption) i.next()).getText();
 			if (i.hasNext()) {
-				s += " [...] ";
+				s += " [...] "; //$NON-NLS-1$
 			}
 		}
 		return s;
 	}
 
 	public Element toXML() {
-		Element e = DocumentHelper.createElement("quote");
-		e.addElement("id").addText(ID.toString());
-		e.addElement("sourceFile").addText(sourceFilePath);
-		e.addElement("comment").addText(comment);
+		Element e = DocumentHelper.createElement("quote"); //$NON-NLS-1$
+		e.addElement("id").addText(ID.toString()); //$NON-NLS-1$
+		e.addElement("sourceFile").addText(sourceFilePath); //$NON-NLS-1$
+		e.addElement("comment").addText(comment); //$NON-NLS-1$
 		for (Excerption excerption : excerptions) {
 			e.add(excerption.toXML());
 		}
@@ -94,16 +94,16 @@ public class Quote {
 
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked") //$NON-NLS-1$
 	public Quote(Element elem, ToK tok) {
-		this(elem.element("sourceFile").getText(), new ArrayList<Excerption>(),
-				elem.element("comment").getText());
-		ID = Integer.valueOf(elem.element("id").getText());
+		this(elem.element("sourceFile").getText(), new ArrayList<Excerption>(), //$NON-NLS-1$
+				elem.element("comment").getText()); //$NON-NLS-1$
+		ID = Integer.valueOf(elem.element("id").getText()); //$NON-NLS-1$
 
 		SourceDocument sd = new SourceDocument();
 		sd.set(GeneralFunctions.readFromXML(tok.getSource(sourceFilePath)));
 
-		List<Element> exps = elem.elements("excerption");
+		List<Element> exps = elem.elements("excerption"); //$NON-NLS-1$
 		for (Element exp : exps) {
 			Excerption e = new Excerption(exp);
 
@@ -141,7 +141,7 @@ public class Quote {
 			return text;
 		} else {
 			int i = j > text.length() ? text.length() : j;
-			String expPrefix = text.substring(0, i) + "...";
+			String expPrefix = text.substring(0, i) + "..."; //$NON-NLS-1$
 			return expPrefix;
 		}
 	}

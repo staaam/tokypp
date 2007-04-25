@@ -11,7 +11,7 @@ public class ToKNature implements IProjectNature {
 	/**
 	 * ID of this project nature
 	 */
-	public static final String NATURE_ID = "lost.tok.ToKNature";
+	public static final String NATURE_ID = "lost.tok.ToKNature"; //$NON-NLS-1$
 
 	IProject project;
 
