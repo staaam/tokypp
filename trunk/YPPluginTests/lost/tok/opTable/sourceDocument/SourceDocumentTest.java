@@ -21,6 +21,9 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 
+/**
+ * A set of tests for the source document
+ */
 public class SourceDocumentTest extends TestCase {
 
 	/**

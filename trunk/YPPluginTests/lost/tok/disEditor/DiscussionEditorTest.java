@@ -1,8 +1,8 @@
 package lost.tok.disEditor;
 
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.part.FileEditorInput;
+//import org.eclipse.core.resources.ResourcesPlugin;
+//import org.eclipse.ui.IEditorInput;
+//import org.eclipse.ui.part.FileEditorInput;
 import java.io.IOException;
 import org.eclipse.core.runtime.CoreException;
 
@@ -11,6 +11,9 @@ import lost.tok.Discussion;
 import lost.tok.DiscussionTest;
 import lost.tok.ToK;
 
+/**
+ * A set of tests for the discussion editor
+ */
 public class DiscussionEditorTest extends TestCase {
 
 	/**
@@ -40,7 +43,7 @@ public class DiscussionEditorTest extends TestCase {
 		Discussion disc = tok.getDiscussion("shay");
 		// IFile discFile = disc.getFile();
 		// FileEditorInput input = new FileEditorInput(discFile);
-		DiscussionEditor editor = new DiscussionEditor();
+		// DiscussionEditor editor = new DiscussionEditor();
 		// IEditorInput input = disc.getIEditorInput();
 		// editor.init(null, input);
 
