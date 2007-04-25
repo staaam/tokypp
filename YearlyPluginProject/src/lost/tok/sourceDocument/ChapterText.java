@@ -133,6 +133,10 @@ public class ChapterText extends Chapter {
 		if (newName.equals(Chapter.UNPARSED_STR)) {
 			return false;
 		}
+		
+		// apostrophe can cause problems with xPath queries
+		if (newName.contains("'"))
+			return false;
 
 		if (!isUnparsed()) {
 			return true; // a new sub-level will be created. there are no

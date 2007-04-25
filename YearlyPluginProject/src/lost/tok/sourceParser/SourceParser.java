@@ -36,6 +36,7 @@ public class SourceParser extends TextEditor {
 	/** The Editor's id in plugins.xml */
 	public static String EditorID = "lost.tok.sourceParser.SourceParser"; //$NON-NLS-1$
 
+	/** C'tor */
 	public SourceParser() {
 		super();
 		// setDocumentProvider(new UnparsedDocumentProvider());
@@ -157,15 +158,8 @@ public class SourceParser extends TextEditor {
 		int cursorWidgetOffset = srcview.getTextWidget().getCaretOffset();
 		return widgetOffset2ModelOffset(srcview, cursorWidgetOffset);
 	}
-
-	/*
-	 * Doesn't work :( public void close(boolean save) { super.close(save); //
-	 * call to save
-	 *  // Get the target unparsed file and delete it IFile iFile =
-	 * getInputIFile(); if (iFile != null) { try { iFile.delete(true, null); }
-	 * catch (CoreException e) { e.printStackTrace(); } } }
-	 */
-
+	
+	/** Marks the editor as dirty (which means it can be saved) */
 	public boolean isDirty() {
 		return dirty;
 	}

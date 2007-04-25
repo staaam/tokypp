@@ -1,7 +1,5 @@
 package lost.tok.sourceParser.wizards;
 
-//import lost.tok.ToK;
-
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -36,9 +34,16 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 
+/**
+ * The Wizard for the Source Parser
+ * 
+ * Allows the user to choose the file to parse
+ * and allows to fill information about it
+ */
 public class UnparsedDocWizard extends Wizard implements INewWizard {
+	/** The main and only page of the wizards */
 	private UnparsedDocWizardPage page;
-
+	/** The selection used by the page */
 	private ISelection selection;
 
 	/**
