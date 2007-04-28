@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<work-item>
+    <field id="initialEstimate">15d</field>
+    <field id="type">task</field>
+    <field id="timeSpent">3d</field>
+    <field id="author">ateter</field>
+    <field id="title">Import\Export of Discussions</field>
+    <field id="created">2007-04-29 01:11:47.338 +0300</field>
+    <field id="priority">25.0</field>
+    <field id="description">Addin the feature of importing nd exporting discussions.</field>
+    <field id="dueDate">2007-05-15 00:00:00.000 +0300</field>
+    <field id="remainingEstimate">15d</field>
+    <field id="status">open</field>
+    <field id="assignee">Arie</field>
+    <field id="severity">normal</field>
+</work-item>

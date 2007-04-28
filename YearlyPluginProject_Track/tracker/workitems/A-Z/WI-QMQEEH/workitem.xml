@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<work-item>
+    <field id="initialEstimate">5d</field>
+    <field id="type">task</field>
+    <field id="timeSpent">4d</field>
+    <field id="author">ateter</field>
+    <field id="title">Creating project without a root</field>
+    <field id="created">2007-04-29 01:06:23.603 +0300</field>
+    <field id="priority">33.0</field>
+    <field id="description"><![CDATA[<P>Enable creationof a Tok project without a root.</P>
+<P>Cahnges in the wizard and in the Tok creation function.</P>]]></field>
+    <field id="dueDate">2007-05-15 00:00:00.000 +0300</field>
+    <field id="remainingEstimate">0d</field>
+    <field id="status">open</field>
+    <field id="assignee">Arie</field>
+    <field id="severity">normal</field>
+</work-item>
