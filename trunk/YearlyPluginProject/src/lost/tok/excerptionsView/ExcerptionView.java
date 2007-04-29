@@ -25,7 +25,6 @@ import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.ITreeSelection;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -54,20 +53,8 @@ import org.eclipse.ui.part.ViewPart;
  * 
  */
 public class ExcerptionView extends ViewPart {
-	//private List<FileExcerption> objects = new ArrayList<FileExcerption>();
-//	private Hashtable<IFile, List<Excerption> > 
-//		fileToExcerption = new Hashtable<IFile, List<Excerption>>();
-	
-//	private Hashtable<String, List<Excerption>>
-//		nameToExcerption = new Hashtable<String, List<Excerption>>();
-//	
-//	private Hashtable<String, IProject>
-//		nameToProject = new Hashtable<String, IProject>();
 	
 	class OTSet extends HashSet<OperationTable> {
-		/**
-		 * 
-		 */
 		private static final long serialVersionUID = 8498357334519966448L;
 		
 		private Hashtable<String, OperationTable> nameToOT = new Hashtable<String, OperationTable>();
@@ -103,9 +90,6 @@ public class ExcerptionView extends ViewPart {
 	private Hashtable<IProject, OTSet> projectOTs = new Hashtable<IProject, OTSet>();
 	
 	private IProject currentProject = null;
-	
-//	class NameSorter extends ViewerSorter {
-//	}
 
 	class TreeObject implements IAdaptable {
 		private int id;
@@ -489,14 +473,6 @@ public class ExcerptionView extends ViewPart {
 	public static String nameFromOT(OperationTable ot) {
 		return ot.getTitle();
 	}
-//	public void setExcerptions(String fileName, List<Excerption> exps, IProject project) {
-//		nameToExcerption.put(fileName, exps);
-//		nameToProject.put(fileName, project);
-//		for (Excerption exp : exps) {
-//			exp.setProperty(idQName, nextId++);
-//		}
-//		refresh();
-//	}
 
 	/**
 	 * Returns the ExcerptionView object. If the view not shown
@@ -525,10 +501,6 @@ public class ExcerptionView extends ViewPart {
 		}
 		
 		return (ExcerptionView)view;
-	}
-
-	public IStructuredSelection getRoots() {
-		return (IStructuredSelection) viewer.getSelection();
 	}
 
 	public IProject getProject() {
