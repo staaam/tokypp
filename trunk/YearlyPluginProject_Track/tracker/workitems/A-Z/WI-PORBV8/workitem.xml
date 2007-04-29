@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<work-item>
+<field id="created">2007-04-29 13:22:29.937 +0200</field>
+<field id="title">17. Show ExcerptionView automatically</field>
+<field id="severity">normal</field>
+<field id="resolution">fixed</field>
+<field id="timeSpent">1d</field>
+<field id="assignee">Michael</field>
+<field id="previousStatus">open</field>
+<field id="priority">20.0</field>
+<field id="type">task</field>
+<field id="status">closed</field>
+<field id="description">&lt;SPAN lang=HE dir=rtl style="FONT-SIZE: 12pt; FONT-FAMILY: 'Times New Roman'; mso-fareast-font-family: 'Times New Roman'; mso-ansi-language: EN-US; mso-fareast-language: EN-US; mso-bidi-language: HE"&gt;בעת סימון מקטע טקסט, יופיע אוטומטית מבט המקטעים והטקסט המסומן יופיע בו&lt;/SPAN&gt;</field>
+<field id="initialEstimate">15d</field>
+<field id="author">Michael</field>
+</work-item>
