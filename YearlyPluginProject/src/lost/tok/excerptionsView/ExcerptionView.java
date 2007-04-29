@@ -11,7 +11,6 @@ import lost.tok.Excerption;
 import lost.tok.Messages;
 import lost.tok.opTable.OperationTable;
 import lost.tok.opTable.wizards.NewLinkWizard;
-import lost.tok.wizards.NewDiscussion;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IAdaptable;
@@ -288,9 +287,7 @@ public class ExcerptionView extends ViewPart {
 	@SuppressWarnings("unused")
 	private DrillDownAdapter drillDownAdapter;
 
-	private IAction linkExistingAction;
-
-	private IAction linkNewAction;
+	private IAction linkDiscussionAction;
 
 	private TreeViewer viewer;
 
@@ -351,14 +348,12 @@ public class ExcerptionView extends ViewPart {
 	}
 
 	private void fillContextMenu(IMenuManager manager) {
-		manager.add(linkNewAction);
-		manager.add(linkExistingAction);
+		manager.add(linkDiscussionAction);
 		manager.add(deleteAction);
 	}
 
 	private void fillLocalPullDown(IMenuManager manager) {
-		manager.add(linkNewAction);
-		manager.add(linkExistingAction);
+		manager.add(linkDiscussionAction);
 	}
 
 	public IContentProvider getContentProvider() {
@@ -404,67 +399,22 @@ public class ExcerptionView extends ViewPart {
 	private void hookDoubleClickAction() {
 		viewer.addDoubleClickListener(new IDoubleClickListener() {
 			public void doubleClick(DoubleClickEvent event) {
-				linkExistingAction.run();
+				linkDiscussionAction.run();
 			}
 		});
 	}
 
 	private void makeActions() {
-		linkExistingAction = new Action() {
+		linkDiscussionAction = new Action() {
 			public void run() {
-
-				ITreeSelection selection = (ITreeSelection) viewer
-						.getSelection();
-				List list = selection.toList();
-				List<Integer> selectedIds = new ArrayList<Integer>();
-				for (Iterator iter = list.iterator(); iter.hasNext();) {
-					TreeObject element = (TreeObject) iter.next();
-					selectedIds.add(element.getId());
-				}
-
-				NewLinkWizard wizard = new NewLinkWizard();
-				wizard.init(PlatformUI.getWorkbench(),
-						(IStructuredSelection) viewer.getSelection());
-				WizardDialog dialog = new WizardDialog(new Shell(), wizard);
-				dialog.setTitle(Messages.getString("ExcerptionView.7")); //$NON-NLS-1$
-				dialog.updateSize();
-				dialog.create();
-				dialog.open();
+				linkDiscussion();
 			}
 		};
-		linkExistingAction.setText(Messages.getString("ExcerptionView.8")); //$NON-NLS-1$
-		linkExistingAction.setToolTipText(Messages
+		linkDiscussionAction.setText(Messages.getString("ExcerptionView.8")); //$NON-NLS-1$
+		linkDiscussionAction.setToolTipText(Messages
 				.getString("ExcerptionView.9")); //$NON-NLS-1$
-		linkExistingAction.setImageDescriptor(ImageDescriptor.createFromFile(
+		linkDiscussionAction.setImageDescriptor(ImageDescriptor.createFromFile(
 				this.getClass(), "../../../../icons/link_ico.gif")); //$NON-NLS-1$
-
-		linkNewAction = new Action() {
-			public void run() {
-				NewDiscussion discWizard = new NewDiscussion();
-				discWizard.init(PlatformUI.getWorkbench(),
-						(IStructuredSelection) viewer.getSelection());
-				discWizard.setProject(currentProject);
-				Shell shell = new Shell();
-				WizardDialog discDialog = new WizardDialog(shell, discWizard);
-				discDialog.setTitle(Messages.getString("ExcerptionView.6")); //$NON-NLS-1$
-				discDialog.updateSize();
-				discDialog.create();
-				discDialog.open();
-
-				NewLinkWizard linkWizard = new NewLinkWizard();
-				linkWizard.init(PlatformUI.getWorkbench(),
-						(IStructuredSelection) viewer.getSelection());
-				WizardDialog linkDialog = new WizardDialog(shell, linkWizard);
-				linkDialog.setTitle(Messages.getString("ExcerptionView.7")); //$NON-NLS-1$
-				linkDialog.updateSize();
-				linkDialog.create();
-				linkDialog.open();
-			}
-		};
-		linkNewAction.setText(Messages.getString("ExcerptionView.5")); //$NON-NLS-1$
-		linkNewAction.setToolTipText(Messages.getString("ExcerptionView.4")); //$NON-NLS-1$
-		linkNewAction.setImageDescriptor(ImageDescriptor.createFromFile(this
-				.getClass(), "../../../../icons/link_new_ico.gif")); //$NON-NLS-1$
 
 		deleteAction = new Action() {
 			public void run() {
@@ -583,5 +533,11 @@ public class ExcerptionView extends ViewPart {
 
 	public IProject getProject() {
 		return currentProject;
+	}
+
+	public void linkDiscussion() {
+		WizardDialog dialog = new WizardDialog(new Shell(), new NewLinkWizard());
+		dialog.setTitle(Messages.getString("ExcerptionView.7")); //$NON-NLS-1$
+		dialog.open();
 	}
 }

@@ -114,8 +114,7 @@ public class NewLinkWizardPage extends WizardPage {
 		
 		newPrjButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				NewDiscussion w = new NewDiscussion();
-				w.setProject(project);
+				NewDiscussion w = new NewDiscussion(project);
 
 				WizardDialog wd = new WizardDialog(new Shell(), w);
 				wd.setBlockOnOpen(true);

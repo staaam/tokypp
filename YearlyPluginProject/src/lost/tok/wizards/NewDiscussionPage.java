@@ -1,9 +1,10 @@
 package lost.tok.wizards;
 
 import lost.tok.Messages;
+import lost.tok.ToK;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.dialogs.IDialogPage;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -23,7 +24,7 @@ public class NewDiscussionPage extends WizardPage implements
 	/**
 	 * Constructor for UnparsedDocWizardPage.
 	 */
-	public NewDiscussionPage(ISelection selection) {
+	public NewDiscussionPage() {
 		super("wizardPage"); //$NON-NLS-1$
 		setTitle(Messages.getString("NewDiscussionWizardPage.1")); //$NON-NLS-1$
 		setDescription(Messages.getString("NewDiscussionWizardPage.2")); //$NON-NLS-1$
@@ -58,14 +59,31 @@ public class NewDiscussionPage extends WizardPage implements
 	 */
 
 	private void dialogChanged() {
-
-		discussionName = updateDiscussionName();
+		discussionName = name.getText();
+		
 		if (discussionName.length() == 0) {
-			updateStatus("Discussion name must be specified"); //$NON-NLS-1$
+			updateStatus("Discussion name must be specified");
 			return;
 		}
-
+		
+		if (discussionExists(discussionName)) {
+			updateStatus("Discussion already exists");
+			return;
+		}
+		
 		updateStatus(null);
+	}
+
+	private boolean discussionExists(String name) {
+		if (getWizard() != null && (getWizard() instanceof NewDiscussion)) {
+			NewDiscussion wizard = (NewDiscussion) getWizard();
+			try {
+				return (null != ToK.getProjectToK(wizard.getProject())
+					               .getDiscussion(name));
+			} catch (CoreException e) {
+			}
+		}
+		return false;
 	}
 
 	private void updateStatus(String message) {
@@ -77,10 +95,6 @@ public class NewDiscussionPage extends WizardPage implements
 		dialogChanged();
 	}
 
-	public String updateDiscussionName() {
-		return name.getText();
-	}
-	
 	public String getDiscussionName() {
 		return discussionName;
 	}
