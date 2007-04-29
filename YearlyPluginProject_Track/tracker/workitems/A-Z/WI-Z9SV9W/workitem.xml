@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<work-item>
+    <field id="initialEstimate">15d</field>
+    <field id="type">task</field>
+    <field id="timeSpent">0d</field>
+    <field id="author">ZIMERMAN MOTI</field>
+    <field id="title">Tracing a quote back to its source and marking it</field>
+    <field id="created">2007-04-29 22:35:27.671 +0300</field>
+    <field id="priority">25.0</field>
+    <field id="description"/>
+    <field id="dueDate">2007-05-15 00:00:00.000 +0300</field>
+    <field id="remainingEstimate">15d</field>
+    <field id="status">open</field>
+    <field id="assignee">michal</field>
+    <field id="severity">normal</field>
+</work-item>
