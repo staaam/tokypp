@@ -109,10 +109,10 @@ public class NewLinkWizardPage extends WizardPage {
 
 		});
 
-		Button newPrjButton = new Button(c, SWT.NONE);
-		newPrjButton.setText("New...");
+		Button newDisButton = new Button(c, SWT.NONE);
+		newDisButton.setText("New...");
 		
-		newPrjButton.addSelectionListener(new SelectionAdapter() {
+		newDisButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				NewDiscussion w = new NewDiscussion(project);
 

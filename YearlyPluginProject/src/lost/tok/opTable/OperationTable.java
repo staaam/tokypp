@@ -42,7 +42,7 @@ public class OperationTable extends TextEditor {
 	@Override
 	public void setFocus() {
 		super.setFocus();
-		ExcerptionView.getView().updateMonitoredEditor(this);
+		updateExcerptionView();
 	}
 
 	/** The ID of the operation table editor */
@@ -139,7 +139,9 @@ public class OperationTable extends TextEditor {
 	SortedMap<Integer, Integer> markedText;
 
 	private void updateExcerptionView() {
-		ExcerptionView.getView().updateMonitoredEditor(this);
+		ExcerptionView view = ExcerptionView.getView();
+		if (view == null) return;
+		view.updateMonitoredEditor(this);
 	}
 	
 //	private void updateExcerptionView() {
