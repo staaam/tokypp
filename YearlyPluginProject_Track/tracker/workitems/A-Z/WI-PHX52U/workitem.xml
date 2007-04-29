@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<work-item>
+<field id="created">2007-04-29 13:47:01.031 +0200</field>
+<field id="title">NoUS. ExcerptionView should work per project</field>
+<field id="severity">normal</field>
+<field id="resolution">fixed</field>
+<field id="timeSpent">2d</field>
+<field id="assignee">Michael</field>
+<field id="previousStatus">open</field>
+<field id="priority">25.0</field>
+<field id="type">changerequest</field>
+<field id="status">closed</field>
+<field id="description">ExcerptionView should show selected excerptions only from sources of the same project</field>
+<field id="author">Michael</field>
+</work-item>

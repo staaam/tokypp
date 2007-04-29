@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<work-item>
+<field id="created">2007-04-29 13:49:37.046 +0200</field>
+<field id="title">19.2. Change the way of 'New Discission' wizards detects the project</field>
+<field id="severity">normal</field>
+<field id="remainingEstimate">2d</field>
+<field id="assignee">Michael</field>
+<field id="priority">25.0</field>
+<field id="type">task</field>
+<field id="status">open</field>
+<field id="description">Current way (from current selection) not always&amp;nbsp;works (i.e when called from other wizard)</field>
+<field id="initialEstimate">2d</field>
+<field id="author">Michael</field>
+</work-item>

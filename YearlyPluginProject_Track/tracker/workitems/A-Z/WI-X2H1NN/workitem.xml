@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<work-item>
+<field id="created">2007-04-29 13:40:23.203 +0200</field>
+<field id="title">19.1. Singel 'Link Discussion to Root' wizard</field>
+<field id="severity">normal</field>
+<field id="remainingEstimate"></field>
+<field id="resolution">fixed</field>
+<field id="timeSpent">2d</field>
+<field id="assignee">Michael</field>
+<field id="previousStatus">open</field>
+<field id="priority">20.0</field>
+<field id="type">changerequest</field>
+<field id="status">closed</field>
+<field id="description"><![CDATA[<FONT size=1>
+<P>Only one "Link Discussion to Root" wizard for both new disussion and existing discussion link.</P>
+<P>&nbsp;</P></FONT>]]></field>
+<field id="initialEstimate">10d</field>
+<field id="author">Michael</field>
+</work-item>
