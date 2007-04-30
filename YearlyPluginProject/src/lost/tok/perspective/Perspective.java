@@ -32,7 +32,6 @@ public class Perspective implements IPerspectiveFactory{
 	 *  This method defines the initial layout for a page 
 	 */
 	public void createInitialLayout(IPageLayout layout) {
-		System.out.println("bla0");
 		defineActions(layout);
 	    defineLayout(layout);
 
@@ -43,31 +42,32 @@ public class Perspective implements IPerspectiveFactory{
 		//Editors are placed for free.
         String editorArea = layout.getEditorArea();
 
-        // Place navigator and outline to left of
+        // Place package explorer to the left of
         // editor area.
         IFolderLayout left =
                 layout.createFolder("left", IPageLayout.LEFT, (float) 0.26, editorArea);
         left.addView("org.eclipse.jdt.ui.PackageExplorer");
    
+        // Place the Excerption view underneath
+        // editor area.
         IFolderLayout bottom = 
         	layout.createFolder("bottom", IPageLayout.BOTTOM, (float) 0.75, editorArea);
         bottom.addView(ExcerptionView.ID);
 	}
 
 	private void defineActions(IPageLayout layout) {
-		System.out.println("bla2");
 		//Add "new wizards".
+		//this Adds it to the File->new menu and the right click menu
 		layout.addNewWizardShortcut("lost.tok.newTokWizard");
 		layout.addNewWizardShortcut("lost.tok.newDiscussionWizard.NewDiscussionWizard");
 		layout.addNewWizardShortcut("lost.tok.newRelationWizard.NewRelationWizard");
 		layout.addNewWizardShortcut("lost.tok.newLinkWizard.NewLinkWizard");
 		layout.addNewWizardShortcut("lost.tok.unparsedDocWizard");
-	
 		layout.addNewWizardShortcut("org.eclipse.ui.wizards.new.folder");
-        layout.addNewWizardShortcut("org.eclipse.ui.wizards.new.file");
+                
         
-        
-        // Add "show views".
+        // Add "show views". 
+		//(both thtough the menues and the shortcut on the bottom left corner)
         layout.addShowViewShortcut(ExcerptionView.ID);
         layout.addShowViewShortcut(IPageLayout.ID_RES_NAV);
         layout.addShowViewShortcut(IPageLayout.ID_PROP_SHEET);
