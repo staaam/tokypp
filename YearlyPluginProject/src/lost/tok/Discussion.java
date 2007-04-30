@@ -12,6 +12,7 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.XPath;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -498,5 +499,9 @@ public class Discussion {
 		}
 
 		return null;
+	}
+
+	public static String getNameFromResource(IResource resource) {
+		return getNameFromFile(resource.getFullPath().toPortableString());
 	}
 }

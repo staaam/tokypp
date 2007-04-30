@@ -1,12 +1,7 @@
 package lost.tok.wizards;
 
-import lost.tok.Discussion;
 import lost.tok.Messages;
-import lost.tok.ToK;
 
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
@@ -26,7 +21,7 @@ public class NewRelation extends Wizard implements INewWizard {
 
 	private ISelection selection;
 
-	private ToK tok = null;
+//	private ToK tok = null;
 
 	/**
 	 * Constructor for NewRelationWizard.
@@ -63,20 +58,17 @@ public class NewRelation extends Wizard implements INewWizard {
 	 */
 	public boolean performFinish() {
 
-		IStructuredSelection ssel = (IStructuredSelection) selection;
-		IResource resource = (IResource) ssel.getFirstElement();
-		IProject project = resource.getProject();
-		tok = ToK.getProjectToK(project);
+//		IStructuredSelection ssel = (IStructuredSelection) selection;
+//		IResource resource = (IResource) ssel.getFirstElement();
+//		IProject project = resource.getProject();
+//		tok = ToK.getProjectToK(project);
 
-		try {
-			Integer[] ids = page.getSelectedQuotes();
-			Discussion disc = tok.getDiscussion(page.getDiscName());
-			disc.createLink(ids[0], ids[1], page.getComment(), page
-					.getRelationType());
-		} catch (CoreException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		Integer[] ids = page.getSelectedQuotes();
+		page.getDiscussion().createLink(
+				ids[0], ids[1],
+				page.getComment(),
+				page.getRelationType());
+
 		return true;
 	}
 }

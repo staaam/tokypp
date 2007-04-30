@@ -4,6 +4,7 @@ import java.util.List;
 
 import lost.tok.Excerption;
 import lost.tok.Quote;
+import lost.tok.Source;
 import lost.tok.ToK;
 import lost.tok.opTable.Messages;
 import lost.tok.opTable.OperationTable;
@@ -47,7 +48,7 @@ public class AddQuoteAction extends AbstractEditorAction {
 		IFile file = fileEditorInput.getFile();
 		IProject project = file.getProject();
 
-		Quote q = new Quote(file.getName(), excerptions);
+		Quote q = new Quote(new Source(file), excerptions);
 
 		System.out.println(q.getText());
 
