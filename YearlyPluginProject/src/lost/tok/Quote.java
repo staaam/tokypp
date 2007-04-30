@@ -106,7 +106,7 @@ public class Quote {
 		for (Element exp : exps) {
 			Excerption e = new Excerption(exp);
 
-			String text = sd.getChapterText(e.getSourceFilePath()).getText();
+			String text = sd.getChapterText(e.getPathInSourceFile()).getText();
 			int start = e.getStartPos();
 			int end = e.getEndPos();
 			String exText = text.substring(start, end);

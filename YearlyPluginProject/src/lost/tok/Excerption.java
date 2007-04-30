@@ -15,7 +15,7 @@ public class Excerption extends Properties {
 	/** The offset in the document of the excerptions end (the first char not included in the excerption) */
 	Integer endPos;
 	/** The path in the src file of the excerption */
-	String sourceFilePath;
+	String pathInSourceFile;
 	/** The offset in the document of the excerption (inclusive) */
 	Integer startPos;
 	/** The excerption's text */
@@ -39,7 +39,7 @@ public class Excerption extends Properties {
 	 * @param end The offset in the docuemnt of the excerption's end (exclusive)
 	 */
 	public Excerption(String path, String text, int start, int end) {
-		sourceFilePath = path;
+		pathInSourceFile = path;
 		startPos = start;
 		endPos = end;
 		this.text = text;
@@ -51,7 +51,7 @@ public class Excerption extends Properties {
 	 */
 	public Element toXML() {
 		Element e = DocumentHelper.createElement("excerption");
-		e.addElement("sourceFilePath").addText(sourceFilePath);
+		e.addElement("sourceFilePath").addText(pathInSourceFile);
 		e.addElement("startPos").addText(startPos.toString());
 		e.addElement("endPos").addText(endPos.toString());
 		return e;
@@ -66,8 +66,8 @@ public class Excerption extends Properties {
 	}
 
 	/** Returns the path of the excerption's source */
-	public String getSourceFilePath() {
-		return sourceFilePath;
+	public String getPathInSourceFile() {
+		return pathInSourceFile;
 	}
 	/** Returns the offset of the excerptions start */
 	public int getStartPos() {
@@ -79,7 +79,7 @@ public class Excerption extends Properties {
 	}
 
 	public int hashCode() {
-		return (sourceFilePath + "/" + startPos + "-" + endPos).hashCode();
+		return (pathInSourceFile + "/" + startPos + "-" + endPos).hashCode();
 	}
 
 	/** Sets the text of the excerption to the given text */
@@ -88,6 +88,6 @@ public class Excerption extends Properties {
 	}
 
 	public String toString() {
-		return sourceFilePath + "[" + startPos + ":" + endPos + "]";
+		return pathInSourceFile + "[" + startPos + ":" + endPos + "]";
 	}
 }

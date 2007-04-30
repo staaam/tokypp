@@ -154,10 +154,10 @@ public class RootDiscussionsPart extends AbstractEditorAction
 
 				SourceDocument document = operationTable.getDocument();
 
-				ChapterText ct = document.getChapterText(e.getSourceFilePath());
+				ChapterText ct = document.getChapterText(e.getPathInSourceFile());
 				if (ct == null) {
 					System.out.println("wrong excerption found (chapter '"
-							+ e.getSourceFilePath() + "' not found)");
+							+ e.getPathInSourceFile() + "' not found)");
 					continue;
 				}
 
