@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<work-item>
+<field id="created">2007-04-30 11:19:11.703 +0300</field>
+<field id="title">33.אפשור של מקורות בהיררכיה של תיקיות</field>
+<field id="severity">normal</field>
+<field id="remainingEstimate">12d</field>
+<field id="timeSpent">2d</field>
+<field id="assignee">Guy</field>
+<field id="priority">33.0</field>
+<field id="type">task</field>
+<field id="status">open</field>
+<field id="description">&lt;P&gt;&amp;nbsp;&lt;/P&gt;</field>
+<field id="initialEstimate">14h</field>
+<field id="author">aaa</field>
+</work-item>
