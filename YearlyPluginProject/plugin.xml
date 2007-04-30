@@ -32,13 +32,14 @@
       <category
             id="lost.tok.Categoy"
             name="%wizards.catagory"/>
-      	<wizard 
-	        category="lost.tok.Categoy"   
-			class= "lost.tok.wizards.NewProject"
-            icon="icons/sample.gif"
-            id="lost.tok.newTokWizard"
-            name="%wizards.wizard.tok"
-            project="true"/>
+      	<wizard
+             category="lost.tok.Categoy"
+             class="lost.tok.wizards.NewProject"
+             finalPerspective="lost.tok.perspective"
+             icon="icons/sample.gif"
+             id="lost.tok.newTokWizard"
+             name="%wizards.wizard.tok"
+             project="true"/>
 
        <wizard
              category="lost.tok.Categoy"
@@ -251,7 +252,7 @@
             class="lost.tok.perspective.Perspective"
             fixed="false"
             icon="icons/tree.jpg"
-            id="YearlyPluginProject.TOKperspective1"
-            name="Tree of Knowledge"/>
+            id="lost.tok.perspective"
+            name="%perspective.tok"/>
    </extension>
 </plugin>
