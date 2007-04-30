@@ -14,7 +14,7 @@ import org.dom4j.Element;
 public class Excerption extends Properties {
 	/** The offset in the document of the excerptions end (the first char not included in the excerption) */
 	Integer endPos;
-	/** The path to the src file of the excerption */
+	/** The path in the src file of the excerption */
 	String sourceFilePath;
 	/** The offset in the document of the excerption (inclusive) */
 	Integer startPos;

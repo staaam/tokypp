@@ -7,7 +7,6 @@ import lost.tok.ToK;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.dialogs.IDialogPage;
 import org.eclipse.jface.viewers.ISelection;
@@ -37,11 +36,13 @@ public class NewRelationPage extends WizardPage {
 
 	private Text comment;
 
-	private String discName;
+//	private String discName;
+	private Discussion discussion;
 
 	private Tree leftObjects;
 
-	private String projectName;
+//	private String projectName;
+	private IProject project; 
 
 	private Combo relType;
 
@@ -129,23 +130,12 @@ public class NewRelationPage extends WizardPage {
 		rightObjects.setLayoutData(gd);
 		rightObjects.setSize(100, 200);
 
-		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(
-				projectName);
-
 		// FOR DEBUGGING ONLY!!!!!!!!
 		// ToK tok = new ToK(projectName, "Arie", "Babel_he.src");
 		// @TODO
-		ToK tok = ToK.getProjectToK(project);
 
-		Discussion disc = null;
-		try {
-			disc = tok.getDiscussion(discName);
-		} catch (CoreException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		String[] opinionNames = disc.getOpinionNames();
-		Integer[] opinionIDs = disc.getOpinionIDs();
+		String[] opinionNames = discussion.getOpinionNames();
+		Integer[] opinionIDs = discussion.getOpinionIDs();
 
 		for (int i = 0; i < opinionNames.length; i++) {
 			TreeItem leftOpinion = new TreeItem(leftObjects, 0);
@@ -156,14 +146,14 @@ public class NewRelationPage extends WizardPage {
 			rightOpinion.setData(opinionIDs[i]);
 
 			Quote[] quotes = null;
-			quotes = disc.getQuotes(opinionNames[i]);
+			quotes = discussion.getQuotes(opinionNames[i]);
 
 			for (Quote element : quotes) {
 				TreeItem leftQuote = new TreeItem(leftOpinion, 0);
 				TreeItem rightQuote = new TreeItem(rightOpinion, 0);
-				leftQuote.setText(element.getPrefix(40, projectName));
+				leftQuote.setText(element.getPrefix(40));
 				leftQuote.setData(element.getID());
-				rightQuote.setText(element.getPrefix(40, projectName));
+				rightQuote.setText(element.getPrefix(40));
 				rightQuote.setData(element.getID());
 			}
 		}
@@ -223,9 +213,12 @@ public class NewRelationPage extends WizardPage {
 		return comment.getText();
 	}
 
-	public String getDiscName() {
-		return discName;
+	public Discussion getDiscussion() {
+		return discussion;
 	}
+//	public String getDiscName() {
+//		return discName;
+//	}
 
 	public String getRelationType() {
 		return relType.getText();
@@ -255,8 +248,13 @@ public class NewRelationPage extends WizardPage {
 			Object obj = ssel.getFirstElement();
 			if (obj instanceof IResource) {
 				IResource resource = (IResource) obj;
-				discName = resource.getName().split(".dis")[0]; //$NON-NLS-1$
-				projectName = resource.getProject().getName();
+				project = resource.getProject();
+				//discName = resource.getName().split(".dis")[0]; //$NON-NLS-1$
+				try {
+					discussion = ToK.getProjectToK(project).getDiscussion(Discussion.getNameFromResource(resource));
+				} catch (CoreException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}

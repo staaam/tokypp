@@ -133,11 +133,11 @@ public class DiscussionEditor extends TextEditor {
 					IWorkbenchWindow ww = getSite().getWorkbenchWindow();
 					String editorId = OperationTable.EDITOR_ID;
 
-					FileEditorInput fileEditorInput = (FileEditorInput) getEditorInput();
-					ToK tok = ToK.getProjectToK(fileEditorInput.getFile()
-							.getProject());
+//					FileEditorInput fileEditorInput = (FileEditorInput) getEditorInput();
+//					ToK tok = ToK.getProjectToK(fileEditorInput.getFile()
+//							.getProject());
 
-					IFile source = tok.getSource(quote.getSourceFilePath());
+					IFile source = quote.getSource().getFile();
 
 					try {
 						ww.getActivePage().openEditor(

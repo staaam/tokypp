@@ -11,8 +11,6 @@ import lost.tok.sourceDocument.SourceDocument;
 
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.ResourcesPlugin;
 
 /**
  * @author Team LOST
@@ -22,20 +20,20 @@ public class Quote {
 
 	private Integer ID;
 
-	private String sourceFilePath;
+	private Source source;
 
 	private List<Excerption> excerptions;
 
 	private String comment;
 
-	public Quote(String sourceFilePath, List<Excerption> excerptions) {
-		this(sourceFilePath, excerptions, ""); //$NON-NLS-1$
+	public Quote(Source source, List<Excerption> excerptions) {
+		this(source, excerptions, ""); //$NON-NLS-1$
 	}
 
-	public Quote(String sourceFilePath, List<Excerption> excerptions,
+	public Quote(Source source, List<Excerption> excerptions,
 			String comment) {
 		super();
-		this.sourceFilePath = sourceFilePath;
+		this.source = source;
 		this.excerptions = excerptions;
 		this.comment = comment;
 
@@ -43,7 +41,7 @@ public class Quote {
 	}
 
 	public int hashCode() {
-		return 31 * sourceFilePath.hashCode() + excerptions.hashCode();
+		return 31 * source.toString().hashCode() + excerptions.hashCode();
 	}
 
 	public void setID(Integer ID) {
@@ -54,8 +52,8 @@ public class Quote {
 		return ID;
 	}
 
-	public String getSourceFilePath() {
-		return sourceFilePath;
+	public Source getSource() {
+		return source;
 	}
 
 	public void setComment(String comment) {
@@ -85,7 +83,7 @@ public class Quote {
 	public Element toXML() {
 		Element e = DocumentHelper.createElement("quote"); //$NON-NLS-1$
 		e.addElement("id").addText(ID.toString()); //$NON-NLS-1$
-		e.addElement("sourceFile").addText(sourceFilePath); //$NON-NLS-1$
+		e.addElement("sourceFile").addText(source.toString()); //$NON-NLS-1$
 		e.addElement("comment").addText(comment); //$NON-NLS-1$
 		for (Excerption excerption : excerptions) {
 			e.add(excerption.toXML());
@@ -96,12 +94,13 @@ public class Quote {
 
 	@SuppressWarnings("unchecked") //$NON-NLS-1$
 	public Quote(Element elem, ToK tok) {
-		this(elem.element("sourceFile").getText(), new ArrayList<Excerption>(), //$NON-NLS-1$
-				elem.element("comment").getText()); //$NON-NLS-1$
+		this(new Source(tok, elem.element("sourceFile").getText()), //$NON-NLS-1$
+			 new ArrayList<Excerption>(),
+			 elem.element("comment").getText()); //$NON-NLS-1$
 		ID = Integer.valueOf(elem.element("id").getText()); //$NON-NLS-1$
 
 		SourceDocument sd = new SourceDocument();
-		sd.set(GeneralFunctions.readFromXML(tok.getSource(sourceFilePath)));
+		sd.set(GeneralFunctions.readFromXML(source.getFile()));
 
 		List<Element> exps = elem.elements("excerption"); //$NON-NLS-1$
 		for (Element exp : exps) {
@@ -126,23 +125,33 @@ public class Quote {
 	 * @return
 	 */
 
-	public String getPrefix(int j, String projectName) {
-		IFile file = (ToK.getProjectToK(ResourcesPlugin.getWorkspace()
-				.getRoot().getProject(projectName)))
-				.getSource(getSourceFilePath());
-		SourceDocument sourceDoc = new SourceDocument();
-		sourceDoc.set(GeneralFunctions.readFromXML(file));
-		Excerption excerption = getExcerptions().get(0);
-		String text = sourceDoc.getChapterText(excerption.getSourceFilePath())
-				.getText().substring(excerption.getStartPos(),
-						excerption.getEndPos());
-
-		if (j == 0) {
+	public String getPrefix(int j) {
+		String text = excerptions.get(0).getText();
+		
+		if (j == 0 || j >= text.length()) {
 			return text;
-		} else {
-			int i = j > text.length() ? text.length() : j;
-			String expPrefix = text.substring(0, i) + "..."; //$NON-NLS-1$
-			return expPrefix;
 		}
+		
+		return text.substring(0, j) + "..."; //$NON-NLS-1$
 	}
+	
+//	public String getPrefix(int j, String projectName) {
+//		IFile file = (ToK.getProjectToK(ResourcesPlugin.getWorkspace()
+//				.getRoot().getProject(projectName)))
+//				.getSource(getSourceFilePath());
+//		SourceDocument sourceDoc = new SourceDocument();
+//		sourceDoc.set(GeneralFunctions.readFromXML(file));
+//		Excerption excerption = getExcerptions().get(0);
+//		String text = sourceDoc.getChapterText(excerption.getSourceFilePath())
+//				.getText().substring(excerption.getStartPos(),
+//						excerption.getEndPos());
+//
+//		if (j == 0) {
+//			return text;
+//		} else {
+//			int i = j > text.length() ? text.length() : j;
+//			String expPrefix = text.substring(0, i) + "..."; //$NON-NLS-1$
+//			return expPrefix;
+//		}
+//	}
 }
