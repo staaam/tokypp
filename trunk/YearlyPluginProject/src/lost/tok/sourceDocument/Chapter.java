@@ -166,6 +166,7 @@ public class Chapter {
 		return false;
 	}
 
+	/** Creates a new chapter from the element, and returns it */
 	static private Chapter addChapter(Element el, String label) {
 		String chapName = el.elementTextTrim("name"); //$NON-NLS-1$
 		String chapLabel = getChapterLabel(label, chapName);
@@ -175,6 +176,7 @@ public class Chapter {
 		return c;
 	}
 
+	/** Creates a new chapter containing a text paragraph, and returns it */
 	static private Chapter addText(Element el, String label) {
 		String chapName = el.elementTextTrim("name"); //$NON-NLS-1$
 		String chapLabel = getChapterLabel(label, chapName);
