@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<work-item>
+<field id="created">2007-04-30 11:22:44.312 +0300</field>
+<field id="title">20.Import Export של מקורות</field>
+<field id="severity">normal</field>
+<field id="remainingEstimate">8d</field>
+<field id="timeSpent">6d</field>
+<field id="assignee">Guy</field>
+<field id="priority">33.0</field>
+<field id="type">task</field>
+<field id="status">open</field>
+<field id="description"></field>
+<field id="initialEstimate">14d</field>
+<field id="author">aaa</field>
+</work-item>
