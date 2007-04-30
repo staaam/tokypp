@@ -4,7 +4,7 @@
 <field id="title">28. Translation, i18n</field>
 <field id="severity">normal</field>
 <field id="remainingEstimate">3h</field>
-<field id="timeSpent">1h</field>
+<field id="timeSpent">2h</field>
 <field id="assignee">Shay</field>
 <field id="priority">25.0</field>
 <field id="type">task</field>
@@ -16,7 +16,8 @@
 <P>28.1 might take a bit more time (it's a dirty job :P )</P>
 <P>&nbsp;</P>
 <P>&nbsp;</P>
-<P>25/4/07 - Big problems. I can't make my Eclipse work in Hebrew :(</P>]]></field>
+<P>25/4/07 - Big problems. I can't make my Eclipse work in Hebrew :(&nbsp; (spent 1 hour)</P>
+<P>29/4/07 - Reinstalled Eclipse (1 hour)</P>]]></field>
 <field id="initialEstimate">7h</field>
 <field id="author">Shay</field>
 </work-item>
