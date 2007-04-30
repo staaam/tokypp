@@ -504,4 +504,8 @@ public class Discussion {
 	public static String getNameFromResource(IResource resource) {
 		return getNameFromFile(resource.getFullPath().toPortableString());
 	}
+
+	public String getDiscFileName() {
+		return getFile().getName();
+	}
 }

@@ -566,13 +566,13 @@ public class ToK {
 	public void linkDiscussionRoot(Discussion disc, String sourceFile,
 			Excerption[] exp, String subject, String linkType) {
 
-		String discName = disc.getDiscName();
+		String discFileName = disc.getDiscFileName();
 
 		// Open the Links file
 		Document doc = GeneralFunctions.readFromXML(getLinkFile());
 
 		Node link = doc.selectSingleNode("//link/discussionFile[text()=\""
-				+ discName + ".dis\"]");
+				+ discFileName + "\"]");
 		Element newLink = null;
 		if (link != null) {
 			newLink = link.getParent();
@@ -580,7 +580,7 @@ public class ToK {
 
 			Element links = doc.getRootElement();
 			newLink = links.addElement("link");
-			newLink.addElement("discussionFile").addText(discName + ".dis");
+			newLink.addElement("discussionFile").addText(discFileName);
 			newLink.addElement("type").addText(linkType);
 			newLink.addElement("linkSubject").addText(subject);
 		}
