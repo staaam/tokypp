@@ -2,12 +2,16 @@ package lost.tok.wizards;
 
 import lost.tok.ToK;
 
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExecutableExtension;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWizard;
+import org.eclipse.ui.wizards.newresource.BasicNewProjectResourceWizard;
 
 /**
  * This is a sample new wizard. Its role is to create a new file resource in the
@@ -18,10 +22,12 @@ import org.eclipse.ui.IWorkbenchWizard;
  * same extension, it will be able to open it.
  */
 
-public class NewProject extends Wizard implements INewWizard {
+public class NewProject extends Wizard implements INewWizard,IExecutableExtension {
 	private NewProjectPage page;
 
 	private ISelection selection;
+	
+	private IConfigurationElement configElm;
 
 	/**
 	 * Constructor for SampleNewWizard.
@@ -47,6 +53,11 @@ public class NewProject extends Wizard implements INewWizard {
 	public boolean performFinish() {
 		new ToK(page.getProjectName(), page.getCreatorName(), page
 				.getRootName());
+		
+		//We need this in order to prompt the perspective change
+		//when the New Project Wizard is finished
+		BasicNewProjectResourceWizard.updatePerspective(configElm);
+		
 		return true;
 	}
 
@@ -58,5 +69,18 @@ public class NewProject extends Wizard implements INewWizard {
 	 */
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		this.selection = selection;
+	}
+
+	
+	/**
+	 * This method is the method of the  IExecutableExtension interface
+	 *  that this class implements.
+	 *  We need this in order to prompt the perspective change 
+	 *  when the New Project Wizard is finished.
+	 *  (also prompts the Dialog asking if we want to switch perspective)
+	 */
+	public void setInitializationData(IConfigurationElement config, String propertyName, Object data) throws CoreException {
+		configElm = config;
+		
 	}
 }
