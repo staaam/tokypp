@@ -544,6 +544,9 @@ public class ToK {
 		refresh();
 	}
 
+	/**
+	 * Updates the items displayed in the various folders
+	 */
 	private void refresh() {
 		try {
 			discFolder.refreshLocal(IResource.DEPTH_INFINITE, progMonitor);
@@ -636,10 +639,16 @@ public class ToK {
 		}
 	}
 
+	/**
+	 * Returns the folder in which resource files are stored
+	 */
 	public IFolder getResourceFolder() {
 		return srcFolder;
 	}
 
+	/**
+	 * Returns the folder in which discussions are stored
+	 */
 	public IFolder getDiscussionFolder() {
 		return discFolder;
 	}
