@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<work-item>
+    <field id="initialEstimate">3h</field>
+    <field id="type">task</field>
+    <field id="timeSpent">0h</field>
+    <field id="author">evgeni</field>
+    <field id="title">Documentation</field>
+    <field id="created">2007-05-01 22:12:46.412 +0300</field>
+    <field id="priority">33.0</field>
+    <field id="description"/>
+    <field id="dueDate">2007-05-15 00:00:00.000 +0300</field>
+    <field id="remainingEstimate">3h</field>
+    <field id="status">open</field>
+    <field id="assignee">Evgeni</field>
+    <field id="severity">normal</field>
+</work-item>
