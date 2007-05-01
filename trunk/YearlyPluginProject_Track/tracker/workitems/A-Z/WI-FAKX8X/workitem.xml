@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<work-item>
+    <field id="initialEstimate">30d</field>
+    <field id="type">changerequest</field>
+    <field id="timeSpent">0d</field>
+    <field id="author">evgeni</field>
+    <field id="title">Discusion Editor Expand</field>
+    <field id="created">2007-05-01 21:32:43.118 +0300</field>
+    <field id="priority">25.0</field>
+    <field id="description"/>
+    <field id="remainingEstimate">30d</field>
+    <field id="status">open</field>
+    <field id="assignee">Evgeni</field>
+    <field id="severity">major</field>
+</work-item>
