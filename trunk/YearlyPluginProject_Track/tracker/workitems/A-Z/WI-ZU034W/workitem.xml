@@ -7,7 +7,11 @@
     <field id="title">Discusion Editor Expand</field>
     <field id="created">2007-05-01 21:56:31.921 +0300</field>
     <field id="priority">25.0</field>
-    <field id="description"/>
+    <field id="description"><![CDATA[<P>1&nbsp;hours - 22.4</P>
+<P>2&nbsp;hour - 23.4</P>
+<P>2&nbsp;hours - 24.4</P>
+<P>week 2</P>
+<P>4.5&nbsp;hours 30.4</P>]]></field>
     <field id="dueDate">2007-05-15</field>
     <field id="remainingEstimate">20 1/2h</field>
     <field id="status">open</field>
