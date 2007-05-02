@@ -6,7 +6,7 @@ public class Source {
 	IFile file;
 
 	public Source(ToK tok, String fileName) {
-		file = tok.getSource(fileName);
+		file = tok.getProject().getFile(fileName);
 	}
 
 	public Source(IFile file) {
