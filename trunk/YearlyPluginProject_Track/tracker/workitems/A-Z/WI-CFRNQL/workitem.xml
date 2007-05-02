@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<work-item>
+<field id="created">2007-05-03 00:45:37.625 +0300</field>
+<field id="title">New Discussion XSD</field>
+<field id="severity">normal</field>
+<field id="remainingEstimate">2h</field>
+<field id="timeSpent">5h</field>
+<field id="assignee">Shay</field>
+<field id="priority">25.0</field>
+<field id="type">task</field>
+<field id="dueDate">2007-05-15 00:00:00.000 +0300</field>
+<field id="status">open</field>
+<field id="description"><![CDATA[<P>Change the project so it will confirm to the new discussion.xsd schema</P>
+<P>&nbsp;</P>
+<P>30/4/07 -&nbsp;1 hour</P>
+<P>2/5/07 - 4 hours</P>
+<P>&nbsp;</P>
+<P>BUG: We may add an opinion after a relation. The xsd file doesn't allow this :(</P>]]></field>
+<field id="initialEstimate">7h</field>
+<field id="author">Shay</field>
+</work-item>
