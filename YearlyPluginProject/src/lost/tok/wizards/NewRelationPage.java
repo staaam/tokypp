@@ -79,7 +79,7 @@ public class NewRelationPage extends WizardPage {
 
 		relType = new Combo(container, SWT.READ_ONLY | SWT.DROP_DOWN);
 		for (String element : Discussion.relTypes) {
-			relType.add(element);
+			relType.add(element); // TODO(Shay): Make sure this is translated in Hebrew
 		}
 
 		relType.addSelectionListener(new SelectionListener() {
