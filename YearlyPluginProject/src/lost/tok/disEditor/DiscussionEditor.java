@@ -22,22 +22,28 @@ import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
+import org.eclipse.swt.custom.TreeEditor;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.part.FileEditorInput;
 
 public class DiscussionEditor extends TextEditor {
-
+	
 	// Tree disTree;
-
 	private static final String DISCUSSION = "discussion";
 
 	private static final String QUOTE = "Quote";
@@ -50,12 +56,18 @@ public class DiscussionEditor extends TextEditor {
 
 	private TreeItem rootItem = null;
 
+	public DiscussionEditor()
+	{
+		super();
+	}
+	
 	public void createPartControl(Composite parent) {
 		final Composite par = parent;
-		final Tree disTree = new Tree(parent, SWT.BORDER);
+		final Tree disTree = new Tree(parent, SWT.MULTI|SWT.WRAP|SWT.BORDER);
 
-		// ************************ DELETE QUOTES AND OPINIONS
-		// ***********************************
+		// ***********************************************************
+		// ************************ DELETE QUOTES AND OPINIONS ******* 
+		// ***********************************************************
 		disTree.addKeyListener(new KeyListener() {
 			public void keyPressed(KeyEvent e) {
 				if (e.keyCode == SWT.DEL) {
@@ -112,9 +124,11 @@ public class DiscussionEditor extends TextEditor {
 
 			public void keyReleased(KeyEvent e) {
 			}
-		});
-		// *********************************************************************************************
-
+		});		
+		
+		// ***********************************************************
+		// ************************ DOUBLE CLICK ON QUOTE  ******* 
+		// ***********************************************************
 		disTree.addMouseListener(new MouseListener() {
 
 			public void mouseDoubleClick(MouseEvent e) {
@@ -161,8 +175,9 @@ public class DiscussionEditor extends TextEditor {
 
 		});
 
-		// ***************** DRAG AND DROP
-		// ******************************************************************
+		// ************************************************* 
+		// ***************** DRAG AND DROP *****************
+		// ************************************************* 
 		Transfer[] types = new Transfer[] { TextTransfer.getInstance() };
 		int operations = DND.DROP_MOVE | DND.DROP_COPY | DND.DROP_LINK;
 
@@ -313,17 +328,47 @@ public class DiscussionEditor extends TextEditor {
 				}
 			}
 		});
+		
 		// **************************************************************************************************
-
-		// *************************** FROM XML TO TREE
-		// ****************************************************
-
+		// *************************** ASSIGN TREE EDITOR *************************************************
+		// **************************************************************************************************
 		discussion = getDiscussion();
 
-		rootItem = new TreeItem(disTree, SWT.NONE);
+		rootItem = new TreeItem(disTree, SWT.MULTI|SWT.WRAP);
 
 		rootItem.setText(discussion.getDiscName());
 		rootItem.setData(DISCUSSION);
+		
+		final TreeEditor disTreeEditor = new TreeEditor(disTree);
+		disTreeEditor.horizontalAlignment = SWT.LEFT;
+		disTreeEditor.grabHorizontal = true;
+		disTreeEditor.minimumWidth = 50;
+
+		disTree.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				// Clean up any previous editor control
+				Control oldEditor = disTreeEditor.getEditor();
+				if (oldEditor != null) oldEditor.dispose();
+		
+				// Identify the selected row
+				TreeItem item = (TreeItem)e.item;
+				if (item == null) return;
+		
+				// The control that will be the editor must be a child of the Tree
+				Text newEditor = new Text(disTree, SWT.WRAP | SWT.READ_ONLY | SWT.MULTI |SWT.V_SCROLL);
+				newEditor.setText(item.getText());
+				newEditor.addModifyListener(new ModifyListener() {
+					public void modifyText(ModifyEvent e) {
+						Text text = (Text)disTreeEditor.getEditor();
+						disTreeEditor.getItem().setText(text.getText());
+					}
+				});
+				newEditor.selectAll();
+				newEditor.setFocus();
+				disTreeEditor.setEditor(newEditor, item);
+			}
+		});
+
 
 		// Image imageDisc = new Image(null, new
 		// FileInputStream("C:/discussion.gif"));
@@ -341,7 +386,7 @@ public class DiscussionEditor extends TextEditor {
 		// *************************************************************************************************
 		
 		// expends the root and it's opinions, but not the quotes
-		expendToDepth(rootItem, 2); 
+		expendToDepth(rootItem, 3); 
 	}
 	
 	/**
@@ -363,7 +408,7 @@ public class DiscussionEditor extends TextEditor {
 	}
 
 	private TreeItem addTreeOpinion(TreeItem treeItem, Opinion opinion) {
-		TreeItem opinionItem = new TreeItem(treeItem, SWT.NONE);
+		TreeItem opinionItem = new TreeItem(treeItem, SWT.MULTI|SWT.WRAP);
 		// Image imageOpin = new Image(null, new
 		// FileInputStream("C:/opinion.gif"));
 
@@ -379,7 +424,7 @@ public class DiscussionEditor extends TextEditor {
 	}
 
 	private TreeItem addTreeQuote(TreeItem treeItem, Quote quote) {
-		TreeItem quoteItem = new TreeItem(treeItem, SWT.NONE);
+		TreeItem quoteItem = new TreeItem(treeItem,SWT.MULTI|SWT.WRAP);
 		// Image imageQuote = new Image(null, new
 		// FileInputStream("C:/quote.gif"));
 
@@ -389,6 +434,7 @@ public class DiscussionEditor extends TextEditor {
 
 	private void setTreeQuote(Quote quote, TreeItem quoteItem) {
 		quoteItem.setText(quote.getText());
+		
 		quoteItem.setData(QUOTE, quote);
 		quoteItem.setData(QUOTE);
 		// quoteItem.setImage(imageQuote);
