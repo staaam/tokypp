@@ -22,8 +22,6 @@ import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -31,11 +29,8 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
-import org.eclipse.swt.custom.TreeEditor;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.editors.text.TextEditor;
@@ -56,6 +51,8 @@ public class DiscussionEditor extends TextEditor {
 
 	private TreeItem rootItem = null;
 
+	private Composite editor = null;
+	
 	public DiscussionEditor()
 	{
 		super();
@@ -63,8 +60,10 @@ public class DiscussionEditor extends TextEditor {
 	
 	public void createPartControl(Composite parent) {
 		final Composite par = parent;
+		editor = par;
 		final Tree disTree = new Tree(parent, SWT.MULTI|SWT.WRAP|SWT.BORDER);
-
+		
+		
 		// ***********************************************************
 		// ************************ DELETE QUOTES AND OPINIONS ******* 
 		// ***********************************************************
@@ -338,50 +337,69 @@ public class DiscussionEditor extends TextEditor {
 
 		rootItem.setText(discussion.getDiscName());
 		rootItem.setData(DISCUSSION);
-		
-		final TreeEditor disTreeEditor = new TreeEditor(disTree);
-		disTreeEditor.horizontalAlignment = SWT.LEFT;
-		disTreeEditor.grabHorizontal = true;
-		disTreeEditor.minimumWidth = 50;
 
+		
 		disTree.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				// Clean up any previous editor control
-				Control oldEditor = disTreeEditor.getEditor();
-				if (oldEditor != null) oldEditor.dispose();
-		
-				// Identify the selected row
-				TreeItem item = (TreeItem)e.item;
-				if (item == null) return;
-		
-				// The control that will be the editor must be a child of the Tree
-				Text newEditor = new Text(disTree, SWT.WRAP | SWT.READ_ONLY | SWT.MULTI |SWT.V_SCROLL);
-				newEditor.setText(item.getText());
-				newEditor.addModifyListener(new ModifyListener() {
-					public void modifyText(ModifyEvent e) {
-						Text text = (Text)disTreeEditor.getEditor();
-						disTreeEditor.getItem().setText(text.getText());
+//				final TreeEditor disTreeEditor = new TreeEditor(disTree);
+//				disTreeEditor.horizontalAlignment = SWT.LEFT;
+//				disTreeEditor.grabHorizontal = true;
+//				disTreeEditor.minimumWidth = 50;
+//				
+//				// Clean up any previous editor control
+//				Control oldEditor = disTreeEditor.getEditor();
+//				if (oldEditor != null) oldEditor.dispose();
+//		
+//				// Identify the selected row
+//				TreeItem item = (TreeItem)e.item;
+//				if (item == null) return;
+//		
+//				// The control that will be the editor must be a child of the Tree
+//				Text newEditor = new Text(disTree, SWT.WRAP | SWT.READ_ONLY | SWT.MULTI |SWT.V_SCROLL);
+//				newEditor.setText(item.getText());
+//				newEditor.addModifyListener(new ModifyListener() {
+//					public void modifyText(ModifyEvent e) {
+//						Text text = (Text)disTreeEditor.getEditor();
+//						disTreeEditor.getItem().setText(text.getText());
+//					}
+//				});
+//				newEditor.selectAll();
+//				newEditor.setFocus();			
+//				disTreeEditor.setEditor(newEditor, item);
+				
+				rootItem.removeAll();
+				
+				for (Opinion opinion : discussion.getOpinions()) {
+					TreeItem opinionItem = addTreeOpinion(rootItem, opinion);
+
+					for (Quote quote : discussion.getQuotes(opinion.getName())) {
+						addTreeQuote(opinionItem, quote);
 					}
-				});
-				newEditor.selectAll();
-				newEditor.setFocus();
-				disTreeEditor.setEditor(newEditor, item);
+				}
+				
+//				TreeItem infoItem = new TreeItem(disTree,SWT.WRAP);
+//				infoItem.setText("x before  = " + par.getBounds().width);
 			}
 		});
 
-
+//		int x = par.getBounds().width;
+//		
+//		TreeItem infoItem = new TreeItem(disTree,SWT.WRAP);
+//		infoItem.setText("x after = " + x);
+		
 		// Image imageDisc = new Image(null, new
 		// FileInputStream("C:/discussion.gif"));
 
 		// rootItem.setImage(imageDisc);
 
-		for (Opinion opinion : discussion.getOpinions()) {
-			TreeItem opinionItem = addTreeOpinion(rootItem, opinion);
-
-			for (Quote quote : discussion.getQuotes(opinion.getName())) {
-				addTreeQuote(opinionItem, quote);
-			}
-		}
+//		for (Opinion opinion : discussion.getOpinions()) {
+//			TreeItem opinionItem = addTreeOpinion(rootItem, opinion);
+//
+//			for (Quote quote : discussion.getQuotes(opinion.getName())) {
+//				addTreeQuote(opinionItem, quote);
+//			}
+//		}
+		
 
 		// *************************************************************************************************
 		
@@ -438,6 +456,24 @@ public class DiscussionEditor extends TextEditor {
 		quoteItem.setData(QUOTE, quote);
 		quoteItem.setData(QUOTE);
 		// quoteItem.setImage(imageQuote);
+				
+		int editorWidth = editor.getSize().x;
+		
+		int lineSize = editorWidth/10;	
+		
+		if(lineSize == 0)
+		{
+			lineSize = 100;
+//			TreeItem infoItem = new TreeItem(rootItem,SWT.WRAP);
+//			infoItem.setText("editor.getSize().x = " + editor.getSize().x);
+		}
+
+		int lineCnt = quoteItem.getText().length()/lineSize;
+		
+		for (int i = 0; i < lineCnt ; i++) {
+			TreeItem extendedQuote = new TreeItem(quoteItem,SWT.WRAP);
+			extendedQuote.setText(quoteItem.getText().substring((i)*lineSize,(i+1)*lineSize-1));
+		}		
 	}
 
 	public void moveQuoteToDefault(TreeItem itemToMove) {
