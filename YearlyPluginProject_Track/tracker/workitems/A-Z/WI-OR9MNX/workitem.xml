@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <work-item>
-    <field id="initialEstimate">7d</field>
+    <field id="initialEstimate">7h</field>
+    <field id="resolution">fixed</field>
     <field id="type">task</field>
+    <field id="timeSpent">8h</field>
     <field id="author">ateter</field>
     <field id="title">Context menu in the unified editor</field>
     <field id="created">2007-04-29 01:09:42.940 +0300</field>
@@ -11,9 +13,10 @@
 <P>- add quote</P>
 <P>- link a discussion</P>
 <P>-&nbsp; show connected discussions</P>]]></field>
-    <field id="dueDate">2007-05-15 00:00:00.000 +0300</field>
-    <field id="remainingEstimate">7d</field>
-    <field id="status">open</field>
+    <field id="dueDate">2007-05-15</field>
+    <field id="remainingEstimate">0d</field>
+    <field id="status">resolved</field>
     <field id="assignee">Arie</field>
     <field id="severity">normal</field>
+    <field id="previousStatus">open</field>
 </work-item>
