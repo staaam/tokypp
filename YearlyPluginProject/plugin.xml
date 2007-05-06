@@ -74,23 +74,53 @@
    <extension
          point="org.eclipse.ui.popupMenus">
       <viewerContribution
-            id="lost.tok.opTable.MarkPopUpMenu"
-            targetID="lost.tok.opTable.OperationTable">
+            id="lost.tok.opTable.PopUpMenu.MenuContribution"
+            targetID="lost.tok.opTable.PopUpMenu.Menu">
          <action
                class="lost.tok.opTable.actions.MarkAction"
-               enablesFor="1"
-               icon="icons/sample.gif"
-               id="lost.tok.opTable.MarkPopUpMenu.Action"
+               icon="icons/Mark.bmp"
+               id="lost.tok.opTable.PopUpMenu.MarkAction"
                label="%action.name.mark"
-               menubarPath="lost.tok.opTable.MarkPopUpMenu.Menu/group1"
+               menubarPath="additions"
                state="true"
-               style="push"/>
-         <menu
-               id="lost.tok.opTable.MarkPopUpMenu.Menu"
-               label="%menu.label.opTable"
-               path="additions">
-            <separator name="group1"/>
-         </menu>
+               style="push"
+               tooltip="%action.name.mark"/>
+         <action
+               class="lost.tok.opTable.actions.UnMarkAllAction"
+               icon="icons/UnMarkAll.bmp"
+               id="lost.tok.opTable.PopUpMenu.UnMarkAllAction"
+               label="%action.name.unmarkAll"
+               menubarPath="additions"
+               state="true"
+               style="push"
+               tooltip="%action.name.unmarkAll"/>
+         <action
+               class="lost.tok.opTable.actions.AddQuoteAction"
+               icon="icons/AddQuote.bmp"
+               id="lost.tok.opTable.PopUpMenu.AddQuoteAction"
+               label="%action.name.addQuote"
+               menubarPath="additions"
+               state="true"
+               style="push"
+               tooltip="%action.name.addQuote"/>
+         <action
+               class="lost.tok.opTable.actions.LinkDiscussionAction"
+               icon="icons/main_link_ico.gif"
+               id="lost.tok.opTable.PopUpMenu.LinkDiscussionAction"
+               label="%action.name.linkDiscussion"
+               menubarPath="additions"
+               state="true"
+               style="push"
+               tooltip="%action.name.linkDiscussion"/>
+         <action
+               class="lost.tok.opTable.actions.SwitchOpTableViewAction"
+               icon="icons/sample.gif"
+               id="lost.tok.opTable.PopUpMenu.switchView"
+               label="Show Linked Discussions"
+               menubarPath="additions"
+               state="true"
+               style="push"
+               tooltip="Show Linked Discussions"/>
       </viewerContribution>
    </extension>
    <extension
@@ -240,7 +270,8 @@
          point="org.eclipse.ui.exportWizards">
       <wizard
             category="lost.tok.Categoy"
-            class="lost.tok.wizards.ExportDiscussionWizard"
+            class="lost.tok.wizards.ExportDiscussion"
+            icon="icons/sample.gif"
             id="lost.tok.exportDiscussion.ExportDiscussionWizard"
             name="Export Discussion"/>
    </extension>
