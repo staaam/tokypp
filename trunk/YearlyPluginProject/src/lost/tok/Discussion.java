@@ -123,12 +123,27 @@ public class Discussion {
 			// does nothing if opinion already exist
 			return;
 		}
+		
+		// detach all the relations
+		// Note(Shay): We do this in order to maintein the order enforced in the xsd
+		//  First there must be all the opinions, and then the relations
+		XPath relationsXPath = DocumentHelper.createXPath("//relation");
+		List relationNodes = relationsXPath.selectNodes(doc);
+		for (Iterator i = relationNodes.iterator(); i.hasNext();) {
+			Element attached = (Element) i.next();
+			attached.detach();
+		}
 
 		// add the opinion
-		
 		Element opinion = doc.getRootElement().addElement("opinion");
 		opinion.addElement("id").addText(java.lang.Integer.toString(++id));
 		opinion.addElement("name").addText(opinionName);
+		
+		// reattach all the relations
+		for (Iterator i = relationNodes.iterator(); i.hasNext();) {
+			Element relationElement = (Element) i.next();
+			doc.getRootElement().add(relationElement);
+		}
 
 		writeToXml(doc);
 	}
