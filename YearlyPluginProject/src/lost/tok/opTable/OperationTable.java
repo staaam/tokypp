@@ -425,5 +425,9 @@ public class OperationTable extends TextEditor {
 		markedExcerptions.remove(i);
 		markedText.remove(i);
 	}
+
+	public boolean isRootDiscussionsView() {
+		return rootDiscussionsView;
+	}
 	
 }

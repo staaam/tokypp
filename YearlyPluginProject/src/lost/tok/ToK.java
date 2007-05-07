@@ -77,10 +77,12 @@ public class ToK {
 	}
 
 	public IFile getLinkFile() {
+		createLinksFile();
 		return linkFile;
 	}
 
 	public IFile getAuthorFile() {
+		createAuthorsFile();
 		return authorFile;
 	}
 
@@ -563,7 +565,7 @@ public class ToK {
 	 * @param disc
 	 *            an object representing an existing discussion
 	 */
-	public void linkDiscussionRoot(Discussion disc, String sourceFile,
+	public void linkDiscussionRoot(Discussion disc, Source sourceFile,
 			Excerption[] exp, String subject, String linkType) {
 
 		String discFileName = disc.getDiscFileName();
@@ -589,31 +591,12 @@ public class ToK {
 
 		for (Excerption element : exp) {
 
-			subLink.addElement("sourceFile").addText(sourceFile);
+			subLink.addElement("sourceFile").addText(sourceFile.toString());
 			subLink.add(element.toXML());
 
 		}
 
 		GeneralFunctions.writeToXml(getLinkFile(), doc);
-	}
-
-	/**
-	 * Creates a new discussion and links it to a segment in the root of the ToK
-	 * project
-	 * 
-	 * @param discName
-	 *            the name of the discussion
-	 */
-	public void linkNewDiscussionRoot(String discName, String sourceName,
-			Excerption[] exp, String subject, String linkType) {
-
-		addDiscussion(discName);
-		try {
-			linkDiscussionRoot(getDiscussion(discName), sourceName, exp,
-					subject, linkType);
-		} catch (CoreException e) {
-			e.printStackTrace();
-		}
 	}
 
 	private void throwCoreException(String message) throws CoreException {
@@ -704,7 +687,13 @@ public class ToK {
 
 	}
 
-	public IFile getSource(String sourceFilePath) {
-		return srcFolder.getFile(sourceFilePath);
+	/**
+	 * Returns source object for requested source
+	 * 
+	 * @param src - relative to source/ folder
+	 * @return source object for requested source
+	 */
+	public Source getSource(String src) {
+		return new Source(srcFolder.getFile(src));
 	}
 }
