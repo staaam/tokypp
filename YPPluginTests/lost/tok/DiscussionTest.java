@@ -704,4 +704,69 @@ public class DiscussionTest extends TestCase {
 		assertTrue(result1.size() == 1);
 	}
 	
+	/**
+	 * Adding opinion after a relation is a bit more complex, so we test it
+	 * Creates a document, adds a few relations and opinions,
+	 * and verify that there is a correct number of both
+	 */
+	public void testAddOpAfterRel1() throws CoreException, IOException, DocumentException {
+		ToK tok = creation("testOpAfterRel1");
+		tok.addDiscussion("test");
+		Discussion disc = tok.getDiscussion("test");
+		
+		disc.addOpinion("hello1");
+		disc.addOpinion("hello2");
+		disc.createLink(1, 2, "no comment", Discussion.relTypes[1]);
+		disc.addOpinion("hello3"); // hopefully, this won't destroy the order
+
+		Document doc = DocumentHelper.createDocument();
+		SAXReader reader = new SAXReader();
+		String path = disc.getMyToK().getDiscussionFolder().getFile(
+				disc.getDiscName() + ".dis").getLocation().toOSString();
+		File file = new File(path);
+		doc = reader.read(file);
+		
+		int numRel = DocumentHelper.createXPath("//relation").selectNodes(doc).size();
+		int numOps = DocumentHelper.createXPath("//opinion").selectNodes(doc).size();
+		assertEquals(3+1, numOps); // +1 for the def opinion
+		assertEquals(1, numRel);
+		
+		// Note(Shay): I wanted to verify according to the xsd, 
+		// but couldn't figure out how to use Xerces and the schema validation
+	}
+	
+	/**
+	 * Adding opinion after a relation is a bit more complex, so we test it
+	 * Creates a document, adds a few relations and opinions,
+	 * and verify that there is a correct number of both
+	 */
+	public void testAddOpAfterRel2() throws CoreException, IOException, DocumentException {
+		ToK tok = creation("testOpAfterRel2");
+		tok.addDiscussion("test");
+		Discussion disc = tok.getDiscussion("test");
+		
+		disc.addOpinion("hello1");
+		disc.addOpinion("hello2");
+		disc.createLink(1, 2, "no comment", Discussion.relTypes[1]);
+		disc.addOpinion("hello3");
+		disc.createLink(3, 2, "no comment", Discussion.relTypes[0]);
+		disc.addOpinion("hello4");
+		disc.addOpinion("hello5");
+		disc.createLink(4, 5, "no comment", Discussion.relTypes[1]);
+		disc.createLink(5, 1, "no comment", Discussion.relTypes[0]);
+		disc.addOpinion("hello6");
+
+		Document doc = DocumentHelper.createDocument();
+		SAXReader reader = new SAXReader();
+		String path = disc.getMyToK().getDiscussionFolder().getFile(
+				disc.getDiscName() + ".dis").getLocation().toOSString();
+		File file = new File(path);
+		doc = reader.read(file);
+		
+		int numRel = DocumentHelper.createXPath("//relation").selectNodes(doc).size();
+		int numOps = DocumentHelper.createXPath("//opinion").selectNodes(doc).size();
+		assertEquals(6+1, numOps); // +1 for the def opinion
+		assertEquals(4, numRel);
+	}
+	
 }
