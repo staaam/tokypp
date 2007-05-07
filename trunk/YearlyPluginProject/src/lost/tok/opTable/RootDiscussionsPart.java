@@ -6,6 +6,7 @@ import java.util.List;
 import lost.tok.Discussion;
 import lost.tok.Excerption;
 import lost.tok.GeneralFunctions;
+import lost.tok.Source;
 import lost.tok.ToK;
 import lost.tok.disEditor.DiscussionEditor;
 import lost.tok.opTable.actions.AbstractEditorAction;
@@ -131,16 +132,16 @@ public class RootDiscussionsPart extends AbstractEditorAction
 	 * 
 	 * Creates all required data structures
 	 * 
-	 * @param file -
+	 * @param root -
 	 *            the source(root) file
 	 */
-	private void getRootDiscussions(IFile file) {
+	private void getRootDiscussions(Source root) {
 		rootExcerptions = new LinkedList<Excerption>();
 
-		ToK tok = ToK.getProjectToK(file.getProject());
+		ToK tok = ToK.getProjectToK(root.getFile().getProject());
 
 		XPath xpathSelector = DocumentHelper
-				.createXPath("//sublink[sourceFile='" + file.getName() + "']");
+				.createXPath("//sublink[sourceFile='" + root.toString() + "']");
 
 		for (Object os : xpathSelector.selectNodes(GeneralFunctions
 				.readFromXML(tok.getLinkFile()))) {
@@ -205,7 +206,7 @@ public class RootDiscussionsPart extends AbstractEditorAction
 			FileEditorInput fileEditorInput = (FileEditorInput) input;
 			IFile file = fileEditorInput.getFile();
 			tok = ToK.getProjectToK(file.getProject());
-			getRootDiscussions(file);
+			getRootDiscussions(new Source(file));
 		}
 	}
 

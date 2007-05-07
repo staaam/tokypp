@@ -176,7 +176,7 @@
                menubarPath="edit/OpTableGroup"
                style="toggle"
                toolbarPath="OpTableGroup"
-               tooltip="Tooltip"/>
+               tooltip="Show Linked Discussions"/>
       </editorContribution>
 
 

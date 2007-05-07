@@ -5,6 +5,12 @@ import org.eclipse.core.resources.IFile;
 public class Source {
 	IFile file;
 
+	/**
+	 * Creates Source object
+	 * 
+	 * @param tok - related source
+	 * @param fileName - source file (relative to project dir)
+	 */
 	public Source(ToK tok, String fileName) {
 		file = tok.getProject().getFile(fileName);
 	}
