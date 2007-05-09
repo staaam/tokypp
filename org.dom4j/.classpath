@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry exported="true" kind="lib" path="dom4j-1.6.1.jar" sourcepath="F:/HW/SEProj2/ws/ws/YearlyPluginProject/other/JarPackages/dom4j/"/>
+	<classpathentry exported="true" kind="lib" path="jaxen-1.1-beta-12.jar"/>
+	<classpathentry exported="true" kind="lib" path="resolver.jar"/>
+	<classpathentry exported="true" kind="lib" path="serializer.jar"/>
+	<classpathentry exported="true" kind="lib" path="xercesImpl.jar"/>
+	<classpathentry exported="true" kind="lib" path="xercesSamples.jar"/>
+	<classpathentry exported="true" kind="lib" path="xml-apis.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
