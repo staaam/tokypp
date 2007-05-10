@@ -10,7 +10,7 @@ import org.eclipse.ui.IPerspectiveFactory;
 
 /**
  * This class creates the perspective Tree of Knowledge
- * @author smichalz
+ * @author LOST
  *
  */
 public class Perspective implements IPerspectiveFactory{
