@@ -1,8 +1,10 @@
 package lost.tok.disEditor;
 
+import java.util.List;
 import java.util.TreeMap;
 
 import lost.tok.Discussion;
+import lost.tok.Excerption;
 import lost.tok.Opinion;
 import lost.tok.Quote;
 import lost.tok.ToK;
@@ -11,6 +13,7 @@ import lost.tok.opTable.OperationTable;
 import org.eclipse.core.commands.common.EventManager;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jface.text.TextSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DragSource;
@@ -35,6 +38,7 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.editors.text.TextEditor;
@@ -157,13 +161,31 @@ public class DiscussionEditor extends TextEditor {
 //							.getProject());
 
 					IFile source = quote.getSource().getFile();
-
+					IEditorPart editorP = null;
 					try {
-						ww.getActivePage().openEditor(
+						editorP = ww.getActivePage().openEditor(
 								new FileEditorInput(source), editorId);
 					} catch (PartInitException e1) {
 						// e1.printStackTrace();
 					}
+					
+//					MICHAL - enter marking here...
+					
+					OperationTable ot = (OperationTable) editorP;
+					ot.clearMarked();
+					//List<Excerption> exerptions = quote.getExcerptions();
+					
+					
+					for(Excerption ex : quote.getExcerptions()) {
+						TextSelection ts = new TextSelection(ex.getStartPos(),ex.getEndPos()-ex.getStartPos());		
+						ot.mark(ts);
+					}
+				
+					//markedExcerptions.put(mergedBegin, e);
+					
+					
+					ot.refreshDisplay();
+					
 				}
 
 			}
