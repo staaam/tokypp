@@ -525,7 +525,7 @@ public class DiscussionEditor extends TextEditor {
 	private void setTreeQuote(Quote quote, TreeItem quoteItem) {
 
 		String quoteText = new String(quote.getText());
-		quoteItem.setText(quoteText.substring(0, 10) + "...");
+		quoteItem.setText(quoteText.substring(0, java.lang.Math.min(10, quoteText.length())) + "...");
 		
 		quoteItem.setData(QUOTE, quote);
 		quoteItem.setData(QUOTE);
