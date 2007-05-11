@@ -16,7 +16,7 @@ public class ToKNature implements IProjectNature {
 	IProject project;
 
 	public void configure() throws CoreException {
-		System.out.println("configure");
+		System.out.println("configure"); //$NON-NLS-1$
 
 		IProjectDescription desc = project.getDescription();
 		ICommand[] commands = desc.getBuildSpec();
@@ -37,7 +37,7 @@ public class ToKNature implements IProjectNature {
 	}
 
 	public void deconfigure() throws CoreException {
-		System.out.println("deconfigure");
+		System.out.println("deconfigure"); //$NON-NLS-1$
 		IProjectDescription description = getProject().getDescription();
 		ICommand[] commands = description.getBuildSpec();
 		for (int i = 0; i < commands.length; ++i) {
@@ -53,12 +53,12 @@ public class ToKNature implements IProjectNature {
 	}
 
 	public IProject getProject() {
-		System.out.println("getProject");
+		System.out.println("getProject"); //$NON-NLS-1$
 		return project;
 	}
 
 	public void setProject(IProject project) {
-		System.out.println("setProject");
+		System.out.println("setProject"); //$NON-NLS-1$
 		this.project = project;
 	}
 

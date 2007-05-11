@@ -180,7 +180,7 @@ public class NewProjectPage extends WizardPage {
 		}
 
 		if (rootName.length() == 0) {
-			warningStatus("Pay attention, you haven't chosen a root file! \nIt is recommended to choose a root file");
+			warningStatus(Messages.getString("NewProjectPage.WrnNoRoot")); //$NON-NLS-1$
 			//updateStatus(Messages.getString("NewToKWizErrSelectRoot")); //$NON-NLS-1$
 			return;
 		}

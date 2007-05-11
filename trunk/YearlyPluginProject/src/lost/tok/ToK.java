@@ -50,16 +50,16 @@ public class ToK {
 	private List<Discussion> discussions = null;
 
 	public final static QualifiedName tokQName = new QualifiedName(null,
-			"ToK Object");
+			"ToK Object"); //$NON-NLS-1$
 
 	/** The QualifiedName of the creatorQName property */
 	public final static QualifiedName creatorQName = new QualifiedName(
-			"lost.tok", "Creator");
+			"lost.tok", "Creator"); //$NON-NLS-1$ //$NON-NLS-2$
 
 	/** The QualifiedName of the isRoot file property */
 	// TODO(Shay): if we implement new dir structure, remove this
 	public final static QualifiedName isRootQName = new QualifiedName(
-			"lost.tok", "isRoot");
+			"lost.tok", "isRoot"); //$NON-NLS-1$ //$NON-NLS-2$
 
 	/** The minimal ranking of authors */
 	public static final int MIN_AUTHOR_GROUP = 1;
@@ -105,7 +105,7 @@ public class ToK {
 	}
 
 	private void createToKFromProject(IProject project) {
-		System.out.println("createToKFromProject");
+		System.out.println("createToKFromProject"); //$NON-NLS-1$
 
 		treeOfKnowledgeProj = project;
 		progMonitor = new NullProgressMonitor();
@@ -114,20 +114,20 @@ public class ToK {
 			try {
 				treeOfKnowledgeProj.create(progMonitor);
 			} catch (CoreException e) {
-				System.out.println("exception in project create: " + e);
+				System.out.println("exception in project create: " + e); //$NON-NLS-1$
 			}
 		}
 
 		try {
 			treeOfKnowledgeProj.open(progMonitor);
 		} catch (CoreException e) {
-			System.out.println("exception in project open: " + e);
+			System.out.println("exception in project open: " + e); //$NON-NLS-1$
 		}
 
 		try {
 			treeOfKnowledgeProj.setSessionProperty(tokQName, this);
 		} catch (CoreException e) {
-			System.out.println("exception in setSessionProperty: " + e);
+			System.out.println("exception in setSessionProperty: " + e); //$NON-NLS-1$
 		}
 
 		ToKNature.setNature(treeOfKnowledgeProj);
@@ -202,7 +202,7 @@ public class ToK {
 		Document linkDoc = DocumentHelper.createDocument();
 
 		// Create the Skeleton of the Links file
-		linkDoc.addElement("links");
+		linkDoc.addElement("links"); //$NON-NLS-1$
 		return linkDoc;
 	}
 
@@ -210,16 +210,16 @@ public class ToK {
 		Document authDoc = DocumentHelper.createDocument();
 
 		// Create the Skeleton of the authors file
-		Element authElm = authDoc.addElement("authors");
+		Element authElm = authDoc.addElement("authors"); //$NON-NLS-1$
 
 		for (int i = MIN_AUTHOR_GROUP; i <= MAX_AUTHOR_GROUP; i++) {
-			Element inAuthElm = authElm.addElement("authorsGroup");
-			inAuthElm.addElement("id").addText(String.valueOf(i));
-			inAuthElm.addElement("name").addText(
-					"author group " + String.valueOf(i));
-			inAuthElm.addElement("nextGroupId").addText(
+			Element inAuthElm = authElm.addElement("authorsGroup"); //$NON-NLS-1$
+			inAuthElm.addElement("id").addText(String.valueOf(i)); //$NON-NLS-1$
+			inAuthElm.addElement("name").addText( //$NON-NLS-1$
+					"author group " + String.valueOf(i)); //$NON-NLS-1$
+			inAuthElm.addElement("nextGroupId").addText( //$NON-NLS-1$
 					String.valueOf(nextOf(i)));
-			inAuthElm.addElement("prevGroupId").addText(
+			inAuthElm.addElement("prevGroupId").addText( //$NON-NLS-1$
 					String.valueOf(prevOf(i)));
 		}
 		return authDoc;
@@ -244,7 +244,7 @@ public class ToK {
 			srcFolder.getFile(rootName).create(new FileInputStream(rootPath),
 					true, progMonitor);
 		} catch (FileNotFoundException e) {
-			System.out.println("file is none existant or extention not src");
+			System.out.println("file is none existant or extention not src"); //$NON-NLS-1$
 			return false;
 		} catch (CoreException e) {
 			e.printStackTrace();
@@ -292,14 +292,14 @@ public class ToK {
 			final String sl = XMLConstants.W3C_XML_SCHEMA_NS_URI;
 			SchemaFactory factory = SchemaFactory.newInstance(sl);
 			StreamSource ss = new StreamSource(Activator.sourceXsdPath
-					+ "source.xsd");
+					+ "source.xsd"); //$NON-NLS-1$
 			Schema schema = factory.newSchema(ss);
 			Validator validator = schema.newValidator();
 			File fileToValidate = new File(filePathGivenByUser);
 			validator.validate(new StreamSource(fileToValidate));
 			// System.out.println("Source file is valid ");
 		} catch (Exception e) {
-			System.out.println("FAILED validating source file ");
+			System.out.println("FAILED validating source file "); //$NON-NLS-1$
 			return;
 		}
 
@@ -310,7 +310,7 @@ public class ToK {
 		 */
 
 		String filePathVarified = new String(filePathGivenByUser);
-		int beginIndex = filePathVarified.lastIndexOf("\\");
+		int beginIndex = filePathVarified.lastIndexOf("\\"); //$NON-NLS-1$
 		String fileNameVarified = filePathVarified.substring(beginIndex);
 
 		// check if file with that name exists in Sources folder
@@ -325,7 +325,7 @@ public class ToK {
 				refresh();
 				// System.out.println("Source file was added to ToK ");
 			} catch (Exception e) {
-				System.out.println("FAILED to add source file to ToK ");
+				System.out.println("FAILED to add source file to ToK "); //$NON-NLS-1$
 				return;
 			}
 
@@ -344,10 +344,10 @@ public class ToK {
 			Document sourceDocumentObject = GeneralFunctions
 					.readFromXML(filePathVarified);
 			sourceAuthor.name = sourceDocumentObject.getRootElement().element(
-					"author").getText();
+					"author").getText(); //$NON-NLS-1$
 			// System.out.println("Source's author is " + sourceAuthor.name);
 		} catch (Exception e) {
-			System.out.println("FAILED to get author name from source file \n"
+			System.out.println("FAILED to get author name from source file \n" //$NON-NLS-1$
 					+ e.getMessage());
 			return;
 		}
@@ -358,7 +358,7 @@ public class ToK {
 					.readFromXML(getAuthorFile());
 
 			Iterator groupsIterator = authorsDocumentObject.getRootElement()
-					.elementIterator("authorsGroup");
+					.elementIterator("authorsGroup"); //$NON-NLS-1$
 			int authorDefaultRank = 3;
 			Boolean authorExists = false;
 
@@ -366,13 +366,13 @@ public class ToK {
 			while (groupsIterator.hasNext()) {
 				Element groupElement = (Element) groupsIterator.next();
 				Iterator authorsIterator = groupElement
-						.elementIterator("author");
+						.elementIterator("author"); //$NON-NLS-1$
 				while (authorsIterator.hasNext()) {
 					Element authorElement = (Element) authorsIterator.next();
 					if (authorElement.getTextTrim().equals(sourceAuthor.name)) {
 						authorExists = true;
 						sourceAuthor.rank = Integer.parseInt(groupElement
-								.element("id").getText());
+								.element("id").getText()); //$NON-NLS-1$
 						break;
 					}
 				}
@@ -380,16 +380,16 @@ public class ToK {
 
 			// if author exists in authors XML
 			if (authorExists) {
-				System.out.println("Author allready exists ");
+				System.out.println("Author allready exists "); //$NON-NLS-1$
 			} else {
 				// System.out.println("Author DOESN'T exist ");
 				sourceAuthor.rank = authorDefaultRank;
 				AddAuthorToFile(sourceAuthor);
 			}
 			// RankChangeByUser(sourceAuthor);
-			System.out.println("Author's rank changed");
+			System.out.println("Author's rank changed"); //$NON-NLS-1$
 		} catch (Exception e) {
-			System.out.println("FAILED to open Aouthors file \n"
+			System.out.println("FAILED to open Aouthors file \n" //$NON-NLS-1$
 					+ e.getMessage());
 			return;
 		}
@@ -402,21 +402,21 @@ public class ToK {
 					.readFromXML(getAuthorFile());
 
 			Iterator groupsIterator = authorsDocumentObject.getRootElement()
-					.elementIterator("authorsGroup");
+					.elementIterator("authorsGroup"); //$NON-NLS-1$
 
 			while (groupsIterator.hasNext()) {
 				Element element = (Element) groupsIterator.next();
-				if (Integer.parseInt(element.element("id").getTextTrim()) == author.rank) {
-					Element newAuthorElem = element.addElement("author");
+				if (Integer.parseInt(element.element("id").getTextTrim()) == author.rank) { //$NON-NLS-1$
+					Element newAuthorElem = element.addElement("author"); //$NON-NLS-1$
 					newAuthorElem.addText(author.name);
 					GeneralFunctions.writeToXml(getAuthorFile(),
 							authorsDocumentObject);
 				}
 			}
-			System.out.println("Added new author tag to " + author.rank
-					+ " group");
+			System.out.println("Added new author tag to " + author.rank //$NON-NLS-1$
+					+ " group"); //$NON-NLS-1$
 		} catch (Exception e) {
-			System.out.println("FAILED to add new author to Authors file");
+			System.out.println("FAILED to add new author to Authors file"); //$NON-NLS-1$
 			return;
 		}
 	}
@@ -427,12 +427,12 @@ public class ToK {
 			Document authorsDocumentObject = GeneralFunctions
 					.readFromXML(getAuthorFile());
 			Iterator groupsIterator = authorsDocumentObject.getRootElement()
-					.elementIterator("authorsGroup");
+					.elementIterator("authorsGroup"); //$NON-NLS-1$
 
 			while (groupsIterator.hasNext()) {
 				Element groupElement = (Element) groupsIterator.next();
 				Iterator authorsIterator = groupElement
-						.elementIterator("author");
+						.elementIterator("author"); //$NON-NLS-1$
 				while (authorsIterator.hasNext()) {
 					Element authorElement = (Element) authorsIterator.next();
 					if (authorElement.getTextTrim().equals(author.name)) {
@@ -443,10 +443,10 @@ public class ToK {
 					}
 				}
 			}
-			System.out.println("Removed author tag from " + author.rank
-					+ " group");
+			System.out.println("Removed author tag from " + author.rank //$NON-NLS-1$
+					+ " group"); //$NON-NLS-1$
 		} catch (Exception e) {
-			System.out.println("FAILED to remove author from Authors file");
+			System.out.println("FAILED to remove author from Authors file"); //$NON-NLS-1$
 			return;
 		}
 	}
@@ -457,7 +457,7 @@ public class ToK {
 			Document authorsDocumentObject = GeneralFunctions
 					.readFromXML(getAuthorFile());
 			Iterator groupsIterator = authorsDocumentObject.getRootElement()
-					.elementIterator("authorsGroup");
+					.elementIterator("authorsGroup"); //$NON-NLS-1$
 			int authorDefaultRank = 3;
 			Boolean authorExists = false;
 
@@ -465,13 +465,13 @@ public class ToK {
 			while (groupsIterator.hasNext()) {
 				Element groupElement = (Element) groupsIterator.next();
 				Iterator authorsIterator = groupElement
-						.elementIterator("author");
+						.elementIterator("author"); //$NON-NLS-1$
 				while (authorsIterator.hasNext()) {
 					Element authorElement = (Element) authorsIterator.next();
 					if (authorElement.getTextTrim().equals(author.name)) {
 						authorExists = true;
 						author.rank = Integer.parseInt(groupElement.element(
-								"id").getText());
+								"id").getText()); //$NON-NLS-1$
 						break;
 					}
 				}
@@ -489,7 +489,7 @@ public class ToK {
 			// System.out.println("Author file updated " + author.name + "
 			// rank");
 		} catch (Exception e) {
-			System.out.println("FAILED to update Authors file ");
+			System.out.println("FAILED to update Authors file "); //$NON-NLS-1$
 			return;
 		}
 	}
@@ -504,14 +504,14 @@ public class ToK {
 //					+ "\nType new rank (1 - 5):  8");
 //			char inputRank = (char) System.in.read();
 			
-			System.out.println("Author name = " + author.name
-					+ " , Current rank = " + author.rank
-					+ "\nUser enters new rank: 8");
+			System.out.println("Author name = " + author.name //$NON-NLS-1$
+					+ " , Current rank = " + author.rank //$NON-NLS-1$
+					+ "\nUser enters new rank: 8"); //$NON-NLS-1$
 			
 			char inputRank = '8';
 			int newRank = Character.digit(inputRank, Character.MAX_RADIX);
 			if (newRank < 1 || newRank > 5) {
-				System.out.println(newRank + " is bad rank input !!");
+				System.out.println(newRank + " is bad rank input !!"); //$NON-NLS-1$
 				return;
 			}
 			if (newRank != author.rank) {
@@ -523,7 +523,7 @@ public class ToK {
 				// author.rank);
 			}
 		} catch (Exception e) {
-			System.out.println("FAILED to change " + author.name + " rank");
+			System.out.println("FAILED to change " + author.name + " rank"); //$NON-NLS-1$ //$NON-NLS-2$
 			return;
 		}
 
@@ -573,25 +573,25 @@ public class ToK {
 		// Open the Links file
 		Document doc = GeneralFunctions.readFromXML(getLinkFile());
 
-		Node link = doc.selectSingleNode("//link/discussionFile[text()=\""
-				+ discFileName + "\"]");
+		Node link = doc.selectSingleNode("//link/discussionFile[text()=\"" //$NON-NLS-1$
+				+ discFileName + "\"]"); //$NON-NLS-1$
 		Element newLink = null;
 		if (link != null) {
 			newLink = link.getParent();
 		} else {
 
 			Element links = doc.getRootElement();
-			newLink = links.addElement("link");
-			newLink.addElement("discussionFile").addText(discFileName);
-			newLink.addElement("type").addText(linkType);
-			newLink.addElement("linkSubject").addText(subject);
+			newLink = links.addElement("link"); //$NON-NLS-1$
+			newLink.addElement("discussionFile").addText(discFileName); //$NON-NLS-1$
+			newLink.addElement("type").addText(linkType); //$NON-NLS-1$
+			newLink.addElement("linkSubject").addText(subject); //$NON-NLS-1$
 		}
 
-		Element subLink = newLink.addElement("sublink");
+		Element subLink = newLink.addElement("sublink"); //$NON-NLS-1$
 
 		for (Excerption element : exp) {
 
-			subLink.addElement("sourceFile").addText(sourceFile.toString());
+			subLink.addElement("sourceFile").addText(sourceFile.toString()); //$NON-NLS-1$
 			subLink.add(element.toXML());
 
 		}
@@ -600,7 +600,7 @@ public class ToK {
 	}
 
 	private void throwCoreException(String message) throws CoreException {
-		IStatus status = new Status(IStatus.ERROR, "Yearly_Plugin_Project",
+		IStatus status = new Status(IStatus.ERROR, "Yearly_Plugin_Project", //$NON-NLS-1$
 				IStatus.OK, message, null);
 		throw new CoreException(status);
 	}
@@ -655,7 +655,7 @@ public class ToK {
 				return discussion;
 			}
 		}
-		throwCoreException("No such discussion exists!");
+		throwCoreException("No such discussion exists!"); //$NON-NLS-1$
 		return null;
 	}
 
@@ -674,7 +674,7 @@ public class ToK {
 			for (IResource resource : files) {
 				if (resource instanceof IFile) {
 					IFile file = (IFile) resource;
-					if (isExtentionLegel(file.getName(), "dis")) {
+					if (isExtentionLegel(file.getName(), "dis")) { //$NON-NLS-1$
 						discussions.add(new Discussion(this, file.getLocation()
 								.toOSString()));
 					}
