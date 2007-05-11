@@ -3,8 +3,6 @@ package lost.tok.opTable.wizards;
 import lost.tok.Messages;
 import lost.tok.ToK;
 
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -59,10 +57,7 @@ public class NewLinkWizard extends Wizard implements INewWizard {
 	 * will create an operation and run it using wizard as execution context.
 	 */
 	public boolean performFinish() {
-
-		IProject tokProject = ResourcesPlugin.getWorkspace().getRoot()
-				.getProject(page.getProject());
-		tok = new ToK(tokProject);
+		tok = page.getTok();
 		String[] roots = page.getSourceFiles();
 		// TODO
 		try {

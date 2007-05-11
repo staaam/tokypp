@@ -487,7 +487,9 @@ public class Discussion {
 			begin = discussionFile.lastIndexOf('\\');
 		}
 		begin++;
-		int end = discussionFile.lastIndexOf('.');
+		int end = discussionFile.lastIndexOf(".dis");
+		
+		if (end == -1) return null;
 
 		return discussionFile.substring(begin, end);
 	}

@@ -64,7 +64,7 @@ public class AddQuoteAction extends AbstractEditorAction {
 			// tok.addDiscussion("Test Discussion"); //$NON-NLS-1$
 		}
 
-		AddQuoteWizard w = new AddQuoteWizard(tok.getDiscussions(), q);
+		AddQuoteWizard w = new AddQuoteWizard(tok, q);
 
 		WizardDialog wd = new WizardDialog(new Shell(), w);
 		wd.setBlockOnOpen(true);

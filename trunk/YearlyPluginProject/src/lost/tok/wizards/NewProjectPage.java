@@ -4,12 +4,9 @@ import java.io.File;
 
 import lost.tok.Messages;
 
-import org.eclipse.core.resources.IContainer;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.dialogs.IDialogPage;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -37,7 +34,7 @@ public class NewProjectPage extends WizardPage {
 
 	private Text creatorText;
 
-	private ISelection selection;
+//	private ISelection selection;
 
 	/**
 	 * Constructor for SampleNewWizardPage.
@@ -48,7 +45,7 @@ public class NewProjectPage extends WizardPage {
 		super("wizardPage"); //$NON-NLS-1$
 		setTitle(Messages.getString("NewToKWizTitle")); //$NON-NLS-1$
 		setDescription(Messages.getString("NewToKWizDescription")); //$NON-NLS-1$
-		this.selection = selection;
+//		this.selection = selection;
 	}
 
 	/**
@@ -58,7 +55,7 @@ public class NewProjectPage extends WizardPage {
 		Composite container = new Composite(parent, SWT.NULL);
 		GridLayout layout = new GridLayout();
 		container.setLayout(layout);
-		layout.numColumns = 3;
+		layout.numColumns = 2;
 		layout.verticalSpacing = 9;
 
 		Label label = new Label(container, SWT.NULL);
@@ -74,8 +71,6 @@ public class NewProjectPage extends WizardPage {
 		});
 
 		label = new Label(container, SWT.NULL);
-		label.setText(""); //$NON-NLS-1$
-		label = new Label(container, SWT.NULL);
 		label.setText(Messages.getString("NewToKWizReqCreatorName")); //$NON-NLS-1$
 		creatorText = new Text(container, SWT.BORDER | SWT.SINGLE);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -85,9 +80,6 @@ public class NewProjectPage extends WizardPage {
 				dialogChanged();
 			}
 		});
-
-		label = new Label(container, SWT.NULL);
-		label.setText(""); //$NON-NLS-1$
 
 		label = new Label(container, SWT.NULL);
 		label.setText(Messages.getString("NewToKWizReqRootFile")); //$NON-NLS-1$
@@ -100,6 +92,9 @@ public class NewProjectPage extends WizardPage {
 			}
 		});
 
+		label = new Label(container, SWT.NULL);
+		label.setText(""); //$NON-NLS-1$
+
 		Button button = new Button(container, SWT.PUSH);
 		button.setText(Messages.getString("NewToKWizBrowseCmd")); //$NON-NLS-1$
 		button.addSelectionListener(new SelectionAdapter() {
@@ -107,7 +102,8 @@ public class NewProjectPage extends WizardPage {
 				handleBrowse();
 			}
 		});
-		initialize();
+		button.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
+//		initialize();
 		dialogChanged();
 		setControl(container);
 	}
@@ -119,9 +115,9 @@ public class NewProjectPage extends WizardPage {
 	private void handleBrowse() {
 		FileDialog fd = new FileDialog(getShell(), SWT.OPEN);
 		fd.setText(Messages.getString("NewToKWizOpenCmd")); //$NON-NLS-1$
-		fd.setFilterPath("C:/"); //$NON-NLS-1$
-		String[] filterExt = {
-				"*.src", "*.xml", "*.txt", "*.doc", ".rtf", "*.*" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
+		fd.setFilterPath(null); //$NON-NLS-1$
+		String[] filterExt = {"*.src"};
+				//, "*.xml", "*.txt", "*.doc", ".rtf", "*.*" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
 		fd.setFilterExtensions(filterExt);
 		String selected = fd.open();
 		rootText.setText(selected);
@@ -131,25 +127,25 @@ public class NewProjectPage extends WizardPage {
 	 * Tests if the current workbench selection is a suitable container to use.
 	 */
 
-	private void initialize() {
-		if (selection != null && selection.isEmpty() == false
-				&& selection instanceof IStructuredSelection) {
-			IStructuredSelection ssel = (IStructuredSelection) selection;
-			if (ssel.size() > 1) {
-				return;
-			}
-			Object obj = ssel.getFirstElement();
-			if (obj instanceof IResource) {
-				IContainer container;
-				if (obj instanceof IContainer) {
-					container = (IContainer) obj;
-				} else {
-					container = ((IResource) obj).getParent();
-				}
-				rootText.setText(container.getFullPath().toString());
-			}
-		}
-	}
+//	private void initialize() {
+//		if (selection != null && selection.isEmpty() == false
+//				&& selection instanceof IStructuredSelection) {
+//			IStructuredSelection ssel = (IStructuredSelection) selection;
+//			if (ssel.size() > 1) {
+//				return;
+//			}
+//			Object obj = ssel.getFirstElement();
+//			if (obj instanceof IResource) {
+//				IContainer container;
+//				if (obj instanceof IContainer) {
+//					container = (IContainer) obj;
+//				} else {
+//					container = ((IResource) obj).getParent();
+//				}
+//				rootText.setText(container.getFullPath().toString());
+//			}
+//		}
+//	}
 
 	/**
 	 * Ensures that both text fields are set.

@@ -1,35 +1,26 @@
 package lost.tok.opTable.wizards;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
-import lost.tok.Discussion;
 import lost.tok.Excerption;
 import lost.tok.Link;
 import lost.tok.Messages;
 import lost.tok.ToK;
 import lost.tok.excerptionsView.ExcerptionView;
-import lost.tok.wizards.NewDiscussion;
+import lost.tok.wizards.DiscCombo;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.dialogs.IDialogPage;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
@@ -40,11 +31,8 @@ import org.eclipse.swt.widgets.TreeItem;
  * @author Team Lost
  * 
  */
-public class NewLinkWizardPage extends WizardPage {
-
-	private HashMap<String, Discussion> discMap = new HashMap<String, Discussion>();
-
-	private Combo discussionCombo;
+public class NewLinkWizardPage extends WizardPage implements SelectionListener, ModifyListener {
+	private DiscCombo discussionCombo;
 
 	private Tree excerptions;
 
@@ -52,12 +40,9 @@ public class NewLinkWizardPage extends WizardPage {
 
 	private Combo linkType;
 
-	@SuppressWarnings("unused")
-	private ISelection selection;
-
 	private Text subject;
 
-	private IProject project;
+	private ToK tok;
 
 	/**
 	 * Constructor for NewLinkWizardPage.
@@ -68,7 +53,7 @@ public class NewLinkWizardPage extends WizardPage {
 		super("wizardPage"); //$NON-NLS-1$
 		setTitle(Messages.getString("NewLinkWizardPage.0")); //$NON-NLS-1$
 		setDescription(Messages.getString("NewLinkWizardPage.12")); //$NON-NLS-1$
-		project = ExcerptionView.getView().getProject();
+		tok = ToK.getProjectToK(ExcerptionView.getView().getProject());
 	}
 
 	/**
@@ -76,82 +61,31 @@ public class NewLinkWizardPage extends WizardPage {
 	 */
 	public void createControl(Composite parent) {
 		Composite container = new Composite(parent, SWT.NULL);
+		GridData gd;
 		GridLayout layout = new GridLayout();
 		container.setLayout(layout);
 		layout.numColumns = 2;
 		layout.verticalSpacing = 9;
 
+		// discussion
 		Label label = new Label(container, SWT.NULL);
 		label.setText(Messages.getString("NewLinkWizardPage.14")); //$NON-NLS-1$
 		
-		Composite c = new Composite(container, SWT.NONE);
-		GridLayout layout2 = new GridLayout();
-		c.setLayout(layout2);
-		layout2.numColumns = 2;
-		layout2.marginWidth = 0;
-		layout2.marginHeight = 0;
-		c.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_FILL | GridData.FILL_HORIZONTAL));
-
-		discussionCombo = new Combo(c, SWT.READ_ONLY | SWT.DROP_DOWN);
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		discussionCombo = new DiscCombo(container, SWT.NONE, tok);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
 		discussionCombo.setLayoutData(gd);
-		projectSelected();
-		discussionCombo.addSelectionListener(new SelectionListener() {
-
-			public void widgetDefaultSelected(SelectionEvent arg0) {
-				// TODO Auto-generated method stub
-
-			}
-
-			public void widgetSelected(SelectionEvent arg0) {
-				dialogChanged();
-			}
-
-		});
-
-		Button newDisButton = new Button(c, SWT.NONE);
-		newDisButton.setText("New...");
+		discussionCombo.discCombo.addSelectionListener(this);
 		
-		newDisButton.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				NewDiscussion w = new NewDiscussion(project);
-
-				WizardDialog wd = new WizardDialog(new Shell(), w);
-				wd.setBlockOnOpen(true);
-
-				wd.open();
-				
-				if (wd.getReturnCode() != WizardDialog.OK)
-					return;
-
-				String newDiscussion = w.getDiscussionName();
-				projectSelected();
-				for (int i=0; i<discussionCombo.getItemCount(); i++) {
-					if (newDiscussion.compareTo(discussionCombo.getItem(i)) != 0)
-						continue;
-					
-					discussionCombo.select(i);
-					dialogChanged();
-					break;
-				}
-			}
-		});
-		
+		// subject
 		label = new Label(container, SWT.NULL);
 		label.setText(Messages.getString("NewLinkWizardPage.1")); //$NON-NLS-1$
 
 		subject = new Text(container, SWT.BORDER);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		subject.setLayoutData(gd);
-		subject.addModifyListener(new ModifyListener() {
+		subject.addModifyListener(this);
 
-			public void modifyText(ModifyEvent arg0) {
-				dialogChanged();
-
-			}
-
-		});
-
+		// link type
 		label = new Label(container, SWT.NULL);
 		label.setText(Messages.getString("NewLinkWizardPage.2")); //$NON-NLS-1$
 
@@ -159,20 +93,9 @@ public class NewLinkWizardPage extends WizardPage {
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		linkType.setLayoutData(gd);
 		linkType.setItems(Link.linkTypes);
-		linkType.addSelectionListener(new SelectionListener() {
+		linkType.addSelectionListener(this);
 
-			public void widgetDefaultSelected(SelectionEvent arg0) {
-				// TODO Auto-generated method stub
-
-			}
-
-			public void widgetSelected(SelectionEvent arg0) {
-				dialogChanged();
-
-			}
-
-		});
-
+		// roots
 		label = new Label(container, SWT.NULL);
 		label.setText(Messages.getString("NewLinkWizardPage.15")); //$NON-NLS-1$
 		gd = new GridData(GridData.VERTICAL_ALIGN_BEGINNING);
@@ -190,19 +113,8 @@ public class NewLinkWizardPage extends WizardPage {
 			file.setText(element.getText());
 		}
 		gd = new GridData(GridData.FILL_BOTH);
-		excerptions.addSelectionListener(new SelectionListener() {
-
-			public void widgetDefaultSelected(SelectionEvent arg0) {
-				// TODO Auto-generated method stub
-
-			}
-
-			public void widgetSelected(SelectionEvent arg0) {
-				dialogChanged();
-
-			}
-
-		});
+		gd.horizontalSpan = 2;
+		excerptions.addSelectionListener(this);
 
 		excerptions.setLayoutData(gd);
 		excerptions.redraw();
@@ -216,7 +128,7 @@ public class NewLinkWizardPage extends WizardPage {
 	 * 
 	 */
 	private void dialogChanged() {
-		if (discussionCombo.getText() == "") { //$NON-NLS-1$
+		if (discussionCombo.discCombo.getText() == "") { //$NON-NLS-1$
 			updateStatus(Messages.getString("NewLinkWizardPage.6")); //$NON-NLS-1$
 			return;
 		}
@@ -240,7 +152,7 @@ public class NewLinkWizardPage extends WizardPage {
 	}
 
 	public String getDiscussion() {
-		return discussionCombo.getText();
+		return discussionCombo.discCombo.getText();
 	}
 
 	public Excerption[] getExcerptions(String fileName) {
@@ -252,10 +164,6 @@ public class NewLinkWizardPage extends WizardPage {
 
 	public String getLinkType() {
 		return linkType.getText();
-	}
-
-	public String getProject() {
-		return project.getName();
 	}
 
 	public String[] getSourceFiles() {
@@ -313,22 +221,6 @@ public class NewLinkWizardPage extends WizardPage {
 //		}
 	}
 
-	private void projectSelected() {
-		// //$NON-NLS-1$ //$NON-NLS-2$
-		// TODO
-		ToK tok = ToK.getProjectToK(project);
-		ArrayList<Discussion> discussions = new ArrayList<Discussion>(tok
-				.getDiscussions());
-		String[] discs = new String[discussions.size()];
-		int i = 0;
-		for (Discussion discussion : discussions) {
-			discs[i] = discussion.getDiscName();
-			discMap.put(discs[i++], discussion);
-		}
-		discussionCombo.setItems(discs);
-		discussionCombo.redraw();
-	}
-
 	/**
 	 * Sets the project in which context the linkage occurs
 	 * 
@@ -352,4 +244,24 @@ public class NewLinkWizardPage extends WizardPage {
 		setPageComplete(message == null);
 	}
 
+	public void widgetDefaultSelected(SelectionEvent arg0) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void widgetSelected(SelectionEvent arg0) {
+		dialogChanged();
+
+	}
+
+	public void modifyText(ModifyEvent arg0) {
+		dialogChanged();
+
+	}
+
+	public ToK getTok() {
+		return tok;
+	}
+
+	
 }
