@@ -8,6 +8,7 @@ import java.util.Vector;
 import java.util.Map.Entry;
 
 import lost.tok.Excerption;
+import lost.tok.disEditor.DiscussionEditor;
 import lost.tok.excerptionsView.ExcerptionView;
 import lost.tok.sourceDocument.Chapter;
 import lost.tok.sourceDocument.ChapterText;
@@ -174,8 +175,11 @@ public class OperationTable extends TextEditor {
 		}
 		
 		updateExcerptionView();
-		
-		StyleRange markedTextStyle = StyleManager.getMarkedStyle();
+		StyleRange markedTextStyle;
+		if (DiscussionEditor.isMarkQuote())
+			markedTextStyle = StyleManager.getMarkedQuoteStyle();
+		else
+			markedTextStyle = StyleManager.getMarkedStyle();
 		StyleRange chapterTextStyle = StyleManager.getChapterStyle();
 
 		ISourceViewer srcview = getSourceViewer();
