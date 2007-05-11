@@ -1,16 +1,18 @@
 package lost.tok.disEditor;
 
-import java.util.List;
 import java.util.TreeMap;
 
 import lost.tok.Discussion;
 import lost.tok.Excerption;
+import lost.tok.GeneralFunctions;
 import lost.tok.Opinion;
 import lost.tok.Quote;
 import lost.tok.ToK;
 import lost.tok.opTable.OperationTable;
+import lost.tok.sourceDocument.ChapterText;
+import lost.tok.sourceDocument.SourceDocument;
 
-import org.eclipse.core.commands.common.EventManager;
+import org.dom4j.Document;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.TextSelection;
@@ -26,13 +28,10 @@ import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
-import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
@@ -169,23 +168,31 @@ public class DiscussionEditor extends TextEditor {
 						// e1.printStackTrace();
 					}
 					
-//					MICHAL - enter marking here...
+					// Marking the text in the editor
 					
 					OperationTable ot = (OperationTable) editorP;
 					ot.clearMarked();
 					//List<Excerption> exerptions = quote.getExcerptions();
 					
+					// Shay: Loading the quote's xml document, and creating a SourceDocument from it
+					Document xmlSrcDoc = GeneralFunctions.readFromXML(quote.getSource().getFile());
+					SourceDocument srcDoc = new SourceDocument();
+					srcDoc.set(xmlSrcDoc);
 					
 					for(Excerption ex : quote.getExcerptions()) {
-						TextSelection ts = new TextSelection(ex.getStartPos(),ex.getEndPos()-ex.getStartPos());		
+						// getting the chapter in which the text appears
+						ChapterText ct = srcDoc.getChapterText(ex.getPathInSourceFile());
+						// adding the offset of the chpater (in the whole doc) to the offset of the excerption
+						int exBegin = ct.getOffset() + ex.getStartPos();
+						int exLength = ex.getEndPos()- ex.getStartPos();
+						TextSelection ts = new TextSelection(exBegin, exLength);		
 						ot.mark(ts);
 					}
-				
+									
 					//markedExcerptions.put(mergedBegin, e);
 					
 					
 					ot.refreshDisplay();
-					
 				}
 
 			}
