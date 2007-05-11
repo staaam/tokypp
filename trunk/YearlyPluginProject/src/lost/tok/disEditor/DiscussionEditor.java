@@ -53,6 +53,8 @@ public class DiscussionEditor extends TextEditor {
 	private static final String OPINION = "Opinion";
 
 	public static final String EDITOR_ID = "lost.tok.disEditor.DiscussionEditor"; 
+	
+	private static boolean markQuote = false;
 
 	private Discussion discussion = null;
 
@@ -149,6 +151,11 @@ public class DiscussionEditor extends TextEditor {
 				if (treeItem.getData(QUOTE) == null) {
 					return;
 				}
+				
+				//a double on a quote will lead to:
+				//1. "jumping" to the quote origin document
+				//2. highlighting the quote
+				//3. scrolling the editor to the begining of the quote
 				if (treeItem.getData(QUOTE) instanceof Quote) {
 					Quote quote = (Quote) treeItem.getData(QUOTE);
 
@@ -165,20 +172,22 @@ public class DiscussionEditor extends TextEditor {
 						editorP = ww.getActivePage().openEditor(
 								new FileEditorInput(source), editorId);
 					} catch (PartInitException e1) {
-						// e1.printStackTrace();
+						e1.printStackTrace();
 					}
 					
 					// Marking the text in the editor
-					
+					markQuote = true; //for choosing the style
 					OperationTable ot = (OperationTable) editorP;
 					ot.clearMarked();
-					//List<Excerption> exerptions = quote.getExcerptions();
 					
-					// Shay: Loading the quote's xml document, and creating a SourceDocument from it
+					// Loading the quote's xml document, and creating a SourceDocument from it
 					Document xmlSrcDoc = GeneralFunctions.readFromXML(quote.getSource().getFile());
 					SourceDocument srcDoc = new SourceDocument();
 					srcDoc.set(xmlSrcDoc);
+				
 					
+					boolean firstExcerp = true;
+					int qBegining = 0,qLength=0;
 					for(Excerption ex : quote.getExcerptions()) {
 						// getting the chapter in which the text appears
 						ChapterText ct = srcDoc.getChapterText(ex.getPathInSourceFile());
@@ -187,12 +196,22 @@ public class DiscussionEditor extends TextEditor {
 						int exLength = ex.getEndPos()- ex.getStartPos();
 						TextSelection ts = new TextSelection(exBegin, exLength);		
 						ot.mark(ts);
-					}
-									
-					//markedExcerptions.put(mergedBegin, e);
-					
-					
+						
+						//setting the begining and length of the quote
+						if (firstExcerp){
+							qBegining = exBegin;
+							qLength = exLength;
+							firstExcerp=false;
+						}
+					}				
 					ot.refreshDisplay();
+					
+					//scrolling the editor to the position of the quote
+					ot.resetHighlightRange();
+					ot.setHighlightRange(qBegining,qLength,true);	
+					
+					//for the use of style in the operation table
+					markQuote = false;
 				}
 
 			}
@@ -808,5 +827,9 @@ public class DiscussionEditor extends TextEditor {
 				qItem.setExpanded(true);
 			}
 		}
+	}
+
+	public static boolean isMarkQuote() {
+		return markQuote;
 	}
 }
