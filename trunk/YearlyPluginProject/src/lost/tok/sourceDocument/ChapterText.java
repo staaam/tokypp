@@ -136,7 +136,7 @@ public class ChapterText extends Chapter {
 		}
 		
 		// apostrophe can cause problems with xPath queries
-		if (newName.contains("'"))
+		if (newName.contains("'")) //$NON-NLS-1$
 			return false;
 
 		if (!isUnparsed()) {

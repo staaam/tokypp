@@ -227,9 +227,9 @@ public class SourceDocument extends Document {
 	private void preorderFunc(Chapter chapter, String currXMLPath) {
 		if (nextChapterIsText(chapter)) {
 			if (firstLevel & !firstChild) {
-				currXMLPath = "//source";
-				addElement(currXMLPath, "child");
-				currXMLPath += "/child[position()=" + childNum + "]";
+				currXMLPath = "//source"; //$NON-NLS-1$
+				addElement(currXMLPath, "child"); //$NON-NLS-1$
+				currXMLPath += "/child[position()=" + childNum + "]"; //$NON-NLS-1$ //$NON-NLS-2$
 			}
 			// the son of this node is a text node
 			treatTextNode(chapter, currXMLPath);
@@ -243,8 +243,8 @@ public class SourceDocument extends Document {
 				currXMLPath = currXMLPath
 						+ "/chapter[name='" + chapter.getName() + "']/child"; //$NON-NLS-1$ //$NON-NLS-2$
 			} else {
-				currXMLPath = currXMLPath + "/chapter[name='"
-						+ chapter.getName() + "']";
+				currXMLPath = currXMLPath + "/chapter[name='" //$NON-NLS-1$
+						+ chapter.getName() + "']"; //$NON-NLS-1$
 			}
 			for (Chapter c : chapter.children) {
 				preorderFunc(c, currXMLPath);
@@ -271,7 +271,7 @@ public class SourceDocument extends Document {
 		chapterElm.addElement(elmName);
 		GeneralFunctions.writeToXml(outputFile, doc);
 
-		System.out.println("added element at: " + currXMLPath);
+		System.out.println("added element at: " + currXMLPath); //$NON-NLS-1$
 	}
 
 	// entering chapter information to the XML
@@ -283,19 +283,19 @@ public class SourceDocument extends Document {
 		List result = xpathSelector.selectNodes(doc);
 
 		Element chapterElm = (Element) result.get(0);
-		Element chapterSubElm = chapterElm.addElement("chapter");
-		chapterSubElm.addElement("name").addText(c.getName());
+		Element chapterSubElm = chapterElm.addElement("chapter"); //$NON-NLS-1$
+		chapterSubElm.addElement("name").addText(c.getName()); //$NON-NLS-1$
 		// if "grandsone" is not text
 		if (!nextChapterIsText(c.children.getFirst())) {
 			grandsonText = false;
-			chapterSubElm.addElement("child");
+			chapterSubElm.addElement("child"); //$NON-NLS-1$
 		} else {
 			grandsonText = true;
 		}
 
 		GeneralFunctions.writeToXml(outputFile, doc);
 
-		System.out.println("chapter name is: " + c.getName());
+		System.out.println("chapter name is: " + c.getName()); //$NON-NLS-1$
 	}
 
 	// entering chapter & text information to the XML
@@ -309,20 +309,20 @@ public class SourceDocument extends Document {
 		Element chapterElm = (Element) result.get(0);
 		Element chapterChildElement;
 		if (!firstLevel) {
-			chapterChildElement = chapterElm.addElement("child");
+			chapterChildElement = chapterElm.addElement("child"); //$NON-NLS-1$
 		} else {
 			chapterChildElement = chapterElm;
 		}
 
-		Element textElm = chapterChildElement.addElement("text");
+		Element textElm = chapterChildElement.addElement("text"); //$NON-NLS-1$
 		// the name is of the current chapter, while the content is from the son
-		textElm.addElement("name").addText(c.getName());
+		textElm.addElement("name").addText(c.getName()); //$NON-NLS-1$
 		String contentText = getTextofChild(c);
-		textElm.addElement("content").addText(contentText);
+		textElm.addElement("content").addText(contentText); //$NON-NLS-1$
 
 		GeneralFunctions.writeToXml(outputFile, doc);
 
-		System.out.println("   text node name: " + c.getName());
+		System.out.println("   text node name: " + c.getName()); //$NON-NLS-1$
 
 	}
 

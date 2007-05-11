@@ -212,7 +212,7 @@ public class UnparsedDocWizard extends Wizard implements INewWizard {
 		unparsedXML.setXMLEncoding("UTF-8"); //$NON-NLS-1$
 		Element source = unparsedXML.addElement("Source"); //$NON-NLS-1$
 		Element sourceName = source.addElement("name"); //$NON-NLS-1$
-		if (srcPath.equals("")) {
+		if (srcPath.equals("")) { //$NON-NLS-1$
 			sourceName.addText(title);
 		} else {
 			sourceName.addText(srcPath + "\\" + title); //$NON-NLS-1$
