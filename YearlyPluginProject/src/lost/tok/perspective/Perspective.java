@@ -6,7 +6,7 @@ import lost.tok.excerptionsView.ExcerptionView;
 
 import org.eclipse.ui.IFolderLayout;
 import org.eclipse.ui.IPageLayout;
-import org.eclipse.ui.IPerspectiveFactory; 
+import org.eclipse.ui.IPerspectiveFactory;
 
 /**
  * This class creates the perspective Tree of Knowledge
@@ -19,12 +19,12 @@ public class Perspective implements IPerspectiveFactory{
         /**
          * Plugin id.
          */
-        public final static String PLUGIN_ID = "lost.tok.perspective";
+        public final static String PLUGIN_ID = "lost.tok.perspective"; //$NON-NLS-1$
         
         /**
          * Test perspective id.
          */
-        public final static String TEST_PERSPECTIVE_ID = PLUGIN_ID + ".ToK";
+        public final static String TEST_PERSPECTIVE_ID = PLUGIN_ID + ".ToK"; //$NON-NLS-1$
 	}
 
 	/**
@@ -45,25 +45,25 @@ public class Perspective implements IPerspectiveFactory{
         // Place package explorer to the left of
         // editor area.
         IFolderLayout left =
-                layout.createFolder("left", IPageLayout.LEFT, (float) 0.26, editorArea);
-        left.addView("org.eclipse.jdt.ui.PackageExplorer");
+                layout.createFolder("left", IPageLayout.LEFT, (float) 0.26, editorArea); //$NON-NLS-1$
+        left.addView("org.eclipse.jdt.ui.PackageExplorer"); //$NON-NLS-1$
    
         // Place the Excerption view underneath
         // editor area.
         IFolderLayout bottom = 
-        	layout.createFolder("bottom", IPageLayout.BOTTOM, (float) 0.75, editorArea);
+        	layout.createFolder("bottom", IPageLayout.BOTTOM, (float) 0.75, editorArea); //$NON-NLS-1$
         bottom.addView(ExcerptionView.ID);
 	}
 
 	private void defineActions(IPageLayout layout) {
 		//Add "new wizards".
 		//this Adds it to the File->new menu and the right click menu
-		layout.addNewWizardShortcut("lost.tok.newTokWizard");
-		layout.addNewWizardShortcut("lost.tok.newDiscussionWizard.NewDiscussionWizard");
-		layout.addNewWizardShortcut("lost.tok.newRelationWizard.NewRelationWizard");
-		layout.addNewWizardShortcut("lost.tok.newLinkWizard.NewLinkWizard");
-		layout.addNewWizardShortcut("lost.tok.unparsedDocWizard");
-		layout.addNewWizardShortcut("org.eclipse.ui.wizards.new.folder");
+		layout.addNewWizardShortcut("lost.tok.newTokWizard"); //$NON-NLS-1$
+		layout.addNewWizardShortcut("lost.tok.newDiscussionWizard.NewDiscussionWizard"); //$NON-NLS-1$
+		layout.addNewWizardShortcut("lost.tok.newRelationWizard.NewRelationWizard"); //$NON-NLS-1$
+		layout.addNewWizardShortcut("lost.tok.newLinkWizard.NewLinkWizard"); //$NON-NLS-1$
+		layout.addNewWizardShortcut("lost.tok.unparsedDocWizard"); //$NON-NLS-1$
+		layout.addNewWizardShortcut("org.eclipse.ui.wizards.new.folder"); //$NON-NLS-1$
                 
         
         // Add "show views". 
@@ -74,7 +74,7 @@ public class Perspective implements IPerspectiveFactory{
         layout.addShowViewShortcut(IPageLayout.ID_TASK_LIST);
         layout.addShowViewShortcut(IPageLayout.ID_BOOKMARKS);
         layout.addShowViewShortcut(IPageLayout.ID_EDITOR_AREA);
-        layout.addShowViewShortcut("org.eclipse.jdt.ui.PackageExplorer");
+        layout.addShowViewShortcut("org.eclipse.jdt.ui.PackageExplorer"); //$NON-NLS-1$
 	
 	}
 	

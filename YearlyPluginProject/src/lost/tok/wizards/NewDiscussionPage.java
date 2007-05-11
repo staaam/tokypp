@@ -62,14 +62,14 @@ public class NewDiscussionPage extends WizardPage implements
 		discussionName = name.getText();
 		
 		if (discussionName.length() == 0) {
-			updateStatus("Discussion name must be specified");
+			updateStatus(Messages.getString("NewDiscussionPage.ErrNoDiscName")); //$NON-NLS-1$
 			return;
 		}
 		
 		// TODO: Check whether the given discussion name is valid
 		
 		if (discussionExists(discussionName)) {
-			updateStatus("Discussion already exists");
+			updateStatus(Messages.getString("NewDiscussionPage.ErrDiscAlreadyExist")); //$NON-NLS-1$
 			return;
 		}
 		
