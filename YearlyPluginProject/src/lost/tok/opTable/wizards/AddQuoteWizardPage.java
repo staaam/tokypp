@@ -1,11 +1,11 @@
 package lost.tok.opTable.wizards;
 
-import java.util.HashMap;
-import java.util.List;
-
 import lost.tok.Discussion;
+import lost.tok.ToK;
 import lost.tok.opTable.Messages;
+import lost.tok.wizards.DiscCombo;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -18,31 +18,20 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 public class AddQuoteWizardPage extends WizardPage {
-	private List<Discussion> disussions;
+	private ToK tok;
 
 	private String quoteText;
 
-	private HashMap<String, Discussion> discMap = new HashMap<String, Discussion>();
-
-	protected AddQuoteWizardPage(List<Discussion> disussions, String text) {
+	protected AddQuoteWizardPage(ToK tok, String text) {
 		super("Add quote");
 
 		setTitle("Add quote");
 
-		this.disussions = disussions;
+		this.tok = tok;
 		quoteText = text;
 	}
 
-	public void createAddQuoteWizard(List<Discussion> discussions,
-			String comment) {
-		String[] discs = new String[discussions.size()];
-		int i = 0;
-		for (Discussion discussion : discussions) {
-			discs[i] = discussion.getDiscName() + " ("
-					+ discussion.getCreatorName() + ")";
-			discMap.put(discs[i++], discussion);
-		}
-
+	public void createAddQuoteWizard(String comment) {
 		discussionCombo.addSelectionListener(new SelectionListener() {
 			public void widgetDefaultSelected(SelectionEvent e) {
 				widgetSelected(e);
@@ -55,7 +44,6 @@ public class AddQuoteWizardPage extends WizardPage {
 			}
 		});
 
-		discussionCombo.setItems(discs);
 		quoteArea.setText(comment);
 
 		updateStatus("Select discussion");
@@ -71,7 +59,11 @@ public class AddQuoteWizardPage extends WizardPage {
 	}
 
 	public Discussion getDiscussion() {
-		return discMap.get(discussionCombo.getText());
+		try {
+			return tok.getDiscussion(discussionCombo.getText());
+		} catch (CoreException e) {
+		}
+		return null;
 	}
 
 	public String getOpinion() {
@@ -106,7 +98,7 @@ public class AddQuoteWizardPage extends WizardPage {
 				| SWT.BORDER);
 		commentArea.setLayoutData(gridData);
 
-		createAddQuoteWizard(disussions, quoteText);
+		createAddQuoteWizard(quoteText);
 		setControl(parent);
 	}
 
@@ -121,8 +113,9 @@ public class AddQuoteWizardPage extends WizardPage {
 
 		new Label(composite, SWT.NONE).setText(Messages
 				.getString("AddQuoteWizard.Discussion")); //$NON-NLS-1$
-		discussionCombo = new Combo(composite, SWT.READ_ONLY);
-		discussionCombo.setLayoutData(gridData);
+		DiscCombo dc = new DiscCombo(composite, SWT.READ_ONLY, tok);
+		dc.setLayoutData(gridData);
+		discussionCombo = dc.discCombo;
 
 		new Label(composite, SWT.NONE).setText(Messages
 				.getString("AddQuoteWizard.Opinion")); //$NON-NLS-1$

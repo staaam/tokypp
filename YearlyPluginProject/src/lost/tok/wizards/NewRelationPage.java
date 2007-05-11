@@ -5,7 +5,6 @@ import lost.tok.Messages;
 import lost.tok.Quote;
 import lost.tok.ToK;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.dialogs.IDialogPage;
@@ -32,23 +31,20 @@ import org.eclipse.swt.widgets.TreeItem;
  * @author Team Lost
  * 
  */
-public class NewRelationPage extends WizardPage {
+public class NewRelationPage extends WizardPage implements ModifyListener, SelectionListener {
 
-	private Text comment;
+//	private String projectName;
+	private ToK tok; 
 
 //	private String discName;
 	private Discussion discussion;
-
-	private Tree leftObjects;
-
-//	private String projectName;
-	private IProject project; 
-
+	
 	private Combo relType;
-
+	private Text comment;
+	private Tree leftObjects;
 	private Tree rightObjects;
 
-	private ISelection selection;
+	private Combo discCombo;
 
 	/**
 	 * Constructor for NewRelationWizardPage.
@@ -58,23 +54,35 @@ public class NewRelationPage extends WizardPage {
 		super("wizardPage"); //$NON-NLS-1$
 		setTitle(Messages.getString("NewRelationWizardPage.0")); //$NON-NLS-1$
 		setDescription(Messages.getString("NewRelationWizardPage.1")); //$NON-NLS-1$
-		this.selection = selection;
+		initialize(selection);
 	}
 
 	/**
 	 * @see IDialogPage#createControl(Composite)
 	 */
 	public void createControl(Composite parent) {
-
-		getShell().setSize(600, 400);
-		initialize();
 		Composite container = new Composite(parent, SWT.NULL);
 		GridLayout layout = new GridLayout();
 		container.setLayout(layout);
 		layout.numColumns = 3;
 		layout.verticalSpacing = 9;
+		
+		Label label;
+		GridData gd;
 
-		Label label = new Label(container, SWT.NULL);
+		// Discussion line
+		label = new Label(container, SWT.NULL);
+		label.setText(Messages.getString("NewRelationWizardPage.Discussion")); //$NON-NLS-1$
+
+		DiscCombo dCombo = new DiscCombo(container, SWT.READ_ONLY | SWT.DROP_DOWN, tok);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		dCombo.setLayoutData(gd);
+		discCombo = dCombo.discCombo;
+		discCombo.addSelectionListener(this);
+
+		// Relation type line
+		label = new Label(container, SWT.NULL);
 		label.setText(Messages.getString("NewRelationWizardPage.2")); //$NON-NLS-1$
 
 		relType = new Combo(container, SWT.READ_ONLY | SWT.DROP_DOWN);
@@ -82,108 +90,44 @@ public class NewRelationPage extends WizardPage {
 			relType.add(element); // TODO(Shay): Make sure this is translated in Hebrew
 		}
 
-		relType.addSelectionListener(new SelectionListener() {
-
-			public void widgetDefaultSelected(SelectionEvent arg0) {
-				// TODO Auto-generated method stub
-
-			}
-
-			public void widgetSelected(SelectionEvent arg0) {
-				// TODO Auto-generated method stub
-				dialogChanged();
-			}
-
-		});
-
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		relType.addSelectionListener(this);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
 		relType.setLayoutData(gd);
 
-		label = new Label(container, SWT.NULL);
-		label.setText(""); //$NON-NLS-1$
+		// Comment line
 		label = new Label(container, SWT.NULL);
 		label.setText(Messages.getString("NewRelationWizardPage.3")); //$NON-NLS-1$
+		
 		comment = new Text(container, SWT.BORDER | SWT.SINGLE);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
 		comment.setLayoutData(gd);
-		comment.addModifyListener(new ModifyListener() {
-			public void modifyText(ModifyEvent e) {
-				dialogChanged();
-			}
-		});
+		comment.addModifyListener(this);
 
-		label = new Label(container, SWT.NULL);
-		label.setText(""); //$NON-NLS-1$		
-
+		// last 'line'
 		label = new Label(container, SWT.NULL);
 		label.setText(Messages.getString("NewRelationWizardPage.4")); //$NON-NLS-1$
-		gd = new GridData(GridData.VERTICAL_ALIGN_BEGINNING);
-		label.setLayoutData(gd);
+		label.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
 
 		gd = new GridData(GridData.FILL_BOTH);
 		leftObjects = new Tree(container, SWT.BORDER);
 		leftObjects.setLayoutData(gd);
-		leftObjects.setSize(100, 200);
 
 		gd = new GridData(GridData.FILL_BOTH);
 		rightObjects = new Tree(container, SWT.BORDER);
 		rightObjects.setLayoutData(gd);
-		rightObjects.setSize(100, 200);
 
-		// FOR DEBUGGING ONLY!!!!!!!!
-		// ToK tok = new ToK(projectName, "Arie", "Babel_he.src");
-		// @TODO
+		leftObjects.addSelectionListener(this);
 
-		String[] opinionNames = discussion.getOpinionNames();
-		Integer[] opinionIDs = discussion.getOpinionIDs();
-
-		for (int i = 0; i < opinionNames.length; i++) {
-			TreeItem leftOpinion = new TreeItem(leftObjects, 0);
-			TreeItem rightOpinion = new TreeItem(rightObjects, 0);
-			leftOpinion.setText(opinionNames[i]);
-			leftOpinion.setData(opinionIDs[i]);
-			rightOpinion.setText(opinionNames[i]);
-			rightOpinion.setData(opinionIDs[i]);
-
-			Quote[] quotes = null;
-			quotes = discussion.getQuotes(opinionNames[i]);
-
-			for (Quote element : quotes) {
-				TreeItem leftQuote = new TreeItem(leftOpinion, 0);
-				TreeItem rightQuote = new TreeItem(rightOpinion, 0);
-				leftQuote.setText(element.getPrefix(40));
-				leftQuote.setData(element.getID());
-				rightQuote.setText(element.getPrefix(40));
-				rightQuote.setData(element.getID());
-			}
+		rightObjects.addSelectionListener(this);
+		
+		
+		if (discussion != null) {
+			discCombo.setText(discussion.getDiscName());
+			discussionChanged();
 		}
-		leftObjects.addSelectionListener(new SelectionListener() {
-
-			public void widgetDefaultSelected(SelectionEvent arg0) {
-				// TODO Auto-generated method stub
-
-			}
-
-			public void widgetSelected(SelectionEvent arg0) {
-				dialogChanged();
-
-			}
-
-		});
-
-		rightObjects.addSelectionListener(new SelectionListener() {
-
-			public void widgetDefaultSelected(SelectionEvent arg0) {
-				// TODO Auto-generated method stub
-
-			}
-
-			public void widgetSelected(SelectionEvent arg0) {
-				dialogChanged();
-
-			}
-
-		});
+		
 		dialogChanged();
 		setControl(container);
 	}
@@ -193,6 +137,10 @@ public class NewRelationPage extends WizardPage {
 	 */
 
 	private void dialogChanged() {
+		if (discCombo.getSelectionIndex() == -1) {
+			updateStatus("No Discussion selected"); //$NON-NLS-1$
+			return;
+		}
 
 		String relType = getRelationType();
 		TreeItem[] leftSelected = leftObjects.getSelection();
@@ -216,16 +164,12 @@ public class NewRelationPage extends WizardPage {
 	public Discussion getDiscussion() {
 		return discussion;
 	}
-//	public String getDiscName() {
-//		return discName;
-//	}
 
 	public String getRelationType() {
 		return relType.getText();
 	}
 
 	public Integer[] getSelectedQuotes() {
-
 		TreeItem[] leftSelected = leftObjects.getSelection();
 		TreeItem[] rightSelected = rightObjects.getSelection();
 		Integer[] selectedText = new Integer[2];
@@ -238,7 +182,7 @@ public class NewRelationPage extends WizardPage {
 	 * Tests if the current workbench selection is a suitable container to use.
 	 */
 
-	private void initialize() {
+	private void initialize(ISelection selection) {
 		if (selection != null && selection.isEmpty() == false
 				&& selection instanceof IStructuredSelection) {
 			IStructuredSelection ssel = (IStructuredSelection) selection;
@@ -248,12 +192,10 @@ public class NewRelationPage extends WizardPage {
 			Object obj = ssel.getFirstElement();
 			if (obj instanceof IResource) {
 				IResource resource = (IResource) obj;
-				project = resource.getProject();
-				//discName = resource.getName().split(".dis")[0]; //$NON-NLS-1$
+				tok = ToK.getProjectToK(resource.getProject());
 				try {
-					discussion = ToK.getProjectToK(project).getDiscussion(Discussion.getNameFromResource(resource));
+					discussion = tok.getDiscussion(Discussion.getNameFromResource(resource));
 				} catch (CoreException e) {
-					e.printStackTrace();
 				}
 			}
 		}
@@ -262,5 +204,60 @@ public class NewRelationPage extends WizardPage {
 	private void updateStatus(String message) {
 		setErrorMessage(message);
 		setPageComplete(message == null);
+	}
+
+	public void modifyText(ModifyEvent e) {
+		dialogChanged();
+	}
+
+	public void widgetDefaultSelected(SelectionEvent arg0) {
+	}
+
+	public void widgetSelected(SelectionEvent arg0) {
+		if ((discussion == null && 
+			 discCombo.getText() != null && 
+			 discCombo.getText().length() > 0) ||
+			discussion.getDiscName().compareTo(discCombo.getText()) != 0) {
+			try {
+				discussion = tok.getDiscussion(discCombo.getText());
+			} catch (CoreException e) {
+				discussion = null;
+			}
+			
+			discussionChanged();
+		}
+
+		dialogChanged();
+	}
+
+	private void discussionChanged() {
+		if (discussion == null) return;
+		leftObjects.removeAll();
+		rightObjects.removeAll();
+		
+		String[] opinionNames = discussion.getOpinionNames();
+		Integer[] opinionIDs = discussion.getOpinionIDs();
+
+		for (int i = 0; i < opinionNames.length; i++) {
+			TreeItem leftOpinion = new TreeItem(leftObjects, 0);
+			leftOpinion.setText(opinionNames[i]);
+			leftOpinion.setData(opinionIDs[i]);
+			leftOpinion.setExpanded(true);
+			
+			TreeItem rightOpinion = new TreeItem(rightObjects, 0);
+			rightOpinion.setText(opinionNames[i]);
+			rightOpinion.setData(opinionIDs[i]);
+			rightOpinion.setExpanded(true);
+
+			for (Quote quote : discussion.getQuotes(opinionNames[i])) {
+				TreeItem leftQuote = new TreeItem(leftOpinion, 0);
+				leftQuote.setText(quote.getPrefix(40));
+				leftQuote.setData(quote.getID());
+
+				TreeItem rightQuote = new TreeItem(rightOpinion, 0);
+				rightQuote.setText(quote.getPrefix(40));
+				rightQuote.setData(quote.getID());
+			}
+		}
 	}
 }

@@ -43,18 +43,10 @@
 
        <wizard
              category="lost.tok.Categoy"
-             class="lost.tok.sourceParser.wizards.UnparsedDocWizard"
+             class="lost.tok.wizards.NewDiscussion"
              icon="icons/sample.gif"
-             id="lost.tok.unparsedDocWizard"
-             name="%wizard.source.parser.create"
-             project="false"/>
-
-       <wizard
-             category="lost.tok.Categoy"
-             class="lost.tok.opTable.wizards.NewLinkWizard"
-             icon="icons/sample.gif"
-             id="lost.tok.newLinkWizard.NewLinkWizard"
-             name="%lost.tok.linkDisToRoot"
+             id="lost.tok.newDiscussionWizard.NewDiscussionWizard"
+             name="%wizard.discussion.create"
              project="false"/>
        <wizard
              category="lost.tok.Categoy"
@@ -65,11 +57,12 @@
              project="false"/>
        <wizard
              category="lost.tok.Categoy"
-             class="lost.tok.wizards.NewDiscussion"
+             class="lost.tok.sourceParser.wizards.UnparsedDocWizard"
              icon="icons/sample.gif"
-             id="lost.tok.newDiscussionWizard.NewDiscussionWizard"
-             name="%wizard.discussion.create"
+             id="lost.tok.unparsedDocWizard"
+             name="%wizard.source.parser.create"
              project="false"/>
+
    </extension>
    <extension
          point="org.eclipse.ui.popupMenus">
@@ -116,7 +109,7 @@
                class="lost.tok.opTable.actions.SwitchOpTableViewAction"
                icon="icons/sample.gif"
                id="lost.tok.opTable.PopUpMenu.switchView"
-               label="Show Linked Discussions"
+               label="%action.label.discussions.show"
                menubarPath="additions"
                state="true"
                style="push"

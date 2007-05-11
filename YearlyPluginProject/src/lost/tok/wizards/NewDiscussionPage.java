@@ -66,6 +66,8 @@ public class NewDiscussionPage extends WizardPage implements
 			return;
 		}
 		
+		// TODO: Check whether the given discussion name is valid
+		
 		if (discussionExists(discussionName)) {
 			updateStatus("Discussion already exists");
 			return;

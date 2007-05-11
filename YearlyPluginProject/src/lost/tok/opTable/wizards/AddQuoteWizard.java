@@ -1,9 +1,7 @@
 package lost.tok.opTable.wizards;
 
-import java.util.List;
-
-import lost.tok.Discussion;
 import lost.tok.Quote;
+import lost.tok.ToK;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.wizard.Wizard;
@@ -13,19 +11,16 @@ public class AddQuoteWizard extends Wizard {
 
 	boolean finished = false;
 
-	List<Discussion> disussions;
-
 	Quote quote;
 
-	public AddQuoteWizard(List<Discussion> disussions, Quote quote) {
+	public AddQuoteWizard(ToK tok, Quote quote) {
 		super();
 
-		this.disussions = disussions;
 		this.quote = quote;
 
 		setWindowTitle("Add quote");
 
-		page = new AddQuoteWizardPage(disussions, quote.getText());
+		page = new AddQuoteWizardPage(tok, quote.getText());
 		addPage(page);
 	}
 
