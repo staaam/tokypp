@@ -57,7 +57,7 @@ public class AddQuoteAction extends AbstractEditorAction {
 
 	private void addQuote(ToK tok, Quote q) {
 		if (tok.getDiscussions().isEmpty()) {
-			messageBox("Error", "No discussions found");
+			messageBox(Messages.getString("AddQuoteAction.AddQuoteAction.Error"), Messages.getString("AddQuoteAction.NoDiscFound")); //$NON-NLS-1$ //$NON-NLS-2$
 			return;
 
 			// TODO: First iteration only

@@ -8,6 +8,7 @@ import java.util.Vector;
 import java.util.Map.Entry;
 
 import lost.tok.Excerption;
+import lost.tok.Messages;
 import lost.tok.disEditor.DiscussionEditor;
 import lost.tok.excerptionsView.ExcerptionView;
 import lost.tok.sourceDocument.Chapter;
@@ -48,10 +49,10 @@ public class OperationTable extends TextEditor {
 	}
 	
 	/** The ID of the operation table editor. */
-	public static final String EDITOR_ID = "lost.tok.opTable.OperationTable";
+	public static final String EDITOR_ID = "lost.tok.opTable.OperationTable"; //$NON-NLS-1$
 	 
 	/** The Constant EDITOR_CONTEXT. */
-	public static final String EDITOR_CONTEXT = "lost.tok.opTable.PopUpMenu.Menu";
+	public static final String EDITOR_CONTEXT = "lost.tok.opTable.PopUpMenu.Menu"; //$NON-NLS-1$
 	
 	/** The root discussions. */
 	private RootDiscussionsPart rootDiscussions = null;

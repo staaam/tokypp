@@ -23,9 +23,9 @@ public class AddQuoteWizardPage extends WizardPage {
 	private String quoteText;
 
 	protected AddQuoteWizardPage(ToK tok, String text) {
-		super("Add quote");
+		super(Messages.getString("AddQuoteWizardPage.AddQuote")); //$NON-NLS-1$
 
-		setTitle("Add quote");
+		setTitle(Messages.getString("AddQuoteWizardPage.AddQuote")); //$NON-NLS-1$
 
 		this.tok = tok;
 		quoteText = text;
@@ -46,7 +46,7 @@ public class AddQuoteWizardPage extends WizardPage {
 
 		quoteArea.setText(comment);
 
-		updateStatus("Select discussion");
+		updateStatus(Messages.getString("AddQuoteWizardPage.SelectDisc")); //$NON-NLS-1$
 	}
 
 	private void updateStatus(String message) {

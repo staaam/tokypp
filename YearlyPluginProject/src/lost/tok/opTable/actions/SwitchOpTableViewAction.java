@@ -1,5 +1,6 @@
 package lost.tok.opTable.actions;
 
+import lost.tok.Messages;
 import lost.tok.opTable.OperationTable;
 
 import org.eclipse.jface.action.IAction;
@@ -19,10 +20,10 @@ public class SwitchOpTableViewAction extends AbstractEditorAction {
 		OperationTable ot = (OperationTable) activeEditor;
 		
 		if (action.isChecked()) {
-			System.out.println("checked");
+			System.out.println("checked"); //$NON-NLS-1$
 			ot.showDiscussions();
 		} else {
-			System.out.println("not checked");
+			System.out.println("not checked"); //$NON-NLS-1$
 			ot.hideDisucssions();
 		}
 		

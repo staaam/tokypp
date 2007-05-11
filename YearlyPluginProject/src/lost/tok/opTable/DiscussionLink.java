@@ -1,6 +1,7 @@
 package lost.tok.opTable;
 
 import lost.tok.Discussion;
+import lost.tok.Messages;
 
 import org.dom4j.Element;
 
@@ -13,8 +14,8 @@ public class DiscussionLink {
 	private String type;
 
 	public DiscussionLink(Element e) {
-		this(e.element("discussionFile").getText(), e.element("type")
-				.getText(), e.element("linkSubject").getText());
+		this(e.element("discussionFile").getText(), e.element("type") //$NON-NLS-1$ //$NON-NLS-2$
+				.getText(), e.element("linkSubject").getText()); //$NON-NLS-1$
 	}
 
 	public DiscussionLink(String discussionFile, String type,

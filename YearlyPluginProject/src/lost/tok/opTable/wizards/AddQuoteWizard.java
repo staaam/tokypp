@@ -1,5 +1,6 @@
 package lost.tok.opTable.wizards;
 
+import lost.tok.Messages;
 import lost.tok.Quote;
 import lost.tok.ToK;
 
@@ -18,7 +19,7 @@ public class AddQuoteWizard extends Wizard {
 
 		this.quote = quote;
 
-		setWindowTitle("Add quote");
+		setWindowTitle(Messages.getString("AddQuoteWizard.AddQuote0")); //$NON-NLS-1$
 
 		page = new AddQuoteWizardPage(tok, quote.getText());
 		addPage(page);

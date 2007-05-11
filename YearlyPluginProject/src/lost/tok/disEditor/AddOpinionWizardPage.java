@@ -2,6 +2,8 @@ package lost.tok.disEditor;
 
 import java.util.HashSet;
 
+import lost.tok.Messages;
+
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -18,10 +20,10 @@ public class AddOpinionWizardPage extends WizardPage implements ModifyListener {
 	HashSet<String> opinions = new HashSet<String>();
 
 	public AddOpinionWizardPage(DiscussionEditor discussionEditor) {
-		super("Add Opinion");
+		super(Messages.getString("AddOpinionWizardPage.AddOpinion")); //$NON-NLS-1$
 		this.discussionEditor = discussionEditor;
 
-		setTitle("Add Opinion");
+		setTitle(Messages.getString("AddOpinionWizardPage.AddOpinion")); //$NON-NLS-1$
 
 		for (String opinion : discussionEditor.getDiscussion()
 				.getOpinionNames()) {
@@ -47,7 +49,7 @@ public class AddOpinionWizardPage extends WizardPage implements ModifyListener {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(gridLayout);
 
-		new Label(composite, SWT.NONE).setText("Opinion");
+		new Label(composite, SWT.NONE).setText(Messages.getString("AddOpinionWizardPage.Opinion")); //$NON-NLS-1$
 		opinionArea = new Text(composite, SWT.SINGLE | SWT.BORDER);
 		opinionArea.setLayoutData(gridData);
 
@@ -63,9 +65,9 @@ public class AddOpinionWizardPage extends WizardPage implements ModifyListener {
 
 	private void dialogChanged() {
 		if (opinionArea.getText().length() == 0) {
-			updateStatus("Opinion name should not be empty");
+			updateStatus(Messages.getString("AddOpinionWizardPage.ErrOpinionMustNotBeEmpty")); //$NON-NLS-1$
 		} else if (opinions.contains(opinionArea.getText())) {
-			updateStatus("Opinion already exists");
+			updateStatus(Messages.getString("AddOpinionWizardPage.ErrOpinionExists")); //$NON-NLS-1$
 		} else {
 			updateStatus(null);
 		}
