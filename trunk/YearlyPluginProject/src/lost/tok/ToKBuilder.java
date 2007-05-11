@@ -9,16 +9,16 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ToKBuilder extends IncrementalProjectBuilder {
 
-	public static String BUILDER_ID = "lost.tok.ToKBuilder";
+	public static String BUILDER_ID = "lost.tok.ToKBuilder"; //$NON-NLS-1$
 
 	public ToKBuilder() {
-		System.out.println("tokBuilder");
+		System.out.println("tokBuilder"); //$NON-NLS-1$
 	}
 
 	@Override
 	protected IProject[] build(int kind, Map args, IProgressMonitor monitor)
 			throws CoreException {
-		System.out.println("build");
+		System.out.println("build"); //$NON-NLS-1$
 		return null;
 	}
 

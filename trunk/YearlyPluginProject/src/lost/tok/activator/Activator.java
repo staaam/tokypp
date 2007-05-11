@@ -1,5 +1,7 @@
 package lost.tok.activator;
 
+import lost.tok.Messages;
+
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -9,13 +11,13 @@ import org.osgi.framework.BundleContext;
 public class Activator extends AbstractUIPlugin {
 
 	/** The plug-in ID */
-	public static final String PLUGIN_ID = "Yearly_Plugin_Project";
+	public static final String PLUGIN_ID = "Yearly_Plugin_Project"; //$NON-NLS-1$
 
 	// The shared instance
 	private static Activator plugin;
 
 	/** The path of source.xsd file */
-	public static final String sourceXsdPath = "C:\\temp\\TestFiles\\";
+	public static final String sourceXsdPath = "C:\\temp\\TestFiles\\"; //$NON-NLS-1$
 
 	/**
 	 * The constructor

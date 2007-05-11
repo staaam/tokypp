@@ -268,7 +268,7 @@ public class ExcerptionView extends ViewPart {
 	 */
 
 	// private Action doubleClickAction;
-	@SuppressWarnings("unused")
+	@SuppressWarnings("unused") //$NON-NLS-1$
 	private DrillDownAdapter drillDownAdapter;
 
 	private IAction linkDiscussionAction;

@@ -1,5 +1,7 @@
 package lost.tok.disEditor;
 
+import lost.tok.Messages;
+
 import org.eclipse.jface.wizard.Wizard;
 
 public class AddOpinionWizard extends Wizard {
@@ -12,7 +14,7 @@ public class AddOpinionWizard extends Wizard {
 
 		this.discussionEditor = discussionEditor;
 
-		setWindowTitle("Add Opinion");
+		setWindowTitle(Messages.getString("AddOpinionWizard.AddOpinion")); //$NON-NLS-1$
 
 		page = new AddOpinionWizardPage(discussionEditor);
 		addPage(page);

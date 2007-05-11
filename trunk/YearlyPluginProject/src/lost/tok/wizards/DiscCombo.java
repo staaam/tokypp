@@ -1,6 +1,7 @@
 package lost.tok.wizards;
 
 import lost.tok.Discussion;
+import lost.tok.Messages;
 import lost.tok.ToK;
 
 import org.eclipse.jface.wizard.WizardDialog;
@@ -40,7 +41,7 @@ public class DiscCombo extends Composite implements SelectionListener {
 		updateDiscussions();
 		
 		newDisButton = new Button(this, SWT.NONE);
-		newDisButton.setText("New...");
+		newDisButton.setText(Messages.getString("DiscCombo.new")); //$NON-NLS-1$
 		
 		newDisButton.addSelectionListener(this);
 	}

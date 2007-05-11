@@ -52,7 +52,7 @@ public class GeneralFunctions {
 		SAXReader reader = new SAXReader();
 		try {
 			BufferedReader rdr = new BufferedReader(new InputStreamReader(
-					inputStream, "UTF-8"));
+					inputStream, "UTF-8")); //$NON-NLS-1$
 			doc = reader.read(rdr);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -67,11 +67,11 @@ public class GeneralFunctions {
 	public static void writeToXml(String path, Document doc) {
 		try {
 			OutputFormat outformat = OutputFormat.createPrettyPrint();
-			outformat.setEncoding("UTF-8");
+			outformat.setEncoding("UTF-8"); //$NON-NLS-1$
 			outformat.setTrimText(false);
 
 			BufferedWriter wrtr = new BufferedWriter(new OutputStreamWriter(
-					new FileOutputStream(path), "UTF-8"));
+					new FileOutputStream(path), "UTF-8")); //$NON-NLS-1$
 
 			XMLWriter writer = new XMLWriter(wrtr, outformat);
 			writer.write(doc);

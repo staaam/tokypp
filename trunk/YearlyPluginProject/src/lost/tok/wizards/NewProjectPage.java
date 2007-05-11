@@ -116,7 +116,7 @@ public class NewProjectPage extends WizardPage {
 		FileDialog fd = new FileDialog(getShell(), SWT.OPEN);
 		fd.setText(Messages.getString("NewToKWizOpenCmd")); //$NON-NLS-1$
 		fd.setFilterPath(null); //$NON-NLS-1$
-		String[] filterExt = {"*.src"};
+		String[] filterExt = {"*.src"}; //$NON-NLS-1$
 				//, "*.xml", "*.txt", "*.doc", ".rtf", "*.*" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
 		fd.setFilterExtensions(filterExt);
 		String selected = fd.open();
