@@ -8,7 +8,6 @@ import java.util.Vector;
 import java.util.Map.Entry;
 
 import lost.tok.Excerption;
-import lost.tok.Messages;
 import lost.tok.disEditor.DiscussionEditor;
 import lost.tok.excerptionsView.ExcerptionView;
 import lost.tok.sourceDocument.Chapter;
@@ -46,6 +45,12 @@ public class OperationTable extends TextEditor {
 	public void setFocus() {
 		super.setFocus();
 		updateExcerptionView();
+	}
+	
+	@Override
+	public void dispose() {
+		ExcerptionView.getView().removeMonitoredEditor(this);
+		super.dispose();
 	}
 	
 	/** The ID of the operation table editor. */
@@ -237,6 +242,16 @@ public class OperationTable extends TextEditor {
 	 * @param t the current selection, which should be added
 	 */
 	public void mark(TextSelection t) {
+		mark(t, true);
+	}
+	
+	/**
+	 * Adds/Removes the selected text to/from the marked text set.
+	 * 
+	 * @param t the current selection, which should be added
+	 * @param include whether the mark is inclusive (mark/unmark)
+	 */
+	public void mark(TextSelection t, boolean include) {
 		SourceDocument doc = (SourceDocument) getSourceViewer().getDocument();
 
 		Chapter cStart = doc.getChapterFromOffset(t.getOffset());
@@ -251,7 +266,7 @@ public class OperationTable extends TextEditor {
 				int markLen = currChap.getOffset() + currChap.getInnerLength()
 						- currOffset;
 				markChapterExcerption(currOffset, markLen,
-						(ChapterText) currChap);
+						(ChapterText) currChap, include);
 			}
 			currOffset = currChap.getOffset() + currChap.getInnerLength();
 			currChap = doc.getChapterFromOffset(currOffset); // could be
@@ -262,67 +277,105 @@ public class OperationTable extends TextEditor {
 		// marking the last chapter
 		if (currChap instanceof ChapterText) {
 			markChapterExcerption(currOffset, lastOffset - currOffset,
-					(ChapterText) currChap);
+					(ChapterText) currChap, include);
 		}
 
 		refreshDisplay();
 	}
 
 	/**
-	 * Updates markedExcerptions and markedText The mark should be inside a
-	 * single ChapterText.
+	 * Updates markedExcerptions and markedText
+	 * The mark should be inside a single ChapterText.
 	 * 
 	 * @param offset the mark's offset inside the document
 	 * @param length the length of the mark
 	 * @param c the chapter text which contains the marking
 	 */
 	protected void markChapterExcerption(int offset, int length, ChapterText c) {
-		int mergedBegin = offset; // we will update this if we make a merge
-		int mergedEnd = offset + length;
+		markChapterExcerption(offset, length, c, true);
+	}
+	
+	/**
+	 * Updates markedExcerptions and markedText
+	 * The mark should be inside a single ChapterText.
+	 * 
+	 * @param offset the mark's offset inside the document
+	 * @param length the length of the mark
+	 * @param c the chapter text which contains the marking
+	 * @param include whether the mark is inclusive (mark/unmark)
+	 */
+	protected void markChapterExcerption(int offset, int length, ChapterText c, boolean include) {
+		int[] m = findMergedExcerptions(offset, offset + length);
 
+		if (include) {
+			putExcerption(m[0], m[1], c);
+		} else {
+			putExcerption(m[0], offset, c);
+			putExcerption(offset + length, m[1], c);
+		}
+	}
+
+	private void putExcerption(int mergedBegin, int mergedEnd, ChapterText c) {
+		int startInText = (mergedBegin - c.getOffset()) + c.getPathOffset();
+		int endInText = (mergedEnd - c.getOffset()) + c.getPathOffset();
+		String excerptionText = c.toString().substring(startInText, endInText);
+		String trimmed = excerptionText.trim();
+		if (trimmed.length() != excerptionText.length()) {
+			int diff = excerptionText.indexOf(trimmed);
+			startInText += diff;
+			endInText = startInText + trimmed.length();
+			
+			mergedBegin += diff;
+			mergedEnd = mergedBegin + trimmed.length();
+			excerptionText = trimmed;
+		}
+		
+		if (mergedBegin == mergedEnd) return;
+		
+		Excerption e = new Excerption(c.getExcerptionPath(), excerptionText,
+				startInText, endInText);
+		
+		markedText.put(mergedBegin, mergedEnd - mergedBegin);
+		markedExcerptions.put(mergedBegin, e);
+	}
+
+	private int[] findMergedExcerptions(int mergedBegin, int mergedEnd) {
 		// Searching for a previous marked to merge
 		SortedMap<Integer, Integer> prefixMap = markedText.headMap(mergedBegin);
 		while (!prefixMap.isEmpty()) {
 			Integer beginBefore = prefixMap.lastKey();
 			Integer endBefore = beginBefore + prefixMap.get(beginBefore);
-			if (endBefore >= mergedBegin) {
-				markedText.remove(beginBefore);
-				markedExcerptions.remove(beginBefore);
-
-				mergedBegin = Math.min(beginBefore, mergedBegin);
-				mergedEnd = Math.max(endBefore, mergedEnd);
-			} else {
-				break; // we have reached a marked text that ends before we
-				// start
-			}
+			
+			// have we reached a marked text that ends before we start?
+			if (endBefore < mergedBegin) break;
+	
+			markedText.remove(beginBefore);
+			markedExcerptions.remove(beginBefore);
+	
+			mergedBegin = Math.min(beginBefore, mergedBegin);
+			mergedEnd = Math.max(endBefore, mergedEnd);
 		}
-
+	
 		// Searching for a later marked to merge
 		SortedMap<Integer, Integer> suffixMap = markedText.tailMap(mergedBegin);
 		while (!suffixMap.isEmpty()) {
 			Integer beginAfter = suffixMap.firstKey();
 			Integer endAfter = beginAfter + suffixMap.get(beginAfter);
-			if (mergedEnd >= beginAfter) {
-				markedText.remove(beginAfter);
-				markedExcerptions.remove(beginAfter);
-
-				// mergedBegin = Math.min(beginAfter, mergedBegin); mergedBegin
-				// is always <=
-				mergedEnd = Math.max(endAfter, mergedEnd);
-			} else {
-				break;
-			}
+			if (mergedEnd < beginAfter) break;
+				
+			markedText.remove(beginAfter);
+			markedExcerptions.remove(beginAfter);
+	
+			// mergedBegin = Math.min(beginAfter, mergedBegin);
+			// mergedBegin is always <=
+			mergedEnd = Math.max(endAfter, mergedEnd);
 		}
-
-		markedText.put(mergedBegin, mergedEnd - mergedBegin);
-		int startInText = (mergedBegin - c.getOffset()) + c.getPathOffset();
-		int endInText = (mergedEnd - c.getOffset()) + c.getPathOffset();
-		String excerptionText = c.toString().substring(startInText, endInText);
-		Excerption e = new Excerption(c.getExcerptionPath(), excerptionText,
-				startInText, endInText);
-		markedExcerptions.put(mergedBegin, e);
+		
+		int[] r = { mergedBegin,  mergedEnd };
+		
+		return r;
 	}
-
+	
 	/**
 	 * Returns the selected excerptions in the editor.
 	 * 
