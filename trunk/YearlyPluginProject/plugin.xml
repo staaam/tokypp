@@ -70,32 +70,14 @@
             id="lost.tok.opTable.PopUpMenu.MenuContribution"
             targetID="lost.tok.opTable.PopUpMenu.Menu">
          <action
-               class="lost.tok.opTable.actions.MarkAction"
-               icon="icons/Mark.bmp"
-               id="lost.tok.opTable.PopUpMenu.MarkAction"
-               label="%action.name.mark"
+               class="lost.tok.opTable.actions.SwitchOpTableViewAction"
+               icon="icons/sample.gif"
+               id="lost.tok.opTable.PopUpMenu.switchView"
+               label="%action.label.discussions.show"
                menubarPath="additions"
-               state="true"
-               style="push"
-               tooltip="%action.name.mark"/>
-         <action
-               class="lost.tok.opTable.actions.UnMarkAllAction"
-               icon="icons/UnMarkAll.bmp"
-               id="lost.tok.opTable.PopUpMenu.UnMarkAllAction"
-               label="%action.name.unmarkAll"
-               menubarPath="additions"
-               state="true"
-               style="push"
-               tooltip="%action.name.unmarkAll"/>
-         <action
-               class="lost.tok.opTable.actions.AddQuoteAction"
-               icon="icons/AddQuote.bmp"
-               id="lost.tok.opTable.PopUpMenu.AddQuoteAction"
-               label="%action.name.addQuote"
-               menubarPath="additions"
-               state="true"
-               style="push"
-               tooltip="%action.name.addQuote"/>
+               state="false"
+               style="toggle"
+               tooltip="%action.label.discussions.show"/>
          <action
                class="lost.tok.opTable.actions.LinkDiscussionAction"
                icon="icons/main_link_ico.gif"
@@ -106,51 +88,59 @@
                style="push"
                tooltip="%action.name.linkDiscussion"/>
          <action
-               class="lost.tok.opTable.actions.SwitchOpTableViewAction"
-               icon="icons/sample.gif"
-               id="lost.tok.opTable.PopUpMenu.switchView"
-               label="%action.label.discussions.show"
+               class="lost.tok.opTable.actions.AddQuoteAction"
+               icon="icons/AddQuote.bmp"
+               id="lost.tok.opTable.PopUpMenu.AddQuoteAction"
+               label="%action.name.addQuote"
                menubarPath="additions"
                state="true"
                style="push"
-               tooltip="Show Linked Discussions"/>
+               tooltip="%action.name.addQuote"/>
+         <action
+               class="lost.tok.opTable.actions.UnMarkAllAction"
+               icon="icons/UnMarkAll.bmp"
+               id="lost.tok.opTable.PopUpMenu.UnMarkAllAction"
+               label="%action.name.unmarkAll"
+               menubarPath="additions"
+               state="true"
+               style="push"
+               tooltip="%action.name.unmarkAll"/>
+         <action
+               class="lost.tok.opTable.actions.MarkAction"
+               icon="icons/Unmark.bmp"
+               id="lost.tok.opTable.PopUpMenu.UnmarkAction"
+               label="%action.name.unmark"
+               menubarPath="additions"
+               state="true"
+               style="push"
+               tooltip="%action.name.unmark"/>
+         <action
+               class="lost.tok.opTable.actions.MarkAction"
+               icon="icons/Mark.bmp"
+               id="lost.tok.opTable.PopUpMenu.MarkAction"
+               label="%action.name.mark"
+               menubarPath="additions"
+               state="true"
+               style="push"
+               tooltip="%action.name.mark"/>
       </viewerContribution>
    </extension>
    <extension
          point="org.eclipse.ui.editorActions">
       <editorContribution
             id="lost.tok.opTable.Contribution"
+            sibling_order="org.eclipse.pde.internal.core.text.plugin.PluginElementNode@fa1c60"
             targetID="lost.tok.opTable.OperationTable">
          <action
-               class="lost.tok.opTable.actions.MarkAction"
-               icon="icons/Mark.bmp"
-               id="lost.tok.opTable.MarkAction"
-               label="%action.name.mark"
+               class="lost.tok.opTable.actions.SwitchOpTableViewAction"
+               icon="icons/sample.gif"
+               id="lost.tok.opTable.switchView"
+               label="%action.label.discussions.show"
                menubarPath="edit/OpTableGroup"
-               state="true"
-               style="push"
+               state="false"
+               style="toggle"
                toolbarPath="OpTableGroup"
-               tooltip="%action.tooltip.mark"/>
-         <action
-               class="lost.tok.opTable.actions.UnMarkAllAction"
-               icon="icons/UnMarkAll.bmp"
-               id="lost.tok.opTable.UnMarkAllAction"
-               label="%action.name.unmarkAll"
-               menubarPath="edit/OpTableGroup"
-               state="true"
-               style="push"
-               toolbarPath="OpTableGroup"
-               tooltip="%action.tooltip.unmarkAll"/>
-         <action
-               class="lost.tok.opTable.actions.AddQuoteAction"
-               icon="icons/AddQuote.bmp"
-               id="lost.tok.opTable.AddQuoteAction"
-               label="%action.name.addQuote"
-               menubarPath="edit/OpTableGroup"
-               state="true"
-               style="push"
-               toolbarPath="OpTableGroup"
-               tooltip="%action.tooltip.addQuote"/>
+               tooltip="%action.label.discussions.show"/>
          <action
                class="lost.tok.opTable.actions.LinkDiscussionAction"
                icon="icons/main_link_ico.gif"
@@ -162,14 +152,45 @@
                toolbarPath="OpTableGroup"
                tooltip="%action.tooltip.linkDiscussion"/>
          <action
-               class="lost.tok.opTable.actions.SwitchOpTableViewAction"
-               icon="icons/sample.gif"
-               id="lost.tok.opTable.switchView"
-               label="Show Linked Discussions"
+               class="lost.tok.opTable.actions.AddQuoteAction"
+               icon="icons/AddQuote.bmp"
+               id="lost.tok.opTable.AddQuoteAction"
+               label="%action.name.addQuote"
                menubarPath="edit/OpTableGroup"
-               style="toggle"
+               state="true"
+               style="push"
                toolbarPath="OpTableGroup"
-               tooltip="Show Linked Discussions"/>
+               tooltip="%action.tooltip.addQuote"/>
+         <action
+               class="lost.tok.opTable.actions.UnMarkAllAction"
+               icon="icons/UnMarkAll.bmp"
+               id="lost.tok.opTable.UnMarkAllAction"
+               label="%action.name.unmarkAll"
+               menubarPath="edit/OpTableGroup"
+               state="true"
+               style="push"
+               toolbarPath="OpTableGroup"
+               tooltip="%action.tooltip.unmarkAll"/>
+         <action
+               class="lost.tok.opTable.actions.MarkAction"
+               icon="icons/Unmark.bmp"
+               id="lost.tok.opTable.UnmarkAction"
+               label="%action.name.unmark"
+               menubarPath="edit/OpTableGroup"
+               state="true"
+               style="push"
+               toolbarPath="OpTableGroup"
+               tooltip="%action.tooltip.unmark"/>
+         <action
+               class="lost.tok.opTable.actions.MarkAction"
+               icon="icons/Mark.bmp"
+               id="lost.tok.opTable.MarkAction"
+               label="%action.name.mark"
+               menubarPath="edit/OpTableGroup"
+               state="true"
+               style="push"
+               toolbarPath="OpTableGroup"
+               tooltip="%action.tooltip.mark"/>
       </editorContribution>
 
 

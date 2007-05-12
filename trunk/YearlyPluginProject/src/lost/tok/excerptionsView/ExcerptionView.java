@@ -469,6 +469,14 @@ public class ExcerptionView extends ViewPart {
 		
 		refresh();
 	}
+	
+	public void removeMonitoredEditor(OperationTable ot) {
+		if (!projectOTs.containsKey(ot.getProject()) ||
+			!projectOTs.get(ot.getProject()).contains(ot)) return;
+		
+		projectOTs.get(ot.getProject()).remove(ot);
+		refresh();
+	}
 
 	public static String nameFromOT(OperationTable ot) {
 		return ot.getTitle();

@@ -1,6 +1,5 @@
 package lost.tok.opTable.actions;
 
-import lost.tok.Messages;
 import lost.tok.opTable.OperationTable;
 
 import org.eclipse.jface.action.IAction;
@@ -19,6 +18,10 @@ public class SwitchOpTableViewAction extends AbstractEditorAction {
 		
 		OperationTable ot = (OperationTable) activeEditor;
 		
+//		activeEditor.getAction("lost.tok.opTable.PopUpMenu.switchView").setChecked(action.isChecked());
+//		activeEditor.getAction("lost.tok.opTable.switchView").setChecked(action.isChecked());
+		//IContributionItem a = activeEditor.getEditorSite().getActionBars().getToolBarManager().find("lost.tok.opTable.switchView");
+		//((PluginActionContributionItem)a).getAction().setChecked(action.isChecked());
 		if (action.isChecked()) {
 			System.out.println("checked"); //$NON-NLS-1$
 			ot.showDiscussions();

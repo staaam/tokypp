@@ -1,6 +1,5 @@
 package lost.tok.opTable.actions;
 
-import lost.tok.Messages;
 import lost.tok.opTable.OperationTable;
 
 import org.eclipse.jface.action.IAction;
@@ -16,6 +15,7 @@ public class MarkAction extends AbstractEditorAction {
 			return;
 		}
 
-		((OperationTable) activeEditor).mark(currentSelection);
+		((OperationTable) activeEditor).mark(currentSelection,
+				action.getId().indexOf("Unmark") == -1);
 	}
 }
