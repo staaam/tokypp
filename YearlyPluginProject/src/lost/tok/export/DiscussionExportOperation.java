@@ -267,7 +267,7 @@ public class DiscussionExportOperation implements IRunnableWithProgress {
 		monitor.subTask(destinationName);
 
 		// Collect the names for fetching the links to the sources later
-		if (exportResource.getName().compareTo(this.TEMP_LINKS_XML) != 0)
+		if (exportResource.getName().compareTo(TEMP_LINKS_XML) != 0)
 			discussionNames.add(exportResource.getName());
 
 		try {
