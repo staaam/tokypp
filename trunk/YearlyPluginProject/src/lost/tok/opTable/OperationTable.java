@@ -8,6 +8,7 @@ import java.util.Vector;
 import java.util.Map.Entry;
 
 import lost.tok.Excerption;
+import lost.tok.GeneralFunctions;
 import lost.tok.disEditor.DiscussionEditor;
 import lost.tok.excerptionsView.ExcerptionView;
 import lost.tok.sourceDocument.Chapter;
@@ -104,6 +105,10 @@ public class OperationTable extends TextEditor {
 		ISourceViewer srcview = getSourceViewer();
 		assert (srcview != null);
 		getSourceViewerDecorationSupport(srcview).dispose();
+		
+		// using Eclipse' word wrapping, but only in LTR languages
+		if (GeneralFunctions.isLTR())
+			srcview.getTextWidget().setWordWrap(true);
 		refreshDisplay();
 	}
 	
