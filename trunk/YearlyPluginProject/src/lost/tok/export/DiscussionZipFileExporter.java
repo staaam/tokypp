@@ -7,6 +7,8 @@ import java.util.zip.CRC32;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import lost.tok.Messages;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -16,7 +18,7 @@ import org.eclipse.ui.internal.wizards.datatransfer.IFileExporter;
 /**
  *	Exports resources to a .zip file
  */
-@SuppressWarnings("restriction")
+@SuppressWarnings("restriction") //$NON-NLS-1$
 public class DiscussionZipFileExporter  implements IFileExporter {
     private ZipOutputStream outputStream;
 
@@ -104,9 +106,9 @@ public class DiscussionZipFileExporter  implements IFileExporter {
             throws IOException, CoreException {
         ZipEntry newEntry = new ZipEntry(destinationPath);
         String fileName = resource.getName();
-        String[] name = fileName.split("\\.");
-        if (name[1].compareTo("dis") != 0) {
-			MessageDialog.openWarning(null, "Attention", "You have selected non-disscusion resources to export!\n Only the discussion will be exported!");
+        String[] name = fileName.split("\\."); //$NON-NLS-1$
+        if (name[1].compareTo("dis") != 0) { //$NON-NLS-1$
+			MessageDialog.openWarning(null, Messages.getString("DiscussionZipFileExporter.attention"), Messages.getString("DiscussionZipFileExporter.nonDiscussionsSelectedWrn")); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		newEntry.setComment(name[0]);
         write(newEntry, resource);

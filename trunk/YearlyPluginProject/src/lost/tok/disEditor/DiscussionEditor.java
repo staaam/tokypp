@@ -52,7 +52,7 @@ public class DiscussionEditor extends TextEditor {
 
 	private static final String OPINION = "Opinion";
 
-	public static final String EDITOR_ID = "lost.tok.disEditor.DiscussionEditor"; 
+	public static final String EDITOR_ID = "lost.tok.disEditor.DiscussionEditor";  //$NON-NLS-1$
 	
 	private static boolean markQuote = false;
 
@@ -298,7 +298,7 @@ public class DiscussionEditor extends TextEditor {
 				Quote quote = (Quote) dragSourceItem[0].getData(QUOTE);
 				if (event.item == null) {
 					TreeItem item = new TreeItem(disTree, SWT.NONE);
-					item.setText("basa");
+					item.setText("basa"); //$NON-NLS-1$
 				} else {
 					TreeItem item = (TreeItem) event.item;
 					Point pt = par.getDisplay().map(null, disTree, event.x,
@@ -525,7 +525,7 @@ public class DiscussionEditor extends TextEditor {
 	private void setTreeQuote(Quote quote, TreeItem quoteItem) {
 
 		String quoteText = new String(quote.getText());
-		quoteItem.setText(quoteText.substring(0, java.lang.Math.min(10, quoteText.length())) + "...");
+		quoteItem.setText(quoteText.substring(0, java.lang.Math.min(10, quoteText.length())) + "..."); //$NON-NLS-1$
 		
 		quoteItem.setData(QUOTE, quote);
 		quoteItem.setData(QUOTE);
@@ -551,7 +551,7 @@ public class DiscussionEditor extends TextEditor {
 				break;
 			}
 			if(IsInMiddleOfWord(quoteText,lineCnt,i,lineSize))
-				qText.setText(quoteText.substring((i)*lineSize,((i+1)*lineSize)) + "-");
+				qText.setText(quoteText.substring((i)*lineSize,((i+1)*lineSize)) + "-"); //$NON-NLS-1$
 			else
 				qText.setText(quoteText.substring((i)*lineSize,((i+1)*lineSize)));
 		}		
@@ -562,9 +562,9 @@ public class DiscussionEditor extends TextEditor {
 		if(quoteComment.trim().length() != 0)
 		{		
 			//make son saparator
-			String saparator = new String("-");
+			String saparator = new String("-"); //$NON-NLS-1$
 			for (int i = 0; i < lineSize; i++) {
-				saparator+="-";
+				saparator+="-"; //$NON-NLS-1$
 			}
 			TreeItem saparatQuote = new TreeItem(quoteItem,SWT.WRAP);
 			saparatQuote.setText(saparator);
@@ -578,7 +578,7 @@ public class DiscussionEditor extends TextEditor {
 					break;
 				}
 				if(IsInMiddleOfWord(quoteComment,commentLineCnt,i,lineSize))
-					qComment.setText(quoteComment.substring((i)*lineSize,((i+1)*lineSize)) + "-");
+					qComment.setText(quoteComment.substring((i)*lineSize,((i+1)*lineSize)) + "-"); //$NON-NLS-1$
 				else
 					qComment.setText(quoteComment.substring((i)*lineSize,((i+1)*lineSize)));
 			}		

@@ -26,9 +26,9 @@ public class Excerption extends Properties {
 	 * @param excerption the XML element describing the excerption
 	 */
 	public Excerption(Element excerption) {
-		this(excerption.element("sourceFilePath").getText(), null, Integer
-				.valueOf(excerption.element("startPos").getText()), Integer
-				.valueOf(excerption.element("endPos").getText()));
+		this(excerption.element("sourceFilePath").getText(), null, Integer //$NON-NLS-1$
+				.valueOf(excerption.element("startPos").getText()), Integer //$NON-NLS-1$
+				.valueOf(excerption.element("endPos").getText())); //$NON-NLS-1$
 	}
 
 	/**
@@ -50,10 +50,10 @@ public class Excerption extends Properties {
 	 * @return an XML element describing the excerption
 	 */
 	public Element toXML() {
-		Element e = DocumentHelper.createElement("excerption");
-		e.addElement("sourceFilePath").addText(pathInSourceFile);
-		e.addElement("startPos").addText(startPos.toString());
-		e.addElement("endPos").addText(endPos.toString());
+		Element e = DocumentHelper.createElement("excerption"); //$NON-NLS-1$
+		e.addElement("sourceFilePath").addText(pathInSourceFile); //$NON-NLS-1$
+		e.addElement("startPos").addText(startPos.toString()); //$NON-NLS-1$
+		e.addElement("endPos").addText(endPos.toString()); //$NON-NLS-1$
 		return e;
 	}
 
@@ -79,7 +79,7 @@ public class Excerption extends Properties {
 	}
 
 	public int hashCode() {
-		return (pathInSourceFile + "/" + startPos + "-" + endPos).hashCode();
+		return (pathInSourceFile + "/" + startPos + "-" + endPos).hashCode(); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/** Sets the text of the excerption to the given text */
@@ -88,6 +88,6 @@ public class Excerption extends Properties {
 	}
 
 	public String toString() {
-		return pathInSourceFile + "[" + startPos + ":" + endPos + "]";
+		return pathInSourceFile + "[" + startPos + ":" + endPos + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 }

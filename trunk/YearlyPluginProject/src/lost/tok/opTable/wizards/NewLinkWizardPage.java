@@ -92,7 +92,7 @@ public class NewLinkWizardPage extends WizardPage implements SelectionListener, 
 		linkType = new Combo(container, SWT.READ_ONLY | SWT.DROP_DOWN);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		linkType.setLayoutData(gd);
-		linkType.setItems(Link.linkTypes);
+		linkType.setItems(Link.linkDisplayNames);
 		linkType.addSelectionListener(this);
 
 		// roots
@@ -162,8 +162,15 @@ public class NewLinkWizardPage extends WizardPage implements SelectionListener, 
 		return exs;
 	}
 
+	/**
+	 * Returns the type of the link chosen 
+	 * @return the String for link type which should be written in the xml (and not the display string)
+	 */
 	public String getLinkType() {
-		return linkType.getText();
+		int indexChosen = linkType.getSelectionIndex();
+		if (indexChosen == -1)
+			return "";
+		return Link.linkXMLTypes[indexChosen];
 	}
 
 	public String[] getSourceFiles() {

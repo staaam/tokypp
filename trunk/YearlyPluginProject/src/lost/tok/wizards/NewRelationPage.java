@@ -86,8 +86,8 @@ public class NewRelationPage extends WizardPage implements ModifyListener, Selec
 		label.setText(Messages.getString("NewRelationWizardPage.2")); //$NON-NLS-1$
 
 		relType = new Combo(container, SWT.READ_ONLY | SWT.DROP_DOWN);
-		for (String element : Discussion.relTypes) {
-			relType.add(element); // TODO(Shay): Make sure this is translated in Hebrew
+		for (String element : Discussion.relDisplayNames) {
+			relType.add(element);
 		}
 
 		relType.addSelectionListener(this);
@@ -138,7 +138,7 @@ public class NewRelationPage extends WizardPage implements ModifyListener, Selec
 
 	private void dialogChanged() {
 		if (discCombo.getSelectionIndex() == -1) {
-			updateStatus("No Discussion selected"); //$NON-NLS-1$
+			updateStatus(Messages.getString("NewRelationPage.ErrNoDiscSelected")); //$NON-NLS-1$
 			return;
 		}
 
@@ -164,9 +164,16 @@ public class NewRelationPage extends WizardPage implements ModifyListener, Selec
 	public Discussion getDiscussion() {
 		return discussion;
 	}
-
+	
+	/**
+	 * Returns the type of the relation chosen 
+	 * @return the String for relation type which should be written in the xml (and not the display string)
+	 */
 	public String getRelationType() {
-		return relType.getText();
+		int chosenIdx = relType.getSelectionIndex();
+		if (chosenIdx == -1)
+			return "";
+		return Discussion.relXMLTypes[chosenIdx];
 	}
 
 	public Integer[] getSelectedQuotes() {
