@@ -82,11 +82,15 @@ public class DiscussionEditor extends TextEditor {
 			public void keyPressed(KeyEvent e) {
 				if (e.keyCode == SWT.DEL) {
 					// deletion of descussion or default opinion is NOT allowed
-					if (disTree.getSelection()[0].getData().equals(DISCUSSION)
-							|| (disTree.getSelection()[0].getData().equals(
-									OPINION) && disTree.getSelection()[0]
-									.getText().equalsIgnoreCase(
-											Discussion.DEFAULT_OPINION))) {
+					if (
+							disTree.getSelection()[0].getData().equals(DISCUSSION)
+							|| 
+							(
+								disTree.getSelection()[0].getData().equals(OPINION) 
+								&& 
+								discussion.getOpinionsId(disTree.getSelection()[0].getText()).equals(discussion.DEFAULT_OPINION_ID)
+							)
+						) {
 						return;
 					}
 
@@ -95,13 +99,14 @@ public class DiscussionEditor extends TextEditor {
 						TreeItem defOp = null;
 						TreeItem itmArr[] = disTree.getItem(0).getItems();
 
+						//fatch default opinion
 						for (TreeItem element : itmArr) {
-							if (element.getText().equalsIgnoreCase(
-									Discussion.DEFAULT_OPINION)) {
+							if (discussion.getOpinionsId(element.getText()).equals(discussion.DEFAULT_OPINION_ID)){
 								defOp = element;
 							}
 						}
 
+						//if no default opinion create one
 						if (defOp == null) {
 							defOp = new TreeItem(disTree.getItem(0), SWT.NONE);
 							defOp.setText(Discussion.DEFAULT_OPINION);
@@ -406,73 +411,13 @@ public class DiscussionEditor extends TextEditor {
 							addTreeQuote(opinionItem, quote);
 						}
 					}
+					
+					rootItem.setExpanded(true);
 				}
 			}
 
 		});
 		
-//		disTree.addSelectionListener(new SelectionAdapter() {
-//			public void widgetSelected(SelectionEvent e) {
-////				final TreeEditor disTreeEditor = new TreeEditor(disTree);
-////				disTreeEditor.horizontalAlignment = SWT.LEFT;
-////				disTreeEditor.grabHorizontal = true;
-////				disTreeEditor.minimumWidth = 50;
-////				
-////				// Clean up any previous editor control
-////				Control oldEditor = disTreeEditor.getEditor();
-////				if (oldEditor != null) oldEditor.dispose();
-////		
-////				// Identify the selected row
-////				TreeItem item = (TreeItem)e.item;
-////				if (item == null) return;
-////		
-////				// The control that will be the editor must be a child of the Tree
-////				Text newEditor = new Text(disTree, SWT.WRAP | SWT.READ_ONLY | SWT.MULTI |SWT.V_SCROLL);
-////				newEditor.setText(item.getText());
-////				newEditor.addModifyListener(new ModifyListener() {
-////					public void modifyText(ModifyEvent e) {
-////						Text text = (Text)disTreeEditor.getEditor();
-////						disTreeEditor.getItem().setText(text.getText());
-////					}
-////				});
-////				newEditor.selectAll();
-////				newEditor.setFocus();			
-////				disTreeEditor.setEditor(newEditor, item);
-//				
-//				rootItem.removeAll();
-//				
-//				for (Opinion opinion : discussion.getOpinions()) {
-//					TreeItem opinionItem = addTreeOpinion(rootItem, opinion);
-//
-//					for (Quote quote : discussion.getQuotes(opinion.getName())) {
-//						addTreeQuote(opinionItem, quote);
-//					}
-//				}
-//				
-////				TreeItem infoItem = new TreeItem(disTree,SWT.WRAP);
-////				infoItem.setText("x before  = " + par.getBounds().width);
-//			}
-//		});
-
-//		int x = par.getBounds().width;
-//		
-//		TreeItem infoItem = new TreeItem(disTree,SWT.WRAP);
-//		infoItem.setText("x after = " + x);
-		
-		// Image imageDisc = new Image(null, new
-		// FileInputStream("C:/discussion.gif"));
-
-		// rootItem.setImage(imageDisc);
-
-//		for (Opinion opinion : discussion.getOpinions()) {
-//			TreeItem opinionItem = addTreeOpinion(rootItem, opinion);
-//
-//			for (Quote quote : discussion.getQuotes(opinion.getName())) {
-//				addTreeQuote(opinionItem, quote);
-//			}
-//		}
-		
-
 		// *************************************************************************************************
 		
 		// expends the root and it's opinions, but not the quotes
@@ -599,8 +544,7 @@ public class DiscussionEditor extends TextEditor {
 	
 	public void moveQuoteToDefault(TreeItem itemToMove) {
 		Quote quote = getQuote(itemToMove);
-		discussion.relocateQuote(quote.getID(), discussion
-				.getOpinionsId(Discussion.DEFAULT_OPINION));
+		discussion.relocateQuote(quote.getID(), discussion.DEFAULT_OPINION_ID);//discussion.getOpinionsId(Discussion.DEFAULT_OPINION));
 	}
 
 	private Quote getQuote(TreeItem itemToMove) {
