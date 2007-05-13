@@ -42,7 +42,7 @@ public class ToK {
 
 	private IProgressMonitor progMonitor;
 
-	private IFolder srcFolder, discFolder, unparsedSrcFolder;
+	private IFolder srcFolder, discFolder, unparsedSrcFolder, rootFolder;
 
 	private IFile authorFile, linkFile;
 
@@ -66,6 +66,8 @@ public class ToK {
 	public static final int MAX_AUTHOR_GROUP = 5;
 	/** The name of folder of our sources */
 	static public final String SOURCES_FOLDER = Messages.getString("ToK.srcFolder"); //$NON-NLS-1$
+	/** The name of folder of our roots */
+	static public final String ROOTS_FOLDER = "root";
 	/** The name of the discussions folder */
 	static public final String DISCUSSION_FOLDER = Messages.getString("ToK.DiscFolder"); //$NON-NLS-1$
 	/** The name of the folder in which we store our unparsed sources */
@@ -153,12 +155,16 @@ public class ToK {
 
 	public boolean createToKLibraries() throws CoreException {
 		srcFolder = treeOfKnowledgeProj.getFolder(SOURCES_FOLDER);
+		rootFolder = treeOfKnowledgeProj.getFolder(ROOTS_FOLDER);
 		discFolder = treeOfKnowledgeProj.getFolder(DISCUSSION_FOLDER);
 		unparsedSrcFolder = treeOfKnowledgeProj
 				.getFolder(UNPARSED_SOURCES_FOLDER);
 
 		if (!srcFolder.exists()) {
 			srcFolder.create(IResource.NONE, true, progMonitor);
+		}
+		if (!rootFolder.exists()) {
+			rootFolder.create(IResource.NONE, true, progMonitor);
 		}
 		if (!discFolder.exists()) {
 			discFolder.create(IResource.NONE, true, progMonitor);
@@ -236,9 +242,9 @@ public class ToK {
 		// getting the root name
 		String rootName = getRootName(rootPath);
 
-		// This should add the new root file to sources folder
+		// This should add the new root file to roots folder
 		try {
-			srcFolder.getFile(rootName).create(new FileInputStream(rootPath),
+			rootFolder.getFile(rootName).create(new FileInputStream(rootPath),
 					true, progMonitor);
 		} catch (FileNotFoundException e) {
 			System.out.println("file is none existant or extention not src"); //$NON-NLS-1$
