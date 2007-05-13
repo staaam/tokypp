@@ -31,7 +31,16 @@ public class Discussion {
 
 	private Integer id = 1;
 
-	public static final String[] relTypes = { "disagree", "explain" };
+	/**
+	 * The types of the relations, as strings displayable to the user
+	 * The order of the strings should be the same as in the relXMLTypes array
+	 */
+	public static final String[] relDisplayNames = { Messages.getString("Discussion.1"), Messages.getString("Discussion.2") };  //$NON-NLS-1$ //$NON-NLS-2$
+	/**
+	 * The types of the links, as the xml scheme defines
+	 * The order of the strings should be the same as in the relDisplayNames array
+	 */
+	public static final String[] relXMLTypes = { "disagree", "explain" }; //$NON-NLS-1$ //$NON-NLS-2$
 
 	/**
 	 * first constructor for discussion
@@ -47,7 +56,7 @@ public class Discussion {
 		this.creatorName = creatorName;
 
 		if (new File(getFullFileName()).exists()) {
-			System.out.println("discussion " + discName + " already exists");
+			System.out.println("discussion " + discName + " already exists"); //$NON-NLS-1$ //$NON-NLS-2$
 			return;
 		}
 
@@ -56,12 +65,12 @@ public class Discussion {
 
 	private Document discussionSkeleton(String discName, String creatorName) {
 		Document doc = DocumentHelper.createDocument();
-		Element disc = doc.addElement("discussion");
-		disc.addElement("name").addText(discName);
-		disc.addElement("user").addText(creatorName);
-		Element defOpin = disc.addElement("opinion");
-		defOpin.addElement("id").addText("1");
-		defOpin.addElement("name").addText(DEFAULT_OPINION);
+		Element disc = doc.addElement("discussion"); //$NON-NLS-1$
+		disc.addElement("name").addText(discName); //$NON-NLS-1$
+		disc.addElement("user").addText(creatorName); //$NON-NLS-1$
+		Element defOpin = disc.addElement("opinion"); //$NON-NLS-1$
+		defOpin.addElement("id").addText("1"); //$NON-NLS-1$ //$NON-NLS-2$
+		defOpin.addElement("name").addText(DEFAULT_OPINION); //$NON-NLS-1$
 		return doc;
 	}
 
@@ -78,12 +87,12 @@ public class Discussion {
 
 		Document d = GeneralFunctions.readFromXML(filename);
 
-		setDiscName(DocumentHelper.createXPath("/discussion/name")
+		setDiscName(DocumentHelper.createXPath("/discussion/name") //$NON-NLS-1$
 				.selectSingleNode(d).getText());
-		setCreatorName(DocumentHelper.createXPath("/discussion/user")
+		setCreatorName(DocumentHelper.createXPath("/discussion/user") //$NON-NLS-1$
 				.selectSingleNode(d).getText());
 
-		List result = DocumentHelper.createXPath("//id").selectNodes(d);
+		List result = DocumentHelper.createXPath("//id").selectNodes(d); //$NON-NLS-1$
 		for (Iterator i = result.iterator(); i.hasNext();) {
 			Element element = (Element) i.next();
 			if (Integer.valueOf(element.getText()) > max) {
@@ -116,8 +125,8 @@ public class Discussion {
 
 		Document doc = readFromXML();
 
-		XPath xpathSelector = DocumentHelper.createXPath("//opinion[name='"
-				+ opinionName + "']");
+		XPath xpathSelector = DocumentHelper.createXPath("//opinion[name='" //$NON-NLS-1$
+				+ opinionName + "']"); //$NON-NLS-1$
 		List result = xpathSelector.selectNodes(doc);
 		if (result.isEmpty() == false) {
 			// does nothing if opinion already exist
@@ -127,7 +136,7 @@ public class Discussion {
 		// detach all the relations
 		// Note(Shay): We do this in order to maintein the order enforced in the xsd
 		//  First there must be all the opinions, and then the relations
-		XPath relationsXPath = DocumentHelper.createXPath("//relation");
+		XPath relationsXPath = DocumentHelper.createXPath("//relation"); //$NON-NLS-1$
 		List relationNodes = relationsXPath.selectNodes(doc);
 		for (Iterator i = relationNodes.iterator(); i.hasNext();) {
 			Element attached = (Element) i.next();
@@ -135,9 +144,9 @@ public class Discussion {
 		}
 
 		// add the opinion
-		Element opinion = doc.getRootElement().addElement("opinion");
-		opinion.addElement("id").addText(java.lang.Integer.toString(++id));
-		opinion.addElement("name").addText(opinionName);
+		Element opinion = doc.getRootElement().addElement("opinion"); //$NON-NLS-1$
+		opinion.addElement("id").addText(java.lang.Integer.toString(++id)); //$NON-NLS-1$
+		opinion.addElement("name").addText(opinionName); //$NON-NLS-1$
 		
 		// reattach all the relations
 		for (Iterator i = relationNodes.iterator(); i.hasNext();) {
@@ -149,7 +158,7 @@ public class Discussion {
 	}
 
 	public IFile getFile() {
-		return myToK.getDiscussionFolder().getFile(discName + ".dis");
+		return myToK.getDiscussionFolder().getFile(discName + ".dis"); //$NON-NLS-1$
 	}
 	
 	/** Returns the file associated with this as an IEditorInput */
@@ -172,10 +181,10 @@ public class Discussion {
 		}
 
 		// Move all the quotes from the given opinion to the defult opinion
-		XPath xpathSelector3 = DocumentHelper.createXPath("//opinion[id='"
-				+ java.lang.Integer.toString(opinionId) + "']/quote");
+		XPath xpathSelector3 = DocumentHelper.createXPath("//opinion[id='" //$NON-NLS-1$
+				+ java.lang.Integer.toString(opinionId) + "']/quote"); //$NON-NLS-1$
 		List result3 = xpathSelector3.selectNodes(doc);
-		XPath xpathSelector4 = DocumentHelper.createXPath("//opinion[id='1']");
+		XPath xpathSelector4 = DocumentHelper.createXPath("//opinion[id='1']"); //$NON-NLS-1$
 		List result4 = xpathSelector4.selectNodes(doc);
 		if (result4.size() != 1) {
 			// cant found the defult opinion
@@ -192,8 +201,8 @@ public class Discussion {
 		// if there are several opinions with the given id, fix it by removing
 		// all of them
 		// if there are no opinions with the given id, do nothing
-		XPath xpathSelector1 = DocumentHelper.createXPath("//opinion[id='"
-				+ java.lang.Integer.toString(opinionId) + "']");
+		XPath xpathSelector1 = DocumentHelper.createXPath("//opinion[id='" //$NON-NLS-1$
+				+ java.lang.Integer.toString(opinionId) + "']"); //$NON-NLS-1$
 		List result1 = xpathSelector1.selectNodes(doc);
 		for (Iterator i = result1.iterator(); i.hasNext();) {
 			Element element = (Element) i.next();
@@ -216,8 +225,8 @@ public class Discussion {
 		
 		// remove relations in which we are the first item (id1)
 		XPath id1relationxPath = DocumentHelper
-				.createXPath("//relation[id1='"
-						+ java.lang.Integer.toString(id) + "']");
+				.createXPath("//relation[id1='" //$NON-NLS-1$
+						+ java.lang.Integer.toString(id) + "']"); //$NON-NLS-1$
 		relationNodes = id1relationxPath.selectNodes(doc);
 		for (Iterator i = relationNodes.iterator(); i.hasNext();) {
 			Element element = (Element) i.next();
@@ -226,8 +235,8 @@ public class Discussion {
 		
 		// remove relations in which we are the second item (id2)
 		XPath id2relationxPath = DocumentHelper
-				.createXPath("//relation[id2='"
-						+ java.lang.Integer.toString(id) + "']");
+				.createXPath("//relation[id2='" //$NON-NLS-1$
+						+ java.lang.Integer.toString(id) + "']"); //$NON-NLS-1$
 		relationNodes = id2relationxPath.selectNodes(doc);
 		for (Iterator i = relationNodes.iterator(); i.hasNext();) {
 			Element element = (Element) i.next();
@@ -240,11 +249,11 @@ public class Discussion {
 
 		Document doc = readFromXML();
 
-		XPath xpathSelector0 = DocumentHelper.createXPath("//opinion[id='"
-				+ java.lang.Integer.toString(opinionId) + "']");
+		XPath xpathSelector0 = DocumentHelper.createXPath("//opinion[id='" //$NON-NLS-1$
+				+ java.lang.Integer.toString(opinionId) + "']"); //$NON-NLS-1$
 		List result0 = xpathSelector0.selectNodes(doc);
 		Element defOp = (Element) result0.get(0);
-		defOp.addElement("quote").addElement("id").addText(
+		defOp.addElement("quote").addElement("id").addText( //$NON-NLS-1$ //$NON-NLS-2$
 				java.lang.Integer.toString(id++));
 
 		writeToXml(doc);
@@ -263,13 +272,13 @@ public class Discussion {
 
 		// If the quote and the target opinion can be found,
 		// the quote will move to the target opinion
-		XPath xpathSelector1 = DocumentHelper.createXPath("//quote[id='"
-				+ java.lang.Integer.toString(quoteId) + "']");
+		XPath xpathSelector1 = DocumentHelper.createXPath("//quote[id='" //$NON-NLS-1$
+				+ java.lang.Integer.toString(quoteId) + "']"); //$NON-NLS-1$
 		List result = xpathSelector1.selectNodes(doc);
 		if (result.size() == 1) {
 			Element element = (Element) result.get(0);
-			XPath xpathSelector2 = DocumentHelper.createXPath("//opinion[id='"
-					+ java.lang.Integer.toString(targetId) + "']");
+			XPath xpathSelector2 = DocumentHelper.createXPath("//opinion[id='" //$NON-NLS-1$
+					+ java.lang.Integer.toString(targetId) + "']"); //$NON-NLS-1$
 			List targets = xpathSelector2.selectNodes(doc);
 			if (targets.size() == 1) {
 				Element target = (Element) targets.get(0);
@@ -294,8 +303,8 @@ public class Discussion {
 		// if there are several quotes with the given id, fix it by removing all
 		// of them
 		// if there are no quotes with the given id, do nothing
-		XPath xpathSelector1 = DocumentHelper.createXPath("//quote[id='"
-				+ java.lang.Integer.toString(quoteId) + "']");
+		XPath xpathSelector1 = DocumentHelper.createXPath("//quote[id='" //$NON-NLS-1$
+				+ java.lang.Integer.toString(quoteId) + "']"); //$NON-NLS-1$
 		List result = xpathSelector1.selectNodes(doc);
 		for (Iterator i = result.iterator(); i.hasNext();) {
 			Element element = (Element) i.next();
@@ -322,39 +331,39 @@ public class Discussion {
 		Document doc = readFromXML();
 
 		// Make sure that the 2 elements exist
-		XPath xpathSelector1 = DocumentHelper.createXPath("//*[id='"
-				+ java.lang.Integer.toString(element1) + "']");
+		XPath xpathSelector1 = DocumentHelper.createXPath("//*[id='" //$NON-NLS-1$
+				+ java.lang.Integer.toString(element1) + "']"); //$NON-NLS-1$
 		List op1 = xpathSelector1.selectNodes(doc);
-		XPath xpathSelector2 = DocumentHelper.createXPath("//*[id='"
-				+ java.lang.Integer.toString(element2) + "']");
+		XPath xpathSelector2 = DocumentHelper.createXPath("//*[id='" //$NON-NLS-1$
+				+ java.lang.Integer.toString(element2) + "']"); //$NON-NLS-1$
 		List op2 = xpathSelector2.selectNodes(doc);
 		if (op1.size() != 1 || op2.size() != 1) {
 			return;
 		}
 
 		// chack that the relation does not exist
-		XPath xpathSelector3 = DocumentHelper.createXPath("//relation[id1='"
+		XPath xpathSelector3 = DocumentHelper.createXPath("//relation[id1='" //$NON-NLS-1$
 				+ java.lang.Integer.toString(element1)
-				+ "'][id2='"
-				+ java.lang.Integer.toString(element2) + "']"
-				+ "|"
-				+ "//relation[id2='"
+				+ "'][id2='" //$NON-NLS-1$
+				+ java.lang.Integer.toString(element2) + "']" //$NON-NLS-1$
+				+ "|" //$NON-NLS-1$
+				+ "//relation[id2='" //$NON-NLS-1$
 				+ java.lang.Integer.toString(element1)
-				+ "'][id1='"
-				+ java.lang.Integer.toString(element2) + "']");
+				+ "'][id1='" //$NON-NLS-1$
+				+ java.lang.Integer.toString(element2) + "']"); //$NON-NLS-1$
 		List list = xpathSelector3.selectNodes(doc);
 		if (list.isEmpty() == false) {
 			return;
 		}
 
 		// add the relation
-		Element link1 = doc.getRootElement().addElement("relation");
-		link1.addElement("id1").addText(
+		Element link1 = doc.getRootElement().addElement("relation"); //$NON-NLS-1$
+		link1.addElement("id1").addText( //$NON-NLS-1$
 				java.lang.Integer.toString(element1));
-		link1.addElement("id2").addText(
+		link1.addElement("id2").addText( //$NON-NLS-1$
 				java.lang.Integer.toString(element2));
-		link1.addElement("comment").addText(comment);
-		link1.addElement("type").addText(type);
+		link1.addElement("comment").addText(comment); //$NON-NLS-1$
+		link1.addElement("type").addText(type); //$NON-NLS-1$
 
 		writeToXml(doc);
 
@@ -372,15 +381,15 @@ public class Discussion {
 		Document doc = readFromXML();
 
 		// removes the relation, whether it is (element1, element2) or (element2, element1)
-		XPath xpathSelector1 = DocumentHelper.createXPath("//relation[id1='"
+		XPath xpathSelector1 = DocumentHelper.createXPath("//relation[id1='" //$NON-NLS-1$
 				+ java.lang.Integer.toString(element1)
-				+ "'][id2='"
-				+ java.lang.Integer.toString(element2) + "']"
-				+ "|"
-				+ "//relation[id2='"
+				+ "'][id2='" //$NON-NLS-1$
+				+ java.lang.Integer.toString(element2) + "']" //$NON-NLS-1$
+				+ "|" //$NON-NLS-1$
+				+ "//relation[id2='" //$NON-NLS-1$
 				+ java.lang.Integer.toString(element1)
-				+ "'][id1='"
-				+ java.lang.Integer.toString(element2) + "']");
+				+ "'][id1='" //$NON-NLS-1$
+				+ java.lang.Integer.toString(element2) + "']"); //$NON-NLS-1$
 		List opl1 = xpathSelector1.selectNodes(doc);
 		for (Iterator i = opl1.iterator(); i.hasNext();) {
 			Element element = (Element) i.next();
@@ -393,14 +402,14 @@ public class Discussion {
 	public void addQuote(Quote quote, String opinion) throws CoreException {
 
 		if (!myToK.getProject().exists() || quote == null) {
-			throwCoreException("problem with atributes to addQuote");
+			throwCoreException("problem with atributes to addQuote"); //$NON-NLS-1$
 			return;
 		}
 
 		Document doc = readFromXML();
 
-		XPath xpathSelector = DocumentHelper.createXPath("//opinion[name='"
-				+ opinion + "']");
+		XPath xpathSelector = DocumentHelper.createXPath("//opinion[name='" //$NON-NLS-1$
+				+ opinion + "']"); //$NON-NLS-1$
 		List result = xpathSelector.selectNodes(doc);
 		if (result.size() != 1) {
 			// cant found the defult opinion
@@ -416,7 +425,7 @@ public class Discussion {
 	}
 
 	private void throwCoreException(String message) throws CoreException {
-		IStatus status = new Status(IStatus.ERROR, "Yearly_Plugin_Project",
+		IStatus status = new Status(IStatus.ERROR, "Yearly_Plugin_Project", //$NON-NLS-1$
 				IStatus.OK, message, null);
 		throw new CoreException(status);
 	}
@@ -471,7 +480,7 @@ public class Discussion {
 		Document doc = readFromXML();
 
 		List result = doc
-				.selectNodes("//opinion[name='" + opinion + "']/quote");
+				.selectNodes("//opinion[name='" + opinion + "']/quote"); //$NON-NLS-1$ //$NON-NLS-2$
 
 		Quote[] quotes = new Quote[result.size()];
 		for (Object object : result) {
@@ -487,7 +496,7 @@ public class Discussion {
 			begin = discussionFile.lastIndexOf('\\');
 		}
 		begin++;
-		int end = discussionFile.lastIndexOf(".dis");
+		int end = discussionFile.lastIndexOf(".dis"); //$NON-NLS-1$
 		
 		if (end == -1) return null;
 
@@ -497,7 +506,7 @@ public class Discussion {
 	public Opinion[] getOpinions() {
 		Document doc = readFromXML();
 
-		XPath xpathSelector = DocumentHelper.createXPath("//opinion");
+		XPath xpathSelector = DocumentHelper.createXPath("//opinion"); //$NON-NLS-1$
 		List result = xpathSelector.selectNodes(doc);
 
 		Opinion[] ss = new Opinion[result.size()];

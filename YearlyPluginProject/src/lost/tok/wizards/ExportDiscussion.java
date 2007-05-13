@@ -2,6 +2,7 @@ package lost.tok.wizards;
 
 import java.util.List;
 
+import lost.tok.Messages;
 import lost.tok.ToK;
 
 import org.eclipse.core.resources.IProject;
@@ -43,7 +44,7 @@ public class ExportDiscussion extends ZipFileExportWizard
 
         setDefaultPageImageDescriptor(IDEWorkbenchPlugin.getIDEImageDescriptor("wizban/exportzip_wiz.png"));//$NON-NLS-1$
         setNeedsProgressMonitor(true);
-		setWindowTitle("Export Discussions");
+		setWindowTitle(Messages.getString("ExportDiscussion.exportDiscs")); //$NON-NLS-1$
 	}
 
 	@Override
