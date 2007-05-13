@@ -172,7 +172,7 @@ public class NewRelationPage extends WizardPage implements ModifyListener, Selec
 	public String getRelationType() {
 		int chosenIdx = relType.getSelectionIndex();
 		if (chosenIdx == -1)
-			return "";
+			return ""; //$NON-NLS-1$
 		return Discussion.relXMLTypes[chosenIdx];
 	}
 

@@ -24,7 +24,6 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
-import org.eclipse.core.resources.ResourceAttributes;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -66,11 +65,11 @@ public class ToK {
 	/** The maximal ranking of authoers */
 	public static final int MAX_AUTHOR_GROUP = 5;
 	/** The name of folder of our sources */
-	static public final String SOURCES_FOLDER = "Sources";
+	static public final String SOURCES_FOLDER = Messages.getString("ToK.srcFolder"); //$NON-NLS-1$
 	/** The name of the discussions folder */
-	static public final String DISCUSSION_FOLDER = "Discussions";
+	static public final String DISCUSSION_FOLDER = Messages.getString("ToK.DiscFolder"); //$NON-NLS-1$
 	/** The name of the folder in which we store our unparsed sources */
-	static public final String UNPARSED_SOURCES_FOLDER = "UnparsedSources";
+	static public final String UNPARSED_SOURCES_FOLDER = Messages.getString("ToK.UnparsedFolder"); //$NON-NLS-1$
 
 	public ToK(IProject project) {
 		createToKFromProject(project);
@@ -139,6 +138,7 @@ public class ToK {
 		}
 
 		createToKFiles();
+		refresh();	
 	}
 
 	private boolean checkProjectName(String projectName) {
@@ -165,9 +165,6 @@ public class ToK {
 		}
 		if (!unparsedSrcFolder.exists()) {
 			unparsedSrcFolder.create(IResource.NONE, true, progMonitor);
-			ResourceAttributes r = new ResourceAttributes();
-			r.setHidden(true);
-			unparsedSrcFolder.setResourceAttributes(r);
 		}
 
 		return true;
@@ -185,14 +182,14 @@ public class ToK {
 	}
 
 	private void createLinksFile() {
-		linkFile = treeOfKnowledgeProj.getFile("Links.xml");
+		linkFile = treeOfKnowledgeProj.getFile(Messages.getString("ToK.linksFile")); //$NON-NLS-1$
 		if (!linkFile.exists()) {
 			GeneralFunctions.writeToXml(linkFile, linksSkeleton());
 		}
 	}
 
 	private void createAuthorsFile() {
-		authorFile = treeOfKnowledgeProj.getFile("Authors.xml");
+		authorFile = treeOfKnowledgeProj.getFile(Messages.getString("ToK.authFile")); //$NON-NLS-1$
 		if (!authorFile.exists()) {
 			GeneralFunctions.writeToXml(authorFile, authorsSkeleton());
 		}
@@ -316,7 +313,7 @@ public class ToK {
 		// check if file with that name exists in Sources folder
 		if (!filePathGivenByUser.equals(treeOfKnowledgeProj.getFullPath()
 				.toString()
-				+ "/Sources/" + fileNameVarified)) {
+				+ "/" + SOURCES_FOLDER + "/" + fileNameVarified)) { //$NON-NLS-1$  //$NON-NLS-2$
 			try {
 				// This should add the new source file to sources folder
 				IFile sourceFile = srcFolder.getFile(fileNameVarified);
@@ -486,8 +483,6 @@ public class ToK {
 
 			AddAuthorToFile(author);
 
-			// System.out.println("Author file updated " + author.name + "
-			// rank");
 		} catch (Exception e) {
 			System.out.println("FAILED to update Authors file "); //$NON-NLS-1$
 			return;
@@ -551,10 +546,8 @@ public class ToK {
 	 */
 	private void refresh() {
 		try {
-			discFolder.refreshLocal(IResource.DEPTH_INFINITE, progMonitor);
-			srcFolder.refreshLocal(IResource.DEPTH_INFINITE, progMonitor);
+			treeOfKnowledgeProj.refreshLocal(IResource.DEPTH_INFINITE, progMonitor);
 		} catch (CoreException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

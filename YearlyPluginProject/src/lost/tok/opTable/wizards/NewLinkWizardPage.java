@@ -169,7 +169,7 @@ public class NewLinkWizardPage extends WizardPage implements SelectionListener, 
 	public String getLinkType() {
 		int indexChosen = linkType.getSelectionIndex();
 		if (indexChosen == -1)
-			return "";
+			return ""; //$NON-NLS-1$
 		return Link.linkXMLTypes[indexChosen];
 	}
 
