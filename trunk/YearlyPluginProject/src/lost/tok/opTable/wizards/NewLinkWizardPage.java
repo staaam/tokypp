@@ -2,8 +2,8 @@ package lost.tok.opTable.wizards;
 
 import java.util.List;
 
+import lost.tok.DiscussionLink;
 import lost.tok.Excerption;
-import lost.tok.Link;
 import lost.tok.Messages;
 import lost.tok.ToK;
 import lost.tok.excerptionsView.ExcerptionView;
@@ -92,7 +92,7 @@ public class NewLinkWizardPage extends WizardPage implements SelectionListener, 
 		linkType = new Combo(container, SWT.READ_ONLY | SWT.DROP_DOWN);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		linkType.setLayoutData(gd);
-		linkType.setItems(Link.linkDisplayNames);
+		linkType.setItems(DiscussionLink.linkDisplayNames);
 		linkType.addSelectionListener(this);
 
 		// roots
@@ -170,7 +170,7 @@ public class NewLinkWizardPage extends WizardPage implements SelectionListener, 
 		int indexChosen = linkType.getSelectionIndex();
 		if (indexChosen == -1)
 			return ""; //$NON-NLS-1$
-		return Link.linkXMLTypes[indexChosen];
+		return DiscussionLink.linkXMLTypes[indexChosen];
 	}
 
 	public String[] getSourceFiles() {
