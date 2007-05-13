@@ -5,18 +5,10 @@ import java.io.IOException;
 
 import junit.framework.TestCase;
 
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.DocumentHelper;
-import org.dom4j.Node;
-import org.dom4j.io.SAXReader;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.QualifiedName;
 
 public class ToKTest extends TestCase {
 
