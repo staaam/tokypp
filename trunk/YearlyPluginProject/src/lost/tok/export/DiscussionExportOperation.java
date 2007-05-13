@@ -38,7 +38,7 @@ import org.eclipse.ui.internal.wizards.datatransfer.IFileExporter;
  */
 public class DiscussionExportOperation implements IRunnableWithProgress {
 
-	private final String TEMP_LINKS_XML = "TempLinks.xml";
+	public static final String TEMP_LINKS_XML = "TempLinks.xml";
 
 	private IFileExporter exporter;
 
