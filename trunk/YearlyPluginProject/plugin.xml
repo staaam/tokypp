@@ -216,11 +216,12 @@
                class="lost.tok.disEditor.AddOpinionAction"
                icon="icons/link_ico.gif"
                id="lost.tok.disEditor.addOpinion"
-               label="Add Opinion"
+               label="%action.name.addOpinion"
                menubarPath="edit/OpTableGroup"
                state="true"
                style="push"
-               toolbarPath="OpTableGroup"/>
+               toolbarPath="OpTableGroup"
+               tooltip="%action.name.addOpinion"/>
       </editorContribution>
 
    </extension>
