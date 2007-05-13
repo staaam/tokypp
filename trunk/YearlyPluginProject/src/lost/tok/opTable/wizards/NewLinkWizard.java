@@ -64,7 +64,7 @@ public class NewLinkWizard extends Wizard implements INewWizard {
 			for (String root : roots) {
 				tok.linkDiscussionRoot(tok.getDiscussion(page.getDiscussion()),
 						tok.getSource(root),
-						page.getExcerptions(root), 
+						page.getExcerptions(this.getRootName(root)), 
 						page.getSubject(),
 						page.getLinkType());
 			}
@@ -81,6 +81,20 @@ public class NewLinkWizard extends Wizard implements INewWizard {
 		IStatus status = new Status(IStatus.ERROR, "Yearly_Plugin_Project", //$NON-NLS-1$
 				IStatus.OK, message, null);
 		throw new CoreException(status);
+	}
+	
+	private String getRootName(String rootPath) {
+		int slashLoc = rootPath.lastIndexOf('\\');
+		if (slashLoc != -1) {
+			rootPath = rootPath.substring(slashLoc + 1);
+		}
+
+		slashLoc = rootPath.lastIndexOf('/');
+		if (slashLoc != -1) {
+			rootPath = rootPath.substring(slashLoc + 1);
+		}
+		
+		return rootPath;
 	}
 
 }
