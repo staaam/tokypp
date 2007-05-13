@@ -16,6 +16,13 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Shell;
 
+/**
+ * Widget(composite) that contains combobox with list of disussions 
+ * and button to create new discussion
+ * 
+ * @author Michael Gelfand
+ *
+ */
 public class DiscCombo extends Composite implements SelectionListener {
 	ToK tok;
 	public Combo discCombo;

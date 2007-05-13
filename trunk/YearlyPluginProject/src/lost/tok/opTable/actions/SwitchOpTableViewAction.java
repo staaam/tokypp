@@ -5,6 +5,12 @@ import lost.tok.opTable.OperationTable;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.ui.IEditorPart;
 
+/**
+ * Action for 'Show root discussions' button
+ * 
+ * @author Michael Gelfand
+ *
+ */
 public class SwitchOpTableViewAction extends AbstractEditorAction {
 
 	public void setActiveEditor(IAction action, IEditorPart targetEditor) {
