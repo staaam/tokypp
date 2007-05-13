@@ -6,6 +6,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 import java.util.List;
 
+import lost.tok.ToK;
 import lost.tok.export.DiscussionExportOperation;
 
 import org.eclipse.core.resources.IContainer;
@@ -36,7 +37,6 @@ import org.eclipse.ui.internal.wizards.datatransfer.WizardFileSystemResourceExpo
 /**
  * Page 1 of the base resource export-to-zip Wizard.
  */
-@SuppressWarnings("restriction")
 public class ExportDiscussionPage extends
         WizardFileSystemResourceExportPage1 {
 
@@ -54,6 +54,10 @@ public class ExportDiscussionPage extends
     /** The Constant STORE_COMPRESS_CONTENTS_ID. */
     private final static String STORE_COMPRESS_CONTENTS_ID = "ExportDiscussiontPage.STORE_COMPRESS_CONTENTS_ID"; //$NON-NLS-1$
 
+    private IStructuredSelection selection;
+    
+    private ToK tok;
+    
     /**
      * Create an instance of this class.
      * 
@@ -63,6 +67,7 @@ public class ExportDiscussionPage extends
     protected ExportDiscussionPage(String name,
             IStructuredSelection selection) {
         super(name, selection);
+        this.selection = selection;
     }
 
     /**
@@ -72,9 +77,9 @@ public class ExportDiscussionPage extends
      */
     public ExportDiscussionPage(IStructuredSelection selection) {
         this("zipFileExportPage1", selection); //$NON-NLS-1$
-        setTitle(DataTransferMessages.ZipExport_exportTitle);
-        setDescription(DataTransferMessages.ZipExport_description);
-           }
+        setTitle("Export Discussions");
+       setDescription("Export Discussions to a zip file");
+     }
 
     /**
      * (non-Javadoc)
@@ -277,15 +282,16 @@ public class ExportDiscussionPage extends
         
         resourcesToExport = getWhiteCheckedResources();
         
+         
         //Save dirty editors if possible but do not stop if not all are saved
         saveDirtyEditors();
         // about to invoke the operation so save our state
         saveWidgetValues();
         
-        
+        getTok();
         if (resourcesToExport.size() > 0) {
 			return executeExportOperation(new DiscussionExportOperation(null,
-                    resourcesToExport, getDestinationValue()));
+                    resourcesToExport, getDestinationValue(),tok));
 		}
         MessageDialog.openInformation(getContainer().getShell(),
                 DataTransferMessages.DataTransfer_information,
@@ -376,7 +382,7 @@ public class ExportDiscussionPage extends
      * @return the output suffix
      */
     protected String getOutputSuffix() {
-        return ".zip"; //$NON-NLS-1$
+        return ".exd"; //$NON-NLS-1$
     }
 
     /**
@@ -385,7 +391,7 @@ public class ExportDiscussionPage extends
      */
     protected void handleDestinationBrowseButtonPressed() {
         FileDialog dialog = new FileDialog(getContainer().getShell(), SWT.SAVE);
-        dialog.setFilterExtensions(new String[] { "*.zip", "*.*" }); //$NON-NLS-1$ //$NON-NLS-2$
+        dialog.setFilterExtensions(new String[] { "*.exd"}); //$NON-NLS-1$ //$NON-NLS-2$
         dialog.setText(DataTransferMessages.ZipExport_selectDestinationTitle);
         String currentSourceString = getDestinationValue();
         int lastSeparatorIndex = currentSourceString
@@ -463,6 +469,25 @@ public class ExportDiscussionPage extends
     protected String destinationEmptyMessage() {
         return DataTransferMessages.ZipExport_destinationEmpty;
     }
+    
+    /**
+	 * Tests if the current workbench selection is a suitable container to use.
+	 */
+
+	private void getTok() {
+		if (selection != null && selection.isEmpty() == false
+				&& selection instanceof IStructuredSelection) {
+			IStructuredSelection ssel = (IStructuredSelection) selection;
+			if (ssel.size() > 1) {
+				return;
+			}
+			Object obj = ssel.getFirstElement();
+			if (obj instanceof IResource) {
+				IResource resource = (IResource) obj;
+				tok = ToK.getProjectToK(resource.getProject());
+			}
+		}
+	}
 }
 
 

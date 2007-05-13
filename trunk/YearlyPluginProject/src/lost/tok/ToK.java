@@ -195,7 +195,7 @@ public class ToK {
 		}
 	}
 
-	private Document linksSkeleton() {
+	public Document linksSkeleton() {
 		Document linkDoc = DocumentHelper.createDocument();
 
 		// Create the Skeleton of the Links file
