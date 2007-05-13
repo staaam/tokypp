@@ -88,7 +88,7 @@ public class DiscussionEditor extends TextEditor {
 							(
 								disTree.getSelection()[0].getData().equals(OPINION) 
 								&& 
-								discussion.getOpinionsId(disTree.getSelection()[0].getText()).equals(discussion.DEFAULT_OPINION_ID)
+								discussion.getOpinionsId(disTree.getSelection()[0].getText()).equals(Discussion.DEFAULT_OPINION_ID)
 							)
 						) {
 						return;
@@ -101,7 +101,7 @@ public class DiscussionEditor extends TextEditor {
 
 						//fatch default opinion
 						for (TreeItem element : itmArr) {
-							if (discussion.getOpinionsId(element.getText()).equals(discussion.DEFAULT_OPINION_ID)){
+							if (discussion.getOpinionsId(element.getText()).equals(Discussion.DEFAULT_OPINION_ID)){
 								defOp = element;
 							}
 						}
@@ -544,7 +544,7 @@ public class DiscussionEditor extends TextEditor {
 	
 	public void moveQuoteToDefault(TreeItem itemToMove) {
 		Quote quote = getQuote(itemToMove);
-		discussion.relocateQuote(quote.getID(), discussion.DEFAULT_OPINION_ID);//discussion.getOpinionsId(Discussion.DEFAULT_OPINION));
+		discussion.relocateQuote(quote.getID(), Discussion.DEFAULT_OPINION_ID);//discussion.getOpinionsId(Discussion.DEFAULT_OPINION));
 	}
 
 	private Quote getQuote(TreeItem itemToMove) {
