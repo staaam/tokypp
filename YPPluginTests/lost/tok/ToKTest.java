@@ -14,6 +14,8 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.QualifiedName;
 
 public class ToKTest extends TestCase {
@@ -40,16 +42,15 @@ public class ToKTest extends TestCase {
 				"michalsProj_2").getName().equals("michalsProj_2"));
 
 		// check creator name
-		QualifiedName name = new QualifiedName("TOK Project creator", "Creator");
 		assertTrue(ResourcesPlugin.getWorkspace().getRoot().getProject(
-				"michalsProj_2").getPersistentProperty(name).compareTo(
+				"michalsProj_2").getPersistentProperty(ToK.creatorQName).compareTo(
 				"michalzim") == 0);
 
 		// check root name
-		name = new QualifiedName("TOK Project root", "Root");
-		assertTrue(ResourcesPlugin.getWorkspace().getRoot().getProject(
-				"michalsProj_2").getPersistentProperty(name).compareTo(
-				"source_example.src") == 0);
+//		name = new QualifiedName("TOK Project root", "Root");
+//		assertTrue(ResourcesPlugin.getWorkspace().getRoot().getProject(
+//				"michalsProj_2").getPersistentProperty(name).compareTo(
+//				"source_example.src") == 0);
 
 	}
 
