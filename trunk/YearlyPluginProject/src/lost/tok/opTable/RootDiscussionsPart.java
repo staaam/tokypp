@@ -163,11 +163,8 @@ public class RootDiscussionsPart extends AbstractEditorAction
 					continue;
 				}
 
-				e.setText(ct.toString().substring(e.getStartPos(),
-						e.getEndPos()));
-				e
-						.setProperty(textOffsetQName, ct.getOffset()
-								+ e.getStartPos());
+				e.setText(ct.toString().substring(e.getStartPos(), e.getEndPos()));
+				e.setProperty(textOffsetQName, ct.getOffset()+ e.getStartPos());
 
 				rootExcerptions.add(e);
 

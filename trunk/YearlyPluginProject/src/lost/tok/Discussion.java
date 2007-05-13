@@ -21,7 +21,7 @@ import org.eclipse.ui.part.FileEditorInput;
 
 public class Discussion {
 
-	public static final String DEFAULT_OPINION = "Default Opinion";
+	public static final String DEFAULT_OPINION = Messages.getString("Discussion.DefOpinion"); //$NON-NLS-1$
 
 	private ToK myToK;
 
