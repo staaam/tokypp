@@ -15,19 +15,15 @@ import lost.tok.sourceDocument.ChapterText;
 import lost.tok.sourceDocument.SourceDocument;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.text.source.SourceViewerConfiguration;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.part.FileEditorInput;
 
-// TODO: Auto-generated Javadoc
 /**
  * The operation table is an extension of the Eclipse editor. It displays source
  * files. It allows the user to mark excerptions in it. It DOESN'T allow the
@@ -38,9 +34,6 @@ import org.eclipse.ui.part.FileEditorInput;
  */
 public class OperationTable extends TextEditor {
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.texteditor.AbstractTextEditor#setFocus()
-	 */
 	@Override
 	public void setFocus() {
 		super.setFocus();
@@ -110,39 +103,10 @@ public class OperationTable extends TextEditor {
 		showChangeInformation(false);
 		ISourceViewer srcview = getSourceViewer();
 		assert (srcview != null);
-		//hookContextMenu(parent);
 		getSourceViewerDecorationSupport(srcview).dispose();
 		refreshDisplay();
 	}
-
-	// Shay: this should add the pop up action, but it doesn't work
-	/**
-	 * Hook context menu.
-	 * 
-	 * @param parent the parent
-	 */
-	protected void hookContextMenu(Control parent) {
-		if (rootDiscussionsView ) {
-			return;
-		}
-
-		MenuManager menuMgr = new MenuManager(EDITOR_CONTEXT,EDITOR_CONTEXT); //$NON-NLS-1$
-		menuMgr.setRemoveAllWhenShown(true);
-		menuMgr.removeAll();
-		Menu menu = menuMgr.createContextMenu(parent);
-		parent.setMenu(menu);
-		setEditorContextMenuId(EDITOR_CONTEXT);
-		getEditorSite().registerContextMenu(EDITOR_CONTEXT,menuMgr,getSelectionProvider());
-	}
 	
-	/*
-	 * Canceled attribute! /** These excerptions contain all the displayed text
-	 * (including the marked one) When the user cuts some text from the middle
-	 * of an excerption, it should be splitted into two excerptions.
-	 * 
-	 * List<Excerption> displayedText;
-	 */
-
 	/** These excerptions contain all the marked text. The dictionary is the function: offset->Excerption */
 	SortedMap<Integer, Excerption> markedExcerptions;
 
@@ -158,23 +122,9 @@ public class OperationTable extends TextEditor {
 		view.updateMonitoredEditor(this);
 	}
 	
-//	private void updateExcerptionView() {
-//		FileEditorInput fileEditorInput = 
-//			(FileEditorInput)getEditorInput();
-//		IFile file = fileEditorInput.getFile();
-//		String fileName = file.getName();
-//
-//		try {
-//			ExcerptionView.getView().setExcerptions(fileName, getMarked(), file.getProject());
-//		} catch (Exception e) {
-//			// TODO: handle exception
-//		}
-//		//expViewer.setFocus();
-//	}
-	
 	/**
- * Updates the colored lines and the general display of the editor.
- */
+	 * Updates the colored lines and the general display of the editor.
+	 */
 	public void refreshDisplay() {
 		if (rootDiscussionsView) {
 			rootDiscussions.refreshDisplay();
@@ -404,16 +354,6 @@ public class OperationTable extends TextEditor {
 	}
 
 	/**
-	 * Cuts text from the source. Currently is an Unsupported Operation
-	 * 
-	 * @param t the t
-	 */
-	public void cut(TextSelection t) {
-		throw new UnsupportedOperationException(
-				"Cut not allowed in this version"); //$NON-NLS-1$
-	}
-
-	/**
 	 * Returns the Source Document displayed by the editor.
 	 * 
 	 * @return the document
@@ -426,7 +366,7 @@ public class OperationTable extends TextEditor {
 	private SourceViewerConfiguration oldSourceViewerConfiguration = null;
 
 	/**
-	 * Highlights the discussion links in the editor.
+	 * Highlights the discussions links in the editor.
 	 */
 	public void showDiscussions() {
 		if (oldSourceViewerConfiguration == null)
@@ -446,7 +386,7 @@ public class OperationTable extends TextEditor {
 	}
 	
 	/**
-	 * Hide the discussion links from the editor.
+	 * Hide the discussions links from the editor.
 	 */
 	public void hideDisucssions() {
 		if (oldSourceViewerConfiguration != null)
@@ -483,7 +423,12 @@ public class OperationTable extends TextEditor {
 		markedExcerptions.remove(i);
 		markedText.remove(i);
 	}
-
+	
+	/**
+	 * Returns whether the editor is in View Root Discussions mode
+	 *  
+	 * @return true if in View Root Discussions mode, and false if not
+	 */
 	public boolean isRootDiscussionsView() {
 		return rootDiscussionsView;
 	}
