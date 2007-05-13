@@ -2,7 +2,7 @@ package lost.tok.opTable.wizards;
 
 import lost.tok.Discussion;
 import lost.tok.ToK;
-import lost.tok.opTable.Messages;
+import lost.tok.Messages;
 import lost.tok.wizards.DiscCombo;
 
 import org.eclipse.core.runtime.CoreException;

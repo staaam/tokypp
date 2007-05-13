@@ -6,6 +6,7 @@ import java.util.List;
 import lost.tok.Discussion;
 import lost.tok.Excerption;
 import lost.tok.GeneralFunctions;
+import lost.tok.Messages;
 import lost.tok.Source;
 import lost.tok.ToK;
 import lost.tok.disEditor.DiscussionEditor;
@@ -44,10 +45,10 @@ public class RootDiscussionsPart extends AbstractEditorAction
 		implements ITextDoubleClickStrategy, ITextHover {
 
 	private static QualifiedName discussionLinkQName = new QualifiedName(
-			"lost.tok.opTable.ShowRootDiscussions", "excerptionSource");
+			"lost.tok.opTable.ShowRootDiscussions", "excerptionSource"); //$NON-NLS-1$ //$NON-NLS-2$
 
 	private static QualifiedName textOffsetQName = new QualifiedName(
-			"lost.tok.opTable.ShowRootDiscussions", "textOffset");
+			"lost.tok.opTable.ShowRootDiscussions", "textOffset"); //$NON-NLS-1$ //$NON-NLS-2$
 
 	List<Excerption> rootExcerptions = null;
 
@@ -96,9 +97,9 @@ public class RootDiscussionsPart extends AbstractEditorAction
 		for (Excerption excerption : exs) {
 			DiscussionLink discussionLink = (DiscussionLink) excerption
 					.getProperty(discussionLinkQName);
-			s += "Discussion: " + discussionLink.getDiscussionFile() + "\n"
-					+ "Type: " + discussionLink.getType() + "\n" + "Subject: "
-					+ discussionLink.getLinkSubject() + "\n" + "\n";
+			s += Messages.getString("RootDiscussionsPart.disc") + discussionLink.getDiscussionFile() + "\n" //$NON-NLS-1$ //$NON-NLS-2$
+					+ Messages.getString("RootDiscussionsPart.type") + discussionLink.getType() + "\n" + Messages.getString("RootDiscussionsPart.subj") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+					+ discussionLink.getLinkSubject() + "\n" + "\n"; //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		return s.trim();
 	}
@@ -141,7 +142,7 @@ public class RootDiscussionsPart extends AbstractEditorAction
 		ToK tok = ToK.getProjectToK(root.getFile().getProject());
 
 		XPath xpathSelector = DocumentHelper
-				.createXPath("//sublink[sourceFile='" + root.toString() + "']");
+				.createXPath("//sublink[sourceFile='" + root.toString() + "']"); //$NON-NLS-1$ //$NON-NLS-2$
 
 		for (Object os : xpathSelector.selectNodes(GeneralFunctions
 				.readFromXML(tok.getLinkFile()))) {
@@ -149,7 +150,7 @@ public class RootDiscussionsPart extends AbstractEditorAction
 
 			DiscussionLink discussionLink = new DiscussionLink(s.getParent());
 
-			for (Object oe : s.elements("excerption")) {
+			for (Object oe : s.elements("excerption")) { //$NON-NLS-1$
 				Excerption e = new Excerption((Element) oe);
 				e.setProperty(discussionLinkQName, discussionLink);
 
@@ -157,8 +158,8 @@ public class RootDiscussionsPart extends AbstractEditorAction
 
 				ChapterText ct = document.getChapterText(e.getPathInSourceFile());
 				if (ct == null) {
-					System.out.println("wrong excerption found (chapter '"
-							+ e.getPathInSourceFile() + "' not found)");
+					System.out.println("wrong excerption found (chapter '" //$NON-NLS-1$
+							+ e.getPathInSourceFile() + "' not found)"); //$NON-NLS-1$
 					continue;
 				}
 
@@ -211,7 +212,7 @@ public class RootDiscussionsPart extends AbstractEditorAction
 	}
 
 	public void run(IAction action) {
-		System.out.println("run");
+		System.out.println("run"); //$NON-NLS-1$
 		if (selection instanceof StructuredSelection) {
 			StructuredSelection ss = (StructuredSelection) selection;
 			for (Object o : ss.toList()) {
