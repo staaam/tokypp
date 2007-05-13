@@ -240,10 +240,14 @@ public class SourceDocumentTest extends TestCase {
 		SourceDocument doc = new SourceDocument();
 
 		try {
-			doc.set(reader.read(sourceFilename));
+			doc.set(reader.read(Paths.getInputStream(sourceFilename)));
 		} catch (DocumentException e) {
 			fail(Paths.FILE_NOT_FOUND_MESSAGE);
+		} catch (IOException e) {
+			fail(Paths.FILE_NOT_FOUND_MESSAGE);
 		}
+
+		
 		return doc;
 	}
 	
@@ -254,7 +258,7 @@ public class SourceDocumentTest extends TestCase {
 		StringBuffer buff = new StringBuffer();
 		try {
 			BufferedReader eReader = new BufferedReader(new InputStreamReader(
-					new FileInputStream(filename), "UTF-8"));
+					Paths.getInputStream(filename), "UTF-8"));
 
 			int nextChar = eReader.read();
 			while (nextChar != -1) {

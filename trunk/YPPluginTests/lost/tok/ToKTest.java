@@ -72,12 +72,6 @@ public class ToKTest extends TestCase {
 		assertTrue(ResourcesPlugin.getWorkspace().getRoot().getProject(
 				"michalsProj_99").getFolder("Sources").getFile(
 				Paths.SOURCE_EXAMPLE + "aaa").exists() == false);
-
-		// illegal project name
-		new ToK("**michalsProj", "michalzim",	Paths.SOURCE_EXAMPLE);
-		
-		assertTrue(ResourcesPlugin.getWorkspace().getRoot().getProject(
-				"michalsProj_99").exists() == false);
 	}
 
 	// testing that the two project Folders were created
@@ -120,22 +114,21 @@ public class ToKTest extends TestCase {
 
 	// testing that the project root were created correctly
 	public void testProjectRoot() throws CoreException, IOException {
+		
+		// creating the file and getting its path
+		IFile sysFile = Paths.getIFile(Paths.SOURCE_EXAMPLE);
+		String sysFilePath = sysFile.getRawLocation().makeAbsolute().toOSString();
 
-		new ToK("michalsProj_6", "michalzim",Paths.SOURCE_EXAMPLE);
+		// using the file to create a project
+		new ToK("michalsProj_6", "michalzim",sysFilePath);
 
 		// Root file
 		IFolder srcFolder = ResourcesPlugin.getWorkspace().getRoot()
-				.getProject("michalsProj_6").getFolder("Sources");
+				.getProject("michalsProj_6").getFolder("root");
 		IFile rootFile = srcFolder.getFile("source_example.src");
 
 		// checking that the root exists
 		assertTrue(rootFile.exists());
-
-		// checking that it is marked as root
-		QualifiedName name = new QualifiedName("TOK Root File", "Is Root");
-		// the assert will return true if it is marked as root
-		assertTrue(rootFile.getPersistentProperty(name) == "true");
-
 	}
 
 	public void testAddDiscussion() throws CoreException, IOException {
@@ -144,53 +137,6 @@ public class ToKTest extends TestCase {
 		tok.addDiscussion("test");
 		assertTrue(ResourcesPlugin.getWorkspace().getRoot().getProject(
 				"AriesProj1").getFolder("Discussions").getFile("test.dis") != null);
-	}
-
-	public void testLinkDiscussionRoot() throws CoreException, IOException {
-		ToK tok;
-		tok = new ToK("AriesProj2", "Arie", Paths.SOURCE_EXAMPLE);
-		tok.addDiscussion("test");
-		/*tok.linkDiscussionRoot(tok.getDiscussion("test"), new Excerption(
-				"/Bible/The Begining/The Continue/The First Paragraph", "", 2,
-				22));*/
-
-		IFile links = ResourcesPlugin.getWorkspace().getRoot().getProject(
-				"AriesProj2").getFile("Links.xml");
-		String path = links.getLocation().toOSString();
-		Document doc = DocumentHelper.createDocument();
-		SAXReader reader = new SAXReader();
-		try {
-			doc = reader.read(new File(path));
-		} catch (DocumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		Node link = doc
-				.selectSingleNode("//link/discussionFile[text()=\"test.dis\"]");
-		assertTrue(link != null);
-	}
-
-	public void testNewLinkDiscussionRoot() throws CoreException, IOException {
-		new ToK("AriesProj3", "Arie", Paths.SOURCE_EXAMPLE);
-		/*tok.linkNewDiscussionRoot("New Discussion", new Excerption(
-				"/Bible/The Begining/The Continue/The First Paragraph", "", 2,
-				22));*/
-
-		assertTrue(ResourcesPlugin.getWorkspace().getRoot().getProject(
-				"AriesProj3").getFolder("Discussions").getFile("test.dis") != null);
-		IFile links = ResourcesPlugin.getWorkspace().getRoot().getProject(
-				"AriesProj3").getFile("Links.xml");
-		Document doc = DocumentHelper.createDocument();
-		SAXReader reader = new SAXReader();
-		try {
-			doc = reader.read(new File(links.getLocation().toOSString()));
-		} catch (DocumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		Node link = doc
-				.selectSingleNode("//link/discussionFile[text()=\"New Discussion.dis\"]");
-		assertTrue(link != null);
 	}
 
 	//Evgeni
