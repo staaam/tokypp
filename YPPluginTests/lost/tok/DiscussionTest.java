@@ -22,7 +22,7 @@ public class DiscussionTest extends TestCase {
 	 */
 	static public ToK creation(String projectName) throws CoreException,
 			IOException {
-		ToK tok = new ToK(projectName, "Guy", Paths.SOURCE_EXAMPLE);
+		ToK tok = new ToK(projectName, "Guy", "");
 		return tok;
 	}
 	
