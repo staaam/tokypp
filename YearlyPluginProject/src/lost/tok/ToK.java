@@ -29,6 +29,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.Status;
 
@@ -88,7 +89,7 @@ public class ToK {
 	}
 
 	public ToK(String projectName, String creator, String root) {
-		if (!checkProjectName(projectName)) {
+		if (!checkFileName(projectName)) {
 			return;
 		}
 
@@ -143,14 +144,16 @@ public class ToK {
 		refresh();	
 	}
 
-	private boolean checkProjectName(String projectName) {
-		if (projectName.replace('\\', '/').indexOf('/', 1) > 0) {
-			// File name must be valid
+	public static boolean checkFileName(String projectName) {
+		if (projectName.replace('\\', '/').indexOf('/', 1) > 0)
 			return false;
-		} else {
-			return true;
+		
+		String name = "/" + projectName;
+		if (!new Path(name).isValidPath(name)) {
+			return false;
 		}
-
+		
+		return true;
 	}
 
 	public boolean createToKLibraries() throws CoreException {
