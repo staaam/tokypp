@@ -11,7 +11,6 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.internal.wizards.datatransfer.IFileExporter;
-import org.eclipse.ui.internal.wizards.datatransfer.ZipFileExporter;
 
 
 /**

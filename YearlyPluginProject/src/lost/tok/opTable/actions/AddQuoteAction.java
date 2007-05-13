@@ -3,10 +3,10 @@ package lost.tok.opTable.actions;
 import java.util.List;
 
 import lost.tok.Excerption;
+import lost.tok.Messages;
 import lost.tok.Quote;
 import lost.tok.Source;
 import lost.tok.ToK;
-import lost.tok.opTable.Messages;
 import lost.tok.opTable.OperationTable;
 import lost.tok.opTable.wizards.AddQuoteWizard;
 

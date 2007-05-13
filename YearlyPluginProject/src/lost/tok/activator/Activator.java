@@ -1,7 +1,5 @@
 package lost.tok.activator;
 
-import lost.tok.Messages;
-
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
