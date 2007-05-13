@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import lost.tok.Discussion;
+import lost.tok.DiscussionLink;
 import lost.tok.Excerption;
 import lost.tok.GeneralFunctions;
 import lost.tok.Messages;
@@ -98,7 +99,7 @@ public class RootDiscussionsPart extends AbstractEditorAction
 			DiscussionLink discussionLink = (DiscussionLink) excerption
 					.getProperty(discussionLinkQName);
 			s += Messages.getString("RootDiscussionsPart.disc") + discussionLink.getDiscussionFile() + "\n" //$NON-NLS-1$ //$NON-NLS-2$
-					+ Messages.getString("RootDiscussionsPart.type") + discussionLink.getType() + "\n" + Messages.getString("RootDiscussionsPart.subj") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+					+ Messages.getString("RootDiscussionsPart.type") + discussionLink.getDisplayType() + "\n" + Messages.getString("RootDiscussionsPart.subj") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 					+ discussionLink.getLinkSubject() + "\n" + "\n"; //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		return s.trim();
@@ -178,7 +179,7 @@ public class RootDiscussionsPart extends AbstractEditorAction
 	private void openDiscussionLink(DiscussionLink discussionLink) {
 		Discussion d;
 		try {
-			d = tok.getDiscussion(discussionLink.discussion);
+			d = tok.getDiscussion(discussionLink.getDiscussionFile());
 		} catch (CoreException e) {
 			e.printStackTrace();
 			return;
