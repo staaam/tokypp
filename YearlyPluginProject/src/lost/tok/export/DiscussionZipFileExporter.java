@@ -11,14 +11,13 @@ import lost.tok.Messages;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.internal.wizards.datatransfer.IFileExporter;
 
 
 /**
  *	Exports resources to a .zip file
  */
-@SuppressWarnings("restriction") //$NON-NLS-1$
+
 public class DiscussionZipFileExporter  implements IFileExporter {
     private ZipOutputStream outputStream;
 
@@ -106,11 +105,8 @@ public class DiscussionZipFileExporter  implements IFileExporter {
             throws IOException, CoreException {
         ZipEntry newEntry = new ZipEntry(destinationPath);
         String fileName = resource.getName();
-        String[] name = fileName.split("\\."); //$NON-NLS-1$
-        if (name[1].compareTo("dis") != 0) { //$NON-NLS-1$
-			MessageDialog.openWarning(null, Messages.getString("DiscussionZipFileExporter.attention"), Messages.getString("DiscussionZipFileExporter.nonDiscussionsSelectedWrn")); //$NON-NLS-1$ //$NON-NLS-2$
-		}
-		newEntry.setComment(name[0]);
+        String[] name = fileName.split("\\.");
+        newEntry.setComment(name[0]);
         write(newEntry, resource);
     }
 }

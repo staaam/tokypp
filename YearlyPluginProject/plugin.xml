@@ -284,11 +284,18 @@
 	<extension
          point="org.eclipse.ui.exportWizards">
       <wizard
-            category="lost.tok.Categoy"
+            category="lost.tok.ExportCategory"
             class="lost.tok.wizards.ExportDiscussion"
             icon="icons/sample.gif"
-            id="lost.tok.exportDiscussion.ExportDiscussionWizard"
-            name="Export Discussion"/>
+            id="lost.tok.exportDiscussion.ExportDiscussion"
+            name="Export Discussion">
+         <description>
+            Exports discussions from a Tok Project
+         </description>
+      </wizard>
+      <category
+            id="lost.tok.ExportCategory"
+            name="%wizards.catagory"/>
    </extension>
    <extension
          id="TOKPerspective"
@@ -300,5 +307,21 @@
             icon="icons/tree.jpg"
             id="lost.tok.perspective"
             name="%perspective.tok"/>
+   </extension>
+   <extension
+         point="org.eclipse.ui.importWizards">
+      <category
+            id="lost.tok.ImportCategory"
+            name="%wizards.catagory"/>
+      <wizard
+            category="lost.tok.ImportCategory"
+            class="lost.tok.wizards.ImportDiscussion"
+            icon="icons/sample.gif"
+            id="lost.tok.wizards.ImportDiscussion"
+            name="Import Discussions">
+         <description>
+            Imports discussions into the Tok Project
+         </description>
+      </wizard>
    </extension>
 </plugin>
