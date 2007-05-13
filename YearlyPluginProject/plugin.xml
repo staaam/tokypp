@@ -70,15 +70,6 @@
             id="lost.tok.opTable.PopUpMenu.MenuContribution"
             targetID="lost.tok.opTable.PopUpMenu.Menu">
          <action
-               class="lost.tok.opTable.actions.SwitchOpTableViewAction"
-               icon="icons/sample.gif"
-               id="lost.tok.opTable.PopUpMenu.switchView"
-               label="%action.label.discussions.show"
-               menubarPath="additions"
-               state="false"
-               style="toggle"
-               tooltip="%action.label.discussions.show"/>
-         <action
                class="lost.tok.opTable.actions.LinkDiscussionAction"
                icon="icons/main_link_ico.gif"
                id="lost.tok.opTable.PopUpMenu.LinkDiscussionAction"
@@ -95,7 +86,8 @@
                menubarPath="additions"
                state="true"
                style="push"
-               tooltip="%action.name.addQuote"/>
+               tooltip="%action.name.addQuote">
+         </action>
          <action
                class="lost.tok.opTable.actions.UnMarkAllAction"
                icon="icons/UnMarkAll.bmp"

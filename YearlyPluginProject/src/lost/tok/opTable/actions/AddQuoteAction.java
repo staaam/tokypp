@@ -25,12 +25,7 @@ public class AddQuoteAction extends AbstractEditorAction {
 	public void run(IAction action) {
 		List<Excerption> excerptions = ((OperationTable) activeEditor)
 				.getMarked();
-		System.out.println("The are " + excerptions.size() + " Excerptions:"); //$NON-NLS-1$ //$NON-NLS-2$
-		for (Excerption e : excerptions) {
-			System.out.println(e);
-		}
 
-		// List<Discussion> l = tok.getDiscussions();
 		if (excerptions.isEmpty()) {
 			messageBox(
 					Messages.getString("AddQuoteAction.Error"), Messages.getString("AddQuoteAction.NoMarkedText")); //$NON-NLS-1$ //$NON-NLS-2$
@@ -56,14 +51,6 @@ public class AddQuoteAction extends AbstractEditorAction {
 	}
 
 	private void addQuote(ToK tok, Quote q) {
-		if (tok.getDiscussions().isEmpty()) {
-			messageBox(Messages.getString("AddQuoteAction.AddQuoteAction.Error"), Messages.getString("AddQuoteAction.NoDiscFound")); //$NON-NLS-1$ //$NON-NLS-2$
-			return;
-
-			// TODO: First iteration only
-			// tok.addDiscussion("Test Discussion"); //$NON-NLS-1$
-		}
-
 		AddQuoteWizard w = new AddQuoteWizard(tok, q);
 
 		WizardDialog wd = new WizardDialog(new Shell(), w);

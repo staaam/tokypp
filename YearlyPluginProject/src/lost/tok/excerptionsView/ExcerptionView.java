@@ -9,6 +9,7 @@ import java.util.Set;
 
 import lost.tok.Excerption;
 import lost.tok.Messages;
+import lost.tok.Source;
 import lost.tok.opTable.OperationTable;
 import lost.tok.opTable.wizards.NewLinkWizard;
 
@@ -218,7 +219,7 @@ public class ExcerptionView extends ViewPart {
 
 			if (currentProject != null && projectOTs.containsKey(currentProject)) {
 				for (OperationTable ot : getOTs()) {
-					TreeParent parentFile = new TreeParent(((FileEditorInput)ot.getEditorInput()).getFile().getProjectRelativePath().toPortableString());
+					TreeParent parentFile = new TreeParent(ExcerptionView.nameFromOT(ot));
 					for (Integer i : ot.getExcerptions().keySet()) {
 						Excerption exp = ot.getExcerptions().get(i);
 						String expText = exp.getText();
@@ -283,25 +284,6 @@ public class ExcerptionView extends ViewPart {
 	public ExcerptionView() {
 
 	}
-
-	/**
-	 * Adds a list of excerptions from one rrot file to the view
-	 * 
-	 * @param sourceFileName
-	 *            the root file name
-	 * @param exp
-	 *            excerptions
-	 * @param file
-	 *            Resource representing the file
-	 */
-//	public void addExcerptions(String filename, List<Excerption> exp) {
-//		if (!nameToExcerption.containsKey(filename)) {
-//			nameToExcerption.put(filename, new LinkedList<Excerption>());
-//		}
-//		nameToExcerption.get(filename).addAll(exp);
-//
-//		refresh();
-//	}
 	
 	public void clear() {
 		refresh();
@@ -405,9 +387,6 @@ public class ExcerptionView extends ViewPart {
 		deleteAction = new Action() {
 			public void run() {
 				ITreeSelection selection = (ITreeSelection) viewer.getSelection();
-				//List list = selection.toList();
-				//List<Integer> selectedIds = new ArrayList<Integer>();
-				//List<String> selectedFiles = new ArrayList<String>();
 				
 				HashSet<OperationTable> ots = new HashSet<OperationTable>();
 				
@@ -430,22 +409,6 @@ public class ExcerptionView extends ViewPart {
 					ot.refreshDisplay();
 				}
 
-//				for (String filename : selectedFiles) {
-//					nameToExcerption.remove(filename);
-//				}
-//
-//				for (Integer id : selectedIds) {
-//					for (String filename : nameToExcerption.keySet()) {
-//						List<Excerption> excerptions = nameToExcerption.get(filename);
-//						for (Iterator<Excerption> iter = excerptions.iterator(); iter.hasNext();) {
-//							if (((Integer) iter.next().getProperty(idQName)).compareTo(id) != 0)
-//								continue;
-//
-//							iter.remove();
-//							break;
-//						}
-//					}
-//				}
 			}
 		};
 		deleteAction.setText(Messages.getString("ExcerptionView.13")); //$NON-NLS-1$
@@ -461,6 +424,11 @@ public class ExcerptionView extends ViewPart {
 		viewer.getControl().setFocus();
 	}
 	
+	/**
+	 * Updates excerptions of given Operation Table in Excerption View
+	 * If given Operation Table still not monitored - adds it
+	 * @param ot - Operation Table to update
+	 */
 	public void updateMonitoredEditor(OperationTable ot) {
 		currentProject = ot.getProject();
 		if (!projectOTs.containsKey(currentProject))
@@ -472,6 +440,10 @@ public class ExcerptionView extends ViewPart {
 		refresh();
 	}
 	
+	/**
+	 * Removes Operation Table from monitored by excerption view
+	 * @param ot - operation table to remove
+	 */
 	public void removeMonitoredEditor(OperationTable ot) {
 		if (!projectOTs.containsKey(ot.getProject()) ||
 			!projectOTs.get(ot.getProject()).contains(ot)) return;
@@ -480,8 +452,14 @@ public class ExcerptionView extends ViewPart {
 		refresh();
 	}
 
+	/**
+	 * Returns the name of the Operation Table (name of it's source) 
+	 * 
+	 * @param ot - operation table to get name of
+	 * @return name to show in excerption view
+	 */
 	public static String nameFromOT(OperationTable ot) {
-		return ot.getTitle();
+		return new Source(((FileEditorInput)ot.getEditorInput()).getFile()).toString();
 	}
 
 	/**
@@ -513,10 +491,19 @@ public class ExcerptionView extends ViewPart {
 		return (ExcerptionView)view;
 	}
 
+	/**
+	 * Returns the project, excerption view is currently works with
+	 * 
+	 * @return current active project
+	 */
 	public IProject getProject() {
 		return currentProject;
 	}
 
+	/**
+	 * Shows Link Discussion wizard
+	 *
+	 */
 	public void linkDiscussion() {
 		WizardDialog dialog = new WizardDialog(new Shell(), new NewLinkWizard());
 		dialog.setTitle(Messages.getString("ExcerptionView.7")); //$NON-NLS-1$
