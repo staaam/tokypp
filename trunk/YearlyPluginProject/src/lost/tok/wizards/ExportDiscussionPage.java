@@ -78,7 +78,7 @@ public class ExportDiscussionPage extends
     public ExportDiscussionPage(IStructuredSelection selection) {
         this("zipFileExportPage1", selection); //$NON-NLS-1$
         setTitle("Export Discussions");
-       setDescription("Export Discussions to a zip file");
+       setDescription("Export Discussions to an exd file");
      }
 
     /**
@@ -110,7 +110,7 @@ public class ExportDiscussionPage extends
         
         optionsGroup.setVisible(false);
         // initial setup
-        createDirectoryStructureButton.setSelection(true);
+        createDirectoryStructureButton.setSelection(false);
         createSelectionOnlyButton.setSelection(false);
         createSelectionOnlyButton.setVisible(false);
      //   compressContentsCheckbox.setSelection(true);
@@ -238,7 +238,7 @@ public class ExportDiscussionPage extends
      */
     protected boolean executeExportOperation(DiscussionExportOperation op) {
       
-    	op.setCreateLeadupStructure(true);
+    	op.setCreateLeadupStructure(false);
         op.setUseCompression(true);
 
         try {
@@ -276,12 +276,12 @@ public class ExportDiscussionPage extends
                 
         List resourcesToExport = getWhiteCheckedResources();
         
-        checkDiscussionSelection(resourcesToExport);
-        
+        if (!checkDiscussionSelection(resourcesToExport))
+        {
         handleTypesEditButtonPressed();
         
         resourcesToExport = getWhiteCheckedResources();
-        
+        }
          
         //Save dirty editors if possible but do not stop if not all are saved
         saveDirtyEditors();
@@ -303,7 +303,7 @@ public class ExportDiscussionPage extends
 	/**
 	 * @param resourcesToExport
 	 */
-	private void checkDiscussionSelection(List resourcesToExport) {
+	private boolean checkDiscussionSelection(List resourcesToExport) {
 		Iterator iter = resourcesToExport.iterator();
 
         while (iter.hasNext()) {
@@ -321,11 +321,12 @@ public class ExportDiscussionPage extends
 			        String[] name = fileName.split("\\.");
 			        if (name[1].compareTo("dis") != 0) {
 						MessageDialog.openWarning(null, "Attention", "You have selected non-disscusion resources to export!\n Only the discussion will be exported!");
-						break;
+						return false;
 					}
 				}
 			}
 		}
+        return true;
 	}
     
     @Override
@@ -334,6 +335,7 @@ public class ExportDiscussionPage extends
     	super.handleTypesEditButtonPressed();
     }
 
+    
     /**
      * Answer the string to display in the receiver as the destination type.
      * 
