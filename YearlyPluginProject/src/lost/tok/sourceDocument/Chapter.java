@@ -14,8 +14,8 @@ import org.dom4j.Element;
 public class Chapter {
 
 	/** The title before each chapter */
-	static public final String CHAPTER_STR = Messages
-			.getString("SourceDocument.ChapterLabel"); //$NON-NLS-1$
+	static public final String CHAPTER_STR = Messages.getString("SourceDocument.ChapterLabel");  //$NON-NLS-1$
+		// Note(Shay) used to be: Messages.getString("SourceDocument.ChapterLabel");
 
 	/** The name of an unparsed text excerpt */
 	static public final String UNPARSED_STR = Messages
