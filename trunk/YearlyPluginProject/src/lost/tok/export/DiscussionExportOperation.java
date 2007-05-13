@@ -15,8 +15,6 @@ import org.dom4j.Node;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspace;
-import org.eclipse.core.resources.IWorkspaceRunnable;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -38,7 +36,8 @@ import org.eclipse.ui.internal.wizards.datatransfer.IFileExporter;
  */
 public class DiscussionExportOperation implements IRunnableWithProgress {
 
-	public static final String TEMP_LINKS_XML = "TempLinks.xml";
+	static public final String TEMP_LINKS_XML = "links.xml";
+
 
 	private IFileExporter exporter;
 
@@ -192,6 +191,8 @@ public class DiscussionExportOperation implements IRunnableWithProgress {
 			Node link = linkfileDoc
 					.selectSingleNode("//link/discussionFile[text()=\"" //$NON-NLS-1$
 							+ discussionName + "\"]"); //$NON-NLS-1$
+			if (link == null)
+				continue;
 			Element newLink = link.getParent();
 			Element links = tempLinkfileDoc.getRootElement();
 			links.addComment("The root element of the links");
@@ -267,7 +268,8 @@ public class DiscussionExportOperation implements IRunnableWithProgress {
 		monitor.subTask(destinationName);
 
 		// Collect the names for fetching the links to the sources later
-		if (exportResource.getName().compareTo(TEMP_LINKS_XML) != 0)
+
+		if (exportResource.getName().compareTo(DiscussionExportOperation.TEMP_LINKS_XML) != 0)
 			discussionNames.add(exportResource.getName());
 
 		try {
@@ -312,27 +314,22 @@ public class DiscussionExportOperation implements IRunnableWithProgress {
 		}
 		while (!tok.getProject().isSynchronized(1)){}
 		writeFileToZip(tempLinkFile, 1);
-		try {
-			tok.getProject().refreshLocal(1, null);
-		} catch (CoreException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		while (!tok.getProject().isSynchronized(1)){}
 		
-		IWorkspace workspace =tok.getWorkspace();
-		IWorkspaceRunnable operation = new IWorkspaceRunnable() {
-		      public void run(IProgressMonitor monitor) throws CoreException {
-		    	  tempLinkFile.delete(true, monitor);
-		         }
-		   };
-		   try {
-			workspace.run(operation, null);
-		} catch (CoreException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			System.out.println("File Delete Error!");
+		boolean error = true;
+		
+		while (!error) {
+			try {
+				tempLinkFile.delete(true, null);
+				error = false;
+			} catch (CoreException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				System.out.println("Shay");
+				error = true;
+			}
+			
 		}
+		
 	}
 
 	/**
