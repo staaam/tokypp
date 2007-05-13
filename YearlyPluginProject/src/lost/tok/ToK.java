@@ -693,6 +693,6 @@ public class ToK {
 	 * @return source object for requested source
 	 */
 	public Source getSource(String src) {
-		return new Source(srcFolder.getFile(src));
+		return new Source(treeOfKnowledgeProj.getFile(src));
 	}
 }

@@ -44,6 +44,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.DrillDownAdapter;
+import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.part.ViewPart;
 
 /**
@@ -160,6 +161,7 @@ public class ExcerptionView extends ViewPart {
 			children.remove(child);
 			child.setParent(null);
 		}
+		
 	}
 
 	class ViewContentProvider implements IStructuredContentProvider,
@@ -216,7 +218,7 @@ public class ExcerptionView extends ViewPart {
 
 			if (currentProject != null && projectOTs.containsKey(currentProject)) {
 				for (OperationTable ot : getOTs()) {
-					TreeParent parentFile = new TreeParent(ot.getTitle());
+					TreeParent parentFile = new TreeParent(((FileEditorInput)ot.getEditorInput()).getFile().getProjectRelativePath().toPortableString());
 					for (Integer i : ot.getExcerptions().keySet()) {
 						Excerption exp = ot.getExcerptions().get(i);
 						String expText = exp.getText();
