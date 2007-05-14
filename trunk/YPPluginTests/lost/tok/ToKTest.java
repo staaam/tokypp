@@ -258,5 +258,28 @@ public class ToKTest extends TestCase {
 
 		assertTrue(true);
 	}
+	
+	//Testing that the root folder exist and that the root is in it
+	public void testRoot() throws CoreException, IOException{
+		
+		//creating the file and getting its path
+		IFile sysFile = Paths.getIFile(Paths.SOURCE_EXAMPLE);
+		String sysFilePath = sysFile.getRawLocation().makeAbsolute().toOSString();
+		
+		new ToK("GuysProj_1", "Guy", sysFilePath);
+
+		// getting the handles to the roots folder
+		IFolder rootFolder = ResourcesPlugin.getWorkspace().getRoot()
+				.getProject("GuysProj_1").getFolder(ToK.ROOTS_FOLDER);
+		
+		// checking that the folder exist
+		assertTrue(rootFolder.exists());
+		
+		// getting the root file
+		IFile rootFile = rootFolder.getFile("source_example.src");
+		
+		//chacking that the root file exist
+		assertTrue(rootFile.exists());
+	}
 
 }
