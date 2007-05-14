@@ -14,7 +14,7 @@ import org.dom4j.Element;
 public class Chapter {
 
 	/** The title before each chapter */
-	static public final String CHAPTER_STR = Messages.getString("SourceDocument.ChapterLabel");  //$NON-NLS-1$
+	static public final String CHAPTER_STR = "";  //$NON-NLS-1$
 		// Note(Shay) used to be: Messages.getString("SourceDocument.ChapterLabel");
 
 	/** The name of an unparsed text excerpt */
@@ -240,7 +240,7 @@ public class Chapter {
 	 * @param element the element under which this chapter will be added
 	 */
 	public void addToXml(Element element) {
-		Element chapTextElement = element.addElement("child");
+		Element chapTextElement = element.addElement("child"); //$NON-NLS-1$
 		if ((children.size() == 1) && (children.getFirst() instanceof ChapterText))
 		{
 			// Note(Shay): This chapter contains only text
@@ -250,8 +250,8 @@ public class Chapter {
 		else
 		{
 			// this chapter has other chapters as children
-			Element chapElement = chapTextElement.addElement("chapter");
-			chapElement.addElement("name").addText(getName());
+			Element chapElement = chapTextElement.addElement("chapter"); //$NON-NLS-1$
+			chapElement.addElement("name").addText(getName()); //$NON-NLS-1$
 			for (Chapter c : children)
 				c.addToXml(chapElement);
 		}

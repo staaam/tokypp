@@ -10,7 +10,6 @@ import java.util.Map.Entry;
 import lost.tok.Excerption;
 import lost.tok.GeneralFunctions;
 import lost.tok.ToK;
-import lost.tok.disEditor.DiscussionEditor;
 import lost.tok.excerptionsView.ExcerptionView;
 import lost.tok.sourceDocument.Chapter;
 import lost.tok.sourceDocument.ChapterText;

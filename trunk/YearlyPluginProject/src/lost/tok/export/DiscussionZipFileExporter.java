@@ -133,7 +133,7 @@ public class DiscussionZipFileExporter implements IFileExporter {
 			throws IOException, CoreException {
 		ZipEntry newEntry = new ZipEntry(destinationPath);
 		String fileName = resource.getName();
-		String[] name = fileName.split("\\.");
+		String[] name = fileName.split("\\."); //$NON-NLS-1$
 		newEntry.setComment(name[0]);
 		write(newEntry, resource);
 	}
