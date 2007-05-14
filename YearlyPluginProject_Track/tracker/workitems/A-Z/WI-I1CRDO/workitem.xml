@@ -2,14 +2,15 @@
 <work-item>
     <field id="initialEstimate">4h</field>
     <field id="type">task</field>
-    <field id="timeSpent">3h</field>
+    <field id="timeSpent">1/2d</field>
     <field id="author">evgeni</field>
     <field id="title">Personal Role</field>
     <field id="created">2007-05-01 22:08:49.571 +0300</field>
     <field id="priority">25.0</field>
-    <field id="description">3h - 01.05.07</field>
+    <field id="description"><![CDATA[<P>3h - 01.05.07</P>
+<P>1h - 14.05.07</P>]]></field>
     <field id="dueDate">2007-05-15</field>
-    <field id="remainingEstimate">1h</field>
+    <field id="remainingEstimate"/>
     <field id="status">open</field>
     <field id="assignee">Evgeni</field>
     <field id="severity">normal</field>
