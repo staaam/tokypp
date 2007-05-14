@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 
 import lost.tok.Excerption;
 import lost.tok.GeneralFunctions;
+import lost.tok.ToK;
 import lost.tok.disEditor.DiscussionEditor;
 import lost.tok.excerptionsView.ExcerptionView;
 import lost.tok.sourceDocument.Chapter;
@@ -38,7 +39,9 @@ public class OperationTable extends TextEditor {
 	@Override
 	public void setFocus() {
 		super.setFocus();
-		updateExcerptionView();
+		if (((FileEditorInput)this.getEditorInput()).getFile().getProjectRelativePath().toPortableString().startsWith(ToK.ROOTS_FOLDER)){
+			updateExcerptionView();
+		}
 	}
 	
 	@Override
@@ -134,8 +137,9 @@ public class OperationTable extends TextEditor {
 		if (rootDiscussionsView) {
 			rootDiscussions.refreshDisplay();
 		}
-		
-		updateExcerptionView();
+		if (((FileEditorInput)this.getEditorInput()).getFile().getProjectRelativePath().toPortableString().startsWith(ToK.ROOTS_FOLDER)){
+			updateExcerptionView();
+		}
 		StyleRange markedTextStyle;
 		if (DiscussionEditor.isMarkQuote())
 			markedTextStyle = StyleManager.getMarkedQuoteStyle();
