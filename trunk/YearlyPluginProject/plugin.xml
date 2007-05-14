@@ -284,7 +284,7 @@
             class="lost.tok.wizards.ExportDiscussion"
             icon="icons/sample.gif"
             id="lost.tok.exportDiscussion.ExportDiscussion"
-            name="Export Discussion">
+            name="%wizard.discussion.export">
          <description>
             Exports discussions from a Tok Project
          </description>
@@ -314,7 +314,7 @@
             class="lost.tok.wizards.ImportDiscussion"
             icon="icons/sample.gif"
             id="lost.tok.wizards.ImportDiscussion"
-            name="Import Discussions">
+            name="%wizard.discussion.import">
          <description>
             Imports discussions into the Tok Project
          </description>
