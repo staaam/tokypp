@@ -83,7 +83,14 @@ public class ToK {
 		return authorFile;
 	}
 
+	/**
+	 * Creating a new ToK project
+	 * @param projectName
+	 * @param creator
+	 * @param root
+	 */
 	public ToK(String projectName, String creator, String root) {
+		//checking if a project with the same name already exists
 		if (!checkFileName(projectName)) {
 			return;
 		}
@@ -91,6 +98,7 @@ public class ToK {
 		createToKFromProject(ResourcesPlugin.getWorkspace().getRoot()
 				.getProject(projectName));
 
+		//setting the creator name as a property of the project
 		try {
 			treeOfKnowledgeProj.setPersistentProperty(creatorQName, creator);
 		} catch (CoreException e) {
@@ -151,6 +159,11 @@ public class ToK {
 		return true;
 	}
 
+	/**
+	 * Creation of the ToK libraries
+	 * @return
+	 * @throws CoreException
+	 */
 	public boolean createToKLibraries() throws CoreException {
 		srcFolder = treeOfKnowledgeProj.getFolder(SOURCES_FOLDER);
 		rootFolder = treeOfKnowledgeProj.getFolder(ROOTS_FOLDER);

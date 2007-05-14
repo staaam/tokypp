@@ -401,6 +401,13 @@ public class Discussion {
 		writeToXml(doc);
 	}
 
+	/**
+	 *  Adding a quote to the xml file
+	 *  
+	 * @param quote - the quote to add
+	 * @param opinion
+	 * @throws CoreException
+	 */
 	public void addQuote(Quote quote, String opinion) throws CoreException {
 
 		if (!myToK.getProject().exists() || quote == null) {
@@ -410,6 +417,7 @@ public class Discussion {
 
 		Document doc = readFromXML();
 
+		//creating the xPath
 		XPath xpathSelector = DocumentHelper.createXPath("//opinion[name='" //$NON-NLS-1$
 				+ opinion + "']"); //$NON-NLS-1$
 		List result = xpathSelector.selectNodes(doc);
@@ -475,7 +483,11 @@ public class Discussion {
 
 		return ss;
 	}
-
+	/**
+	 *  getting the quotes from an opinion
+	 * @param opinion
+	 * @return quotes
+	 */
 	public Quote[] getQuotes(String opinion) {
 
 		int j = 0;
