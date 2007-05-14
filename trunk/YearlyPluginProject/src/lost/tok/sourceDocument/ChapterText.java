@@ -2,6 +2,8 @@ package lost.tok.sourceDocument;
 
 import java.util.Vector;
 
+import org.dom4j.Element;
+
 /**
  * A chapter which is composed of only text
  */
@@ -164,5 +166,15 @@ public class ChapterText extends Chapter {
 	/** Returns the text itself */
 	public String getText() {
 		return text;
+	}
+	
+	/**
+	 * Adds this ChapterText to the xml, as a Text node
+	 * @param element The element under which this chapter will be added
+	 */
+	public void addToXml(Element element) {
+		Element textElement = element.addElement("text");
+		textElement.addElement("name").addText(getName());
+		textElement.addElement("content").addText(getText());
 	}
 }
