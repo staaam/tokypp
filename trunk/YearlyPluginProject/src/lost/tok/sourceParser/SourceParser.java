@@ -202,13 +202,6 @@ public class SourceParser extends TextEditor {
 		monitor.setTaskName(Messages.getString("SourceParser.4")); //$NON-NLS-1$
 		IFile srcIFile = tProj.getFolder(ToK.SOURCES_FOLDER).getFile(srcName);
 
-		try {
-			String isRootStr = unParsedIFile
-					.getPersistentProperty(ToK.isRootQName);
-			srcIFile.setPersistentProperty(ToK.isRootQName, isRootStr);
-		} catch (CoreException e) {
-			e.printStackTrace();
-		}
 		monitor.worked(1);
 
 		monitor.setTaskName(Messages.getString("SourceParser.5")); //$NON-NLS-1$

@@ -46,19 +46,11 @@ public class UnparsedDocWizardPage extends WizardPage implements ModifyListener 
 	/** The name of the source's Author */
 	private Text authorNameText;
 
-	/** The path of the specific source (ie bible\genesis\) */
-	private Text sourcePathText;
-
 	/** The path of the file to be parsed */
 	private Text inputFilePath;
 
 	/** The destanation project */
 	private Text targetProject;
-
-	/** Checked if this should be root, unchecked otherwise */
-	private Button isRootButton;
-
-	private boolean isRootField;
 
 	private ISelection selection;
 
@@ -105,19 +97,6 @@ public class UnparsedDocWizardPage extends WizardPage implements ModifyListener 
 
 		label = new Label(container, SWT.NULL);
 
-		// Source path selection
-		label = new Label(container, SWT.NULL);
-		label.setText(Messages.getString("SPWizardP.FieldSrcPath")); //$NON-NLS-1$
-		label.setToolTipText(Messages
-				.getString("SPWizardP.FieldSrcPathDescription")); //$NON-NLS-1$
-
-		sourcePathText = new Text(container, SWT.BORDER | SWT.SINGLE);
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		sourcePathText.setLayoutData(gd);
-		sourcePathText.addModifyListener(this);
-
-		label = new Label(container, SWT.NULL);
-
 		// Source file selection
 		label = new Label(container, SWT.NULL);
 		label.setText(Messages.getString("SPWizardP.FieldSrcInputFile")); //$NON-NLS-1$
@@ -152,22 +131,6 @@ public class UnparsedDocWizardPage extends WizardPage implements ModifyListener 
 			}
 		});
 
-		// IsProject CheckBox
-		label = new Label(container, SWT.NULL);
-		label.setText(Messages.getString("SPWizardP.FieldIsRoot")); //$NON-NLS-1$
-		label.setToolTipText(Messages
-				.getString("SPWizardP.FieldIsRootDescription")); //$NON-NLS-1$
-
-		isRootButton = new Button(container, SWT.CHECK);
-		isRootButton.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				isRootField = !isRootField;
-				dialogChanged();
-			}
-		});
-		isRootField = false;
-
-		label = new Label(container, SWT.NULL);
 
 		// Last:
 		initialize();
@@ -247,19 +210,6 @@ public class UnparsedDocWizardPage extends WizardPage implements ModifyListener 
 			return;
 		}
 
-		/** The path of the specific source: sourcePathText */
-		String srcPath = sourcePathText.getText();
-		if (srcPath.length() != 0
-				&& srcPath.charAt(srcPath.length() - 1) == '\\') {
-			updateStatus(Messages.getString("SPWizardP.ErrorSlash")); //$NON-NLS-1$
-			return;
-		}
-
-		if (srcPath.indexOf('/') != -1) {
-			updateStatus(Messages.getString("SPWizardP.ErrorBackslash")); //$NON-NLS-1$
-			return;
-		}
-
 		/** The path of the file to be parsed: inputFilePath */
 		if (inputFilePath.getText().length() == 0) {
 			updateStatus(Messages.getString("SPWizardP.ErrorMissingInputFile")); //$NON-NLS-1$
@@ -325,19 +275,11 @@ public class UnparsedDocWizardPage extends WizardPage implements ModifyListener 
 		return inputFilePath.getText();
 	}
 
-	public String getSourcePath() {
-		return sourcePathText.getText();
-	}
-
 	public String getSourceTitle() {
 		return sourceTitleText.getText();
 	}
 
 	public String getTargetProjectName() {
 		return targetProject.getText();
-	}
-
-	public boolean getIsRoot() {
-		return isRootField;
 	}
 }

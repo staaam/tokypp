@@ -56,11 +56,6 @@ public class ToK {
 	public final static QualifiedName creatorQName = new QualifiedName(
 			"lost.tok", "Creator"); //$NON-NLS-1$ //$NON-NLS-2$
 
-	/** The QualifiedName of the isRoot file property */
-	// TODO(Shay): if we implement new dir structure, remove this
-	public final static QualifiedName isRootQName = new QualifiedName(
-			"lost.tok", "isRoot"); //$NON-NLS-1$ //$NON-NLS-2$
-
 	/** The minimal ranking of authors */
 	public static final int MIN_AUTHOR_GROUP = 1;
 	/** The maximal ranking of authoers */
