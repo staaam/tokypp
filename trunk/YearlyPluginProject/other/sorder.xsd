@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<xsd:include schemaLocation="common.xsd"/>
+	<!--elementFormDefault="qualified"
+    xmlns="http://tempuri.org/XMLSchema.xsd"
+    xmlns:mstns="http://tempuri.org/XMLSchema.xsd"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"			    -->
+
+
+	<xsd:complexType name="Sub">
+		<xsd:sequence>
+			<xsd:element name="name" type="xsd:string"/>
+			<xsd:element name="type" type="SubType" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:simpleType name="SubType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="dir"/>
+			<xsd:enumeration value="file"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:element name="order">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="dir" type="xsd:string"/>
+				<xsd:element name="sub" type="Sub" minOccurs="0" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+</xsd:schema>

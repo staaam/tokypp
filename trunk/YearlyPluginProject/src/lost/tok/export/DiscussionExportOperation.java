@@ -129,7 +129,7 @@ public class DiscussionExportOperation implements IRunnableWithProgress {
 
 	private void buildTempLinksFile() {
 		// TODO Auto-generated method stub
-		tempLinkFile = tok.getProject().getFile(TEMP_LINKS_XML);
+		tempLinkFile = tok.getResourceFolder().getFile(TEMP_LINKS_XML);
 
 		Document tempLinkfileDoc = tok.linksSkeleton();
 		Document linkfileDoc = GeneralFunctions.readFromXML(tok.getLinkFile());
@@ -275,12 +275,12 @@ public class DiscussionExportOperation implements IRunnableWithProgress {
 
 		buildTempLinksFile();
 		try {
-			tok.getProject().refreshLocal(1, null);
+			tok.getProject().refreshLocal(IResource.DEPTH_INFINITE, null);
 		} catch (CoreException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		while (!tok.getProject().isSynchronized(1)) {
+		while (!tok.getProject().isSynchronized(IResource.DEPTH_INFINITE)) {
 		}
 		writeFileToZip(tempLinkFile, 1);
 	}
