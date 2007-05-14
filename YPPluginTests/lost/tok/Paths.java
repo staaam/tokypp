@@ -21,7 +21,7 @@ import org.osgi.framework.Bundle;
 public class Paths {
 	
 	/** The name of the tests plug-in */
-	private static final String BUNDLE_NAME = "YPPluginTests";
+	private static final String BUNDLE_NAME = "lost.tok.tests";
 
 	/** A friendly message for FileNotFound */
 	static public final String FILE_NOT_FOUND_MESSAGE = "File Not Found";
