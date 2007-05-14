@@ -28,6 +28,7 @@ import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
 import org.eclipse.ui.internal.wizards.datatransfer.DataTransferMessages;
 import org.eclipse.ui.internal.wizards.datatransfer.IFileExporter;
 
+// TODO: Auto-generated Javadoc
 /**
  * Operation for exporting a resource and its children to a new .zip or .tar.gz
  * file.
@@ -36,28 +37,40 @@ import org.eclipse.ui.internal.wizards.datatransfer.IFileExporter;
  */
 public class DiscussionExportOperation implements IRunnableWithProgress {
 
+	/** The Constant TEMP_LINKS_XML. */
 	static public final String TEMP_LINKS_XML = "links.xml";
 
+	/** The create leadup structure. */
 	private boolean createLeadupStructure = true;
 
+	/** The destination filename. */
 	private String destinationFilename;
 
+	/** The discussion names. */
 	private List<String> discussionNames = new ArrayList<String>();
 
+	/** The error table. */
 	private List<Status> errorTable = new ArrayList<Status>(1); // IStatus
 
+	/** The exporter. */
 	private IFileExporter exporter;
 
+	/** The monitor. */
 	private IProgressMonitor monitor;
 
+	/** The resource. */
 	private IResource resource;
 
+	/** The resources to export. */
 	private List resourcesToExport;
 
+	/** The temp link file. */
 	private IFile tempLinkFile;
 
+	/** The tok. */
 	private ToK tok;
 
+	/** The use compression. */
 	private boolean useCompression = true;
 
 	/**
@@ -72,6 +85,7 @@ public class DiscussionExportOperation implements IRunnableWithProgress {
 	 * @param filename
 	 *            java.lang.String
 	 * @param tok
+	 *            the tok
 	 */
 	public DiscussionExportOperation(IResource res, List resources,
 			String filename, ToK tok) {
@@ -120,13 +134,21 @@ public class DiscussionExportOperation implements IRunnableWithProgress {
 	}
 
 	/**
-	 * Add a new entry to the error table with the passed information
+	 * Add a new entry to the error table with the passed information.
+	 * 
+	 * @param message
+	 *            the message
+	 * @param e
+	 *            the e
 	 */
 	protected void addError(String message, Throwable e) {
 		errorTable.add(new Status(IStatus.ERROR,
 				IDEWorkbenchPlugin.IDE_WORKBENCH, 0, message, e));
 	}
 
+	/**
+	 * Builds the temp links file.
+	 */
 	private void buildTempLinksFile() {
 		// TODO Auto-generated method stub
 		tempLinkFile = tok.getResourceFolder().getFile(TEMP_LINKS_XML);
@@ -138,8 +160,9 @@ public class DiscussionExportOperation implements IRunnableWithProgress {
 			Node link = linkfileDoc
 					.selectSingleNode("//link/discussionFile[text()=\"" //$NON-NLS-1$
 							+ discussionName + "\"]"); //$NON-NLS-1$
-			if (link == null)
+			if (link == null) {
 				continue;
+			}
 			Element newLink = link.getParent();
 			Element links = tempLinkfileDoc.getRootElement();
 			links.addComment("The root element of the links");
@@ -155,9 +178,13 @@ public class DiscussionExportOperation implements IRunnableWithProgress {
 	 * Answer the total number of file resources that exist at or below self in
 	 * the resources hierarchy.
 	 * 
-	 * @return int
 	 * @param checkResource
 	 *            org.eclipse.core.resources.IResource
+	 * 
+	 * @return int
+	 * 
+	 * @throws CoreException
+	 *             the core exception
 	 */
 	protected int countChildrenOf(IResource checkResource) throws CoreException {
 		if (checkResource.getType() == IResource.FILE) {
@@ -177,9 +204,12 @@ public class DiscussionExportOperation implements IRunnableWithProgress {
 
 	/**
 	 * Answer a boolean indicating the number of file resources that were
-	 * specified for export
+	 * specified for export.
 	 * 
 	 * @return int
+	 * 
+	 * @throws CoreException
+	 *             the core exception
 	 */
 	protected int countSelectedResources() throws CoreException {
 		int result = 0;
@@ -192,8 +222,9 @@ public class DiscussionExportOperation implements IRunnableWithProgress {
 	}
 
 	/**
-	 * @return status
+	 * Deletetemp links file.
 	 * 
+	 * @return status
 	 */
 	public boolean deletetempLinksFile() {
 		try {
@@ -204,22 +235,22 @@ public class DiscussionExportOperation implements IRunnableWithProgress {
 			return false;
 		}
 		try {
-			
+
 			tempLinkFile.delete(true, null);
 		} catch (CoreException e) {
 			// TODO Auto-generated catch block
 			System.out.println("delete error");
 			return false;
 		}
-		
-//		File tempFile = new File(tempLinkFile.getLocation().toOSString());
-//		tempFile.deleteOnExit();
-//		try {
-//			tok.getProject().refreshLocal(IResource.DEPTH_INFINITE, null);
-//		} catch (CoreException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+
+		// File tempFile = new File(tempLinkFile.getLocation().toOSString());
+		// tempFile.deleteOnExit();
+		// try {
+		// tok.getProject().refreshLocal(IResource.DEPTH_INFINITE, null);
+		// } catch (CoreException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
 		return true;
 	}
 
@@ -229,6 +260,9 @@ public class DiscussionExportOperation implements IRunnableWithProgress {
 	 * 
 	 * @param exportResource
 	 *            org.eclipse.core.resources.IResource
+	 * 
+	 * @throws InterruptedException
+	 *             the interrupted exception
 	 */
 	protected void exportResource(IResource exportResource)
 			throws InterruptedException {
@@ -243,6 +277,9 @@ public class DiscussionExportOperation implements IRunnableWithProgress {
 	 * @param leadupDepth
 	 *            the number of resource levels to be included in the path
 	 *            including the resourse itself.
+	 * 
+	 * @throws InterruptedException
+	 *             the interrupted exception
 	 */
 	protected void exportResource(IResource exportResource, int leadupDepth)
 			throws InterruptedException {
@@ -260,7 +297,10 @@ public class DiscussionExportOperation implements IRunnableWithProgress {
 
 	/**
 	 * Export the resources contained in the previously-defined
-	 * resourcesToExport collection
+	 * resourcesToExport collection.
+	 * 
+	 * @throws InterruptedException
+	 *             the interrupted exception
 	 */
 	protected void exportSpecifiedResources() throws InterruptedException {
 		Iterator resources = resourcesToExport.iterator();
@@ -286,7 +326,7 @@ public class DiscussionExportOperation implements IRunnableWithProgress {
 	}
 
 	/**
-	 * Answer the error table
+	 * Answer the error table.
 	 * 
 	 * @return Vector of IStatus
 	 */
@@ -314,7 +354,10 @@ public class DiscussionExportOperation implements IRunnableWithProgress {
 	}
 
 	/**
-	 * Initialize this operation
+	 * Initialize this operation.
+	 * 
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 * 
 	 * @exception java.io.IOException
 	 */
@@ -325,13 +368,14 @@ public class DiscussionExportOperation implements IRunnableWithProgress {
 
 	/**
 	 * Answer a boolean indicating whether the passed child is a descendent of
-	 * one or more members of the passed resources collection
+	 * one or more members of the passed resources collection.
 	 * 
-	 * @return boolean
 	 * @param resources
 	 *            java.util.Vector
 	 * @param child
 	 *            org.eclipse.core.resources.IResource
+	 * 
+	 * @return boolean
 	 */
 	protected boolean isDescendent(List resources, IResource child) {
 		if (child.getType() == IResource.PROJECT) {
@@ -348,7 +392,15 @@ public class DiscussionExportOperation implements IRunnableWithProgress {
 
 	/**
 	 * Export the resources that were previously specified for export (or if a
-	 * single resource was specified then export it recursively)
+	 * single resource was specified then export it recursively).
+	 * 
+	 * @param progressMonitor
+	 *            the progress monitor
+	 * 
+	 * @throws InvocationTargetException
+	 *             the invocation target exception
+	 * @throws InterruptedException
+	 *             the interrupted exception
 	 */
 	public void run(IProgressMonitor progressMonitor)
 			throws InvocationTargetException, InterruptedException {
@@ -396,7 +448,7 @@ public class DiscussionExportOperation implements IRunnableWithProgress {
 
 	/**
 	 * Set this boolean indicating whether each exported resource's path should
-	 * include containment hierarchies as dictated by its parents
+	 * include containment hierarchies as dictated by its parents.
 	 * 
 	 * @param value
 	 *            boolean
@@ -407,7 +459,7 @@ public class DiscussionExportOperation implements IRunnableWithProgress {
 
 	/**
 	 * Set this boolean indicating whether exported resources should be
-	 * compressed (as opposed to simply being stored)
+	 * compressed (as opposed to simply being stored).
 	 * 
 	 * @param value
 	 *            boolean
@@ -427,9 +479,15 @@ public class DiscussionExportOperation implements IRunnableWithProgress {
 	}
 
 	/**
+	 * Write file to zip.
+	 * 
 	 * @param exportResource
+	 *            the export resource
 	 * @param leadupDepth
+	 *            the leadup depth
+	 * 
 	 * @throws InterruptedException
+	 *             the interrupted exception
 	 */
 	private void writeFileToZip(IResource exportResource, int leadupDepth)
 			throws InterruptedException {
@@ -446,8 +504,9 @@ public class DiscussionExportOperation implements IRunnableWithProgress {
 		// Collect the names for fetching the links to the sources later
 
 		if (exportResource.getName().compareTo(
-				DiscussionExportOperation.TEMP_LINKS_XML) != 0)
+				DiscussionExportOperation.TEMP_LINKS_XML) != 0) {
 			discussionNames.add(exportResource.getName());
+		}
 
 		try {
 			exporter.write((IFile) exportResource, destinationName);
@@ -468,9 +527,15 @@ public class DiscussionExportOperation implements IRunnableWithProgress {
 	}
 
 	/**
+	 * Write folder to zip.
+	 * 
 	 * @param exportResource
+	 *            the export resource
 	 * @param leadupDepth
+	 *            the leadup depth
+	 * 
 	 * @throws InterruptedException
+	 *             the interrupted exception
 	 */
 	private void writeFolderToZip(IResource exportResource, int leadupDepth)
 			throws InterruptedException {

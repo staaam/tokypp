@@ -15,6 +15,7 @@ import java.util.zip.ZipFile;
 
 import lost.tok.Discussion;
 import lost.tok.GeneralFunctions;
+import lost.tok.Messages;
 import lost.tok.ToK;
 import lost.tok.export.DiscussionExportOperation;
 
@@ -40,7 +41,6 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.FileSystemElement;
 import org.eclipse.ui.internal.wizards.datatransfer.ArchiveFileManipulations;
-import org.eclipse.ui.internal.wizards.datatransfer.DataTransferMessages;
 import org.eclipse.ui.internal.wizards.datatransfer.IDataTransferHelpContextIds;
 import org.eclipse.ui.internal.wizards.datatransfer.MinimizedFileSystemElement;
 import org.eclipse.ui.internal.wizards.datatransfer.TarException;
@@ -52,33 +52,47 @@ import org.eclipse.ui.model.AdaptableList;
 import org.eclipse.ui.model.WorkbenchContentProvider;
 import org.eclipse.ui.wizards.datatransfer.ImportOperation;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class ImportDiscussionPage.
+ */
 public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 		implements Listener {
 
+	/** The Constant BUFFER. */
 	private static final int BUFFER = 2048;
 
 	// constants
-	private static final String[] FILE_IMPORT_MASK = { "*.exd" }; //$NON-NLS-1$ //$NON-NLS-2$
+	/** The Constant FILE_IMPORT_MASK. */
+	private static final String[] FILE_IMPORT_MASK = { "*.exd" }; //$NON-NLS-1$ 
 
+	/** The Constant STORE_OVERWRITE_EXISTING_RESOURCES_ID. */
 	private final static String STORE_OVERWRITE_EXISTING_RESOURCES_ID = "WizardZipFileResourceImportPage1.STORE_OVERWRITE_EXISTING_RESOURCES_ID"; //$NON-NLS-1$
 
+	/** The Constant STORE_SELECTED_TYPES_ID. */
 	private final static String STORE_SELECTED_TYPES_ID = "WizardZipFileResourceImportPage1.STORE_SELECTED_TYPES_ID"; //$NON-NLS-1$
 
 	// dialog store id constants
+	/** The Constant STORE_SOURCE_NAMES_ID. */
 	private final static String STORE_SOURCE_NAMES_ID = "WizardZipFileResourceImportPage1.STORE_SOURCE_NAMES_ID"; //$NON-NLS-1$
 
+	/** The selection. */
 	private IStructuredSelection selection;
 
+	/** The tar current provider. */
 	TarLeveledStructureProvider tarCurrentProvider;
 
+	/** The temp links file. */
 	private String tempLinksFile;
 
+	/** The tok. */
 	private ToK tok;
 
+	/** The zip current provider. */
 	ZipLeveledStructureProvider zipCurrentProvider;
 
 	/**
-	 * Creates an instance of this class
+	 * Creates an instance of this class.
 	 * 
 	 * @param aWorkbench
 	 *            IWorkbench
@@ -89,8 +103,8 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 			IStructuredSelection selection) {
 		super("zipFileImportPage1", aWorkbench, selection); //$NON-NLS-1$
 		this.selection = selection;
-		setTitle("Import Discussions");
-		setDescription("Import Discussions from an exd file");
+		setTitle(Messages.getString("ImportDiscussionPage.0")); //$NON-NLS-1$
+		setDescription(Messages.getString("ImportDiscussionPage.1")); //$NON-NLS-1$
 	}
 
 	/**
@@ -104,22 +118,27 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 		return true;
 	}
 
-	@SuppressWarnings("unchecked")
+	/**
+	 * Check sources exist.
+	 * 
+	 * @return true, if successful
+	 */
+	@SuppressWarnings("unchecked") //$NON-NLS-1$
 	private boolean checkSourcesExist() {
 		// TODO Auto-generated method stub
 		List<String> missingFiles = new ArrayList<String>();
 		Document tempDoc = GeneralFunctions.readFromXML(tempLinksFile);
-		List<Node> sourceNodes = tempDoc.selectNodes("//sublink/sourceFile");
+		List<Node> sourceNodes = tempDoc.selectNodes("//sublink/sourceFile"); //$NON-NLS-1$
 		IFolder sourceFolder = tok.getRootFolder();
 		for (Node sourceFile : sourceNodes) {
 			String rawPathName = sourceFile.getText();
 			Path path = new Path(sourceFile.getText());
 			if (rawPathName.contains(sourceFolder.getName())) {// check that
-																// the path
-																// doesn't
-																// include the
-																// source folder
-																// Itself
+				// the path
+				// doesn't
+				// include the
+				// source folder
+				// Itself
 				while (rawPathName.contains(sourceFolder.getName())) {
 					path.removeFirstSegments(1);
 					rawPathName = path.toOSString();
@@ -141,14 +160,15 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 		if (missingFiles.size() != 0) {
 			String error = new String();
 			for (String file : missingFiles) {
-				if (!error.contains(file))
+				if (!error.contains(file)) {
 					error += file + "\n";
+				}
 			}
 			MessageDialog
 					.openError(
 							null,
-							"Error!",
-							"The needed sources don't exist in your project.\n\n The following sources are missing:\n\n"
+							Messages.getString("ImportDiscussionPage.5"), //$NON-NLS-1$
+							Messages.getString("ImportDiscussionPage.6") //$NON-NLS-1$
 									+ error);
 			return false;
 		}
@@ -165,13 +185,18 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 	/**
 	 * Attempts to close the passed zip file, and answers a boolean indicating
 	 * success.
+	 * 
+	 * @param file
+	 *            the file
+	 * 
+	 * @return true, if close zip file
 	 */
 	protected boolean closeZipFile(ZipFile file) {
 		try {
 			file.close();
 		} catch (IOException e) {
 			displayErrorDialog(NLS.bind(
-					DataTransferMessages.ZipImport_couldNotClose, file
+					"", file
 							.getName()));
 			return false;
 		}
@@ -181,7 +206,11 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 
 	/**
 	 * (non-Javadoc) Method declared on IDialogPage.
+	 * 
+	 * @param parent
+	 *            the parent
 	 */
+	@Override
 	public void createControl(Composite parent) {
 		super.createControl(parent);
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(),
@@ -195,17 +224,23 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 	 * @param parent
 	 *            org.eclipse.swt.widgets.Composite
 	 */
+	@Override
 	protected void createOptionsGroup(Composite parent) {
 
 		// overwrite... checkbox
 		overwriteExistingResourcesCheckbox = new Button(parent, SWT.CHECK);
 		overwriteExistingResourcesCheckbox
-				.setText(DataTransferMessages.FileImport_overwriteExisting);
+				.setText("");
 		overwriteExistingResourcesCheckbox.setFont(parent.getFont());
 		overwriteExistingResourcesCheckbox.setSelection(true);
 		overwriteExistingResourcesCheckbox.setVisible(false);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.ui.internal.wizards.datatransfer.WizardFileSystemResourceImportPage1#createSourceGroup(org.eclipse.swt.widgets.Composite)
+	 */
 	@Override
 	protected void createSourceGroup(Composite parent) {
 		createRootDirectoryGroup(parent);
@@ -229,7 +264,7 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 		try {
 			BufferedInputStream is = new BufferedInputStream(zipFile
 					.getInputStream(linksEntry));
-			String tmpFilePath = System.getProperty("java.io.tmpdir");
+			String tmpFilePath = System.getProperty("java.io.tmpdir"); //$NON-NLS-1$
 			File unzipDestinationDirectory = new File(tmpFilePath);
 			File destFile = new File(unzipDestinationDirectory, linksEntry
 					.getName());
@@ -253,6 +288,9 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 
 	}
 
+	/**
+	 * Delete temp links file.
+	 */
 	private void deleteTempLinksFile() {
 		// TODO Auto-generated method stub
 		File tempLinkFile = new File(tempLinksFile);
@@ -262,7 +300,10 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 	/**
 	 * Answer a boolean indicating whether the specified source currently exists
 	 * and is valid (ie.- proper format)
+	 * 
+	 * @return true, if ensure source is valid
 	 */
+	@Override
 	protected boolean ensureSourceIsValid() {
 		if (ArchiveFileManipulations.isTarFile(sourceNameField.getText())) {
 			return ensureTarSourceIsValid();
@@ -270,6 +311,11 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 		return ensureZipSourceIsValid();
 	}
 
+	/**
+	 * Ensure tar source is valid.
+	 * 
+	 * @return true, if successful
+	 */
 	private boolean ensureTarSourceIsValid() {
 		TarFile specifiedFile = getSpecifiedTarSourceFile();
 		if (specifiedFile == null) {
@@ -281,6 +327,8 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 	/**
 	 * Answer a boolean indicating whether the specified source currently exists
 	 * and is valid (ie.- proper format)
+	 * 
+	 * @return true, if ensure zip source is valid
 	 */
 	private boolean ensureZipSourceIsValid() {
 		ZipFile specifiedFile = getSpecifiedZipSourceFile();
@@ -298,6 +346,7 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 	 * 
 	 * @return boolean
 	 */
+	@Override
 	public boolean finish() {
 		if (!ensureSourceIsValid()) {
 			return false;
@@ -317,12 +366,17 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 		}
 
 		MessageDialog.openInformation(getContainer().getShell(),
-				DataTransferMessages.DataTransfer_information,
-				DataTransferMessages.FileImport_noneSelected);
+				"",
+				"");
 
 		return false;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.ui.dialogs.WizardResourceImportPage#getContainerFullPath()
+	 */
 	@Override
 	protected IPath getContainerFullPath() {
 		getTok();
@@ -332,9 +386,13 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 	/**
 	 * Returns a content provider for <code>FileSystemElement</code>s that
 	 * returns only files as children.
+	 * 
+	 * @return the file provider
 	 */
+	@Override
 	protected ITreeContentProvider getFileProvider() {
 		return new WorkbenchContentProvider() {
+			@Override
 			public Object[] getChildren(Object o) {
 				if (o instanceof MinimizedFileSystemElement) {
 					MinimizedFileSystemElement element = (MinimizedFileSystemElement) o;
@@ -357,8 +415,9 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 									.compareTo(DiscussionExportOperation.TEMP_LINKS_XML) == 0) {
 								List<Object> filesList = new ArrayList<Object>();
 								for (int j = 0; j < files.length; j++) {
-									if (i != j)
+									if (i != j) {
 										filesList.add(files[j]);
+									}
 								}
 								newFiles = filesList.toArray();
 							}
@@ -376,7 +435,10 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 	 * Answer the root FileSystemElement that represents the contents of the
 	 * currently-specified .zip file. If this FileSystemElement is not currently
 	 * defined then create and return it.
+	 * 
+	 * @return the file system tree
 	 */
+	@Override
 	protected MinimizedFileSystemElement getFileSystemTree() {
 		if (ArchiveFileManipulations.isTarFile(sourceNameField.getText())) {
 			TarFile sourceTarFile = getSpecifiedTarSourceFile();
@@ -413,9 +475,13 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 	/**
 	 * Returns a content provider for <code>FileSystemElement</code>s that
 	 * returns only folders as children.
+	 * 
+	 * @return the folder provider
 	 */
+	@Override
 	protected ITreeContentProvider getFolderProvider() {
 		return new WorkbenchContentProvider() {
+			@Override
 			public Object[] getChildren(Object o) {
 				if (o instanceof MinimizedFileSystemElement) {
 					MinimizedFileSystemElement element = (MinimizedFileSystemElement) o;
@@ -430,6 +496,7 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 				return new Object[0];
 			}
 
+			@Override
 			public boolean hasChildren(Object o) {
 				if (o instanceof MinimizedFileSystemElement) {
 					MinimizedFileSystemElement element = (MinimizedFileSystemElement) o;
@@ -442,15 +509,20 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 
 	/**
 	 * Answer the string to display as the label for the source specification
-	 * field
+	 * field.
+	 * 
+	 * @return the source label
 	 */
+	@Override
 	protected String getSourceLabel() {
-		return DataTransferMessages.ArchiveImport_fromFile;
+		return "";
 	}
 
 	/**
 	 * Answer a handle to the zip file currently specified as being the source.
 	 * Return null if this file does not exist or is not of valid format.
+	 * 
+	 * @return the specified tar source file
 	 */
 	protected TarFile getSpecifiedTarSourceFile() {
 		return getSpecifiedTarSourceFile(sourceNameField.getText());
@@ -459,6 +531,11 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 	/**
 	 * Answer a handle to the zip file currently specified as being the source.
 	 * Return null if this file does not exist or is not of valid format.
+	 * 
+	 * @param fileName
+	 *            the file name
+	 * 
+	 * @return the specified tar source file
 	 */
 	private TarFile getSpecifiedTarSourceFile(String fileName) {
 		if (fileName.length() == 0) {
@@ -468,9 +545,9 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 		try {
 			return new TarFile(fileName);
 		} catch (TarException e) {
-			displayErrorDialog(DataTransferMessages.TarImport_badFormat);
+			displayErrorDialog("");
 		} catch (IOException e) {
-			displayErrorDialog(DataTransferMessages.ZipImport_couldNotRead);
+			displayErrorDialog("");
 		}
 
 		sourceNameField.setFocus();
@@ -480,6 +557,8 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 	/**
 	 * Answer a handle to the zip file currently specified as being the source.
 	 * Return null if this file does not exist or is not of valid format.
+	 * 
+	 * @return the specified zip source file
 	 */
 	protected ZipFile getSpecifiedZipSourceFile() {
 		return getSpecifiedZipSourceFile(sourceNameField.getText());
@@ -488,6 +567,11 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 	/**
 	 * Answer a handle to the zip file currently specified as being the source.
 	 * Return null if this file does not exist or is not of valid format.
+	 * 
+	 * @param fileName
+	 *            the file name
+	 * 
+	 * @return the specified zip source file
 	 */
 	private ZipFile getSpecifiedZipSourceFile(String fileName) {
 		if (fileName.length() == 0) {
@@ -497,19 +581,24 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 		try {
 			return new ZipFile(fileName);
 		} catch (ZipException e) {
-			displayErrorDialog(DataTransferMessages.ZipImport_badFormat);
+			displayErrorDialog("");
 		} catch (IOException e) {
-			displayErrorDialog(DataTransferMessages.ZipImport_couldNotRead);
+			displayErrorDialog("");
 		}
 
 		sourceNameField.setFocus();
 		return null;
 	}
 
+	/**
+	 * Gets the tok.
+	 * 
+	 * @return the tok
+	 */
 	private void getTok() {
 		if (selection != null && selection.isEmpty() == false
 				&& selection instanceof IStructuredSelection) {
-			IStructuredSelection ssel = (IStructuredSelection) selection;
+			IStructuredSelection ssel = selection;
 			if (ssel.size() > 1) {
 				return;
 			}
@@ -523,8 +612,9 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 
 	/**
 	 * Open a FileDialog so that the user can specify the source file to import
-	 * from
+	 * from.
 	 */
+	@Override
 	protected void handleSourceBrowseButtonPressed() {
 		String selectedFile = queryZipFileToImport();
 
@@ -538,18 +628,29 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 		}
 	}
 
-	@SuppressWarnings("unchecked")
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.ui.internal.wizards.datatransfer.WizardFileSystemResourceImportPage1#handleTypesEditButtonPressed()
+	 */
+	@SuppressWarnings("unchecked") //$NON-NLS-1$
 	@Override
 	protected void handleTypesEditButtonPressed() {
 		selectedTypes.clear();
-		selectedTypes.add("dis");
+		selectedTypes.add("dis"); //$NON-NLS-1$
 		setAllSelections(true);
 		setupSelectionsBasedOnSelectedTypes();
 	}
 
 	/**
-	 * Import the resources with extensions as specified by the user
+	 * Import the resources with extensions as specified by the user.
+	 * 
+	 * @param fileSystemObjects
+	 *            the file system objects
+	 * 
+	 * @return true, if import resources
 	 */
+	@Override
 	protected boolean importResources(List fileSystemObjects) {
 		boolean result = false;
 
@@ -572,18 +673,18 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 			ZipFile zipFile = getSpecifiedZipSourceFile();
 
 			// check not overwriting existing discussions
-			if (!checkExistingDiscussions(zipFile))
+			if (!checkExistingDiscussions(zipFile)) {
 				return false;
+			}
 
 			// extract the partial links file
 			createTempLinksFile(zipFile);
 
 			// check if all the linked sources exist
-			if (!checkSourcesExist()){
+			if (!checkSourcesExist()) {
 				deleteTempLinksFile();
 				return false;
 			}
-				
 
 			ZipLeveledStructureProvider structureProvider = ArchiveFileManipulations
 					.getZipStructureProvider(zipFile, getContainer().getShell());
@@ -604,7 +705,15 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 		return result;
 	}
 
-	@SuppressWarnings("unchecked")
+	/**
+	 * Check existing discussions.
+	 * 
+	 * @param zipFile
+	 *            the zip file
+	 * 
+	 * @return true, if successful
+	 */
+	@SuppressWarnings("unchecked") //$NON-NLS-1$
 	private boolean checkExistingDiscussions(ZipFile zipFile) {
 		// TODO Auto-generated method stub
 		Enumeration<ZipEntry> linksEntries = (Enumeration<ZipEntry>) zipFile
@@ -618,8 +727,8 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 					MessageDialog
 							.openError(
 									null,
-									"Error",
-									"You have selected to import a discussion that already exists in your project!\n Please unselect it!\n\n Import operation will not continue");
+									Messages.getString("ImportDiscussionPage.11"), //$NON-NLS-1$
+									Messages.getString("ImportDiscussionPage.12")); //$NON-NLS-1$
 					return false;
 				}
 			} catch (CoreException e) {
@@ -631,18 +740,25 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 
 	/**
 	 * Initializes the specified operation appropriately.
+	 * 
+	 * @param op
+	 *            the op
 	 */
+	@Override
 	protected void initializeOperation(ImportOperation op) {
 		op.setOverwriteResources(overwriteExistingResourcesCheckbox
 				.getSelection());
 	}
 
-	@SuppressWarnings("unchecked")
+	/**
+	 * Merge linkfiles.
+	 */
+	@SuppressWarnings("unchecked") //$NON-NLS-1$
 	private void mergeLinkfiles() {
 		Document tempDoc = GeneralFunctions.readFromXML(tempLinksFile);
 		Document linksDoc = GeneralFunctions.readFromXML(tok.getLinkFile());
 		Element rootElement = linksDoc.getRootElement();
-		List<Node> linkNodes = tempDoc.selectNodes("//link");
+		List<Node> linkNodes = tempDoc.selectNodes("//link"); //$NON-NLS-1$
 		for (Node node : linkNodes) {
 			node.detach();
 			rootElement.add(node);
@@ -653,11 +769,13 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 	/**
 	 * Opens a file selection dialog and returns a string representing the
 	 * selected file, or <code>null</code> if the dialog was canceled.
+	 * 
+	 * @return the string
 	 */
 	protected String queryZipFileToImport() {
 		FileDialog dialog = new FileDialog(sourceNameField.getShell(), SWT.OPEN);
 		dialog.setFilterExtensions(FILE_IMPORT_MASK);
-		dialog.setText(DataTransferMessages.ArchiveImportSource_title);
+		dialog.setText("");
 
 		String currentSourceString = sourceNameField.getText();
 		int lastSeparatorIndex = currentSourceString
@@ -673,6 +791,7 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 	/**
 	 * Repopulate the view based on the currently entered directory.
 	 */
+	@Override
 	protected void resetSelection() {
 
 		super.resetSelection();
@@ -681,8 +800,9 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 
 	/**
 	 * Use the dialog store to restore widget values to the values that they
-	 * held last time this wizard was used to completion
+	 * held last time this wizard was used to completion.
 	 */
+	@Override
 	protected void restoreWidgetValues() {
 		IDialogSettings settings = getDialogSettings();
 		if (settings != null) {
@@ -710,6 +830,7 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 	 * superclass. This is necessary because proper overriding of instance
 	 * variables is not occurring.
 	 */
+	@Override
 	protected void saveWidgetValues() {
 		IDialogSettings settings = getDialogSettings();
 		if (settings != null) {
@@ -734,6 +855,14 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 		}
 	}
 
+	/**
+	 * Validate source file.
+	 * 
+	 * @param fileName
+	 *            the file name
+	 * 
+	 * @return true, if successful
+	 */
 	private boolean validateSourceFile(String fileName) {
 		if (ArchiveFileManipulations.isTarFile(fileName)) {
 			TarFile tarFile = getSpecifiedTarSourceFile(fileName);
@@ -751,7 +880,10 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 	/**
 	 * Answer a boolean indicating whether self's source specification widgets
 	 * currently all contain valid values.
+	 * 
+	 * @return true, if validate source group
 	 */
+	@Override
 	protected boolean validateSourceGroup() {
 
 		// If there is nothing being provided to the input then there is a
@@ -764,7 +896,7 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 
 		List resourcesToExport = selectionGroup.getAllWhiteCheckedItems();
 		if (resourcesToExport.size() == 0) {
-			setErrorMessage(DataTransferMessages.FileImport_noneSelected);
+			setErrorMessage("");
 			return false;
 		}
 
