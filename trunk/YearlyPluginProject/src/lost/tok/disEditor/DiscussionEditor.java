@@ -169,6 +169,7 @@ public class DiscussionEditor extends TextEditor {
 //					ToK tok = ToK.getProjectToK(fileEditorInput.getFile()
 //							.getProject());
 
+					//oppening the source document
 					IFile source = quote.getSource().getFile();
 					IEditorPart editorP = null;
 					try {
