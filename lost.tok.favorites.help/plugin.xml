@@ -11,9 +11,6 @@
       <toc
             file="tocgettingstarted.xml">
       </toc>
-      <toc
-            file="tocsamples.xml">
-      </toc>
    </extension>
 
 </plugin>
