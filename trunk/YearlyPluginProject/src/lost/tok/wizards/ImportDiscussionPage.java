@@ -579,8 +579,11 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 			createTempLinksFile(zipFile);
 
 			// check if all the linked sources exist
-			if (!checkSourcesExist())
+			if (!checkSourcesExist()){
+				deleteTempLinksFile();
 				return false;
+			}
+				
 
 			ZipLeveledStructureProvider structureProvider = ArchiveFileManipulations
 					.getZipStructureProvider(zipFile, getContainer().getShell());
