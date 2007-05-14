@@ -1,6 +1,7 @@
 package lost.tok.opTable.actions;
 
 import lost.tok.Messages;
+import lost.tok.Source;
 import lost.tok.ToK;
 import lost.tok.opTable.OperationTable;
 import org.eclipse.swt.widgets.MessageBox;
@@ -18,8 +19,16 @@ public class SwitchOpTableViewAction extends AbstractEditorAction {
 
 	public void setActiveEditor(IAction action, IEditorPart targetEditor) {
 		super.setActiveEditor(action, targetEditor);
-		OperationTable ot = (OperationTable) activeEditor;
-		action.setChecked(ot.isRootDiscussionsView());
+		if (activeEditor instanceof OperationTable) {
+			OperationTable ot = (OperationTable) activeEditor;
+			
+			if (new Source(((FileEditorInput)ot.getEditorInput()).getFile()).isRoot()) {
+				action.setEnabled(true);
+				action.setChecked(ot.isRootDiscussionsView());
+			} else {
+				action.setEnabled(false);
+			}
+		}
 	}
 	
 	public void run(IAction action) {
