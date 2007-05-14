@@ -138,12 +138,8 @@ public class OperationTable extends TextEditor {
 			rootDiscussions.refreshDisplay();
 		}
 		updateExcerptionView();
-
-		StyleRange markedTextStyle;
-		if (DiscussionEditor.isMarkQuote())
-			markedTextStyle = StyleManager.getMarkedQuoteStyle();
-		else
-			markedTextStyle = StyleManager.getMarkedStyle();
+		
+		StyleRange markedTextStyle = StyleManager.getMarkedStyle();
 		StyleRange chapterTextStyle = StyleManager.getChapterStyle();
 
 		ISourceViewer srcview = getSourceViewer();
