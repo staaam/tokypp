@@ -27,6 +27,7 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.internal.wizards.datatransfer.DataTransferMessages;
 import org.eclipse.ui.internal.wizards.datatransfer.IDataTransferHelpContextIds;
 import org.eclipse.ui.internal.wizards.datatransfer.WizardFileSystemResourceExportPage1;
 
@@ -205,7 +206,7 @@ public class ExportDiscussionPage extends WizardFileSystemResourceExportPage1 {
 	 */
 	@Override
 	protected String destinationEmptyMessage() {
-		return "";
+		return DataTransferMessages.ZipExport_destinationEmpty;
 	}
 
 	/**
@@ -239,18 +240,18 @@ public class ExportDiscussionPage extends WizardFileSystemResourceExportPage1 {
 	 */
 	protected boolean ensureTargetFileIsValid(File targetFile) {
 		if (targetFile.exists() && targetFile.isDirectory()) {
-			displayErrorDialog("");
+			displayErrorDialog(DataTransferMessages.ZipExport_mustBeFile);
 			giveFocusToDestination();
 			return false;
 		}
 
 		if (targetFile.exists()) {
 			if (targetFile.canWrite()) {
-				if (!queryYesNoQuestion("")) {
+				if (!queryYesNoQuestion(DataTransferMessages.ZipExport_alreadyExists)) {
 					return false;
 				}
 			} else {
-				displayErrorDialog("");
+				displayErrorDialog(DataTransferMessages.ZipExport_alreadyExistsError);
 				giveFocusToDestination();
 				return false;
 			}
@@ -305,7 +306,7 @@ public class ExportDiscussionPage extends WizardFileSystemResourceExportPage1 {
 		IStatus status = op.getStatus();
 		if (!status.isOK()) {
 			ErrorDialog.openError(getContainer().getShell(),
-					"", null, // no
+					DataTransferMessages.DataTransfer_exportProblems, null, // no
 																			// special
 																			// message
 					status);
@@ -349,8 +350,8 @@ public class ExportDiscussionPage extends WizardFileSystemResourceExportPage1 {
 					resourcesToExport, getDestinationValue(), tok));
 		}
 		MessageDialog.openInformation(getContainer().getShell(),
-				"",
-				"");
+				DataTransferMessages.DataTransfer_information,
+				DataTransferMessages.FileExport_noneSelected);
 
 		return false;
 	}
@@ -362,7 +363,7 @@ public class ExportDiscussionPage extends WizardFileSystemResourceExportPage1 {
 	 */
 	@Override
 	protected String getDestinationLabel() {
-		return "";
+		return DataTransferMessages.ZipExport_destinationLabel;
 	}
 
 	/**
@@ -435,7 +436,7 @@ public class ExportDiscussionPage extends WizardFileSystemResourceExportPage1 {
 	protected void handleDestinationBrowseButtonPressed() {
 		FileDialog dialog = new FileDialog(getContainer().getShell(), SWT.SAVE);
 		dialog.setFilterExtensions(new String[] { "*.exd" }); //$NON-NLS-1$ 
-		dialog.setText("");
+		dialog.setText(DataTransferMessages.ZipExport_selectDestinationTitle);
 		String currentSourceString = getDestinationValue();
 		int lastSeparatorIndex = currentSourceString
 				.lastIndexOf(File.separator);

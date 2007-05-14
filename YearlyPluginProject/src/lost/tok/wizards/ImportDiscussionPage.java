@@ -41,6 +41,7 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.FileSystemElement;
 import org.eclipse.ui.internal.wizards.datatransfer.ArchiveFileManipulations;
+import org.eclipse.ui.internal.wizards.datatransfer.DataTransferMessages;
 import org.eclipse.ui.internal.wizards.datatransfer.IDataTransferHelpContextIds;
 import org.eclipse.ui.internal.wizards.datatransfer.MinimizedFileSystemElement;
 import org.eclipse.ui.internal.wizards.datatransfer.TarException;
@@ -196,7 +197,7 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 			file.close();
 		} catch (IOException e) {
 			displayErrorDialog(NLS.bind(
-					"", file
+					DataTransferMessages.ZipImport_couldNotClose, file
 							.getName()));
 			return false;
 		}
@@ -230,7 +231,7 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 		// overwrite... checkbox
 		overwriteExistingResourcesCheckbox = new Button(parent, SWT.CHECK);
 		overwriteExistingResourcesCheckbox
-				.setText("");
+			.setText(DataTransferMessages.FileImport_overwriteExisting);
 		overwriteExistingResourcesCheckbox.setFont(parent.getFont());
 		overwriteExistingResourcesCheckbox.setSelection(true);
 		overwriteExistingResourcesCheckbox.setVisible(false);
@@ -366,8 +367,8 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 		}
 
 		MessageDialog.openInformation(getContainer().getShell(),
-				"",
-				"");
+				DataTransferMessages.DataTransfer_information,
+				DataTransferMessages.FileImport_noneSelected);
 
 		return false;
 	}
@@ -515,7 +516,7 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 	 */
 	@Override
 	protected String getSourceLabel() {
-		return "";
+		return DataTransferMessages.ArchiveImport_fromFile;
 	}
 
 	/**
@@ -545,9 +546,9 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 		try {
 			return new TarFile(fileName);
 		} catch (TarException e) {
-			displayErrorDialog("");
+			displayErrorDialog(DataTransferMessages.TarImport_badFormat);
 		} catch (IOException e) {
-			displayErrorDialog("");
+			displayErrorDialog(DataTransferMessages.ZipImport_couldNotRead);
 		}
 
 		sourceNameField.setFocus();
@@ -581,9 +582,9 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 		try {
 			return new ZipFile(fileName);
 		} catch (ZipException e) {
-			displayErrorDialog("");
+			displayErrorDialog(DataTransferMessages.ZipImport_badFormat);
 		} catch (IOException e) {
-			displayErrorDialog("");
+			displayErrorDialog(DataTransferMessages.ZipImport_couldNotRead);
 		}
 
 		sourceNameField.setFocus();
@@ -775,7 +776,7 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 	protected String queryZipFileToImport() {
 		FileDialog dialog = new FileDialog(sourceNameField.getShell(), SWT.OPEN);
 		dialog.setFilterExtensions(FILE_IMPORT_MASK);
-		dialog.setText("");
+		dialog.setText(DataTransferMessages.ArchiveImportSource_title);
 
 		String currentSourceString = sourceNameField.getText();
 		int lastSeparatorIndex = currentSourceString
@@ -896,7 +897,7 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 
 		List resourcesToExport = selectionGroup.getAllWhiteCheckedItems();
 		if (resourcesToExport.size() == 0) {
-			setErrorMessage("");
+			setErrorMessage(DataTransferMessages.FileImport_noneSelected);
 			return false;
 		}
 
