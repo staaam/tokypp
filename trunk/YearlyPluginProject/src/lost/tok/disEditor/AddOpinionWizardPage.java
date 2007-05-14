@@ -2,6 +2,7 @@ package lost.tok.disEditor;
 
 import java.util.HashSet;
 
+import lost.tok.Discussion;
 import lost.tok.Messages;
 
 import org.eclipse.jface.wizard.WizardPage;
@@ -15,18 +16,17 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 public class AddOpinionWizardPage extends WizardPage implements ModifyListener {
-	DiscussionEditor discussionEditor;
+	Discussion discussion;
 
 	HashSet<String> opinions = new HashSet<String>();
 
-	public AddOpinionWizardPage(DiscussionEditor discussionEditor) {
+	public AddOpinionWizardPage(Discussion discussion) {
 		super(Messages.getString("AddOpinionWizardPage.AddOpinion")); //$NON-NLS-1$
-		this.discussionEditor = discussionEditor;
+		this.discussion = discussion;
 
 		setTitle(Messages.getString("AddOpinionWizardPage.AddOpinion")); //$NON-NLS-1$
 
-		for (String opinion : discussionEditor.getDiscussion()
-				.getOpinionNames()) {
+		for (String opinion : discussion.getOpinionNames()) {
 			opinions.add(opinion);
 		}
 	}
