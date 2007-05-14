@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<work-item>
+    <field id="initialEstimate">3d</field>
+    <field id="resolution">fixed</field>
+    <field id="type">task</field>
+    <field id="timeSpent">2d</field>
+    <field id="author">Michael</field>
+    <field id="title">Help Update</field>
+    <field id="created">2007-05-14 21:47:21.343 +0200</field>
+    <field id="priority">25.0</field>
+    <field id="description"/>
+    <field id="remainingEstimate">3d</field>
+    <field id="status">resolved</field>
+    <field id="assignee">Michael</field>
+    <field id="severity">normal</field>
+    <field id="previousStatus">open</field>
+</work-item>
