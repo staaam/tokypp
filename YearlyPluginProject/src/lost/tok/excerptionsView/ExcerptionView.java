@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
 import lost.tok.Excerption;
 import lost.tok.Messages;
 import lost.tok.Source;
+import lost.tok.ToK;
 import lost.tok.opTable.OperationTable;
 import lost.tok.opTable.wizards.NewLinkWizard;
 
@@ -36,8 +38,9 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IViewPart;
@@ -285,10 +288,6 @@ public class ExcerptionView extends ViewPart {
 
 	}
 	
-	public void clear() {
-		refresh();
-	}
-
 	private void refresh() {
 		((ViewContentProvider) viewer.getContentProvider()).treeBuildAndRefresh();
 	}
@@ -345,10 +344,6 @@ public class ExcerptionView extends ViewPart {
 
 	public IBaseLabelProvider getLabelProvider() {
 		return viewer.getLabelProvider();
-	}
-
-	public Tree getTree() {
-		return viewer.getTree();
 	}
 
 	private void hookContextMenu() {
@@ -502,11 +497,40 @@ public class ExcerptionView extends ViewPart {
 
 	/**
 	 * Shows Link Discussion wizard
+	 * Shows error message if no roots availible
 	 *
 	 */
 	public void linkDiscussion() {
+		if (!hasRoots()) {
+			MessageBox mb = new MessageBox(new Shell());
+			mb.setText(Messages.getString("ExcerptionView.Error")); //$NON-NLS-1$
+			mb.setMessage(Messages.getString("ExcerptionView.NoMarkedRoots")); //$NON-NLS-1$
+			mb.open();
+			return;
+		}
 		WizardDialog dialog = new WizardDialog(new Shell(), new NewLinkWizard());
 		dialog.setTitle(Messages.getString("ExcerptionView.7")); //$NON-NLS-1$
 		dialog.open();
+	}
+
+	/**
+	 * Returns whether the view has visible roots 
+	 * @return true if view has roots with excerptions, and false if not
+	 */
+	public boolean hasRoots() {
+		return !getRoots().isEmpty();
+	}
+
+	/**
+	 * Returns list of roots contained in the view
+	 * @return list of strings with name of the roots
+	 */
+	public List<String> getRoots() {
+		List<String> l = new LinkedList<String>();
+		for (TreeItem i : viewer.getTree().getItems()) {
+			if (new Source(ToK.getProjectToK(getProject()), i.getText()).isRoot())
+				l.add(i.getText());
+		}
+		return l;
 	}
 }

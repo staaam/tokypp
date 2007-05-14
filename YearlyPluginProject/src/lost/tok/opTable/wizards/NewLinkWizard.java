@@ -1,6 +1,7 @@
 package lost.tok.opTable.wizards;
 
 import lost.tok.Messages;
+import lost.tok.Source;
 import lost.tok.ToK;
 
 import org.eclipse.core.runtime.CoreException;
@@ -63,7 +64,7 @@ public class NewLinkWizard extends Wizard implements INewWizard {
 		try {
 			for (String root : roots) {
 				tok.linkDiscussionRoot(tok.getDiscussion(page.getDiscussion()),
-						tok.getSource(root),
+						new Source(tok, root),
 						page.getExcerptions(root), 
 						page.getSubject(),
 						page.getLinkType());
