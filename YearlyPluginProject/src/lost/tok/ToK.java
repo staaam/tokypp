@@ -68,7 +68,7 @@ public class ToK {
 	/** The name of folder of our sources */
 	static public final String SOURCES_FOLDER = Messages.getString("ToK.srcFolder"); //$NON-NLS-1$
 	/** The name of folder of our roots */
-	static public final String ROOTS_FOLDER = "root";
+	static public final String ROOTS_FOLDER = Messages.getString("ToK.rootFolder"); //$NON-NLS-1$
 	/** The name of the discussions folder */
 	static public final String DISCUSSION_FOLDER = Messages.getString("ToK.DiscFolder"); //$NON-NLS-1$
 	/** The name of the folder in which we store our unparsed sources */
@@ -148,7 +148,7 @@ public class ToK {
 		if (projectName.replace('\\', '/').indexOf('/', 1) > 0)
 			return false;
 		
-		String name = "/" + projectName;
+		String name = "/" + projectName; //$NON-NLS-1$
 		if (!new Path(name).isValidPath(name)) {
 			return false;
 		}
