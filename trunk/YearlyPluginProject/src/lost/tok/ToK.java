@@ -632,6 +632,13 @@ public class ToK {
 	}
 
 	/**
+	 * Returns the folder in which roots files are stored
+	 */
+	public IFolder getRootFolder() {
+		return rootFolder;
+	}
+	
+	/**
 	 * Returns the folder in which discussions are stored
 	 */
 	public IFolder getDiscussionFolder() {
