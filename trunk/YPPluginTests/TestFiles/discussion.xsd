@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<xsd:include schemaLocation="common.xsd"/>
+	<!--elementFormDefault="qualified"
+    xmlns="http://tempuri.org/XMLSchema.xsd"
+    xmlns:mstns="http://tempuri.org/XMLSchema.xsd"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"			    -->
+	<xsd:element name="discussion" type="DiscussionType">
+		<xsd:key name="key">
+			<xsd:selector xpath=".//opinion | .//quote"/>
+			<xsd:field xpath="id"/>
+		</xsd:key>
+		<xsd:keyref name="keyRef" refer="key">
+			<xsd:selector xpath=".//relation"/>
+			<xsd:field xpath="id1"/>
+		</xsd:keyref>
+		<xsd:keyref name="keyRef2" refer="key">
+			<xsd:selector xpath=".//relation"/>
+			<xsd:field xpath="id2"/>
+		</xsd:keyref>
+	</xsd:element>
+	<xsd:complexType name="DiscussionType">
+		<xsd:sequence>
+			<xsd:element name="name" type="xsd:string"/>
+			<xsd:element name="user" type="xsd:string"/>
+			<xsd:element name="opinion" type="Opinion" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="relation" type="Relation" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="Opinion">
+		<xsd:sequence>
+			<xsd:element name="id" type="xsd:positiveInteger"/>
+			<xsd:element name="name" type="xsd:string"/>
+			<xsd:element name="quote" type="Quote" minOccurs="0" maxOccurs="unbounded"/>
+			<!--xsd:element name="opinionRel" type="OpinionRelation" minOccurs="0" maxOccurs="unbounded"/-->
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="Quote">
+		<xsd:sequence>
+			<xsd:element name="id" type="xsd:positiveInteger"/>
+			<xsd:element name="sourceFile" type="xsd:string"/>
+			<xsd:element name="comment" type="xsd:string"/>
+			<xsd:element name="excerption" type="Excerption" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="Relation">
+		<xsd:sequence>
+			<xsd:element name="id1" type="xsd:nonNegativeInteger"/>
+			<xsd:element name="id2" type="xsd:nonNegativeInteger"/>
+			<xsd:element name="comment" type="xsd:string"/>
+			<xsd:element name="type" type="OpinionRelationType"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:simpleType name="OpinionRelationType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="explain"/>
+			<xsd:enumeration value="disagree"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+</xsd:schema>
