@@ -116,7 +116,7 @@ public class ToKTest extends TestCase {
 
 		// Root file
 		IFolder srcFolder = ResourcesPlugin.getWorkspace().getRoot()
-				.getProject("michalsProj_6").getFolder("root");
+				.getProject("michalsProj_6").getFolder("Root");
 		IFile rootFile = srcFolder.getFile("source_example.src");
 
 		// checking that the root exists
