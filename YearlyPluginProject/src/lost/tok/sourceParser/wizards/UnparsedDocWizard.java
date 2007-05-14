@@ -76,17 +76,15 @@ public class UnparsedDocWizard extends Wizard implements INewWizard {
 		// page's fields
 		final String title = page.getSourceTitle();
 		final String author = page.getAuthorName();
-		final String srcPath = page.getSourcePath();
 		final String fileName = page.getInputFileName();
 		final String projName = page.getTargetProjectName();
-		final boolean isRoot = page.getIsRoot();
 
 		IRunnableWithProgress op = new IRunnableWithProgress() {
 			public void run(IProgressMonitor monitor)
 					throws InvocationTargetException {
 				try {
-					doFinish(title, author, srcPath, fileName, projName,
-							isRoot, monitor);
+					doFinish(title, author, fileName, projName,
+							monitor);
 				} catch (CoreException e) {
 					throw new InvocationTargetException(e);
 				} finally {
@@ -107,8 +105,8 @@ public class UnparsedDocWizard extends Wizard implements INewWizard {
 		return true;
 	}
 
-	private void doFinish(String title, String author, String srcPath,
-			String fullFileName, String projName, boolean isRoot,
+	private void doFinish(String title, String author, 
+			String fullFileName, String projName,
 			IProgressMonitor monitor) throws CoreException {
 		// create a sample file
 		monitor.beginTask(Messages.getString("SPWizard.1") + title, 2); //$NON-NLS-1$
@@ -121,14 +119,12 @@ public class UnparsedDocWizard extends Wizard implements INewWizard {
 			// as usual
 		} else {
 			try {
-				createResourceDocument(fullFileName, title, author, srcPath,
+				createResourceDocument(fullFileName, title, author, 
 						null, eclipseFile);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
-		eclipseFile.setPersistentProperty(ToK.isRootQName,
-				isRoot ? "True" : "False"); //$NON-NLS-1$ //$NON-NLS-2$
 
 		monitor.worked(1);
 		monitor.setTaskName(Messages.getString("SPWizard.4")); //$NON-NLS-1$
@@ -191,7 +187,7 @@ public class UnparsedDocWizard extends Wizard implements INewWizard {
 
 	/** Creates an xml describing the unparsed document */
 	static private void createResourceDocument(String inputFile, String title,
-			String author, String srcPath, IProgressMonitor monitor,
+			String author, IProgressMonitor monitor,
 			IFile targetFile) throws IOException, CoreException {
 		File inFile = new File(inputFile);
 		long inputLength = inFile.length();
@@ -212,11 +208,7 @@ public class UnparsedDocWizard extends Wizard implements INewWizard {
 		unparsedXML.setXMLEncoding("UTF-8"); //$NON-NLS-1$
 		Element source = unparsedXML.addElement("Source"); //$NON-NLS-1$
 		Element sourceName = source.addElement("name"); //$NON-NLS-1$
-		if (srcPath.equals("")) { //$NON-NLS-1$
-			sourceName.addText(title);
-		} else {
-			sourceName.addText(srcPath + "\\" + title); //$NON-NLS-1$
-		}
+		sourceName.addText(title);
 		source.addElement("author").addText(author); //$NON-NLS-1$
 		Element text = source.addElement("child").addElement("text"); //$NON-NLS-1$ //$NON-NLS-2$
 		text.addElement("name").addText(Chapter.UNPARSED_STR); //$NON-NLS-1$
