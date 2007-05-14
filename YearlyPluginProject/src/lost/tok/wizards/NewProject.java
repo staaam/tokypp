@@ -14,12 +14,10 @@ import org.eclipse.ui.IWorkbenchWizard;
 import org.eclipse.ui.wizards.newresource.BasicNewProjectResourceWizard;
 
 /**
- * This is a sample new wizard. Its role is to create a new file resource in the
+ * This is a new project wizard. Its role is to create a new file resource in the
  * provided container. If the container resource (a folder or a project) is
  * selected in the workspace when the wizard is opened, it will accept it as the
- * target container. The wizard creates one file with the extension "mpe". If a
- * sample multi-page editor (also available as a template) is registered for the
- * same extension, it will be able to open it.
+ * target container. 
  */
 
 public class NewProject extends Wizard implements INewWizard,IExecutableExtension {
@@ -30,7 +28,7 @@ public class NewProject extends Wizard implements INewWizard,IExecutableExtensio
 	private IConfigurationElement configElm;
 
 	/**
-	 * Constructor for SampleNewWizard.
+	 * Constructor new project.
 	 */
 	public NewProject() {
 		super();
