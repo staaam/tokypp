@@ -59,10 +59,10 @@ public class SourceDocumentTest extends TestCase {
 		SourceDocument doc = new SourceDocument();
 		doc.setUnparsed(text,"Source Parser","Shay Nahum");
 		assertEquals("Title:\tSource Parser\nBy   :	Shay Nahum\n\n" +
-				"Chapter 1:\t(Unparsed Text)\n" + text + "\n",
+				" 1:\t(Unparsed Text)\n" + text + "\n",
 				doc.getChapterFromOffset(0).toString());
 		c = doc.getChapterFromOffset(50);
-		assertEquals("Chapter 1:\t(Unparsed Text)\n" + text + "\n", c.toString());
+		assertEquals(" 1:\t(Unparsed Text)\n" + text + "\n", c.toString());
 	}
 	
 	/** Simple test for the creation of a new chpater */
@@ -179,13 +179,13 @@ public class SourceDocumentTest extends TestCase {
 		SourceDocument doc = loadDoc(Paths.OR_AHAIM_EN);
 		Chapter c = null;
 
-		c = doc.getChapterFromOffset(119);
-		assertEquals("fails in Hebrew mode", 99, c.getOffset().intValue());
-		assertEquals(23, c.getInnerLength().intValue());
+		c = doc.getChapterFromOffset(100);
+		assertEquals("fails in Hebrew mode", 85, c.getOffset().intValue());
+		assertEquals(16, c.getInnerLength().intValue());
 		assertEquals("Verse 1", c.getName());
 
-		c = doc.getChapterFromOffset(122);
-		assertEquals(122, c.getOffset().intValue());
+		c = doc.getChapterFromOffset(101);
+		assertEquals(101, c.getOffset().intValue());
 		assertEquals(64 + 401, c.getInnerLength().intValue());
 		assertEquals("Verse 1", c.getParent().getName());
 		assertTrue(c instanceof ChapterText);
@@ -193,25 +193,25 @@ public class SourceDocumentTest extends TestCase {
 				.getExcerptionPath());
 
 		c = doc.getChapterFromOffset(150);
-		assertEquals(122, c.getOffset().intValue());
+		assertEquals(101, c.getOffset().intValue());
 		assertEquals(64 + 401, c.getInnerLength().intValue());
 		assertEquals("Verse 1", c.getParent().getName());
 
-		c = doc.getChapterFromOffset(586);
-		assertEquals(122, c.getOffset().intValue());
+		c = doc.getChapterFromOffset(565);
+		assertEquals(101, c.getOffset().intValue());
 		assertEquals(64 + 401, c.getInnerLength().intValue());
 		assertEquals("Verse 1", c.getParent().getName());
 
 		c = doc.getChapterFromOffset(2664);
-		assertEquals(2651, c.getOffset().intValue());
+		assertEquals(2588, c.getOffset().intValue());
 		assertEquals(520, c.getInnerLength().intValue());
 		assertEquals("Verse 7", c.getParent().getName());
 		assertTrue(c instanceof ChapterText);
 		assertEquals("Genesis/chapter 11/Verse 7", ((ChapterText) c)
 				.getExcerptionPath());
 
-		c = doc.getChapterFromOffset(4200);
-		assertEquals(3461, c.getOffset().intValue());
+		c = doc.getChapterFromOffset(4000);
+		assertEquals(3384, c.getOffset().intValue());
 		assertEquals(740, c.getInnerLength().intValue());
 		assertEquals("Verse 9", c.getParent().getName());
 		assertTrue(c instanceof ChapterText);
