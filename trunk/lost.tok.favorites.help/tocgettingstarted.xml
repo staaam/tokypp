@@ -8,4 +8,5 @@
 	<topic label="Discussion" href="gettingstarted/Discussion.html" /> 
 	<topic label="Operation Table" href="gettingstarted/OperationTable.html" /> 
 	<topic label="Source Parser" href="gettingstarted/SourceParser.html" /> 
+	<topic label="Import\Export" href="gettingstarted/ImportExport.html" /> 
 </toc>
