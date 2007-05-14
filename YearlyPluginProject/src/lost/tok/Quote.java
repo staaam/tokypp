@@ -80,6 +80,11 @@ public class Quote {
 		return s;
 	}
 
+	/**
+	 * Creating a quote XML element
+	 * 
+	 * @return Element of Quote
+	 */
 	public Element toXML() {
 		Element e = DocumentHelper.createElement("quote"); //$NON-NLS-1$
 		e.addElement("id").addText(ID.toString()); //$NON-NLS-1$
