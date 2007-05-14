@@ -173,8 +173,8 @@ public class ChapterText extends Chapter {
 	 * @param element The element under which this chapter will be added
 	 */
 	public void addToXml(Element element) {
-		Element textElement = element.addElement("text");
-		textElement.addElement("name").addText(getName());
-		textElement.addElement("content").addText(getText());
+		Element textElement = element.addElement("text"); //$NON-NLS-1$
+		textElement.addElement("name").addText(getName()); //$NON-NLS-1$
+		textElement.addElement("content").addText(getText()); //$NON-NLS-1$
 	}
 }

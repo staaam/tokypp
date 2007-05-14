@@ -123,7 +123,6 @@
          point="org.eclipse.ui.editorActions">
       <editorContribution
             id="lost.tok.opTable.Contribution"
-            sibling_order="org.eclipse.pde.internal.core.text.plugin.PluginElementNode@fa1c60"
             targetID="lost.tok.opTable.OperationTable">
          <action
                class="lost.tok.opTable.actions.SwitchOpTableViewAction"
