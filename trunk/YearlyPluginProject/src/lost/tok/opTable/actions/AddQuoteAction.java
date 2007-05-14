@@ -22,7 +22,12 @@ import org.eclipse.ui.part.FileEditorInput;
  * The action of adding a new quote from the chosen excerptions
  */
 public class AddQuoteAction extends AbstractEditorAction {
+	
+	private static IAction action;
+	
 	public void run(IAction action) {
+		this.action = action;
+		
 		List<Excerption> excerptions = ((OperationTable) activeEditor)
 				.getMarked();
 
@@ -68,6 +73,10 @@ public class AddQuoteAction extends AbstractEditorAction {
 		mb.setText(title);
 		mb.setMessage(message);
 		mb.open();
+	}
+	
+	static public IAction getQuoteAction(){
+		return action;
 	}
 
 }
