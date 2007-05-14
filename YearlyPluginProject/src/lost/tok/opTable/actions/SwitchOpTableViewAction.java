@@ -1,9 +1,12 @@
 package lost.tok.opTable.actions;
 
+import lost.tok.Messages;
+import lost.tok.ToK;
 import lost.tok.opTable.OperationTable;
-
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.part.FileEditorInput;
 
 /**
  * Action for 'Show root discussions' button
@@ -22,6 +25,13 @@ public class SwitchOpTableViewAction extends AbstractEditorAction {
 	public void run(IAction action) {
 		assert (activeEditor != null);
 		
+		//return an error messege if called from a source that is not a root
+		if (((FileEditorInput)activeEditor.getEditorInput()).getFile().getProjectRelativePath().toPortableString().startsWith(ToK.SOURCES_FOLDER)){
+			messageBox(
+					Messages.getString("AddQuoteAction.Error"), Messages.getString("SwitchOpTableViewAction.0")); //$NON-NLS-1$ //$NON-NLS-2$
+			return;
+		}
+		
 		OperationTable ot = (OperationTable) activeEditor;
 		
 //		activeEditor.getAction("lost.tok.opTable.PopUpMenu.switchView").setChecked(action.isChecked());
@@ -36,6 +46,13 @@ public class SwitchOpTableViewAction extends AbstractEditorAction {
 			ot.hideDisucssions();
 		}
 		
+	}
+	
+	void messageBox(String title, String message) {
+		MessageBox mb = new MessageBox(activeEditor.getSite().getShell());
+		mb.setText(title);
+		mb.setMessage(message);
+		mb.open();
 	}
 
 }
