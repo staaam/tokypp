@@ -15,6 +15,7 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -22,9 +23,13 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
+import lost.tok.GeneralFunctions;
 import lost.tok.ToK;
 import lost.tok.export.DiscussionExportOperation;
 
+import org.dom4j.Document;
+import org.dom4j.Element;
+import org.dom4j.Node;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.dialogs.IDialogSettings;
@@ -65,6 +70,8 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 	    private ToK tok;
 	    
 	   private static final int BUFFER = 2048;
+	   
+	   private String tempLinksFile;
 
 	// constants
 	private static final String[] FILE_IMPORT_MASK = { "*.exd" }; //$NON-NLS-1$ //$NON-NLS-2$
@@ -156,7 +163,6 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void handleTypesEditButtonPressed() {
-		// TODO Auto-generated method stub
 		selectedTypes.clear();
 		selectedTypes.add("dis");
 		setAllSelections(true);
@@ -227,13 +233,6 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 	 * @return boolean
 	 */
 	public boolean finish() {
-		// if (!super.finish()) {
-		// return false;
-		// }
-		//
-		// ArchiveFileManipulations.clearProviderCache(getContainer().getShell());
-		// return true;
-
 		if (!ensureSourceIsValid()) {
 			return false;
 		}
@@ -486,12 +485,33 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 			operation.setContext(getShell());
 			result = executeImportOperation(operation);
 
+			//Merge link files
 			createTempLinksFile(zipFile);	
-			
+			mergeLinkfiles();
+			deleteTempLinksFile();
 			
 			closeZipFile(zipFile);
 		}
 		return result;
+	}
+
+	private void deleteTempLinksFile() {
+		// TODO Auto-generated method stub
+		File tempLinkFile = new File(tempLinksFile);
+		tempLinkFile.delete();
+	}
+
+	@SuppressWarnings("unchecked")
+	private void mergeLinkfiles() {
+		Document tempDoc = GeneralFunctions.readFromXML(tempLinksFile);
+		Document linksDoc = GeneralFunctions.readFromXML(tok.getLinkFile());
+		Element rootElement = linksDoc.getRootElement();
+		List<Node> linkNodes = tempDoc.selectNodes("//link");
+		for (Node node : linkNodes) {
+			node.detach();
+			rootElement.add(node);
+		}
+		GeneralFunctions.writeToXml(tok.getLinkFile(), linksDoc);
 	}
 
 	/**
@@ -522,14 +542,15 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 			dest.flush();
 			dest.close();
 			is.close();
+			tempLinksFile = destFile.getAbsolutePath();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
 	}
 	
 	@Override
 	protected IPath getContainerFullPath() {
-		// TODO Auto-generated method stub
 		getTok();
 		return tok.getDiscussionFolder().getFullPath();
 	}

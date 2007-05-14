@@ -1,5 +1,6 @@
 package lost.tok.export;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -38,28 +39,62 @@ public class DiscussionExportOperation implements IRunnableWithProgress {
 
 	static public final String TEMP_LINKS_XML = "links.xml";
 
-
-	private IFileExporter exporter;
+	private boolean createLeadupStructure = true;
 
 	private String destinationFilename;
 
-	private IProgressMonitor monitor;
-
-	private List resourcesToExport;
-
-	private IResource resource;
+	private List<String> discussionNames = new ArrayList<String>();
 
 	private List<Status> errorTable = new ArrayList<Status>(1); // IStatus
 
-	private boolean useCompression = true;
+	private IFileExporter exporter;
 
-	private boolean createLeadupStructure = true;
+	private IProgressMonitor monitor;
+
+	private IResource resource;
+
+	private List resourcesToExport;
+
+	private IFile tempLinkFile;
 
 	private ToK tok;
 
-	private List<String> discussionNames = new ArrayList<String>();
-	
-	private IFile tempLinkFile;
+	private boolean useCompression = true;
+
+	/**
+	 * Create an instance of this class. Use this constructor if you wish to
+	 * export specific resources with a common parent resource (affects
+	 * container directory creation)
+	 * 
+	 * @param res
+	 *            org.eclipse.core.resources.IResource
+	 * @param resources
+	 *            java.util.Vector
+	 * @param filename
+	 *            java.lang.String
+	 * @param tok
+	 */
+	public DiscussionExportOperation(IResource res, List resources,
+			String filename, ToK tok) {
+		this(res, filename);
+		this.tok = tok;
+		resourcesToExport = resources;
+	}
+
+	/**
+	 * Create an instance of this class. Use this constructor if you wish to
+	 * recursively export a single resource.
+	 * 
+	 * @param res
+	 *            org.eclipse.core.resources.IResource;
+	 * @param filename
+	 *            java.lang.String
+	 */
+	public DiscussionExportOperation(IResource res, String filename) {
+		super();
+		resource = res;
+		destinationFilename = filename;
+	}
 
 	/**
 	 * Create an instance of this class. Use this constructor if you wish to
@@ -86,46 +121,35 @@ public class DiscussionExportOperation implements IRunnableWithProgress {
 	}
 
 	/**
-	 * Create an instance of this class. Use this constructor if you wish to
-	 * recursively export a single resource.
-	 * 
-	 * @param res
-	 *            org.eclipse.core.resources.IResource;
-	 * @param filename
-	 *            java.lang.String
-	 */
-	public DiscussionExportOperation(IResource res, String filename) {
-		super();
-		resource = res;
-		destinationFilename = filename;
-	}
-
-	/**
-	 * Create an instance of this class. Use this constructor if you wish to
-	 * export specific resources with a common parent resource (affects
-	 * container directory creation)
-	 * 
-	 * @param res
-	 *            org.eclipse.core.resources.IResource
-	 * @param resources
-	 *            java.util.Vector
-	 * @param filename
-	 *            java.lang.String
-	 * @param tok
-	 */
-	public DiscussionExportOperation(IResource res, List resources,
-			String filename, ToK tok) {
-		this(res, filename);
-		this.tok = tok;
-		resourcesToExport = resources;
-	}
-
-	/**
 	 * Add a new entry to the error table with the passed information
 	 */
 	protected void addError(String message, Throwable e) {
 		errorTable.add(new Status(IStatus.ERROR,
 				IDEWorkbenchPlugin.IDE_WORKBENCH, 0, message, e));
+	}
+
+	private void buildTempLinksFile() {
+		// TODO Auto-generated method stub
+		tempLinkFile = tok.getProject().getFile(TEMP_LINKS_XML);
+
+		Document tempLinkfileDoc = tok.linksSkeleton();
+		Document linkfileDoc = GeneralFunctions.readFromXML(tok.getLinkFile());
+		// TODO
+		for (String discussionName : discussionNames) {
+			Node link = linkfileDoc
+					.selectSingleNode("//link/discussionFile[text()=\"" //$NON-NLS-1$
+							+ discussionName + "\"]"); //$NON-NLS-1$
+			if (link == null)
+				continue;
+			Element newLink = link.getParent();
+			Element links = tempLinkfileDoc.getRootElement();
+			links.addComment("The root element of the links");
+			newLink.detach();
+			links.add(newLink);
+		}
+
+		GeneralFunctions.writeToXml(tempLinkFile, tempLinkfileDoc);
+
 	}
 
 	/**
@@ -169,6 +193,38 @@ public class DiscussionExportOperation implements IRunnableWithProgress {
 	}
 
 	/**
+	 * @return status
+	 * 
+	 */
+	public boolean deletetempLinksFile() {
+		try {
+			tempLinkFile.refreshLocal(IResource.DEPTH_INFINITE, null);
+		} catch (CoreException e) {
+			// TODO Auto-generated catch block
+			System.out.println("refresh error");
+			return false;
+		}
+		try {
+			
+			tempLinkFile.delete(true, null);
+		} catch (CoreException e) {
+			// TODO Auto-generated catch block
+			System.out.println("delete error");
+			return false;
+		}
+		
+//		File tempFile = new File(tempLinkFile.getLocation().toOSString());
+//		tempFile.deleteOnExit();
+//		try {
+//			tok.getProject().refreshLocal(IResource.DEPTH_INFINITE, null);
+//		} catch (CoreException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		return true;
+	}
+
+	/**
 	 * Export the passed resource to the destination .zip. Export with no path
 	 * leadup
 	 * 
@@ -178,30 +234,6 @@ public class DiscussionExportOperation implements IRunnableWithProgress {
 	protected void exportResource(IResource exportResource)
 			throws InterruptedException {
 		exportResource(exportResource, 1);
-	}
-
-	private void buildTempLinksFile() {
-		// TODO Auto-generated method stub
-		tempLinkFile = tok.getProject().getFile(TEMP_LINKS_XML);
-		
-		Document tempLinkfileDoc = tok.linksSkeleton();
-		Document linkfileDoc = GeneralFunctions.readFromXML(tok.getLinkFile());
-		// TODO
-		for (String discussionName : discussionNames) {
-			Node link = linkfileDoc
-					.selectSingleNode("//link/discussionFile[text()=\"" //$NON-NLS-1$
-							+ discussionName + "\"]"); //$NON-NLS-1$
-			if (link == null)
-				continue;
-			Element newLink = link.getParent();
-			Element links = tempLinkfileDoc.getRootElement();
-			links.addComment("The root element of the links");
-			newLink.detach();
-			links.add(newLink);
-		}
-
-		GeneralFunctions.writeToXml(tempLinkFile, tempLinkfileDoc);
-
 	}
 
 	/**
@@ -228,69 +260,6 @@ public class DiscussionExportOperation implements IRunnableWithProgress {
 	}
 
 	/**
-	 * @param exportResource
-	 * @param leadupDepth
-	 * @throws InterruptedException
-	 */
-	private void writeFolderToZip(IResource exportResource, int leadupDepth)
-			throws InterruptedException {
-		IResource[] children = null;
-
-		try {
-			children = ((IContainer) exportResource).members();
-		} catch (CoreException e) {
-			// this should never happen because an #isAccessible check is
-			// done before #members is invoked
-			addError(NLS.bind(DataTransferMessages.DataTransfer_errorExporting,
-					exportResource.getFullPath()), e);
-		}
-
-		for (int i = 0; i < children.length; i++) {
-			exportResource(children[i], leadupDepth + 1);
-		}
-	}
-
-	/**
-	 * @param exportResource
-	 * @param leadupDepth
-	 * @throws InterruptedException
-	 */
-	private void writeFileToZip(IResource exportResource, int leadupDepth)
-			throws InterruptedException {
-		String destinationName;
-		IPath fullPath = exportResource.getFullPath();
-		if (createLeadupStructure) {
-			destinationName = fullPath.makeRelative().toString();
-		} else {
-			destinationName = fullPath.removeFirstSegments(
-					fullPath.segmentCount() - leadupDepth).toString();
-		}
-		monitor.subTask(destinationName);
-
-		// Collect the names for fetching the links to the sources later
-
-		if (exportResource.getName().compareTo(DiscussionExportOperation.TEMP_LINKS_XML) != 0)
-			discussionNames.add(exportResource.getName());
-
-		try {
-			exporter.write((IFile) exportResource, destinationName);
-		} catch (IOException e) {
-			addError(NLS
-					.bind(DataTransferMessages.DataTransfer_errorExporting,
-							exportResource.getFullPath().makeRelative(), e
-									.getMessage()), e);
-		} catch (CoreException e) {
-			addError(NLS
-					.bind(DataTransferMessages.DataTransfer_errorExporting,
-							exportResource.getFullPath().makeRelative(), e
-									.getMessage()), e);
-		}
-
-		monitor.worked(1);
-		ModalContext.checkCanceled(monitor);
-	}
-
-	/**
 	 * Export the resources contained in the previously-defined
 	 * resourcesToExport collection
 	 */
@@ -312,24 +281,9 @@ public class DiscussionExportOperation implements IRunnableWithProgress {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		while (!tok.getProject().isSynchronized(1)){}
-		writeFileToZip(tempLinkFile, 1);
-		
-		boolean error = true;
-		
-		while (!error) {
-			try {
-				tempLinkFile.delete(true, null);
-				error = false;
-			} catch (CoreException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				System.out.println("Shay");
-				error = true;
-			}
-			
+		while (!tok.getProject().isSynchronized(1)) {
 		}
-		
+		writeFileToZip(tempLinkFile, 1);
 	}
 
 	/**
@@ -471,5 +425,69 @@ public class DiscussionExportOperation implements IRunnableWithProgress {
 	 *            boolean
 	 */
 	public void setUseTarFormat(boolean value) {
+	}
+
+	/**
+	 * @param exportResource
+	 * @param leadupDepth
+	 * @throws InterruptedException
+	 */
+	private void writeFileToZip(IResource exportResource, int leadupDepth)
+			throws InterruptedException {
+		String destinationName;
+		IPath fullPath = exportResource.getFullPath();
+		if (createLeadupStructure) {
+			destinationName = fullPath.makeRelative().toString();
+		} else {
+			destinationName = fullPath.removeFirstSegments(
+					fullPath.segmentCount() - leadupDepth).toString();
+		}
+		monitor.subTask(destinationName);
+
+		// Collect the names for fetching the links to the sources later
+
+		if (exportResource.getName().compareTo(
+				DiscussionExportOperation.TEMP_LINKS_XML) != 0)
+			discussionNames.add(exportResource.getName());
+
+		try {
+			exporter.write((IFile) exportResource, destinationName);
+		} catch (IOException e) {
+			addError(NLS
+					.bind(DataTransferMessages.DataTransfer_errorExporting,
+							exportResource.getFullPath().makeRelative(), e
+									.getMessage()), e);
+		} catch (CoreException e) {
+			addError(NLS
+					.bind(DataTransferMessages.DataTransfer_errorExporting,
+							exportResource.getFullPath().makeRelative(), e
+									.getMessage()), e);
+		}
+
+		monitor.worked(1);
+		ModalContext.checkCanceled(monitor);
+	}
+
+	/**
+	 * @param exportResource
+	 * @param leadupDepth
+	 * @throws InterruptedException
+	 */
+	private void writeFolderToZip(IResource exportResource, int leadupDepth)
+			throws InterruptedException {
+		IResource[] children = null;
+
+		try {
+			children = ((IContainer) exportResource).members();
+		} catch (CoreException e) {
+			// this should never happen because an #isAccessible check is
+			// done before #members is invoked
+			addError(NLS.bind(DataTransferMessages.DataTransfer_errorExporting,
+					exportResource.getFullPath()), e);
+		}
+
+		for (int i = 0; i < children.length; i++) {
+			exportResource(children[i], leadupDepth + 1);
+		}
 	}
 }

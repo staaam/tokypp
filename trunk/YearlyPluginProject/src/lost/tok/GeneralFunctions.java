@@ -62,6 +62,12 @@ public class GeneralFunctions {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		try {
+			inputStream.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		};
 		return doc;
 	}
 
@@ -75,12 +81,14 @@ public class GeneralFunctions {
 			outformat.setEncoding("UTF-8"); //$NON-NLS-1$
 			outformat.setTrimText(false);
 
+			FileOutputStream fos = new FileOutputStream(path);
 			BufferedWriter wrtr = new BufferedWriter(new OutputStreamWriter(
-					new FileOutputStream(path), "UTF-8")); //$NON-NLS-1$
+					fos, "UTF-8")); //$NON-NLS-1$
 
 			XMLWriter writer = new XMLWriter(wrtr, outformat);
 			writer.write(doc);
 			writer.flush();
+			fos.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
