@@ -53,8 +53,6 @@ public class DiscussionEditor extends TextEditor {
 	private static final String OPINION = "Opinion";
 
 	public static final String EDITOR_ID = "lost.tok.disEditor.DiscussionEditor";  //$NON-NLS-1$
-	
-	private static boolean markQuote = false;
 
 	private Discussion discussion = null;
 
@@ -181,7 +179,6 @@ public class DiscussionEditor extends TextEditor {
 					}
 					
 					// Marking the text in the editor
-					markQuote = true; //for choosing the style
 					OperationTable ot = (OperationTable) editorP;
 					ot.clearMarked();
 					
@@ -214,9 +211,6 @@ public class DiscussionEditor extends TextEditor {
 					//scrolling the editor to the position of the quote
 					ot.resetHighlightRange();
 					ot.setHighlightRange(qBegining,qLength,true);	
-					
-					//for the use of style in the operation table
-					markQuote = false;
 				}
 
 			}
@@ -771,9 +765,5 @@ public class DiscussionEditor extends TextEditor {
 				qItem.setExpanded(true);
 			}
 		}
-	}
-
-	public static boolean isMarkQuote() {
-		return markQuote;
 	}
 }
