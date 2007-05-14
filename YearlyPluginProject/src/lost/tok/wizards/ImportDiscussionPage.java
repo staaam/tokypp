@@ -1,13 +1,3 @@
-/*******************************************************************************
- * Copyright (c) 2006 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *     IBM Corporation - initial API and implementation
- *******************************************************************************/
 package lost.tok.wizards;
 
 import java.io.BufferedInputStream;
@@ -16,12 +6,14 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
+import lost.tok.Discussion;
 import lost.tok.GeneralFunctions;
 import lost.tok.ToK;
 import lost.tok.export.DiscussionExportOperation;
@@ -31,6 +23,7 @@ import org.dom4j.Element;
 import org.dom4j.Node;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.IDialogSettings;
@@ -121,7 +114,12 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 		for (Node sourceFile : sourceNodes) {
 			String rawPathName = sourceFile.getText();
 			Path path = new Path(sourceFile.getText());
-			if (rawPathName.contains(sourceFolder.getName())) {//check that the path doesn't include the source folder Itself
+			if (rawPathName.contains(sourceFolder.getName())) {// check that
+																// the path
+																// doesn't
+																// include the
+																// source folder
+																// Itself
 				while (rawPathName.contains(sourceFolder.getName())) {
 					path.removeFirstSegments(1);
 					rawPathName = path.toOSString();
@@ -130,16 +128,17 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 			}
 
 			if (!sourceFolder.exists(path)) {
-//				MessageDialog
-//						.openError(
-//								null,
-//								"Error!",
-//								"The needed sources don't exist in your project.\n Please import the needed sources first!");
-//				return false;
+				// MessageDialog
+				// .openError(
+				// null,
+				// "Error!",
+				// "The needed sources don't exist in your project.\n Please
+				// import the needed sources first!");
+				// return false;
 				missingFiles.add(path.toOSString());
 			}
 		}
-		if(missingFiles.size() != 0){
+		if (missingFiles.size() != 0) {
 			String error = new String();
 			for (String file : missingFiles) {
 				if (!error.contains(file))
@@ -149,7 +148,8 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 					.openError(
 							null,
 							"Error!",
-							"The needed sources don't exist in your project.\n\n The following sources are missing:\n\n" + error);
+							"The needed sources don't exist in your project.\n\n The following sources are missing:\n\n"
+									+ error);
 			return false;
 		}
 		return true;
@@ -217,8 +217,10 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 	}
 
 	/**
-	 * Creates a temporary Links file
+	 * Creates a temporary Links file.
+	 * 
 	 * @param zipFile
+	 *            the zip file
 	 */
 	private void createTempLinksFile(ZipFile zipFile) {
 		ZipEntry linksEntry = zipFile
@@ -569,13 +571,17 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 		if (ensureZipSourceIsValid()) {
 			ZipFile zipFile = getSpecifiedZipSourceFile();
 
-			//extract the partial links file
+			// check not overwriting existing discussions
+			if (!checkExistingDiscussions(zipFile))
+				return false;
+
+			// extract the partial links file
 			createTempLinksFile(zipFile);
 
-			//check if all the linked sources exist
+			// check if all the linked sources exist
 			if (!checkSourcesExist())
 				return false;
-				
+
 			ZipLeveledStructureProvider structureProvider = ArchiveFileManipulations
 					.getZipStructureProvider(zipFile, getContainer().getShell());
 			ImportOperation operation = new ImportOperation(
@@ -585,7 +591,7 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 			operation.setContext(getShell());
 			result = executeImportOperation(operation);
 
-			//Merge link files
+			// Merge link files
 
 			mergeLinkfiles();
 			deleteTempLinksFile();
@@ -593,6 +599,31 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 			closeZipFile(zipFile);
 		}
 		return result;
+	}
+
+	@SuppressWarnings("unchecked")
+	private boolean checkExistingDiscussions(ZipFile zipFile) {
+		// TODO Auto-generated method stub
+		Enumeration<ZipEntry> linksEntries = (Enumeration<ZipEntry>) zipFile
+				.entries();
+		while (linksEntries.hasMoreElements()) {
+			ZipEntry linkEntry = linksEntries.nextElement();
+			String discussionName = linkEntry.getComment();
+			try {
+				Discussion disc = tok.getDiscussion(discussionName);
+				if (disc != null) {
+					MessageDialog
+							.openError(
+									null,
+									"Error",
+									"You have selected to import a discussion that already exists in your project!\n Please unselect it!\n\n Import operation will not continue");
+					return false;
+				}
+			} catch (CoreException e) {
+				continue;
+			}
+		}
+		return true;
 	}
 
 	/**
