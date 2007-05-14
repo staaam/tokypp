@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<work-item>
+    <field id="initialEstimate">3h</field>
+    <field id="type">task</field>
+    <field id="timeSpent">1h</field>
+    <field id="author">ZIMERMAN MOTI</field>
+    <field id="title">Personal role - tracker</field>
+    <field id="created">2007-05-15 00:32:55.281 +0300</field>
+    <field id="priority">25.0</field>
+    <field id="description">will be done when documents are done</field>
+    <field id="dueDate">2007-05-17 00:00:00.000 +0300</field>
+    <field id="remainingEstimate">2h</field>
+    <field id="status">open</field>
+    <field id="assignee">michal</field>
+    <field id="severity">normal</field>
+</work-item>
