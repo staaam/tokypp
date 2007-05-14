@@ -38,3 +38,5 @@ action.label.end.chapter = סגור פרק כאן
 action.tooltip.end.chapter = לחץ כאן כדי ליצור פרק חדש המסתיים במקום הסמן
 command.name.end.chapter = סגור פרק כאן
 perspective.tok =עץ דעת
+wizard.discussion.export = ייצוא דיונים
+wizard.discussion.import = ייבוא דיונים
