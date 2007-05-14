@@ -5,6 +5,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 import java.util.List;
 
+import lost.tok.Messages;
 import lost.tok.ToK;
 import lost.tok.export.DiscussionExportOperation;
 
@@ -26,7 +27,6 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.internal.wizards.datatransfer.DataTransferMessages;
 import org.eclipse.ui.internal.wizards.datatransfer.IDataTransferHelpContextIds;
 import org.eclipse.ui.internal.wizards.datatransfer.WizardFileSystemResourceExportPage1;
 
@@ -50,26 +50,31 @@ public class ExportDiscussionPage extends WizardFileSystemResourceExportPage1 {
 	/** The compress contents checkbox. */
 	protected Button compressContentsCheckbox;
 
+	/** The selection. */
 	private IStructuredSelection selection;
 
+	/** The tok. */
 	private ToK tok;
 
 	/**
 	 * Create an instance of this class.
 	 * 
-	 * @param selection the selection
+	 * @param selection
+	 *            the selection
 	 */
 	public ExportDiscussionPage(IStructuredSelection selection) {
 		this("zipFileExportPage1", selection); //$NON-NLS-1$
-		setTitle("Export Discussions");
-		setDescription("Export Discussions to an exd file");
+		setTitle(Messages.getString("ExportDiscussionPage.0")); //$NON-NLS-1$
+		setDescription(Messages.getString("ExportDiscussionPage.1")); //$NON-NLS-1$
 	}
 
 	/**
 	 * Create an instance of this class.
 	 * 
-	 * @param name java.lang.String
-	 * @param selection the selection
+	 * @param name
+	 *            java.lang.String
+	 * @param selection
+	 *            the selection
 	 */
 	protected ExportDiscussionPage(String name, IStructuredSelection selection) {
 		super(name, selection);
@@ -77,7 +82,12 @@ public class ExportDiscussionPage extends WizardFileSystemResourceExportPage1 {
 	}
 
 	/**
+	 * Check discussion selection.
+	 * 
 	 * @param resourcesToExport
+	 *            the resources to export
+	 * 
+	 * @return true, if check discussion selection
 	 */
 	private boolean checkDiscussionSelection(List resourcesToExport) {
 		Iterator iter = resourcesToExport.iterator();
@@ -94,13 +104,13 @@ public class ExportDiscussionPage extends WizardFileSystemResourceExportPage1 {
 				}
 				for (IResource file : children) {
 					String fileName = file.getName();
-					String[] name = fileName.split("\\.");
-					if (name[1].compareTo("dis") != 0) {
+					String[] name = fileName.split("\\."); //$NON-NLS-1$
+					if (name[1].compareTo("dis") != 0) { //$NON-NLS-1$
 						MessageDialog
 								.openWarning(
 										null,
-										"Attention",
-										"You have selected non-disscusion resources to export!\n Only the discussion will be exported!");
+										Messages.getString("ExportDiscussionPage.4"), //$NON-NLS-1$
+										Messages.getString("ExportDiscussionPage.5")); //$NON-NLS-1$
 						return false;
 					}
 				}
@@ -109,6 +119,12 @@ public class ExportDiscussionPage extends WizardFileSystemResourceExportPage1 {
 		return true;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.ui.dialogs.WizardExportResourcesPage#createButton(org.eclipse.swt.widgets.Composite,
+	 *      int, java.lang.String, boolean)
+	 */
 	@Override
 	protected Button createButton(Composite parent, int id, String label,
 			boolean defaultButton) {
@@ -121,10 +137,10 @@ public class ExportDiscussionPage extends WizardFileSystemResourceExportPage1 {
 		button.setLayoutData(buttonData);
 
 		button.setData(new Integer(id));
-		if (id != 20)
+		if (id != 20) {
 			button.setText(label);
-		else {
-			button.setText("Select Discussions Only");
+		} else {
+			button.setText(Messages.getString("ExportDiscussionPage.6")); //$NON-NLS-1$
 		}
 
 		button.setFont(parent.getFont());
@@ -143,10 +159,10 @@ public class ExportDiscussionPage extends WizardFileSystemResourceExportPage1 {
 	}
 
 	/**
-	 * (non-Javadoc)
-	 * Method declared on IDialogPage.
+	 * (non-Javadoc) Method declared on IDialogPage.
 	 * 
-	 * @param parent the parent
+	 * @param parent
+	 *            the parent
 	 */
 	@Override
 	public void createControl(Composite parent) {
@@ -158,7 +174,8 @@ public class ExportDiscussionPage extends WizardFileSystemResourceExportPage1 {
 	/**
 	 * Create the export options specification widgets.
 	 * 
-	 * @param optionsGroup the options group
+	 * @param optionsGroup
+	 *            the options group
 	 */
 	@Override
 	protected void createOptionsGroupButtons(Group optionsGroup) {
@@ -168,7 +185,7 @@ public class ExportDiscussionPage extends WizardFileSystemResourceExportPage1 {
 		compressContentsCheckbox = new Button(optionsGroup, SWT.CHECK
 				| SWT.LEFT);
 		// compressContentsCheckbox.setText(DataTransferMessages.ZipExport_compressContents);
-		//  compressContentsCheckbox.setFont(font);
+		// compressContentsCheckbox.setFont(font);
 		compressContentsCheckbox.setVisible(false);
 		createDirectoryStructureOptions(optionsGroup, font);
 
@@ -177,23 +194,26 @@ public class ExportDiscussionPage extends WizardFileSystemResourceExportPage1 {
 		createDirectoryStructureButton.setSelection(false);
 		createSelectionOnlyButton.setSelection(false);
 		createSelectionOnlyButton.setVisible(false);
-		//   compressContentsCheckbox.setSelection(true);
+		// compressContentsCheckbox.setSelection(true);
 
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.ui.wizards.datatransfer.WizardFileSystemResourceExportPage1#destinationEmptyMessage()
 	 */
 	@Override
 	protected String destinationEmptyMessage() {
-		return DataTransferMessages.ZipExport_destinationEmpty;
+		return "";
 	}
 
 	/**
-	 * Returns a boolean indicating whether the directory portion of the
-	 * passed pathname is valid and available for use.
+	 * Returns a boolean indicating whether the directory portion of the passed
+	 * pathname is valid and available for use.
 	 * 
-	 * @param fullPathname the full pathname
+	 * @param fullPathname
+	 *            the full pathname
 	 * 
 	 * @return true, if ensure target directory is valid
 	 */
@@ -209,27 +229,28 @@ public class ExportDiscussionPage extends WizardFileSystemResourceExportPage1 {
 	}
 
 	/**
-	 * Returns a boolean indicating whether the passed File handle is
-	 * is valid and available for use.
+	 * Returns a boolean indicating whether the passed File handle is is valid
+	 * and available for use.
 	 * 
-	 * @param targetFile the target file
+	 * @param targetFile
+	 *            the target file
 	 * 
 	 * @return true, if ensure target file is valid
 	 */
 	protected boolean ensureTargetFileIsValid(File targetFile) {
 		if (targetFile.exists() && targetFile.isDirectory()) {
-			displayErrorDialog(DataTransferMessages.ZipExport_mustBeFile);
+			displayErrorDialog("");
 			giveFocusToDestination();
 			return false;
 		}
 
 		if (targetFile.exists()) {
 			if (targetFile.canWrite()) {
-				if (!queryYesNoQuestion(DataTransferMessages.ZipExport_alreadyExists)) {
+				if (!queryYesNoQuestion("")) {
 					return false;
 				}
 			} else {
-				displayErrorDialog(DataTransferMessages.ZipExport_alreadyExistsError);
+				displayErrorDialog("");
 				giveFocusToDestination();
 				return false;
 			}
@@ -239,8 +260,8 @@ public class ExportDiscussionPage extends WizardFileSystemResourceExportPage1 {
 	}
 
 	/**
-	 * Ensures that the target output file and its containing directory are
-	 * both valid and able to be used.  Answer a boolean indicating validity.
+	 * Ensures that the target output file and its containing directory are both
+	 * valid and able to be used. Answer a boolean indicating validity.
 	 * 
 	 * @return true, if ensure target is valid
 	 */
@@ -259,10 +280,11 @@ public class ExportDiscussionPage extends WizardFileSystemResourceExportPage1 {
 	}
 
 	/**
-	 * Export the passed resource and recursively export all of its child resources
-	 * (iff it's a container).  Answer a boolean indicating success.
+	 * Export the passed resource and recursively export all of its child
+	 * resources (iff it's a container). Answer a boolean indicating success.
 	 * 
-	 * @param op the op
+	 * @param op
+	 *            the op
 	 * 
 	 * @return true, if execute export operation
 	 */
@@ -283,7 +305,9 @@ public class ExportDiscussionPage extends WizardFileSystemResourceExportPage1 {
 		IStatus status = op.getStatus();
 		if (!status.isOK()) {
 			ErrorDialog.openError(getContainer().getShell(),
-					DataTransferMessages.DataTransfer_exportProblems, null, // no special message
+					"", null, // no
+																			// special
+																			// message
 					status);
 			return false;
 		}
@@ -294,8 +318,8 @@ public class ExportDiscussionPage extends WizardFileSystemResourceExportPage1 {
 	}
 
 	/**
-	 * The Finish button was pressed.  Try to do the required work now and answer
-	 * a boolean indicating success.  If false is returned then the wizard will
+	 * The Finish button was pressed. Try to do the required work now and answer
+	 * a boolean indicating success. If false is returned then the wizard will
 	 * not close.
 	 * 
 	 * @return boolean
@@ -314,7 +338,7 @@ public class ExportDiscussionPage extends WizardFileSystemResourceExportPage1 {
 			resourcesToExport = getWhiteCheckedResources();
 		}
 
-		//Save dirty editors if possible but do not stop if not all are saved
+		// Save dirty editors if possible but do not stop if not all are saved
 		saveDirtyEditors();
 		// about to invoke the operation so save our state
 		saveWidgetValues();
@@ -325,8 +349,8 @@ public class ExportDiscussionPage extends WizardFileSystemResourceExportPage1 {
 					resourcesToExport, getDestinationValue(), tok));
 		}
 		MessageDialog.openInformation(getContainer().getShell(),
-				DataTransferMessages.DataTransfer_information,
-				DataTransferMessages.FileExport_noneSelected);
+				"",
+				"");
 
 		return false;
 	}
@@ -338,11 +362,11 @@ public class ExportDiscussionPage extends WizardFileSystemResourceExportPage1 {
 	 */
 	@Override
 	protected String getDestinationLabel() {
-		return DataTransferMessages.ZipExport_destinationLabel;
+		return "";
 	}
 
 	/**
-	 * Answer the contents of self's destination specification widget.  If this
+	 * Answer the contents of self's destination specification widget. If this
 	 * value does not have a suffix then add it first.
 	 * 
 	 * @return the destination value
@@ -352,9 +376,9 @@ public class ExportDiscussionPage extends WizardFileSystemResourceExportPage1 {
 		String idealSuffix = getOutputSuffix();
 		String destinationText = super.getDestinationValue();
 
-		// only append a suffix if the destination doesn't already have a . in 
-		// its last path segment.  
-		// Also prevent the user from selecting a directory.  Allowing this will 
+		// only append a suffix if the destination doesn't already have a . in
+		// its last path segment.
+		// Also prevent the user from selecting a directory. Allowing this will
 		// create a ".zip" file in the directory
 		if (destinationText.length() != 0
 				&& !destinationText.endsWith(File.separator)) {
@@ -374,9 +398,9 @@ public class ExportDiscussionPage extends WizardFileSystemResourceExportPage1 {
 	}
 
 	/**
-	 * Answer the suffix that files exported from this wizard should have.
-	 * If this suffix is a file extension (which is typically the case)
-	 * then it must include the leading period character.
+	 * Answer the suffix that files exported from this wizard should have. If
+	 * this suffix is a file extension (which is typically the case) then it
+	 * must include the leading period character.
 	 * 
 	 * @return the output suffix
 	 */
@@ -404,14 +428,14 @@ public class ExportDiscussionPage extends WizardFileSystemResourceExportPage1 {
 	}
 
 	/**
-	 * Open an appropriate destination browser so that the user can specify a source
-	 * to import from.
+	 * Open an appropriate destination browser so that the user can specify a
+	 * source to import from.
 	 */
 	@Override
 	protected void handleDestinationBrowseButtonPressed() {
 		FileDialog dialog = new FileDialog(getContainer().getShell(), SWT.SAVE);
 		dialog.setFilterExtensions(new String[] { "*.exd" }); //$NON-NLS-1$ 
-		dialog.setText(DataTransferMessages.ZipExport_selectDestinationTitle);
+		dialog.setText("");
 		String currentSourceString = getDestinationValue();
 		int lastSeparatorIndex = currentSourceString
 				.lastIndexOf(File.separator);
@@ -427,6 +451,11 @@ public class ExportDiscussionPage extends WizardFileSystemResourceExportPage1 {
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.ui.dialogs.WizardExportResourcesPage#handleTypesEditButtonPressed()
+	 */
 	@Override
 	protected void handleTypesEditButtonPressed() {
 		// TODO Auto-generated method stub
@@ -459,18 +488,23 @@ public class ExportDiscussionPage extends WizardFileSystemResourceExportPage1 {
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.ui.dialogs.WizardExportResourcesPage#queryResourceTypesToExport()
+	 */
 	@Override
 	protected Object[] queryResourceTypesToExport() {
 		// TODO Auto-generated method stub
-		//	return super.queryResourceTypesToExport();
+		// return super.queryResourceTypesToExport();
 		String[] extension = new String[1];
-		extension[0] = "dis";
+		extension[0] = "dis"; //$NON-NLS-1$
 		return extension;
 	}
 
 	/**
-	 * Hook method for restoring widget values to the values that they held
-	 * last time this wizard was used to completion.
+	 * Hook method for restoring widget values to the values that they held last
+	 * time this wizard was used to completion.
 	 */
 	@Override
 	protected void restoreWidgetValues() {

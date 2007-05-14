@@ -17,13 +17,18 @@ import org.eclipse.ui.wizards.datatransfer.ZipFileExportWizard;
  */
 public class ExportDiscussion extends ZipFileExportWizard {
 
-	// private ExportDiscussionPage page;
-
 	/** The selection. */
 	private ISelection selection;
 
+	/** The export page. */
 	private ExportDiscussionPage exportPage;
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.ui.wizards.datatransfer.ZipFileExportWizard#init(org.eclipse.ui.IWorkbench,
+	 *      org.eclipse.jface.viewers.IStructuredSelection)
+	 */
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection currentSelection) {
 		this.selection = currentSelection;
@@ -36,11 +41,16 @@ public class ExportDiscussion extends ZipFileExportWizard {
 				.getIDEImageDescriptor("wizban/exportzip_wiz.png"));//$NON-NLS-1$
 		setNeedsProgressMonitor(true);
 
-		setWindowTitle("Export Discussions");
+		setWindowTitle(Messages.getString("ExportDiscussion.0")); //$NON-NLS-1$
 		setWindowTitle(Messages.getString("ExportDiscussion.exportDiscs")); //$NON-NLS-1$
 
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.ui.wizards.datatransfer.ZipFileExportWizard#addPages()
+	 */
 	@Override
 	public void addPages() {
 		// super.addPages();
@@ -48,6 +58,11 @@ public class ExportDiscussion extends ZipFileExportWizard {
 		addPage(exportPage);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.ui.wizards.datatransfer.ZipFileExportWizard#performFinish()
+	 */
 	@Override
 	public boolean performFinish() {
 		// TODO Auto-generated method stub
