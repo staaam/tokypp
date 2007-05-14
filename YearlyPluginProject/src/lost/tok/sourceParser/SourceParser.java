@@ -2,7 +2,6 @@ package lost.tok.sourceParser;
 
 import lost.tok.GeneralFunctions;
 import lost.tok.Messages;
-import lost.tok.ToK;
 import lost.tok.opTable.SourceDocumentProvider;
 import lost.tok.opTable.StyleManager;
 import lost.tok.sourceDocument.Chapter;
@@ -200,7 +199,7 @@ public class SourceParser extends TextEditor {
 		monitor.worked(1);
 
 		monitor.setTaskName(Messages.getString("SourceParser.4")); //$NON-NLS-1$
-		IFile srcIFile = tProj.getFolder(ToK.SOURCES_FOLDER).getFile(srcName);
+		// IFile srcIFile = tProj.getFolder(ToK.SOURCES_FOLDER).getFile(srcName);
 
 		monitor.worked(1);
 
@@ -214,6 +213,13 @@ public class SourceParser extends TextEditor {
 		}
 		monitor.worked(1);
 		monitor.done();
+		
+		// trying to refresh again, in case the previous refresh didn't work
+		try {
+			tProj.refreshLocal(IResource.DEPTH_INFINITE, null);
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
 
 		firePropertyChange(IEditorPart.PROP_DIRTY);
 	}

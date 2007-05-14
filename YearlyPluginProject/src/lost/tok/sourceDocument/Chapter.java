@@ -22,22 +22,22 @@ public class Chapter {
 			.getString("Chapter.UnparsedTitle"); //$NON-NLS-1$
 
 	/** The displayed label of the chapter */
-	String label;
+	protected String label;
 
 	/** The name of the chapter. Part of its title */
-	String name;
+	protected String name;
 
 	/** The parent of this chapter. null for root */
-	Chapter parent;
+	protected Chapter parent;
 
 	/** The chapters below this one */
-	LinkedList<Chapter> children;
+	protected LinkedList<Chapter> children;
 
 	/** The offset of the chapter from the start of the DISPLAYED document */
-	Integer offset;
+	protected Integer offset;
 
 	/** The length of the chapter, including its subchapters */
-	Integer length;
+	protected Integer length;
 
 	/** Creates a childless Chapter */
 	public Chapter(String label, String name) {
@@ -127,10 +127,14 @@ public class Chapter {
 			child.getTree(l);
 		}
 	}
-
+	
 	/** Returns the chapter's parent */
 	public Chapter getParent() {
 		return parent;
+	}
+	
+	public LinkedList<Chapter> getChildren() {
+		return children;
 	}
 
 	/**
@@ -229,5 +233,27 @@ public class Chapter {
 			return (ChapterText) c.children.getFirst();
 		}
 		return null;
+	}
+	
+	/**
+	 * Adds this Chapter and its sons to the xml
+	 * @param element the element under which this chapter will be added
+	 */
+	public void addToXml(Element element) {
+		Element chapTextElement = element.addElement("child");
+		if ((children.size() == 1) && (children.getFirst() instanceof ChapterText))
+		{
+			// Note(Shay): This chapter contains only text
+			//  if we decide to remove those lone chpaters, we should remove this if
+			children.getFirst().addToXml(chapTextElement);
+		}
+		else
+		{
+			// this chapter has other chapters as children
+			Element chapElement = chapTextElement.addElement("chapter");
+			chapElement.addElement("name").addText(getName());
+			for (Chapter c : children)
+				c.addToXml(chapElement);
+		}
 	}
 }

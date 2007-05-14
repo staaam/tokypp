@@ -7,13 +7,11 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import lost.tok.GeneralFunctions;
 import lost.tok.Messages;
 import lost.tok.ToK;
 
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
-import org.dom4j.XPath;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
 import org.eclipse.core.resources.IFile;
@@ -42,14 +40,6 @@ public class SourceDocument extends Document {
 	private RangeSearch r;
 
 	private IFile outputFile;
-
-	private boolean grandsonText;
-
-	private boolean firstLevel;
-
-	private boolean firstChild;
-
-	private int childNum;
 
 	/** Creates a source document from a source xml */
 	public void set(org.dom4j.Document d) {
@@ -166,171 +156,47 @@ public class SourceDocument extends Document {
 
 	/** Converts a SourceDocument object into an XML document */
 	public void toXML(IProject tokProj, String sourceName) {
-		childNum = 0;
-		firstChild = true;
+
 		outputFile = tokProj.getFolder(ToK.SOURCES_FOLDER).getFile(sourceName);
 
+		if (outputFile.exists())
+			return; // nothing we can do
+
 		// create the XML and fill the name and author tags
-		createXML();
-
-		// start the iteration on the first level of chapters
-		for (Chapter c : rootChapter.children) {
-			childNum++;
-			firstLevel = true;
-			String currXMLPath = "//source/child"; //$NON-NLS-1$
-			preorderFunc(c, currXMLPath);
-			firstChild = false;
+		try {
+			// Print the entire xml to the byte array
+			ByteArrayOutputStream baos = new ByteArrayOutputStream(500);
+			OutputFormat outformat = OutputFormat.createPrettyPrint();
+			outformat.setNewlines(true);
+			outformat.setEncoding("UTF-8"); //$NON-NLS-1$
+			XMLWriter writer = new XMLWriter(baos, outformat);
+			writer.write(toXMLDocument());
+			writer.flush();
+		
+			// create a resource from the byte array
+			ByteArrayInputStream bais = new ByteArrayInputStream(baos
+					.toByteArray());
+			outputFile.create(bais, true, null);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (CoreException e) {
+			e.printStackTrace();
 		}
-	}
-
-	/** create the XML for the source and fill the name and author tags */
-	private void createXML() {
-
-		if (!outputFile.exists()) {
-			try {
-				// Print the entire xml to the byte array
-				ByteArrayOutputStream baos = new ByteArrayOutputStream(500);
-				OutputFormat outformat = OutputFormat.createPrettyPrint();
-				outformat.setEncoding("UTF-8"); //$NON-NLS-1$
-				XMLWriter writer = new XMLWriter(baos, outformat);
-				writer.write(sourceSkeleton());
-				writer.flush();
-
-				// create a resource from the byte array
-				ByteArrayInputStream bais = new ByteArrayInputStream(baos
-						.toByteArray());
-				outputFile.create(bais, true, null);
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (CoreException e) {
-				e.printStackTrace();
-			}
-		}
+		
 	}
 
 	/** fills the name and author tags */
-	private org.dom4j.Document sourceSkeleton() {
+	private org.dom4j.Document toXMLDocument() {
 		// Create the Skeleton of the source file
 		org.dom4j.Document sourceDoc = DocumentHelper.createDocument();
 		Element e = sourceDoc.addElement("source"); //$NON-NLS-1$
 		e.addElement("name").addText(title); //$NON-NLS-1$
 		e.addElement("author").addText(author); //$NON-NLS-1$
-		e.addElement("child"); //$NON-NLS-1$
+		
+		for (Chapter c : rootChapter.getChildren())
+			c.addToXml(e); // will add the chapter and its offsprings
 
 		return sourceDoc;
-	}
-
-	/**
-	 * Runs on the tree in a preorder manner. for every node it will enter the
-	 * information into the XML file.
-	 */
-	private void preorderFunc(Chapter chapter, String currXMLPath) {
-		if (nextChapterIsText(chapter)) {
-			if (firstLevel & !firstChild) {
-				currXMLPath = "//source"; //$NON-NLS-1$
-				addElement(currXMLPath, "child"); //$NON-NLS-1$
-				currXMLPath += "/child[position()=" + childNum + "]"; //$NON-NLS-1$ //$NON-NLS-2$
-			}
-			// the son of this node is a text node
-			treatTextNode(chapter, currXMLPath);
-			return;
-		} else {
-			firstLevel = false;
-			// this is a regular chapter node
-			treatChapterNode(chapter, currXMLPath);
-			// if "grandsone" is not text
-			if (!grandsonText) {
-				currXMLPath = currXMLPath
-						+ "/chapter[name='" + chapter.getName() + "']/child"; //$NON-NLS-1$ //$NON-NLS-2$
-			} else {
-				currXMLPath = currXMLPath + "/chapter[name='" //$NON-NLS-1$
-						+ chapter.getName() + "']"; //$NON-NLS-1$
-			}
-			for (Chapter c : chapter.children) {
-				preorderFunc(c, currXMLPath);
-			}
-		}
-	}
-
-	// chaecks if the son of the given chapter is a text node
-	private boolean nextChapterIsText(Chapter chapter) {
-		if (chapter.children.getFirst() instanceof ChapterText) {
-			return true;
-		}
-		return false;
-	}
-
-	// add child element
-	private void addElement(String currXMLPath, String elmName) {
-
-		org.dom4j.Document doc = GeneralFunctions.readFromXML(outputFile);
-		XPath xpathSelector = DocumentHelper.createXPath(currXMLPath);
-		List result = xpathSelector.selectNodes(doc);
-
-		Element chapterElm = (Element) result.get(0);
-		chapterElm.addElement(elmName);
-		GeneralFunctions.writeToXml(outputFile, doc);
-
-		System.out.println("added element at: " + currXMLPath); //$NON-NLS-1$
-	}
-
-	// entering chapter information to the XML
-	private void treatChapterNode(Chapter c, String currXMLPath) {
-		// for each node we create the apropriate tags
-		org.dom4j.Document doc = GeneralFunctions.readFromXML(outputFile);
-
-		XPath xpathSelector = DocumentHelper.createXPath(currXMLPath);
-		List result = xpathSelector.selectNodes(doc);
-
-		Element chapterElm = (Element) result.get(0);
-		Element chapterSubElm = chapterElm.addElement("chapter"); //$NON-NLS-1$
-		chapterSubElm.addElement("name").addText(c.getName()); //$NON-NLS-1$
-		// if "grandsone" is not text
-		if (!nextChapterIsText(c.children.getFirst())) {
-			grandsonText = false;
-			chapterSubElm.addElement("child"); //$NON-NLS-1$
-		} else {
-			grandsonText = true;
-		}
-
-		GeneralFunctions.writeToXml(outputFile, doc);
-
-		System.out.println("chapter name is: " + c.getName()); //$NON-NLS-1$
-	}
-
-	// entering chapter & text information to the XML
-	private void treatTextNode(Chapter c, String currXMLPath) {
-		// if it is a text node we write the contents
-		org.dom4j.Document doc = GeneralFunctions.readFromXML(outputFile);
-
-		XPath xpathSelector = DocumentHelper.createXPath(currXMLPath);
-		List result = xpathSelector.selectNodes(doc);
-
-		Element chapterElm = (Element) result.get(0);
-		Element chapterChildElement;
-		if (!firstLevel) {
-			chapterChildElement = chapterElm.addElement("child"); //$NON-NLS-1$
-		} else {
-			chapterChildElement = chapterElm;
-		}
-
-		Element textElm = chapterChildElement.addElement("text"); //$NON-NLS-1$
-		// the name is of the current chapter, while the content is from the son
-		textElm.addElement("name").addText(c.getName()); //$NON-NLS-1$
-		String contentText = getTextofChild(c);
-		textElm.addElement("content").addText(contentText); //$NON-NLS-1$
-
-		GeneralFunctions.writeToXml(outputFile, doc);
-
-		System.out.println("   text node name: " + c.getName()); //$NON-NLS-1$
-
-	}
-
-	/** retrieve the text from the child node */
-	private String getTextofChild(Chapter c) {
-		ChapterText textC = (ChapterText) c.children.getFirst();
-		return textC.getText();
-
 	}
 
 	/** Returns the title (the upper label) of the source document */
