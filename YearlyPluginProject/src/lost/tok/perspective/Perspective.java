@@ -38,6 +38,11 @@ public class Perspective implements IPerspectiveFactory{
 		
 	}
 
+	/**
+	 * Setting the look of things - 
+	 * what the user will see with this perspective
+	 * @param layout
+	 */
 	private void defineLayout(IPageLayout layout) {
 		//Editors are placed for free.
         String editorArea = layout.getEditorArea();
@@ -55,6 +60,10 @@ public class Perspective implements IPerspectiveFactory{
         bottom.addView(ExcerptionView.ID);
 	}
 
+	/**
+	 * shortcuts for the perspective - menus and views
+	 * @param layout
+	 */
 	private void defineActions(IPageLayout layout) {
 		//Add "new wizards".
 		//this Adds it to the File->new menu and the right click menu
