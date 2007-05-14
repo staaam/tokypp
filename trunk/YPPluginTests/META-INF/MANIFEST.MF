@@ -1,15 +1,16 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: YPPluginTests Plug-in
-Bundle-SymbolicName: YPPluginTests
+Bundle-Name: YP Tests
+Bundle-SymbolicName: lost.tok.tests
 Bundle-Version: 1.0.0
 Bundle-Activator: lost.tok.Activator
 Bundle-Localization: plugin
-Require-Bundle: Yearly_Plugin_Project,
- org.eclipse.core.runtime,
+Require-Bundle: org.eclipse.core.runtime,
  org.junit,
  org.eclipse.core.resources,
  org.eclipse.ui,
  org.eclipse.ui.editors,
- org.eclipse.ui.workbench.texteditor
+ org.eclipse.ui.workbench.texteditor,
+ lost.tok
 Eclipse-LazyStart: true
+Bundle-Vendor: Team Lost
