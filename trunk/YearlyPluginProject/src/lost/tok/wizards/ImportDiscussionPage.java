@@ -15,7 +15,6 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -30,8 +29,10 @@ import lost.tok.export.DiscussionExportOperation;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.Node;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -61,27 +62,27 @@ import org.eclipse.ui.wizards.datatransfer.ImportOperation;
 public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 		implements Listener {
 
-	ZipLeveledStructureProvider zipCurrentProvider;
-
-	TarLeveledStructureProvider tarCurrentProvider;
-	
-	 private IStructuredSelection selection;
-	    
-	    private ToK tok;
-	    
-	   private static final int BUFFER = 2048;
-	   
-	   private String tempLinksFile;
+	private static final int BUFFER = 2048;
 
 	// constants
 	private static final String[] FILE_IMPORT_MASK = { "*.exd" }; //$NON-NLS-1$ //$NON-NLS-2$
 
-	// dialog store id constants
-	private final static String STORE_SOURCE_NAMES_ID = "WizardZipFileResourceImportPage1.STORE_SOURCE_NAMES_ID"; //$NON-NLS-1$
-
 	private final static String STORE_OVERWRITE_EXISTING_RESOURCES_ID = "WizardZipFileResourceImportPage1.STORE_OVERWRITE_EXISTING_RESOURCES_ID"; //$NON-NLS-1$
 
 	private final static String STORE_SELECTED_TYPES_ID = "WizardZipFileResourceImportPage1.STORE_SELECTED_TYPES_ID"; //$NON-NLS-1$
+
+	// dialog store id constants
+	private final static String STORE_SOURCE_NAMES_ID = "WizardZipFileResourceImportPage1.STORE_SOURCE_NAMES_ID"; //$NON-NLS-1$
+
+	private IStructuredSelection selection;
+
+	TarLeveledStructureProvider tarCurrentProvider;
+
+	private String tempLinksFile;
+
+	private ToK tok;
+
+	ZipLeveledStructureProvider zipCurrentProvider;
 
 	/**
 	 * Creates an instance of this class
@@ -109,8 +110,51 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 		clearProviderCache();
 		return true;
 	}
-	
-	
+
+	@SuppressWarnings("unchecked")
+	private boolean checkSourcesExist() {
+		// TODO Auto-generated method stub
+		List<String> missingFiles = new ArrayList<String>();
+		Document tempDoc = GeneralFunctions.readFromXML(tempLinksFile);
+		List<Node> sourceNodes = tempDoc.selectNodes("//sublink/sourceFile");
+		IFolder sourceFolder = tok.getRootFolder();
+		for (Node sourceFile : sourceNodes) {
+			String rawPathName = sourceFile.getText();
+			Path path = new Path(sourceFile.getText());
+			if (rawPathName.contains(sourceFolder.getName())) {//check that the path doesn't include the source folder Itself
+				while (rawPathName.contains(sourceFolder.getName())) {
+					path.removeFirstSegments(1);
+					rawPathName = path.toOSString();
+					continue;
+				}
+			}
+
+			if (!sourceFolder.exists(path)) {
+//				MessageDialog
+//						.openError(
+//								null,
+//								"Error!",
+//								"The needed sources don't exist in your project.\n Please import the needed sources first!");
+//				return false;
+				missingFiles.add(path.toOSString());
+			}
+		}
+		if(missingFiles.size() != 0){
+			String error = new String();
+			for (String file : missingFiles) {
+				if (!error.contains(file))
+					error += file + "\n";
+			}
+			MessageDialog
+					.openError(
+							null,
+							"Error!",
+							"The needed sources don't exist in your project.\n\n The following sources are missing:\n\n" + error);
+			return false;
+		}
+		return true;
+	}
+
 	/**
 	 * Clears the cached structure provider after first finalizing it properly.
 	 */
@@ -158,15 +202,8 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 		overwriteExistingResourcesCheckbox
 				.setText(DataTransferMessages.FileImport_overwriteExisting);
 		overwriteExistingResourcesCheckbox.setFont(parent.getFont());
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	protected void handleTypesEditButtonPressed() {
-		selectedTypes.clear();
-		selectedTypes.add("dis");
-		setAllSelections(true);
-		setupSelectionsBasedOnSelectedTypes();
+		overwriteExistingResourcesCheckbox.setSelection(true);
+		overwriteExistingResourcesCheckbox.setVisible(false);
 	}
 
 	@Override
@@ -178,32 +215,57 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 		selectAllButton.setVisible(false);
 		deselectAllButton.setVisible(false);
 	}
-	
-	private boolean validateSourceFile(String fileName) {
-		if (ArchiveFileManipulations.isTarFile(fileName)) {
-			TarFile tarFile = getSpecifiedTarSourceFile(fileName);
-			return (tarFile != null);
+
+	/**
+	 * Creates a temporary Links file
+	 * @param zipFile
+	 */
+	private void createTempLinksFile(ZipFile zipFile) {
+		ZipEntry linksEntry = zipFile
+				.getEntry(DiscussionExportOperation.TEMP_LINKS_XML);
+
+		try {
+			BufferedInputStream is = new BufferedInputStream(zipFile
+					.getInputStream(linksEntry));
+			String tmpFilePath = System.getProperty("java.io.tmpdir");
+			File unzipDestinationDirectory = new File(tmpFilePath);
+			File destFile = new File(unzipDestinationDirectory, linksEntry
+					.getName());
+			int currentByte;
+			// establish buffer for writing file
+			byte data[] = new byte[BUFFER];
+			// write the current file to disk
+			FileOutputStream fos = new FileOutputStream(destFile);
+			BufferedOutputStream dest = new BufferedOutputStream(fos, BUFFER);
+			// read and write until last byte is encountered
+			while ((currentByte = is.read(data, 0, BUFFER)) != -1) {
+				dest.write(data, 0, currentByte);
+			}
+			dest.flush();
+			dest.close();
+			is.close();
+			tempLinksFile = destFile.getAbsolutePath();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-		ZipFile zipFile = getSpecifiedZipSourceFile(fileName);
-		if (zipFile != null) {
-			ArchiveFileManipulations.closeZipFile(zipFile, getContainer()
-					.getShell());
-			return true;
-		}
-		return false;
+
+	}
+
+	private void deleteTempLinksFile() {
+		// TODO Auto-generated method stub
+		File tempLinkFile = new File(tempLinksFile);
+		tempLinkFile.delete();
 	}
 
 	/**
 	 * Answer a boolean indicating whether the specified source currently exists
 	 * and is valid (ie.- proper format)
 	 */
-	private boolean ensureZipSourceIsValid() {
-		ZipFile specifiedFile = getSpecifiedZipSourceFile();
-		if (specifiedFile == null) {
-			return false;
+	protected boolean ensureSourceIsValid() {
+		if (ArchiveFileManipulations.isTarFile(sourceNameField.getText())) {
+			return ensureTarSourceIsValid();
 		}
-		return ArchiveFileManipulations.closeZipFile(specifiedFile,
-				getContainer().getShell());
+		return ensureZipSourceIsValid();
 	}
 
 	private boolean ensureTarSourceIsValid() {
@@ -218,11 +280,13 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 	 * Answer a boolean indicating whether the specified source currently exists
 	 * and is valid (ie.- proper format)
 	 */
-	protected boolean ensureSourceIsValid() {
-		if (ArchiveFileManipulations.isTarFile(sourceNameField.getText())) {
-			return ensureTarSourceIsValid();
+	private boolean ensureZipSourceIsValid() {
+		ZipFile specifiedFile = getSpecifiedZipSourceFile();
+		if (specifiedFile == null) {
+			return false;
 		}
-		return ensureZipSourceIsValid();
+		return ArchiveFileManipulations.closeZipFile(specifiedFile,
+				getContainer().getShell());
 	}
 
 	/**
@@ -257,8 +321,12 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 		return false;
 	}
 
-	
-	
+	@Override
+	protected IPath getContainerFullPath() {
+		getTok();
+		return tok.getDiscussionFolder().getFullPath();
+	}
+
 	/**
 	 * Returns a content provider for <code>FileSystemElement</code>s that
 	 * returns only files as children.
@@ -382,35 +450,6 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 	 * Answer a handle to the zip file currently specified as being the source.
 	 * Return null if this file does not exist or is not of valid format.
 	 */
-	protected ZipFile getSpecifiedZipSourceFile() {
-		return getSpecifiedZipSourceFile(sourceNameField.getText());
-	}
-
-	/**
-	 * Answer a handle to the zip file currently specified as being the source.
-	 * Return null if this file does not exist or is not of valid format.
-	 */
-	private ZipFile getSpecifiedZipSourceFile(String fileName) {
-		if (fileName.length() == 0) {
-			return null;
-		}
-
-		try {
-			return new ZipFile(fileName);
-		} catch (ZipException e) {
-			displayErrorDialog(DataTransferMessages.ZipImport_badFormat);
-		} catch (IOException e) {
-			displayErrorDialog(DataTransferMessages.ZipImport_couldNotRead);
-		}
-
-		sourceNameField.setFocus();
-		return null;
-	}
-
-	/**
-	 * Answer a handle to the zip file currently specified as being the source.
-	 * Return null if this file does not exist or is not of valid format.
-	 */
 	protected TarFile getSpecifiedTarSourceFile() {
 		return getSpecifiedTarSourceFile(sourceNameField.getText());
 	}
@@ -437,6 +476,50 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 	}
 
 	/**
+	 * Answer a handle to the zip file currently specified as being the source.
+	 * Return null if this file does not exist or is not of valid format.
+	 */
+	protected ZipFile getSpecifiedZipSourceFile() {
+		return getSpecifiedZipSourceFile(sourceNameField.getText());
+	}
+
+	/**
+	 * Answer a handle to the zip file currently specified as being the source.
+	 * Return null if this file does not exist or is not of valid format.
+	 */
+	private ZipFile getSpecifiedZipSourceFile(String fileName) {
+		if (fileName.length() == 0) {
+			return null;
+		}
+
+		try {
+			return new ZipFile(fileName);
+		} catch (ZipException e) {
+			displayErrorDialog(DataTransferMessages.ZipImport_badFormat);
+		} catch (IOException e) {
+			displayErrorDialog(DataTransferMessages.ZipImport_couldNotRead);
+		}
+
+		sourceNameField.setFocus();
+		return null;
+	}
+
+	private void getTok() {
+		if (selection != null && selection.isEmpty() == false
+				&& selection instanceof IStructuredSelection) {
+			IStructuredSelection ssel = (IStructuredSelection) selection;
+			if (ssel.size() > 1) {
+				return;
+			}
+			Object obj = ssel.getFirstElement();
+			if (obj instanceof IResource) {
+				IResource resource = (IResource) obj;
+				tok = ToK.getProjectToK(resource.getProject());
+			}
+		}
+	}
+
+	/**
 	 * Open a FileDialog so that the user can specify the source file to import
 	 * from
 	 */
@@ -451,6 +534,15 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 				selectionGroup.setFocus();
 			}
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	protected void handleTypesEditButtonPressed() {
+		selectedTypes.clear();
+		selectedTypes.add("dis");
+		setAllSelections(true);
+		setupSelectionsBasedOnSelectedTypes();
 	}
 
 	/**
@@ -476,6 +568,14 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 
 		if (ensureZipSourceIsValid()) {
 			ZipFile zipFile = getSpecifiedZipSourceFile();
+
+			//extract the partial links file
+			createTempLinksFile(zipFile);
+
+			//check if all the linked sources exist
+			if (!checkSourcesExist())
+				return false;
+				
 			ZipLeveledStructureProvider structureProvider = ArchiveFileManipulations
 					.getZipStructureProvider(zipFile, getContainer().getShell());
 			ImportOperation operation = new ImportOperation(
@@ -486,19 +586,21 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 			result = executeImportOperation(operation);
 
 			//Merge link files
-			createTempLinksFile(zipFile);	
+
 			mergeLinkfiles();
 			deleteTempLinksFile();
-			
+
 			closeZipFile(zipFile);
 		}
 		return result;
 	}
 
-	private void deleteTempLinksFile() {
-		// TODO Auto-generated method stub
-		File tempLinkFile = new File(tempLinksFile);
-		tempLinkFile.delete();
+	/**
+	 * Initializes the specified operation appropriately.
+	 */
+	protected void initializeOperation(ImportOperation op) {
+		op.setOverwriteResources(overwriteExistingResourcesCheckbox
+				.getSelection());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -512,55 +614,6 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 			rootElement.add(node);
 		}
 		GeneralFunctions.writeToXml(tok.getLinkFile(), linksDoc);
-	}
-
-	/**
-	 * Creates a temporary Links file
-	 * @param zipFile
-	 */
-	private void createTempLinksFile(ZipFile zipFile) {
-		ZipEntry linksEntry = zipFile.getEntry(DiscussionExportOperation.TEMP_LINKS_XML);
-					
-		try {
-			BufferedInputStream is = new BufferedInputStream(zipFile
-					.getInputStream(linksEntry));
-			String tmpFilePath = System.getProperty("java.io.tmpdir");
-			File unzipDestinationDirectory = new File(tmpFilePath);
-			File destFile = new File(unzipDestinationDirectory, linksEntry
-					.getName());
-			int currentByte;
-			// establish buffer for writing file
-			byte data[] = new byte[BUFFER];
-			// write the current file to disk
-			FileOutputStream fos = new FileOutputStream(destFile);
-			BufferedOutputStream dest = new BufferedOutputStream(fos,
-					BUFFER);
-			// read and write until last byte is encountered
-			while ((currentByte = is.read(data, 0, BUFFER)) != -1) {
-				dest.write(data, 0, currentByte);
-			}
-			dest.flush();
-			dest.close();
-			is.close();
-			tempLinksFile = destFile.getAbsolutePath();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-	}
-	
-	@Override
-	protected IPath getContainerFullPath() {
-		getTok();
-		return tok.getDiscussionFolder().getFullPath();
-	}
-
-	/**
-	 * Initializes the specified operation appropriately.
-	 */
-	protected void initializeOperation(ImportOperation op) {
-		op.setOverwriteResources(overwriteExistingResourcesCheckbox
-				.getSelection());
 	}
 
 	/**
@@ -647,6 +700,20 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 		}
 	}
 
+	private boolean validateSourceFile(String fileName) {
+		if (ArchiveFileManipulations.isTarFile(fileName)) {
+			TarFile tarFile = getSpecifiedTarSourceFile(fileName);
+			return (tarFile != null);
+		}
+		ZipFile zipFile = getSpecifiedZipSourceFile(fileName);
+		if (zipFile != null) {
+			ArchiveFileManipulations.closeZipFile(zipFile, getContainer()
+					.getShell());
+			return true;
+		}
+		return false;
+	}
+
 	/**
 	 * Answer a boolean indicating whether self's source specification widgets
 	 * currently all contain valid values.
@@ -670,20 +737,5 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 		enableButtonGroup(true);
 		setErrorMessage(null);
 		return true;
-	}
-	
-	private void getTok() {
-		if (selection != null && selection.isEmpty() == false
-				&& selection instanceof IStructuredSelection) {
-			IStructuredSelection ssel = (IStructuredSelection) selection;
-			if (ssel.size() > 1) {
-				return;
-			}
-			Object obj = ssel.getFirstElement();
-			if (obj instanceof IResource) {
-				IResource resource = (IResource) obj;
-				tok = ToK.getProjectToK(resource.getProject());
-			}
-		}
 	}
 }
