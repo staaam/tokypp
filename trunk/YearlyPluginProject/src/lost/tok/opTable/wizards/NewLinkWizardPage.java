@@ -36,8 +36,6 @@ public class NewLinkWizardPage extends WizardPage implements SelectionListener, 
 
 	private Tree excerptions;
 
-	private ExcerptionView expViewer;
-
 	private Combo linkType;
 
 	private Text subject;
@@ -101,21 +99,17 @@ public class NewLinkWizardPage extends WizardPage implements SelectionListener, 
 		gd = new GridData(GridData.VERTICAL_ALIGN_BEGINNING);
 		label.setLayoutData(gd);
 
-		expViewer = ExcerptionView.getView();
-		Tree tree = expViewer.getTree();
-		TreeItem[] files = tree.getItems();
-
 		excerptions = new Tree(container, SWT.BORDER | SWT.MULTI);
 		excerptions.setSize(600, 300);
 
-		for (TreeItem element : files) {
+		for (String root : ExcerptionView.getView().getRoots()) {
 			TreeItem file = new TreeItem(excerptions, 0);
-			file.setText(element.getText());
+			file.setText(root);
 		}
 		gd = new GridData(GridData.FILL_BOTH);
 		gd.horizontalSpan = 2;
 		excerptions.addSelectionListener(this);
-
+		excerptions.selectAll();
 		excerptions.setLayoutData(gd);
 		excerptions.redraw();
 		initialize();
@@ -156,7 +150,7 @@ public class NewLinkWizardPage extends WizardPage implements SelectionListener, 
 	}
 
 	public Excerption[] getExcerptions(String fileName) {
-		List<Excerption> excerptions = expViewer.getExcerptions(fileName);
+		List<Excerption> excerptions = ExcerptionView.getView().getExcerptions(fileName);
 		Excerption[] exs = new Excerption[excerptions.size()];
 		excerptions.toArray(exs);
 		return exs;

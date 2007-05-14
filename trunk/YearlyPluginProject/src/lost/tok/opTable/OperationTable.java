@@ -137,9 +137,8 @@ public class OperationTable extends TextEditor {
 		if (rootDiscussionsView) {
 			rootDiscussions.refreshDisplay();
 		}
-		if (((FileEditorInput)this.getEditorInput()).getFile().getProjectRelativePath().toPortableString().startsWith(ToK.ROOTS_FOLDER)){
-			updateExcerptionView();
-		}
+		updateExcerptionView();
+
 		StyleRange markedTextStyle;
 		if (DiscussionEditor.isMarkQuote())
 			markedTextStyle = StyleManager.getMarkedQuoteStyle();
