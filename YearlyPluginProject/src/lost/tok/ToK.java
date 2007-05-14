@@ -699,7 +699,7 @@ public class ToK {
 	/**
 	 * Returns source object for requested source
 	 * 
-	 * @param src - relative to source/ folder
+	 * @param src - relative to the project
 	 * @return source object for requested source
 	 */
 	public Source getSource(String src) {
