@@ -2,7 +2,7 @@
 <?NLS TYPE="org.eclipse.help.toc"?>
 
 <toc label="Tree of Knowladge" topic="toc.html">
-   <topic label="Getting Started">
+   <topic label="ToK Guide">
       <anchor id="gettingstarted"/>
    </topic>
    <topic label="Samples">
