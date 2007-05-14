@@ -50,9 +50,13 @@ public class SwitchOpTableViewAction extends AbstractEditorAction {
 		if (action.isChecked()) {
 			System.out.println("checked"); //$NON-NLS-1$
 			ot.showDiscussions();
+			if (AddQuoteAction.getQuoteAction()!=null)
+				AddQuoteAction.getQuoteAction().setEnabled(false);
 		} else {
 			System.out.println("not checked"); //$NON-NLS-1$
 			ot.hideDisucssions();
+			if (AddQuoteAction.getQuoteAction()!=null)
+				AddQuoteAction.getQuoteAction().setEnabled(true);
 		}
 		
 	}
