@@ -4,6 +4,7 @@ import lost.tok.Discussion;
 import lost.tok.ToK;
 import lost.tok.Messages;
 import lost.tok.wizards.DiscCombo;
+import lost.tok.wizards.OpinionCombo;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.wizard.WizardPage;
@@ -38,8 +39,8 @@ public class AddQuoteWizardPage extends WizardPage {
 			}
 
 			public void widgetSelected(SelectionEvent e) {
-				opinionCombo.setItems(getDiscussion().getOpinionNames());
-				opinionCombo.select(0);
+				oc.setDiscussion(getDiscussion());
+				oc.opinCombo.select(0);
 				updateStatus(null);
 			}
 		});
@@ -67,7 +68,7 @@ public class AddQuoteWizardPage extends WizardPage {
 	}
 
 	public String getOpinion() {
-		return opinionCombo.getText();
+		return oc.opinCombo.getText();
 	}
 
 	private Text quoteArea = null;
@@ -76,7 +77,7 @@ public class AddQuoteWizardPage extends WizardPage {
 
 	private Combo discussionCombo = null;
 
-	private Combo opinionCombo = null;
+	private OpinionCombo oc = null;
 
 	public void createControl(Composite parent) {
 		GridData gridData = new GridData(GridData.FILL_BOTH);
@@ -119,7 +120,7 @@ public class AddQuoteWizardPage extends WizardPage {
 
 		new Label(composite, SWT.NONE).setText(Messages
 				.getString("AddQuoteWizard.Opinion")); //$NON-NLS-1$
-		opinionCombo = new Combo(composite, SWT.READ_ONLY);
-		opinionCombo.setLayoutData(gridData);
+		oc = new OpinionCombo(composite, SWT.READ_ONLY, tok);
+		oc.setLayoutData(gridData);
 	}
 }
