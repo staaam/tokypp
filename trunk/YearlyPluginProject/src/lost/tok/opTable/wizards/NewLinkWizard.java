@@ -64,7 +64,7 @@ public class NewLinkWizard extends Wizard implements INewWizard {
 			for (String root : roots) {
 				tok.linkDiscussionRoot(tok.getDiscussion(page.getDiscussion()),
 						tok.getSource(root),
-						page.getExcerptions(this.getRootName(root)), 
+						page.getExcerptions(root), 
 						page.getSubject(),
 						page.getLinkType());
 			}
@@ -83,18 +83,4 @@ public class NewLinkWizard extends Wizard implements INewWizard {
 		throw new CoreException(status);
 	}
 	
-	private String getRootName(String rootPath) {
-		int slashLoc = rootPath.lastIndexOf('\\');
-		if (slashLoc != -1) {
-			rootPath = rootPath.substring(slashLoc + 1);
-		}
-
-		slashLoc = rootPath.lastIndexOf('/');
-		if (slashLoc != -1) {
-			rootPath = rootPath.substring(slashLoc + 1);
-		}
-		
-		return rootPath;
-	}
-
 }
