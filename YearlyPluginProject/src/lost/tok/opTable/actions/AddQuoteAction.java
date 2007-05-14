@@ -26,7 +26,7 @@ public class AddQuoteAction extends AbstractEditorAction {
 	private static IAction action;
 	
 	public void run(IAction action) {
-		this.action = action;
+		AddQuoteAction.action = action;
 		
 		List<Excerption> excerptions = ((OperationTable) activeEditor)
 				.getMarked();

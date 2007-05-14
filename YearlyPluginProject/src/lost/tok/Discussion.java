@@ -435,7 +435,7 @@ public class Discussion {
 	}
 
 	private void throwCoreException(String message) throws CoreException {
-		IStatus status = new Status(IStatus.ERROR, "Yearly_Plugin_Project", //$NON-NLS-1$
+		IStatus status = new Status(IStatus.ERROR, "lost.tok", //$NON-NLS-1$
 				IStatus.OK, message, null);
 		throw new CoreException(status);
 	}
