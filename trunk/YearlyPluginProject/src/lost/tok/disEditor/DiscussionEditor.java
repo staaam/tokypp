@@ -44,10 +44,11 @@ import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.part.FileEditorInput;
 
 public class DiscussionEditor extends TextEditor {
-
+	
+	/******* M E M B E R S *******************************/
+	
 	public static final String EDITOR_ID = "lost.tok.disEditor.DiscussionEditor"; //$NON-NLS-1$
 
-	// Tree disTree;
 	private static final String DISCUSSION = "discussion";
 
 	private static final String QUOTE = "Quote";
@@ -61,17 +62,17 @@ public class DiscussionEditor extends TextEditor {
 	private Composite editor = null;
 
 	private int ctrlCurrentWidth = 0;
-
+	
+	
+	//******* C ' T O R *************************************
+	
 	public DiscussionEditor() {
 		super();
 	}
 
-	public void addOpinion(String opinionName) {
-		discussion.addOpinion(opinionName);
-		addTreeOpinion(rootItem, new Opinion(opinionName, discussion
-				.getOpinionsId(opinionName)));
-	}
-
+	
+	//******* CREATOR OF THE TREE EDITOR *****************************
+	
 	public void createPartControl(Composite parent) {
 		final Composite par = parent;
 		editor = par;
@@ -165,11 +166,6 @@ public class DiscussionEditor extends TextEditor {
 
 					IWorkbenchWindow ww = getSite().getWorkbenchWindow();
 					String editorId = OperationTable.EDITOR_ID;
-
-					// FileEditorInput fileEditorInput = (FileEditorInput)
-					// getEditorInput();
-					// ToK tok = ToK.getProjectToK(fileEditorInput.getFile()
-					// .getProject());
 
 					// oppening the source document
 					IFile source = quote.getSource().getFile();
@@ -385,10 +381,9 @@ public class DiscussionEditor extends TextEditor {
 			}
 		});
 
-		// **************************************************************************************************
-		// *************************** ASSIGN TREE EDITOR
-		// *************************************************
-		// **************************************************************************************************
+		// ***********************************************************************
+		// *************************** ASSIGN TREE EDITOR  *********************
+		// **********************************************************************
 		discussion = getDiscussion();
 
 		rootItem = new TreeItem(disTree, SWT.MULTI | SWT.WRAP);
@@ -417,122 +412,15 @@ public class DiscussionEditor extends TextEditor {
 
 		});
 
-		// *************************************************************************************************
 
 		// expends the root and it's opinions, but not the quotes
 		expendToDepth(rootItem, 3);
 	}
 
-	public Discussion getDiscussion() {
-		if (discussion != null) {
-			return discussion;
-		}
-
-		if (!(super.getEditorInput() instanceof FileEditorInput)) {
-			// todo - print error message
-			return null;
-		}
-
-		try {
-			FileEditorInput fileEditorInput = (FileEditorInput) super
-					.getEditorInput();
-			IFile file = fileEditorInput.getFile();
-
-			ToK tok = ToK.getProjectToK(file.getProject());
-			tok.loadDiscussions();
-
-			Discussion d = tok.getDiscussion(Discussion.getNameFromFile(file
-					.getName()));
-			return d;
-		} catch (CoreException e) {
-		}
-		return null;
-	}
-
-	/**
-	 * Returns all the displayed opinions
-	 */
-	public Opinion[] getDisplayedOpinions() {
-		Opinion[] retVal = new Opinion[rootItem.getItemCount()];
-
-		int i = 0;
-		for (TreeItem opItem : rootItem.getItems()) {
-			retVal[i] = getOpinion(opItem);
-			i++;
-		}
-		return retVal;
-	}
-
-	/**
-	 * Returns the quotes displayed in the tree Written for testing
-	 * 
-	 * @param opinionId
-	 *            the opinion whose quotes are to be returned
-	 * @return the quotes which are displayed under the given opinion id
-	 */
-	public Quote[] getDisplayedQuotes(Integer opinionId) {
-		TreeItem[] opItems = rootItem.getItems();
-		int i = 0;
-
-		// move i to the opinion we are looking for
-		while (i < opItems.length
-				&& getOpinion(opItems[i]).getId() != opinionId) {
-			i++;
-		}
-
-		if (i == opItems.length)
-			return null; // dude, your opinion id doesn't even exist!
-		// else
-
-		TreeItem[] qItems = rootItem.getItem(i).getItems();
-		Quote[] quotes = new Quote[qItems.length];
-
-		for (int j = 0; j < quotes.length; j++) {
-			quotes[j] = getQuote(qItems[j]);
-		}
-
-		return quotes;
-	}
-
-	public void moveQuoteToDefault(TreeItem itemToMove) {
-		Quote quote = getQuote(itemToMove);
-		discussion.relocateQuote(quote.getID(), Discussion.DEFAULT_OPINION_ID);// discussion.getOpinionsId(Discussion.DEFAULT_OPINION));
-	}
-
-	public void moveQuoteToOpinion(TreeItem quoteToAdd) {
-		Opinion opinion = (Opinion) quoteToAdd.getParentItem().getData(OPINION);
-		Quote quote = getQuote(quoteToAdd);
-		discussion.relocateQuote(quote.getID(), opinion.getId());
-	}
-
-	public void removeOpinionFromFile(TreeItem opinionToRemove) {
-		Opinion opinion = getOpinion(opinionToRemove);
-		discussion.removeOpinion(opinion.getId());
-	}
-
-	public void removeQuoteFromFile(TreeItem quoteToRemove) {
-		Quote quote = getQuote(quoteToRemove);
-		discussion.removeQuote(quote.getID());
-	}
-
-	private TreeItem addTreeOpinion(TreeItem treeItem, Opinion opinion) {
-		TreeItem opinionItem = new TreeItem(treeItem, SWT.MULTI | SWT.WRAP);
-		// Image imageOpin = new Image(null, new
-		// FileInputStream("C:/opinion.gif"));
-
-		setTreeOpinion(opinion, opinionItem);
-		return opinionItem;
-	}
-
-	private TreeItem addTreeQuote(TreeItem treeItem, Quote quote) {
-		TreeItem quoteItem = new TreeItem(treeItem, SWT.MULTI | SWT.WRAP);
-		// Image imageQuote = new Image(null, new
-		// FileInputStream("C:/quote.gif"));
-
-		setTreeQuote(quote, quoteItem);
-		return quoteItem;
-	}
-
+	
+	
+//	****** P R I V A T E  F U N C T I O N S *****************************************
+	
 	/**
 	 * Expends the tree till it dies
 	 * 
@@ -551,7 +439,28 @@ public class DiscussionEditor extends TextEditor {
 		for (TreeItem child : treeItem.getItems())
 			expendToDepth(child, depthLeft - 1);
 	}
+	
+//	add opinion to tree
+	private TreeItem addTreeOpinion(TreeItem treeItem, Opinion opinion) {
+		TreeItem opinionItem = new TreeItem(treeItem, SWT.MULTI | SWT.WRAP);
+		// Image imageOpin = new Image(null, new
+		// FileInputStream("C:/opinion.gif"));
 
+		setTreeOpinion(opinion, opinionItem);
+		return opinionItem;
+	}
+
+//	add quote to opinion
+	private TreeItem addTreeQuote(TreeItem treeItem, Quote quote) {
+		TreeItem quoteItem = new TreeItem(treeItem, SWT.MULTI | SWT.WRAP);
+		// Image imageQuote = new Image(null, new
+		// FileInputStream("C:/quote.gif"));
+
+		setTreeQuote(quote, quoteItem);
+		return quoteItem;
+	}
+
+//	return opinion from tree item
 	private Opinion getOpinion(TreeItem opinionToRemove) {
 		Opinion opinion = (Opinion) opinionToRemove.getData(OPINION);
 		return opinion;
@@ -562,6 +471,7 @@ public class DiscussionEditor extends TextEditor {
 		return quote;
 	}
 
+//	check if quote word wrapping is cutting in the middle of word 
 	private boolean IsInMiddleOfWord(String quoteText, int totalLineNum,
 			int lineNumber, int lineSize) {
 		if (quoteText.charAt((lineNumber + 1) * lineSize - 1) != ' '
@@ -571,6 +481,7 @@ public class DiscussionEditor extends TextEditor {
 		return false;
 	}
 
+//	set opinion properties
 	private void setTreeOpinion(Opinion opinion, TreeItem opinionItem) {
 		opinionItem.setText(opinion.getName());
 		opinionItem.setData(OPINION, opinion);
@@ -578,6 +489,7 @@ public class DiscussionEditor extends TextEditor {
 		// opinionItem.setImage(imageOpin);
 	}
 
+//	set quote properties
 	private void setTreeQuote(Quote quote, TreeItem quoteItem) {
 
 		String quoteText = new String(quote.getText());
@@ -741,7 +653,118 @@ public class DiscussionEditor extends TextEditor {
 			}
 		}
 	}
+	
+	
+//	****** P U B L I C  F U N C T I O N S *****************************************
+	
+//	return the discussion
+	public Discussion getDiscussion() {
+		if (discussion != null) {
+			return discussion;
+		}
 
+		if (!(super.getEditorInput() instanceof FileEditorInput)) {
+			// todo - print error message
+			return null;
+		}
+
+		try {
+			FileEditorInput fileEditorInput = (FileEditorInput) super
+					.getEditorInput();
+			IFile file = fileEditorInput.getFile();
+
+			ToK tok = ToK.getProjectToK(file.getProject());
+			tok.loadDiscussions();
+
+			Discussion d = tok.getDiscussion(Discussion.getNameFromFile(file
+					.getName()));
+			return d;
+		} catch (CoreException e) {
+		}
+		return null;
+	}
+
+	/**
+	 * Returns all the displayed opinions
+	 */
+	public Opinion[] getDisplayedOpinions() {
+		Opinion[] retVal = new Opinion[rootItem.getItemCount()];
+
+		int i = 0;
+		for (TreeItem opItem : rootItem.getItems()) {
+			retVal[i] = getOpinion(opItem);
+			i++;
+		}
+		return retVal;
+	}
+
+	/**
+	 * Returns the quotes displayed in the tree Written for testing
+	 * 
+	 * @param opinionId
+	 *            the opinion whose quotes are to be returned
+	 * @return the quotes which are displayed under the given opinion id
+	 */
+	public Quote[] getDisplayedQuotes(Integer opinionId) {
+		TreeItem[] opItems = rootItem.getItems();
+		int i = 0;
+
+		// move i to the opinion we are looking for
+		while (i < opItems.length
+				&& getOpinion(opItems[i]).getId() != opinionId) {
+			i++;
+		}
+
+		if (i == opItems.length)
+			return null; // dude, your opinion id doesn't even exist!
+		// else
+
+		TreeItem[] qItems = rootItem.getItem(i).getItems();
+		Quote[] quotes = new Quote[qItems.length];
+
+		for (int j = 0; j < quotes.length; j++) {
+			quotes[j] = getQuote(qItems[j]);
+		}
+
+		return quotes;
+	}
+
+//	move diven quote to default
+	public void moveQuoteToDefault(TreeItem itemToMove) {
+		Quote quote = getQuote(itemToMove);
+		discussion.relocateQuote(quote.getID(), Discussion.DEFAULT_OPINION_ID);// discussion.getOpinionsId(Discussion.DEFAULT_OPINION));
+	}
+
+//	move given quote to opinion
+	public void moveQuoteToOpinion(TreeItem quoteToAdd) {
+		Opinion opinion = (Opinion) quoteToAdd.getParentItem().getData(OPINION);
+		Quote quote = getQuote(quoteToAdd);
+		discussion.relocateQuote(quote.getID(), opinion.getId());
+	}
+
+//	add new opinion to tree
+	public void addOpinion(String opinionName) {
+		discussion.addOpinion(opinionName);
+		addTreeOpinion(rootItem, new Opinion(opinionName, discussion
+				.getOpinionsId(opinionName)));
+	}
+	
+//	remove opinion from file
+	public void removeOpinionFromFile(TreeItem opinionToRemove) {
+		Opinion opinion = getOpinion(opinionToRemove);
+		discussion.removeOpinion(opinion.getId());
+	}
+
+//	remove given quote from file
+	public void removeQuoteFromFile(TreeItem quoteToRemove) {
+		Quote quote = getQuote(quoteToRemove);
+		discussion.removeQuote(quote.getID());
+	}
+	
+	
+	
+//	****** P R O T E C T E D  F U N C T I O N S *****************************************
+	
 	/**
 	 * This method allows us to update the displayed information, when the files
 	 * on the disk change. It updates the treeItems to match the file's content
