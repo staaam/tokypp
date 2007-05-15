@@ -12,7 +12,7 @@ import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
 import org.eclipse.ui.wizards.datatransfer.ZipFileExportWizard;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * The Class ExportDiscussion.
  */
@@ -66,7 +66,6 @@ public class ExportDiscussion extends ZipFileExportWizard {
 	 */
 	@Override
 	public boolean performFinish() {
-		// TODO Auto-generated method stub
 		return exportPage.finish();
 	}
 
