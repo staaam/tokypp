@@ -61,7 +61,8 @@ public class ImportDiscussion extends ZipFileImportWizard {
 		setDefaultPageImageDescriptor(IDEWorkbenchPlugin
 				.getIDEImageDescriptor("wizban/importzip_wiz.png"));//$NON-NLS-1$
 		setNeedsProgressMonitor(true);
-		setWindowTitle(Messages.getString("ImportDiscussion.0")); // NON-NLS-1 //$NON-NLS-1$
+		setWindowTitle(Messages.getString("ImportDiscussion.0")); // NON-NLS-1
+																	// //$NON-NLS-1$
 		setNeedsProgressMonitor(true);
 	}
 

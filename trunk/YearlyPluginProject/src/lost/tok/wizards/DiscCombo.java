@@ -17,39 +17,42 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Shell;
 
 /**
- * Widget(composite) that contains combobox with list of disussions 
- * and button to create new discussion
+ * Widget(composite) that contains combobox with list of disussions and button
+ * to create new discussion
  * 
  * @author Michael Gelfand
- *
+ * 
  */
 public class DiscCombo extends Composite implements SelectionListener {
 	ToK tok;
+
 	public Combo discCombo;
+
 	Button newDisButton;
 
 	public DiscCombo(Composite parent, int style, ToK tok) {
 		super(parent, style);
 		this.tok = tok;
-		
+
 		GridLayout gridLayout = new GridLayout();
 		gridLayout.numColumns = 2;
 		gridLayout.marginWidth = 0;
 		gridLayout.marginHeight = 0;
 		setLayout(gridLayout);
 
-		GridData gridData = new GridData(GridData.VERTICAL_ALIGN_FILL | GridData.FILL_HORIZONTAL);
+		GridData gridData = new GridData(GridData.VERTICAL_ALIGN_FILL
+				| GridData.FILL_HORIZONTAL);
 		setLayoutData(gridData);
-		
+
 		discCombo = new Combo(this, SWT.READ_ONLY | SWT.DROP_DOWN);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		discCombo.setLayoutData(gd);
-		
+
 		updateDiscussions();
-		
+
 		newDisButton = new Button(this, SWT.NONE);
 		newDisButton.setText(Messages.getString("DiscCombo.new")); //$NON-NLS-1$
-		
+
 		newDisButton.addSelectionListener(this);
 	}
 
@@ -58,7 +61,7 @@ public class DiscCombo extends Composite implements SelectionListener {
 			discCombo.add(d.getDiscName());
 		}
 	}
-	
+
 	public void widgetSelected(SelectionEvent e) {
 		NewDiscussion w = new NewDiscussion(tok.getProject());
 
@@ -66,7 +69,7 @@ public class DiscCombo extends Composite implements SelectionListener {
 		wd.setBlockOnOpen(true);
 
 		wd.open();
-		
+
 		if (wd.getReturnCode() != WizardDialog.OK)
 			return;
 

@@ -3,6 +3,7 @@ package lost.tok.wizards;
 import java.util.List;
 
 import lost.tok.Messages;
+
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;

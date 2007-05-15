@@ -38,26 +38,28 @@ public class OperationTable extends TextEditor {
 	@Override
 	public void setFocus() {
 		super.setFocus();
-		if (((FileEditorInput)this.getEditorInput()).getFile().getProjectRelativePath().toPortableString().startsWith(ToK.ROOTS_FOLDER)){
+		if (((FileEditorInput) this.getEditorInput()).getFile()
+				.getProjectRelativePath().toPortableString().startsWith(
+						ToK.ROOTS_FOLDER)) {
 			updateExcerptionView();
 		}
 	}
-	
+
 	@Override
 	public void dispose() {
 		ExcerptionView.getView().removeMonitoredEditor(this);
 		super.dispose();
 	}
-	
+
 	/** The ID of the operation table editor. */
 	public static final String EDITOR_ID = "lost.tok.opTable.OperationTable"; //$NON-NLS-1$
-	 
+
 	/** The Constant EDITOR_CONTEXT. */
 	public static final String EDITOR_CONTEXT = "lost.tok.opTable.PopUpMenu.Menu"; //$NON-NLS-1$
-	
+
 	/** The root discussions. */
 	private RootDiscussionsPart rootDiscussions = null;
-	
+
 	/** The root discussions view. */
 	private boolean rootDiscussionsView = false;
 
@@ -74,14 +76,16 @@ public class OperationTable extends TextEditor {
 		markedText = new TreeMap<Integer, Integer>();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.ui.editors.text.TextEditor#initializeEditor()
 	 */
 	protected void initializeEditor() {
-        super.initializeEditor();
-        setEditorContextMenuId(EDITOR_CONTEXT);
+		super.initializeEditor();
+		setEditorContextMenuId(EDITOR_CONTEXT);
 	}
-	
+
 	/**
 	 * Makes the docuemnt uneditable.
 	 * 
@@ -107,17 +111,25 @@ public class OperationTable extends TextEditor {
 		ISourceViewer srcview = getSourceViewer();
 		assert (srcview != null);
 		getSourceViewerDecorationSupport(srcview).dispose();
-		
+
 		// using Eclipse' word wrapping, but only in LTR languages
 		if (GeneralFunctions.isLTR())
 			srcview.getTextWidget().setWordWrap(true);
 		refreshDisplay();
 	}
-	
-	/** These excerptions contain all the marked text. The dictionary is the function: offset->Excerption */
+
+	/**
+	 * These excerptions contain all the marked text. The dictionary is the
+	 * function: offset->Excerption
+	 */
 	SortedMap<Integer, Excerption> markedExcerptions;
 
-	/** Contains the offset and length all the marked text. The dictionary is the function: offset->length Marked text should be highlighted when displayed. This Map should corrospond to the Excerption list (ie - the forth element should point to the text of the forth excerption) */
+	/**
+	 * Contains the offset and length all the marked text. The dictionary is the
+	 * function: offset->length Marked text should be highlighted when
+	 * displayed. This Map should corrospond to the Excerption list (ie - the
+	 * forth element should point to the text of the forth excerption)
+	 */
 	SortedMap<Integer, Integer> markedText;
 
 	/**
@@ -125,10 +137,11 @@ public class OperationTable extends TextEditor {
 	 */
 	private void updateExcerptionView() {
 		ExcerptionView view = ExcerptionView.getView();
-		if (view == null) return;
+		if (view == null)
+			return;
 		view.updateMonitoredEditor(this);
 	}
-	
+
 	/**
 	 * Updates the colored lines and the general display of the editor.
 	 */
@@ -137,7 +150,7 @@ public class OperationTable extends TextEditor {
 			rootDiscussions.refreshDisplay();
 		}
 		updateExcerptionView();
-		
+
 		StyleRange markedTextStyle = StyleManager.getMarkedStyle();
 		StyleRange chapterTextStyle = StyleManager.getChapterStyle();
 
@@ -192,17 +205,20 @@ public class OperationTable extends TextEditor {
 	/**
 	 * Adds the selected text to the marked text set.
 	 * 
-	 * @param t the current selection, which should be added
+	 * @param t
+	 *            the current selection, which should be added
 	 */
 	public void mark(TextSelection t) {
 		mark(t, true);
 	}
-	
+
 	/**
 	 * Adds/Removes the selected text to/from the marked text set.
 	 * 
-	 * @param t the current selection, which should be added
-	 * @param include whether the mark is inclusive (mark/unmark)
+	 * @param t
+	 *            the current selection, which should be added
+	 * @param include
+	 *            whether the mark is inclusive (mark/unmark)
 	 */
 	public void mark(TextSelection t, boolean include) {
 		SourceDocument doc = (SourceDocument) getSourceViewer().getDocument();
@@ -237,27 +253,35 @@ public class OperationTable extends TextEditor {
 	}
 
 	/**
-	 * Updates markedExcerptions and markedText
-	 * The mark should be inside a single ChapterText.
+	 * Updates markedExcerptions and markedText The mark should be inside a
+	 * single ChapterText.
 	 * 
-	 * @param offset the mark's offset inside the document
-	 * @param length the length of the mark
-	 * @param c the chapter text which contains the marking
+	 * @param offset
+	 *            the mark's offset inside the document
+	 * @param length
+	 *            the length of the mark
+	 * @param c
+	 *            the chapter text which contains the marking
 	 */
 	protected void markChapterExcerption(int offset, int length, ChapterText c) {
 		markChapterExcerption(offset, length, c, true);
 	}
-	
+
 	/**
-	 * Updates markedExcerptions and markedText
-	 * The mark should be inside a single ChapterText.
+	 * Updates markedExcerptions and markedText The mark should be inside a
+	 * single ChapterText.
 	 * 
-	 * @param offset the mark's offset inside the document
-	 * @param length the length of the mark
-	 * @param c the chapter text which contains the marking
-	 * @param include whether the mark is inclusive (mark/unmark)
+	 * @param offset
+	 *            the mark's offset inside the document
+	 * @param length
+	 *            the length of the mark
+	 * @param c
+	 *            the chapter text which contains the marking
+	 * @param include
+	 *            whether the mark is inclusive (mark/unmark)
 	 */
-	protected void markChapterExcerption(int offset, int length, ChapterText c, boolean include) {
+	protected void markChapterExcerption(int offset, int length, ChapterText c,
+			boolean include) {
 		int[] m = findMergedExcerptions(offset, offset + length);
 
 		if (include) {
@@ -277,17 +301,18 @@ public class OperationTable extends TextEditor {
 			int diff = excerptionText.indexOf(trimmed);
 			startInText += diff;
 			endInText = startInText + trimmed.length();
-			
+
 			mergedBegin += diff;
 			mergedEnd = mergedBegin + trimmed.length();
 			excerptionText = trimmed;
 		}
-		
-		if (mergedBegin == mergedEnd) return;
-		
+
+		if (mergedBegin == mergedEnd)
+			return;
+
 		Excerption e = new Excerption(c.getExcerptionPath(), excerptionText,
 				startInText, endInText);
-		
+
 		markedText.put(mergedBegin, mergedEnd - mergedBegin);
 		markedExcerptions.put(mergedBegin, e);
 	}
@@ -298,37 +323,39 @@ public class OperationTable extends TextEditor {
 		while (!prefixMap.isEmpty()) {
 			Integer beginBefore = prefixMap.lastKey();
 			Integer endBefore = beginBefore + prefixMap.get(beginBefore);
-			
+
 			// have we reached a marked text that ends before we start?
-			if (endBefore < mergedBegin) break;
-	
+			if (endBefore < mergedBegin)
+				break;
+
 			markedText.remove(beginBefore);
 			markedExcerptions.remove(beginBefore);
-	
+
 			mergedBegin = Math.min(beginBefore, mergedBegin);
 			mergedEnd = Math.max(endBefore, mergedEnd);
 		}
-	
+
 		// Searching for a later marked to merge
 		SortedMap<Integer, Integer> suffixMap = markedText.tailMap(mergedBegin);
 		while (!suffixMap.isEmpty()) {
 			Integer beginAfter = suffixMap.firstKey();
 			Integer endAfter = beginAfter + suffixMap.get(beginAfter);
-			if (mergedEnd < beginAfter) break;
-				
+			if (mergedEnd < beginAfter)
+				break;
+
 			markedText.remove(beginAfter);
 			markedExcerptions.remove(beginAfter);
-	
+
 			// mergedBegin = Math.min(beginAfter, mergedBegin);
 			// mergedBegin is always <=
 			mergedEnd = Math.max(endAfter, mergedEnd);
 		}
-		
-		int[] r = { mergedBegin,  mergedEnd };
-		
+
+		int[] r = { mergedBegin, mergedEnd };
+
 		return r;
 	}
-	
+
 	/**
 	 * Returns the selected excerptions in the editor.
 	 * 
@@ -337,7 +364,7 @@ public class OperationTable extends TextEditor {
 	public SortedMap<Integer, Excerption> getExcerptions() {
 		return markedExcerptions;
 	}
-	
+
 	/**
 	 * Returns the selected excerptions in the editor.
 	 * 
@@ -374,33 +401,37 @@ public class OperationTable extends TextEditor {
 	public void showDiscussions() {
 		if (oldSourceViewerConfiguration == null)
 			oldSourceViewerConfiguration = getSourceViewerConfiguration();
-		
+
 		rootDiscussionsView = true;
 
-		setSourceViewerConfiguration(
-				new RootDisussionsSourceViewerConfiguration(rootDiscussions));
-		
-		getSourceViewer().setTextDoubleClickStrategy(
-				rootDiscussions, IDocument.DEFAULT_CONTENT_TYPE);
-		getSourceViewer().setTextHover(
-				rootDiscussions, IDocument.DEFAULT_CONTENT_TYPE);
-		
+		setSourceViewerConfiguration(new RootDisussionsSourceViewerConfiguration(
+				rootDiscussions));
+
+		getSourceViewer().setTextDoubleClickStrategy(rootDiscussions,
+				IDocument.DEFAULT_CONTENT_TYPE);
+		getSourceViewer().setTextHover(rootDiscussions,
+				IDocument.DEFAULT_CONTENT_TYPE);
+
 		clearMarked();
 	}
-	
+
 	/**
 	 * Hide the discussions links from the editor.
 	 */
 	public void hideDisucssions() {
 		if (oldSourceViewerConfiguration != null)
 			setSourceViewerConfiguration(oldSourceViewerConfiguration);
-		
+
 		rootDiscussionsView = false;
 
 		getSourceViewer().setTextDoubleClickStrategy(
-				oldSourceViewerConfiguration.getDoubleClickStrategy(getSourceViewer(), IDocument.DEFAULT_CONTENT_TYPE), IDocument.DEFAULT_CONTENT_TYPE);
+				oldSourceViewerConfiguration.getDoubleClickStrategy(
+						getSourceViewer(), IDocument.DEFAULT_CONTENT_TYPE),
+				IDocument.DEFAULT_CONTENT_TYPE);
 		getSourceViewer().setTextHover(
-				oldSourceViewerConfiguration.getTextHover(getSourceViewer(), IDocument.DEFAULT_CONTENT_TYPE), IDocument.DEFAULT_CONTENT_TYPE);
+				oldSourceViewerConfiguration.getTextHover(getSourceViewer(),
+						IDocument.DEFAULT_CONTENT_TYPE),
+				IDocument.DEFAULT_CONTENT_TYPE);
 
 		clearMarked();
 	}
@@ -411,29 +442,30 @@ public class OperationTable extends TextEditor {
 	 * @return the project
 	 */
 	public IProject getProject() {
-		FileEditorInput fileEditorInput = 
-			(FileEditorInput)getEditorInput();
-		
+		FileEditorInput fileEditorInput = (FileEditorInput) getEditorInput();
+
 		return fileEditorInput.getFile().getProject();
 	}
 
 	/**
 	 * Removes a specific excerptions from the marked text.
 	 * 
-	 * @param i the index of the excerption (in terms of start offset in the text)
+	 * @param i
+	 *            the index of the excerption (in terms of start offset in the
+	 *            text)
 	 */
 	public void removeExcerption(int i) {
 		markedExcerptions.remove(i);
 		markedText.remove(i);
 	}
-	
+
 	/**
 	 * Returns whether the editor is in View Root Discussions mode
-	 *  
+	 * 
 	 * @return true if in View Root Discussions mode, and false if not
 	 */
 	public boolean isRootDiscussionsView() {
 		return rootDiscussionsView;
 	}
-	
+
 }

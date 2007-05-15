@@ -14,8 +14,9 @@ import org.dom4j.Element;
 public class Chapter {
 
 	/** The title before each chapter */
-	static public final String CHAPTER_STR = "";  //$NON-NLS-1$
-		// Note(Shay) used to be: Messages.getString("SourceDocument.ChapterLabel");
+	static public final String CHAPTER_STR = ""; //$NON-NLS-1$
+
+	// Note(Shay) used to be: Messages.getString("SourceDocument.ChapterLabel");
 
 	/** The name of an unparsed text excerpt */
 	static public final String UNPARSED_STR = Messages
@@ -93,7 +94,9 @@ public class Chapter {
 
 	/**
 	 * Fixes the offsets and lengths of this chapter and its sons
-	 * @param offset the offset of this chapter in the greater document
+	 * 
+	 * @param offset
+	 *            the offset of this chapter in the greater document
 	 */
 	public void fixOffsetLength(Integer offset) {
 		this.offset = offset;
@@ -127,20 +130,22 @@ public class Chapter {
 			child.getTree(l);
 		}
 	}
-	
+
 	/** Returns the chapter's parent */
 	public Chapter getParent() {
 		return parent;
 	}
-	
+
 	public LinkedList<Chapter> getChildren() {
 		return children;
 	}
 
 	/**
 	 * Sets the chapter's parent anew
-	 * @param parent the name of the new parent
-	 */ 
+	 * 
+	 * @param parent
+	 *            the name of the new parent
+	 */
 	public void setParent(Chapter parent) {
 		this.parent = parent;
 	}
@@ -205,7 +210,10 @@ public class Chapter {
 
 	/**
 	 * Returns the chapter according to the chapter path
-	 * @param chapterPath a slash-seperated list of names of chapters' names pointing to a chapter
+	 * 
+	 * @param chapterPath
+	 *            a slash-seperated list of names of chapters' names pointing to
+	 *            a chapter
 	 * @return the chpater pointed by the list
 	 */
 	public Chapter getChapter(String chapterPath) {
@@ -224,7 +232,10 @@ public class Chapter {
 
 	/**
 	 * Returns the text of a chapter according to its chapter path
-	 * @param chapterPath a slash-seperated list of names of chapters' names pointing to a chapter
+	 * 
+	 * @param chapterPath
+	 *            a slash-seperated list of names of chapters' names pointing to
+	 *            a chapter
 	 * @return The text of the pointed chapter
 	 */
 	public ChapterText getChapterText(String chapterPath) {
@@ -234,21 +245,22 @@ public class Chapter {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Adds this Chapter and its sons to the xml
-	 * @param element the element under which this chapter will be added
+	 * 
+	 * @param element
+	 *            the element under which this chapter will be added
 	 */
 	public void addToXml(Element element) {
 		Element chapTextElement = element.addElement("child"); //$NON-NLS-1$
-		if ((children.size() == 1) && (children.getFirst() instanceof ChapterText))
-		{
+		if ((children.size() == 1)
+				&& (children.getFirst() instanceof ChapterText)) {
 			// Note(Shay): This chapter contains only text
-			//  if we decide to remove those lone chpaters, we should remove this if
+			// if we decide to remove those lone chpaters, we should remove this
+			// if
 			children.getFirst().addToXml(chapTextElement);
-		}
-		else
-		{
+		} else {
 			// this chapter has other chapters as children
 			Element chapElement = chapTextElement.addElement("chapter"); //$NON-NLS-1$
 			chapElement.addElement("name").addText(getName()); //$NON-NLS-1$

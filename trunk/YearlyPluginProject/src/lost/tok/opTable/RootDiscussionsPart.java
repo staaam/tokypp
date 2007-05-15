@@ -42,8 +42,8 @@ import org.eclipse.ui.part.FileEditorInput;
  * @author Michael Gelfand
  * 
  */
-public class RootDiscussionsPart extends AbstractEditorAction
-		implements ITextDoubleClickStrategy, ITextHover {
+public class RootDiscussionsPart extends AbstractEditorAction implements
+		ITextDoubleClickStrategy, ITextHover {
 
 	private static QualifiedName discussionLinkQName = new QualifiedName(
 			"lost.tok.opTable.ShowRootDiscussions", "excerptionSource"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -63,7 +63,7 @@ public class RootDiscussionsPart extends AbstractEditorAction
 
 	public RootDiscussionsPart(OperationTable ot) {
 		super();
-		
+
 		operationTable = ot;
 	}
 
@@ -157,21 +157,24 @@ public class RootDiscussionsPart extends AbstractEditorAction
 
 				SourceDocument document = operationTable.getDocument();
 
-				ChapterText ct = document.getChapterText(e.getPathInSourceFile());
+				ChapterText ct = document.getChapterText(e
+						.getPathInSourceFile());
 				if (ct == null) {
 					System.out.println("wrong excerption found (chapter '" //$NON-NLS-1$
 							+ e.getPathInSourceFile() + "' not found)"); //$NON-NLS-1$
 					continue;
 				}
 
-				e.setText(ct.toString().substring(e.getStartPos(), e.getEndPos()));
-				e.setProperty(textOffsetQName, ct.getOffset()+ e.getStartPos());
+				e.setText(ct.toString().substring(e.getStartPos(),
+						e.getEndPos()));
+				e
+						.setProperty(textOffsetQName, ct.getOffset()
+								+ e.getStartPos());
 
 				rootExcerptions.add(e);
 
-				operationTable.markChapterExcerption(ct.getOffset() + e.getStartPos(), e
-						.getEndPos()
-						- e.getStartPos(), ct);
+				operationTable.markChapterExcerption(ct.getOffset()
+						+ e.getStartPos(), e.getEndPos() - e.getStartPos(), ct);
 			}
 		}
 	}
@@ -217,11 +220,9 @@ public class RootDiscussionsPart extends AbstractEditorAction
 				if (o instanceof IFile) {
 					IFile file = (IFile) o;
 					try {
-						targetPart
-								.getSite()
-								.getWorkbenchWindow()
-								.getActivePage()
-								.openEditor(new FileEditorInput(file),
+						targetPart.getSite().getWorkbenchWindow()
+								.getActivePage().openEditor(
+										new FileEditorInput(file),
 										OperationTable.EDITOR_ID);
 					} catch (PartInitException e) {
 						e.printStackTrace();

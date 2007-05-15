@@ -20,8 +20,8 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.Document;
 
 /**
- * A document which can be displayed to the user
- * From this document the user creates quotes or links discussions
+ * A document which can be displayed to the user From this document the user
+ * creates quotes or links discussions
  */
 public class SourceDocument extends Document {
 	/** The root chapter of the sourceDocument */
@@ -41,66 +41,9 @@ public class SourceDocument extends Document {
 
 	private IFile outputFile;
 
-	/** Creates a source document from a source xml */
-	public void set(org.dom4j.Document d) {
-		chapters = new LinkedList<Chapter>();
-		r = new RangeSearch();
-
-		Element root = d.getRootElement();
-		title = root.elementTextTrim("name"); //$NON-NLS-1$
-		author = root.elementTextTrim("author"); //$NON-NLS-1$
-
-		rootChapter = new Chapter(getTitle(),
-				"", root, Chapter.CHAPTER_STR + " "); //$NON-NLS-1$ //$NON-NLS-2$
-		update();
-	}
-
-	/**
-	 * Recalculates the chapter's offset and rangeSearch
-	 */
-	public void update() {
-		chapters.clear();
-		r.clear();
-
-		rootChapter.fixOffsetLength(0);
-		rootChapter.getTree(chapters);
-
-		for (Chapter c : chapters) {
-			r.add(c.getOffset(), c.length, c);
-		}
-
-		set(rootChapter.toString());
-	}
-
-	public String toString() {
-		return rootChapter.toString();
-	}
-
-	/**
-	 * Creates an unparsed document from the given string
-	 * 
-	 * @param s
-	 *            the string to be parsed (the document's text)
-	 * @param title
-	 *            the title of the document (including source path)
-	 * @param author
-	 *            the author of the document
-	 */
-	public void setUnparsed(String s, String title, String author) {
-		chapters = new LinkedList<Chapter>();
-		r = new RangeSearch();
-		this.title = title;
-		this.author = author;
-
-		ChapterText ctext = new ChapterText(Chapter.UNPARSED_STR, s.trim()
-				+ "\n"); //$NON-NLS-1$
-		Chapter firstChapter = new Chapter(Chapter.CHAPTER_STR + " 1:\t" + //$NON-NLS-1$
-				Chapter.UNPARSED_STR + "\n", Chapter.UNPARSED_STR); //$NON-NLS-1$
-		firstChapter.add(ctext);
-		rootChapter = new Chapter(getTitle(), ""); //$NON-NLS-1$
-		rootChapter.add(firstChapter);
-
-		update();
+	/** Returns true if there are any unparsed chapters in the document */
+	public boolean containsUnparsed() {
+		return rootChapter.containsUnparsed();
 	}
 
 	/**
@@ -131,9 +74,23 @@ public class SourceDocument extends Document {
 		return -1;
 	}
 
-	/** Returns true if there are any unparsed chapters in the document */
-	public boolean containsUnparsed() {
-		return rootChapter.containsUnparsed();
+	public int getAbsoluteOffset(String sourceFilePath, int offset) {
+		Chapter c = getChapter(sourceFilePath);
+		if (c == null) {
+			return -1;
+		}
+		return c.getOffset() + offset;
+	}
+
+	/**
+	 * Returns ALL the chapters in this document
+	 */
+	public Collection<Chapter> getAllChapters() {
+		return chapters;
+	}
+
+	public Chapter getChapter(String chapterPath) {
+		return rootChapter.getChapter(chapterPath);
 	}
 
 	/**
@@ -147,11 +104,53 @@ public class SourceDocument extends Document {
 		return r.search(offset);
 	}
 
+	public ChapterText getChapterText(String chapterPath) {
+		return rootChapter.getChapterText(chapterPath);
+	}
+
+	/** Creates a source document from a source xml */
+	public void set(org.dom4j.Document d) {
+		chapters = new LinkedList<Chapter>();
+		r = new RangeSearch();
+
+		Element root = d.getRootElement();
+		title = root.elementTextTrim("name"); //$NON-NLS-1$
+		author = root.elementTextTrim("author"); //$NON-NLS-1$
+
+		rootChapter = new Chapter(getTitle(),
+				"", root, Chapter.CHAPTER_STR + " "); //$NON-NLS-1$ //$NON-NLS-2$
+		update();
+	}
+
 	/**
-	 * Returns ALL the chapters in this document
+	 * Creates an unparsed document from the given string
+	 * 
+	 * @param s
+	 *            the string to be parsed (the document's text)
+	 * @param title
+	 *            the title of the document (including source path)
+	 * @param author
+	 *            the author of the document
 	 */
-	public Collection<Chapter> getAllChapters() {
-		return chapters;
+	public void setUnparsed(String s, String title, String author) {
+		chapters = new LinkedList<Chapter>();
+		r = new RangeSearch();
+		this.title = title;
+		this.author = author;
+
+		ChapterText ctext = new ChapterText(Chapter.UNPARSED_STR, s.trim()
+				+ "\n"); //$NON-NLS-1$
+		Chapter firstChapter = new Chapter(Chapter.CHAPTER_STR + " 1:\t" + //$NON-NLS-1$
+				Chapter.UNPARSED_STR + "\n", Chapter.UNPARSED_STR); //$NON-NLS-1$
+		firstChapter.add(ctext);
+		rootChapter = new Chapter(getTitle(), ""); //$NON-NLS-1$
+		rootChapter.add(firstChapter);
+
+		update();
+	}
+
+	public String toString() {
+		return rootChapter.toString();
 	}
 
 	/** Converts a SourceDocument object into an XML document */
@@ -172,7 +171,7 @@ public class SourceDocument extends Document {
 			XMLWriter writer = new XMLWriter(baos, outformat);
 			writer.write(toXMLDocument());
 			writer.flush();
-		
+
 			// create a resource from the byte array
 			ByteArrayInputStream bais = new ByteArrayInputStream(baos
 					.toByteArray());
@@ -182,7 +181,24 @@ public class SourceDocument extends Document {
 		} catch (CoreException e) {
 			e.printStackTrace();
 		}
-		
+
+	}
+
+	/**
+	 * Recalculates the chapter's offset and rangeSearch
+	 */
+	public void update() {
+		chapters.clear();
+		r.clear();
+
+		rootChapter.fixOffsetLength(0);
+		rootChapter.getTree(chapters);
+
+		for (Chapter c : chapters) {
+			r.add(c.getOffset(), c.length, c);
+		}
+
+		set(rootChapter.toString());
 	}
 
 	/** fills the name and author tags */
@@ -192,7 +208,7 @@ public class SourceDocument extends Document {
 		Element e = sourceDoc.addElement("source"); //$NON-NLS-1$
 		e.addElement("name").addText(title); //$NON-NLS-1$
 		e.addElement("author").addText(author); //$NON-NLS-1$
-		
+
 		for (Chapter c : rootChapter.getChildren())
 			c.addToXml(e); // will add the chapter and its offsprings
 
@@ -204,21 +220,5 @@ public class SourceDocument extends Document {
 		return Messages.getString("SourceDocument.TitleLabel") + ":\t" + title + "\n" + //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				Messages.getString("SourceDocument.AuthorLabel") + ":\t" + author + "\n" + //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				"\n"; //$NON-NLS-1$
-	}
-
-	public int getAbsoluteOffset(String sourceFilePath, int offset) {
-		Chapter c = getChapter(sourceFilePath);
-		if (c == null) {
-			return -1;
-		}
-		return c.getOffset() + offset;
-	}
-
-	public Chapter getChapter(String chapterPath) {
-		return rootChapter.getChapter(chapterPath);
-	}
-
-	public ChapterText getChapterText(String chapterPath) {
-		return rootChapter.getChapterText(chapterPath);
 	}
 }

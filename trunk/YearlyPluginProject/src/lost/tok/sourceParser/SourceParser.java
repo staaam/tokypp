@@ -61,7 +61,7 @@ public class SourceParser extends TextEditor {
 
 		// Note(Shay): Bah... looking for this function was tedious!
 		getSourceViewerDecorationSupport(srcview).dispose();
-		
+
 		// using Eclipse' word wrapping, but only in LTR languages
 		if (GeneralFunctions.isLTR())
 			srcview.getTextWidget().setWordWrap(true);
@@ -162,7 +162,7 @@ public class SourceParser extends TextEditor {
 		int cursorWidgetOffset = srcview.getTextWidget().getCaretOffset();
 		return widgetOffset2ModelOffset(srcview, cursorWidgetOffset);
 	}
-	
+
 	/** Marks the editor as dirty (which means it can be saved) */
 	public boolean isDirty() {
 		return dirty;
@@ -199,7 +199,8 @@ public class SourceParser extends TextEditor {
 		monitor.worked(1);
 
 		monitor.setTaskName(Messages.getString("SourceParser.4")); //$NON-NLS-1$
-		// IFile srcIFile = tProj.getFolder(ToK.SOURCES_FOLDER).getFile(srcName);
+		// IFile srcIFile =
+		// tProj.getFolder(ToK.SOURCES_FOLDER).getFile(srcName);
 
 		monitor.worked(1);
 
@@ -213,7 +214,7 @@ public class SourceParser extends TextEditor {
 		}
 		monitor.worked(1);
 		monitor.done();
-		
+
 		// trying to refresh again, in case the previous refresh didn't work
 		try {
 			tProj.refreshLocal(IResource.DEPTH_INFINITE, null);

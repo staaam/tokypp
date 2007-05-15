@@ -37,12 +37,13 @@ import org.eclipse.ui.ide.IDE;
 /**
  * The Wizard for the Source Parser
  * 
- * Allows the user to choose the file to parse
- * and allows to fill information about it
+ * Allows the user to choose the file to parse and allows to fill information
+ * about it
  */
 public class UnparsedDocWizard extends Wizard implements INewWizard {
 	/** The main and only page of the wizards */
 	private UnparsedDocWizardPage page;
+
 	/** The selection used by the page */
 	private ISelection selection;
 
@@ -83,8 +84,7 @@ public class UnparsedDocWizard extends Wizard implements INewWizard {
 			public void run(IProgressMonitor monitor)
 					throws InvocationTargetException {
 				try {
-					doFinish(title, author, fileName, projName,
-							monitor);
+					doFinish(title, author, fileName, projName, monitor);
 				} catch (CoreException e) {
 					throw new InvocationTargetException(e);
 				} finally {
@@ -105,9 +105,8 @@ public class UnparsedDocWizard extends Wizard implements INewWizard {
 		return true;
 	}
 
-	private void doFinish(String title, String author, 
-			String fullFileName, String projName,
-			IProgressMonitor monitor) throws CoreException {
+	private void doFinish(String title, String author, String fullFileName,
+			String projName, IProgressMonitor monitor) throws CoreException {
 		// create a sample file
 		monitor.beginTask(Messages.getString("SPWizard.1") + title, 2); //$NON-NLS-1$
 
@@ -119,8 +118,8 @@ public class UnparsedDocWizard extends Wizard implements INewWizard {
 			// as usual
 		} else {
 			try {
-				createResourceDocument(fullFileName, title, author, 
-						null, eclipseFile);
+				createResourceDocument(fullFileName, title, author, null,
+						eclipseFile);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -144,8 +143,11 @@ public class UnparsedDocWizard extends Wizard implements INewWizard {
 
 	/**
 	 * Returns the name of the unparsed file sitting in the project's dir
-	 * @param projName The project of the file
-	 * @param fullFileName the full path of the unparsed file outside of the project
+	 * 
+	 * @param projName
+	 *            The project of the file
+	 * @param fullFileName
+	 *            the full path of the unparsed file outside of the project
 	 * @return where the file should be copied to in the project
 	 */
 	static public IFile getUnparsedTargetIFile(String projName,
@@ -160,8 +162,11 @@ public class UnparsedDocWizard extends Wizard implements INewWizard {
 
 	/**
 	 * Returns the name of the parsed file in the project
-	 * @param projName The project of the file
-	 * @param fullFileName the full path of the unparsed file outside of the project
+	 * 
+	 * @param projName
+	 *            The project of the file
+	 * @param fullFileName
+	 *            the full path of the unparsed file outside of the project
 	 * @return where the file should be copied to in the project
 	 */
 	static public IFile getParsedTargetIFile(String projName,
@@ -187,8 +192,8 @@ public class UnparsedDocWizard extends Wizard implements INewWizard {
 
 	/** Creates an xml describing the unparsed document */
 	static private void createResourceDocument(String inputFile, String title,
-			String author, IProgressMonitor monitor,
-			IFile targetFile) throws IOException, CoreException {
+			String author, IProgressMonitor monitor, IFile targetFile)
+			throws IOException, CoreException {
 		File inFile = new File(inputFile);
 		long inputLength = inFile.length();
 

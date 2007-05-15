@@ -25,7 +25,7 @@ public class StyleManager {
 	/** The Background color for marked quotes */
 	final static public Color MARKED_BG_QUOTE_COLOR = new Color(Display
 			.getCurrent(), 250, 200, 200);
-	
+
 	/** The normal foreground color */
 	final static public Color NORMAL_FG_TEXT_COLOR = new Color(Display
 			.getCurrent(), 0, 0, 0);
@@ -60,12 +60,13 @@ public class StyleManager {
 	static public StyleRange getMarkedStyle() {
 		return new StyleRange(0, 0, MARKED_FG_TEXT_COLOR, MARKED_BG_TEXT_COLOR);
 	}
-	
+
 	/**
 	 * Returns the default style for marked quotes
 	 */
 	static public StyleRange getMarkedQuoteStyle() {
-		return new StyleRange(0, 0, MARKED_FG_QUOTE_COLOR, MARKED_BG_QUOTE_COLOR);
+		return new StyleRange(0, 0, MARKED_FG_QUOTE_COLOR,
+				MARKED_BG_QUOTE_COLOR);
 	}
 
 	/**

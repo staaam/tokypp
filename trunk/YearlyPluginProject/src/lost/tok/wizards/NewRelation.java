@@ -21,7 +21,7 @@ public class NewRelation extends Wizard implements INewWizard {
 
 	private ISelection selection;
 
-//	private ToK tok = null;
+	// private ToK tok = null;
 
 	/**
 	 * Constructor for NewRelationWizard.
@@ -58,15 +58,13 @@ public class NewRelation extends Wizard implements INewWizard {
 	 */
 	public boolean performFinish() {
 
-//		IStructuredSelection ssel = (IStructuredSelection) selection;
-//		IResource resource = (IResource) ssel.getFirstElement();
-//		IProject project = resource.getProject();
-//		tok = ToK.getProjectToK(project);
+		// IStructuredSelection ssel = (IStructuredSelection) selection;
+		// IResource resource = (IResource) ssel.getFirstElement();
+		// IProject project = resource.getProject();
+		// tok = ToK.getProjectToK(project);
 
 		Integer[] ids = page.getSelectedQuotes();
-		page.getDiscussion().createLink(
-				ids[0], ids[1],
-				page.getComment(),
+		page.getDiscussion().createLink(ids[0], ids[1], page.getComment(),
 				page.getRelationType());
 
 		return true;

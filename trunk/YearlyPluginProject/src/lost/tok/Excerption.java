@@ -12,18 +12,26 @@ import org.dom4j.Element;
  * @author Team LOST
  */
 public class Excerption extends Properties {
-	/** The offset in the document of the excerptions end (the first char not included in the excerption) */
+	/**
+	 * The offset in the document of the excerptions end (the first char not
+	 * included in the excerption)
+	 */
 	Integer endPos;
+
 	/** The path in the src file of the excerption */
 	String pathInSourceFile;
+
 	/** The offset in the document of the excerption (inclusive) */
 	Integer startPos;
+
 	/** The excerption's text */
 	String text;
 
 	/**
 	 * Builds an excerption from an XML element
-	 * @param excerption the XML element describing the excerption
+	 * 
+	 * @param excerption
+	 *            the XML element describing the excerption
 	 */
 	public Excerption(Element excerption) {
 		this(excerption.element("sourceFilePath").getText(), null, Integer //$NON-NLS-1$
@@ -33,10 +41,15 @@ public class Excerption extends Properties {
 
 	/**
 	 * Builds an excerption from relevant arguments
-	 * @param path The path to the src file of the excerption
-	 * @param text The text of the excerption
-	 * @param start The offset in the document of the excerption (inclusive)
-	 * @param end The offset in the docuemnt of the excerption's end (exclusive)
+	 * 
+	 * @param path
+	 *            The path to the src file of the excerption
+	 * @param text
+	 *            The text of the excerption
+	 * @param start
+	 *            The offset in the document of the excerption (inclusive)
+	 * @param end
+	 *            The offset in the docuemnt of the excerption's end (exclusive)
 	 */
 	public Excerption(String path, String text, int start, int end) {
 		pathInSourceFile = path;
@@ -47,6 +60,7 @@ public class Excerption extends Properties {
 
 	/**
 	 * Returns an XML element describing the excerption
+	 * 
 	 * @return an XML element describing the excerption
 	 */
 	public Element toXML() {
@@ -59,6 +73,7 @@ public class Excerption extends Properties {
 
 	/**
 	 * Returns the offset in the document after the excerption
+	 * 
 	 * @return the offset in the document after the excerption
 	 */
 	public int getEndPos() {
@@ -69,10 +84,12 @@ public class Excerption extends Properties {
 	public String getPathInSourceFile() {
 		return pathInSourceFile;
 	}
+
 	/** Returns the offset of the excerptions start */
 	public int getStartPos() {
 		return startPos;
 	}
+
 	/** Returns the text of the excerption */
 	public String getText() {
 		return text;

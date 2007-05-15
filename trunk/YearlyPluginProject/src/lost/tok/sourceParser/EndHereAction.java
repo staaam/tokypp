@@ -9,10 +9,9 @@ import org.eclipse.jface.action.IAction;
  */
 public class EndHereAction extends AbstractEditorAction {
 
-	
 	/**
-	 * Gets the current location of the cursor and calls to the method
-	 * which opens a new dialog
+	 * Gets the current location of the cursor and calls to the method which
+	 * opens a new dialog
 	 */
 	public void run(IAction action) {
 		assert (activeEditor != null);

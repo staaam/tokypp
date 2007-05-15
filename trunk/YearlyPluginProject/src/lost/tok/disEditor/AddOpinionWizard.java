@@ -9,8 +9,9 @@ public class AddOpinionWizard extends Wizard {
 	private AddOpinionWizardPage page;
 
 	private DiscussionEditor discussionEditor = null;
+
 	private Discussion discussion;
-	
+
 	private String opinionName = null;
 
 	public AddOpinionWizard(DiscussionEditor discussionEditor) {

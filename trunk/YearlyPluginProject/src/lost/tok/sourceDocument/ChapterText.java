@@ -17,8 +17,11 @@ public class ChapterText extends Chapter {
 
 	/**
 	 * Creates a chapterText using it's name and text
-	 * @param name The name of the text paragraph
-	 * @param text The text itself
+	 * 
+	 * @param name
+	 *            The name of the text paragraph
+	 * @param text
+	 *            The text itself
 	 */
 	public ChapterText(String name, String text) {
 		super("", name); //$NON-NLS-1$
@@ -136,14 +139,14 @@ public class ChapterText extends Chapter {
 		if (newName.equals(Chapter.UNPARSED_STR)) {
 			return false;
 		}
-		
+
 		// apostrophe can cause problems with xPath queries
 		if (newName.contains("'")) //$NON-NLS-1$
 			return false;
 
 		if (!isUnparsed()) {
 			return true; // a new sub-level will be created. there are no
-							// brothers
+			// brothers
 		}
 
 		if (parent == null) {
@@ -167,10 +170,12 @@ public class ChapterText extends Chapter {
 	public String getText() {
 		return text;
 	}
-	
+
 	/**
 	 * Adds this ChapterText to the xml, as a Text node
-	 * @param element The element under which this chapter will be added
+	 * 
+	 * @param element
+	 *            The element under which this chapter will be added
 	 */
 	public void addToXml(Element element) {
 		Element textElement = element.addElement("text"); //$NON-NLS-1$
