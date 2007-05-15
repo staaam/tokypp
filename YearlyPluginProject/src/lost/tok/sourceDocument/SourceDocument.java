@@ -167,7 +167,7 @@ public class SourceDocument extends Document {
 			// Print the entire xml to the byte array
 			ByteArrayOutputStream baos = new ByteArrayOutputStream(500);
 			OutputFormat outformat = OutputFormat.createPrettyPrint();
-			outformat.setNewlines(true);
+			outformat.setTrimText(false);
 			outformat.setEncoding("UTF-8"); //$NON-NLS-1$
 			XMLWriter writer = new XMLWriter(baos, outformat);
 			writer.write(toXMLDocument());
