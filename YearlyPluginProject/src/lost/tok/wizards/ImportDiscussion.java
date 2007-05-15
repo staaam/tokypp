@@ -21,7 +21,6 @@ import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
 import org.eclipse.ui.wizards.datatransfer.ZipFileImportWizard;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ImportDiscussion.
  */

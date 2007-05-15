@@ -53,7 +53,7 @@ import org.eclipse.ui.model.AdaptableList;
 import org.eclipse.ui.model.WorkbenchContentProvider;
 import org.eclipse.ui.wizards.datatransfer.ImportOperation;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * The Class ImportDiscussionPage.
  */
@@ -126,7 +126,6 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 	 */
 	@SuppressWarnings("unchecked")//$NON-NLS-1$
 	private boolean checkSourcesExist() {
-		// TODO Auto-generated method stub
 		List<String> missingFiles = new ArrayList<String>();
 		Document tempDoc = GeneralFunctions.readFromXML(tempLinksFile);
 		List<Node> sourceNodes = tempDoc.selectNodes("//sublink/sourceFile"); //$NON-NLS-1$
@@ -290,7 +289,6 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 	 * Delete temp links file.
 	 */
 	private void deleteTempLinksFile() {
-		// TODO Auto-generated method stub
 		File tempLinkFile = new File(tempLinksFile);
 		tempLinkFile.delete();
 	}
@@ -713,7 +711,6 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 	 */
 	@SuppressWarnings("unchecked")//$NON-NLS-1$
 	private boolean checkExistingDiscussions(ZipFile zipFile) {
-		// TODO Auto-generated method stub
 		Enumeration<ZipEntry> linksEntries = (Enumeration<ZipEntry>) zipFile
 				.entries();
 		while (linksEntries.hasMoreElements()) {

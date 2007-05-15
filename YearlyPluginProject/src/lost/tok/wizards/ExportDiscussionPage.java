@@ -31,9 +31,8 @@ import org.eclipse.ui.internal.wizards.datatransfer.DataTransferMessages;
 import org.eclipse.ui.internal.wizards.datatransfer.IDataTransferHelpContextIds;
 import org.eclipse.ui.internal.wizards.datatransfer.WizardFileSystemResourceExportPage1;
 
-// TODO: Auto-generated Javadoc
 /**
- * Page 1 of the base resource export-to-zip Wizard.
+ * Page 1 of export discussions Wizard.
  */
 public class ExportDiscussionPage extends WizardFileSystemResourceExportPage1 {
 
@@ -100,7 +99,6 @@ public class ExportDiscussionPage extends WizardFileSystemResourceExportPage1 {
 				try {
 					children = ((IContainer) resource).members();
 				} catch (CoreException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				for (IResource file : children) {
@@ -168,6 +166,12 @@ public class ExportDiscussionPage extends WizardFileSystemResourceExportPage1 {
 		super.createControl(parent);
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(getControl(),
 				IDataTransferHelpContextIds.ZIP_FILE_EXPORT_WIZARD_PAGE);
+		getTok();
+		try {
+			tok.getProject().refreshLocal(IResource.DEPTH_INFINITE, null);
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -457,7 +461,6 @@ public class ExportDiscussionPage extends WizardFileSystemResourceExportPage1 {
 	 */
 	@Override
 	protected void handleTypesEditButtonPressed() {
-		// TODO Auto-generated method stub
 		super.handleTypesEditButtonPressed();
 	}
 
@@ -494,8 +497,6 @@ public class ExportDiscussionPage extends WizardFileSystemResourceExportPage1 {
 	 */
 	@Override
 	protected Object[] queryResourceTypesToExport() {
-		// TODO Auto-generated method stub
-		// return super.queryResourceTypesToExport();
 		String[] extension = new String[1];
 		extension[0] = "dis"; //$NON-NLS-1$
 		return extension;
