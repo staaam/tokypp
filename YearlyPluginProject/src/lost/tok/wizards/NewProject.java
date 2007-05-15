@@ -14,17 +14,18 @@ import org.eclipse.ui.IWorkbenchWizard;
 import org.eclipse.ui.wizards.newresource.BasicNewProjectResourceWizard;
 
 /**
- * This is a new project wizard. Its role is to create a new file resource in the
- * provided container. If the container resource (a folder or a project) is
+ * This is a new project wizard. Its role is to create a new file resource in
+ * the provided container. If the container resource (a folder or a project) is
  * selected in the workspace when the wizard is opened, it will accept it as the
- * target container. 
+ * target container.
  */
 
-public class NewProject extends Wizard implements INewWizard,IExecutableExtension {
+public class NewProject extends Wizard implements INewWizard,
+		IExecutableExtension {
 	private NewProjectPage page;
 
 	private ISelection selection;
-	
+
 	private IConfigurationElement configElm;
 
 	/**
@@ -51,11 +52,11 @@ public class NewProject extends Wizard implements INewWizard,IExecutableExtensio
 	public boolean performFinish() {
 		new ToK(page.getProjectName(), page.getCreatorName(), page
 				.getRootName());
-		
-		//We need this in order to prompt the perspective change
-		//when the New Project Wizard is finished
+
+		// We need this in order to prompt the perspective change
+		// when the New Project Wizard is finished
 		BasicNewProjectResourceWizard.updatePerspective(configElm);
-		
+
 		return true;
 	}
 
@@ -69,16 +70,15 @@ public class NewProject extends Wizard implements INewWizard,IExecutableExtensio
 		this.selection = selection;
 	}
 
-	
 	/**
-	 * This method is the method of the  IExecutableExtension interface
-	 *  that this class implements.
-	 *  We need this in order to prompt the perspective change 
-	 *  when the New Project Wizard is finished.
-	 *  (also prompts the Dialog asking if we want to switch perspective)
+	 * This method is the method of the IExecutableExtension interface that this
+	 * class implements. We need this in order to prompt the perspective change
+	 * when the New Project Wizard is finished. (also prompts the Dialog asking
+	 * if we want to switch perspective)
 	 */
-	public void setInitializationData(IConfigurationElement config, String propertyName, Object data) throws CoreException {
+	public void setInitializationData(IConfigurationElement config,
+			String propertyName, Object data) throws CoreException {
 		configElm = config;
-		
+
 	}
 }

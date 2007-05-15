@@ -30,8 +30,7 @@ public class Quote {
 		this(source, excerptions, ""); //$NON-NLS-1$
 	}
 
-	public Quote(Source source, List<Excerption> excerptions,
-			String comment) {
+	public Quote(Source source, List<Excerption> excerptions, String comment) {
 		super();
 		this.source = source;
 		this.excerptions = excerptions;
@@ -97,11 +96,10 @@ public class Quote {
 
 	}
 
-	@SuppressWarnings("unchecked") //$NON-NLS-1$
+	@SuppressWarnings("unchecked")//$NON-NLS-1$
 	public Quote(Element elem, ToK tok) {
 		this(new Source(tok, elem.element("sourceFile").getText()), //$NON-NLS-1$
-			 new ArrayList<Excerption>(),
-			 elem.element("comment").getText()); //$NON-NLS-1$
+				new ArrayList<Excerption>(), elem.element("comment").getText()); //$NON-NLS-1$
 		ID = Integer.valueOf(elem.element("id").getText()); //$NON-NLS-1$
 
 		SourceDocument sd = new SourceDocument();
@@ -132,31 +130,31 @@ public class Quote {
 
 	public String getPrefix(int j) {
 		String text = excerptions.get(0).getText();
-		
+
 		if (j == 0 || j >= text.length()) {
 			return text;
 		}
-		
+
 		return text.substring(0, j) + "..."; //$NON-NLS-1$
 	}
-	
-//	public String getPrefix(int j, String projectName) {
-//		IFile file = (ToK.getProjectToK(ResourcesPlugin.getWorkspace()
-//				.getRoot().getProject(projectName)))
-//				.getSource(getSourceFilePath());
-//		SourceDocument sourceDoc = new SourceDocument();
-//		sourceDoc.set(GeneralFunctions.readFromXML(file));
-//		Excerption excerption = getExcerptions().get(0);
-//		String text = sourceDoc.getChapterText(excerption.getSourceFilePath())
-//				.getText().substring(excerption.getStartPos(),
-//						excerption.getEndPos());
-//
-//		if (j == 0) {
-//			return text;
-//		} else {
-//			int i = j > text.length() ? text.length() : j;
-//			String expPrefix = text.substring(0, i) + "..."; //$NON-NLS-1$
-//			return expPrefix;
-//		}
-//	}
+
+	// public String getPrefix(int j, String projectName) {
+	// IFile file = (ToK.getProjectToK(ResourcesPlugin.getWorkspace()
+	// .getRoot().getProject(projectName)))
+	// .getSource(getSourceFilePath());
+	// SourceDocument sourceDoc = new SourceDocument();
+	// sourceDoc.set(GeneralFunctions.readFromXML(file));
+	// Excerption excerption = getExcerptions().get(0);
+	// String text = sourceDoc.getChapterText(excerption.getSourceFilePath())
+	// .getText().substring(excerption.getStartPos(),
+	// excerption.getEndPos());
+	//
+	// if (j == 0) {
+	// return text;
+	// } else {
+	// int i = j > text.length() ? text.length() : j;
+	// String expPrefix = text.substring(0, i) + "..."; //$NON-NLS-1$
+	// return expPrefix;
+	// }
+	// }
 }

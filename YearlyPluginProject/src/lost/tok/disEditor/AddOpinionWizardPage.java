@@ -49,7 +49,8 @@ public class AddOpinionWizardPage extends WizardPage implements ModifyListener {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(gridLayout);
 
-		new Label(composite, SWT.NONE).setText(Messages.getString("AddOpinionWizardPage.Opinion")); //$NON-NLS-1$
+		new Label(composite, SWT.NONE).setText(Messages
+				.getString("AddOpinionWizardPage.Opinion")); //$NON-NLS-1$
 		opinionArea = new Text(composite, SWT.SINGLE | SWT.BORDER);
 		opinionArea.setLayoutData(gridData);
 
@@ -65,9 +66,11 @@ public class AddOpinionWizardPage extends WizardPage implements ModifyListener {
 
 	private void dialogChanged() {
 		if (opinionArea.getText().length() == 0) {
-			updateStatus(Messages.getString("AddOpinionWizardPage.ErrOpinionMustNotBeEmpty")); //$NON-NLS-1$
+			updateStatus(Messages
+					.getString("AddOpinionWizardPage.ErrOpinionMustNotBeEmpty")); //$NON-NLS-1$
 		} else if (opinions.contains(opinionArea.getText())) {
-			updateStatus(Messages.getString("AddOpinionWizardPage.ErrOpinionExists")); //$NON-NLS-1$
+			updateStatus(Messages
+					.getString("AddOpinionWizardPage.ErrOpinionExists")); //$NON-NLS-1$
 		} else {
 			updateStatus(null);
 		}

@@ -64,10 +64,8 @@ public class NewLinkWizard extends Wizard implements INewWizard {
 		try {
 			for (String root : roots) {
 				tok.linkDiscussionRoot(tok.getDiscussion(page.getDiscussion()),
-						new Source(tok, root),
-						page.getExcerptions(root), 
-						page.getSubject(),
-						page.getLinkType());
+						new Source(tok, root), page.getExcerptions(root), page
+								.getSubject(), page.getLinkType());
 			}
 
 		} catch (CoreException e) {
@@ -77,11 +75,11 @@ public class NewLinkWizard extends Wizard implements INewWizard {
 		return true;
 	}
 
-	@SuppressWarnings("unused") //$NON-NLS-1$
+	@SuppressWarnings("unused")//$NON-NLS-1$
 	private void throwCoreException(String message) throws CoreException {
 		IStatus status = new Status(IStatus.ERROR, "Yearly_Plugin_Project", //$NON-NLS-1$
 				IStatus.OK, message, null);
 		throw new CoreException(status);
 	}
-	
+
 }

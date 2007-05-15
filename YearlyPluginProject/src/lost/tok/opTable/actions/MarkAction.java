@@ -15,7 +15,7 @@ public class MarkAction extends AbstractEditorAction {
 			return;
 		}
 
-		((OperationTable) activeEditor).mark(currentSelection,
-				action.getId().indexOf("Unmark") == -1); //$NON-NLS-1$
+		((OperationTable) activeEditor).mark(currentSelection, action.getId()
+				.indexOf("Unmark") == -1); //$NON-NLS-1$
 	}
 }

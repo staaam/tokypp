@@ -107,11 +107,9 @@ public class ExportDiscussionPage extends WizardFileSystemResourceExportPage1 {
 					String fileName = file.getName();
 					String[] name = fileName.split("\\."); //$NON-NLS-1$
 					if (name[1].compareTo("dis") != 0) { //$NON-NLS-1$
-						MessageDialog
-								.openWarning(
-										null,
-										Messages.getString("ExportDiscussionPage.4"), //$NON-NLS-1$
-										Messages.getString("ExportDiscussionPage.5")); //$NON-NLS-1$
+						MessageDialog.openWarning(null, Messages
+								.getString("ExportDiscussionPage.4"), //$NON-NLS-1$
+								Messages.getString("ExportDiscussionPage.5")); //$NON-NLS-1$
 						return false;
 					}
 				}
@@ -307,8 +305,8 @@ public class ExportDiscussionPage extends WizardFileSystemResourceExportPage1 {
 		if (!status.isOK()) {
 			ErrorDialog.openError(getContainer().getShell(),
 					DataTransferMessages.DataTransfer_exportProblems, null, // no
-																			// special
-																			// message
+					// special
+					// message
 					status);
 			return false;
 		}

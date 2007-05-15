@@ -32,10 +32,11 @@ public class GeneralFunctions {
 			return properties.put(key, value);
 		}
 	}
-	
+
 	/** Returns true if the project is running in an LTR language */
 	public static boolean isLTR() {
-		return Messages.getString("LanguageDirection").toLowerCase().equals("ltr"); //$NON-NLS-1$ //$NON-NLS-2$
+		return Messages
+				.getString("LanguageDirection").toLowerCase().equals("ltr"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	public static Document readFromXML(IFile file) {
@@ -67,7 +68,8 @@ public class GeneralFunctions {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		};
+		}
+		;
 		return doc;
 	}
 

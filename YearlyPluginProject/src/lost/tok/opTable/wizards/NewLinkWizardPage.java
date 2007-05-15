@@ -31,7 +31,8 @@ import org.eclipse.swt.widgets.TreeItem;
  * @author Team Lost
  * 
  */
-public class NewLinkWizardPage extends WizardPage implements SelectionListener, ModifyListener {
+public class NewLinkWizardPage extends WizardPage implements SelectionListener,
+		ModifyListener {
 	private DiscCombo discussionCombo;
 
 	private Tree excerptions;
@@ -68,12 +69,12 @@ public class NewLinkWizardPage extends WizardPage implements SelectionListener, 
 		// discussion
 		Label label = new Label(container, SWT.NULL);
 		label.setText(Messages.getString("NewLinkWizardPage.14")); //$NON-NLS-1$
-		
+
 		discussionCombo = new DiscCombo(container, SWT.NONE, tok);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		discussionCombo.setLayoutData(gd);
 		discussionCombo.discCombo.addSelectionListener(this);
-		
+
 		// subject
 		label = new Label(container, SWT.NULL);
 		label.setText(Messages.getString("NewLinkWizardPage.1")); //$NON-NLS-1$
@@ -150,15 +151,18 @@ public class NewLinkWizardPage extends WizardPage implements SelectionListener, 
 	}
 
 	public Excerption[] getExcerptions(String fileName) {
-		List<Excerption> excerptions = ExcerptionView.getView().getExcerptions(fileName);
+		List<Excerption> excerptions = ExcerptionView.getView().getExcerptions(
+				fileName);
 		Excerption[] exs = new Excerption[excerptions.size()];
 		excerptions.toArray(exs);
 		return exs;
 	}
 
 	/**
-	 * Returns the type of the link chosen 
-	 * @return the String for link type which should be written in the xml (and not the display string)
+	 * Returns the type of the link chosen
+	 * 
+	 * @return the String for link type which should be written in the xml (and
+	 *         not the display string)
 	 */
 	public String getLinkType() {
 		int indexChosen = linkType.getSelectionIndex();
@@ -186,40 +190,40 @@ public class NewLinkWizardPage extends WizardPage implements SelectionListener, 
 
 	private void initialize() {
 
-//		if (selection != null && selection.isEmpty() == false
-//				&& selection instanceof IStructuredSelection) {
-//			IStructuredSelection ssel = (IStructuredSelection) selection;
-//			if (ssel.size() > 1) {
-//				return;
-//			}
-//			Object obj = ssel.getFirstElement();
-//			if (obj instanceof IResource) {
-//				IResource resource = (IResource) obj;
-//				String projectName = resource.getProject().getName();
-//				int chosenProjIndex = -1;
-//				String[] projectComboNames = projectCombo.getItems();
-//				for (int i = 0; i < projectComboNames.length; i++) {
-//					if (projectComboNames[i].compareTo(projectName) == 0) {
-//						chosenProjIndex = i;
-//						break;
-//					}
-//				}
-//				projectCombo.select(chosenProjIndex);
-//				projectSelected();
-//
-//				String discName = resource.getName().split(".dis")[0]; //$NON-NLS-1$
-//				int chosenDiscIndex = -1;
-//				String[] discComboNames = discussionCombo.getItems();
-//				for (int i = 0; i < discComboNames.length; i++) {
-//					if (discComboNames[i].compareTo(discName) == 0) {
-//						chosenDiscIndex = i;
-//						break;
-//					}
-//				}
-//				discussionCombo.select(chosenDiscIndex);
-//				discussionCombo.redraw();
-//			}
-//		}
+		// if (selection != null && selection.isEmpty() == false
+		// && selection instanceof IStructuredSelection) {
+		// IStructuredSelection ssel = (IStructuredSelection) selection;
+		// if (ssel.size() > 1) {
+		// return;
+		// }
+		// Object obj = ssel.getFirstElement();
+		// if (obj instanceof IResource) {
+		// IResource resource = (IResource) obj;
+		// String projectName = resource.getProject().getName();
+		// int chosenProjIndex = -1;
+		// String[] projectComboNames = projectCombo.getItems();
+		// for (int i = 0; i < projectComboNames.length; i++) {
+		// if (projectComboNames[i].compareTo(projectName) == 0) {
+		// chosenProjIndex = i;
+		// break;
+		// }
+		// }
+		// projectCombo.select(chosenProjIndex);
+		// projectSelected();
+		//
+		// String discName = resource.getName().split(".dis")[0]; //$NON-NLS-1$
+		// int chosenDiscIndex = -1;
+		// String[] discComboNames = discussionCombo.getItems();
+		// for (int i = 0; i < discComboNames.length; i++) {
+		// if (discComboNames[i].compareTo(discName) == 0) {
+		// chosenDiscIndex = i;
+		// break;
+		// }
+		// }
+		// discussionCombo.select(chosenDiscIndex);
+		// discussionCombo.redraw();
+		// }
+		// }
 	}
 
 	/**
@@ -227,19 +231,18 @@ public class NewLinkWizardPage extends WizardPage implements SelectionListener, 
 	 * 
 	 * @param projectName
 	 */
-//	public void setProjectName(String projectName) {
-//		int chosenProjIndex = -1;
-//		String[] projectComboNames = projectCombo.getItems();
-//		for (int i = 0; i < projectComboNames.length; i++) {
-//			if (projectComboNames[i].compareTo(this.projectName) == 0) {
-//				chosenProjIndex = i;
-//				break;
-//			}
-//		}
-//		projectCombo.select(chosenProjIndex);
-//		projectSelected();
-//	}
-
+	// public void setProjectName(String projectName) {
+	// int chosenProjIndex = -1;
+	// String[] projectComboNames = projectCombo.getItems();
+	// for (int i = 0; i < projectComboNames.length; i++) {
+	// if (projectComboNames[i].compareTo(this.projectName) == 0) {
+	// chosenProjIndex = i;
+	// break;
+	// }
+	// }
+	// projectCombo.select(chosenProjIndex);
+	// projectSelected();
+	// }
 	private void updateStatus(String message) {
 		setErrorMessage(message);
 		setPageComplete(message == null);
@@ -264,5 +267,4 @@ public class NewLinkWizardPage extends WizardPage implements SelectionListener, 
 		return tok;
 	}
 
-	
 }

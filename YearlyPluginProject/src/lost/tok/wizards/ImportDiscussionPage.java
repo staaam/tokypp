@@ -124,7 +124,7 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 	 * 
 	 * @return true, if successful
 	 */
-	@SuppressWarnings("unchecked") //$NON-NLS-1$
+	@SuppressWarnings("unchecked")//$NON-NLS-1$
 	private boolean checkSourcesExist() {
 		// TODO Auto-generated method stub
 		List<String> missingFiles = new ArrayList<String>();
@@ -164,12 +164,10 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 					error += file + "\n";
 				}
 			}
-			MessageDialog
-					.openError(
-							null,
-							Messages.getString("ImportDiscussionPage.5"), //$NON-NLS-1$
-							Messages.getString("ImportDiscussionPage.6") //$NON-NLS-1$
-									+ error);
+			MessageDialog.openError(null, Messages
+					.getString("ImportDiscussionPage.5"), //$NON-NLS-1$
+					Messages.getString("ImportDiscussionPage.6") //$NON-NLS-1$
+							+ error);
 			return false;
 		}
 		return true;
@@ -230,7 +228,7 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 		// overwrite... checkbox
 		overwriteExistingResourcesCheckbox = new Button(parent, SWT.CHECK);
 		overwriteExistingResourcesCheckbox
-			.setText(DataTransferMessages.FileImport_overwriteExisting);
+				.setText(DataTransferMessages.FileImport_overwriteExisting);
 		overwriteExistingResourcesCheckbox.setFont(parent.getFont());
 		overwriteExistingResourcesCheckbox.setSelection(true);
 		overwriteExistingResourcesCheckbox.setVisible(false);
@@ -633,7 +631,7 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 	 * 
 	 * @see org.eclipse.ui.internal.wizards.datatransfer.WizardFileSystemResourceImportPage1#handleTypesEditButtonPressed()
 	 */
-	@SuppressWarnings("unchecked") //$NON-NLS-1$
+	@SuppressWarnings("unchecked")//$NON-NLS-1$
 	@Override
 	protected void handleTypesEditButtonPressed() {
 		selectedTypes.clear();
@@ -713,7 +711,7 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 	 * 
 	 * @return true, if successful
 	 */
-	@SuppressWarnings("unchecked") //$NON-NLS-1$
+	@SuppressWarnings("unchecked")//$NON-NLS-1$
 	private boolean checkExistingDiscussions(ZipFile zipFile) {
 		// TODO Auto-generated method stub
 		Enumeration<ZipEntry> linksEntries = (Enumeration<ZipEntry>) zipFile
@@ -724,11 +722,9 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 			try {
 				Discussion disc = tok.getDiscussion(discussionName);
 				if (disc != null) {
-					MessageDialog
-							.openError(
-									null,
-									Messages.getString("ImportDiscussionPage.11"), //$NON-NLS-1$
-									Messages.getString("ImportDiscussionPage.12")); //$NON-NLS-1$
+					MessageDialog.openError(null, Messages
+							.getString("ImportDiscussionPage.11"), //$NON-NLS-1$
+							Messages.getString("ImportDiscussionPage.12")); //$NON-NLS-1$
 					return false;
 				}
 			} catch (CoreException e) {
@@ -753,7 +749,7 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 	/**
 	 * Merge linkfiles.
 	 */
-	@SuppressWarnings("unchecked") //$NON-NLS-1$
+	@SuppressWarnings("unchecked")//$NON-NLS-1$
 	private void mergeLinkfiles() {
 		Document tempDoc = GeneralFunctions.readFromXML(tempLinksFile);
 		Document linksDoc = GeneralFunctions.readFromXML(tok.getLinkFile());

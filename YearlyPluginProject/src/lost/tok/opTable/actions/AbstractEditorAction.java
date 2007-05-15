@@ -8,8 +8,8 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.editors.text.TextEditor;
 
 /**
- * A basic actions on an editor
- * Keeps track of the active editor and current selection
+ * A basic actions on an editor Keeps track of the active editor and current
+ * selection
  */
 public abstract class AbstractEditorAction implements IEditorActionDelegate {
 

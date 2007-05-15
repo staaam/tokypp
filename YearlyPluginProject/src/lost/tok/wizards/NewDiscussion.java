@@ -28,6 +28,7 @@ public class NewDiscussion extends Wizard implements INewWizard {
 		this();
 		setProject(project);
 	}
+
 	/**
 	 * Adding the page to the wizard.
 	 */
@@ -47,11 +48,11 @@ public class NewDiscussion extends Wizard implements INewWizard {
 	}
 
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
-		if (project != null) return;
-		
-		if (selection == null || 
-			selection.isEmpty() ||
-			selection.size() > 1) return;
+		if (project != null)
+			return;
+
+		if (selection == null || selection.isEmpty() || selection.size() > 1)
+			return;
 
 		Object obj = selection.getFirstElement();
 		if (obj instanceof IResource) {
@@ -63,11 +64,11 @@ public class NewDiscussion extends Wizard implements INewWizard {
 	private void setProject(IProject project) {
 		this.project = project;
 	}
-	
+
 	public IProject getProject() {
 		return project;
 	}
-	
+
 	public String getDiscussionName() {
 		return page.getDiscussionName();
 	}

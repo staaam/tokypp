@@ -15,10 +15,10 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-public class NewDiscussionPage extends WizardPage implements
-		ModifyListener {
+public class NewDiscussionPage extends WizardPage implements ModifyListener {
 	/** The full name of the source */
 	private Text name;
+
 	private String discussionName;
 
 	/**
@@ -60,19 +60,20 @@ public class NewDiscussionPage extends WizardPage implements
 
 	private void dialogChanged() {
 		discussionName = name.getText();
-		
+
 		if (discussionName.length() == 0) {
 			updateStatus(Messages.getString("NewDiscussionPage.ErrNoDiscName")); //$NON-NLS-1$
 			return;
 		}
-		
+
 		// TODO: Check whether the given discussion name is valid
-		
+
 		if (discussionExists(discussionName)) {
-			updateStatus(Messages.getString("NewDiscussionPage.ErrDiscAlreadyExist")); //$NON-NLS-1$
+			updateStatus(Messages
+					.getString("NewDiscussionPage.ErrDiscAlreadyExist")); //$NON-NLS-1$
 			return;
 		}
-		
+
 		updateStatus(null);
 	}
 
@@ -81,7 +82,7 @@ public class NewDiscussionPage extends WizardPage implements
 			NewDiscussion wizard = (NewDiscussion) getWizard();
 			try {
 				return (null != ToK.getProjectToK(wizard.getProject())
-					               .getDiscussion(name));
+						.getDiscussion(name));
 			} catch (CoreException e) {
 			}
 		}

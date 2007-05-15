@@ -58,26 +58,28 @@ import org.eclipse.ui.part.ViewPart;
  * 
  */
 public class ExcerptionView extends ViewPart {
-	
+
 	class OTSet extends HashSet<OperationTable> {
 		private static final long serialVersionUID = 8498357334519966448L;
-		
+
 		private Hashtable<String, OperationTable> nameToOT = new Hashtable<String, OperationTable>();
-		
+
 		@Override
 		public boolean add(OperationTable o) {
-			if (!super.add(o)) return false;
+			if (!super.add(o))
+				return false;
 			nameToOT.put(ExcerptionView.nameFromOT(o), o);
 			return true;
 		}
 
 		@Override
 		public boolean remove(Object o) {
-			if (!super.remove(o)) return false;
-			nameToOT.remove(ExcerptionView.nameFromOT((OperationTable)o));
+			if (!super.remove(o))
+				return false;
+			nameToOT.remove(ExcerptionView.nameFromOT((OperationTable) o));
 			return true;
 		}
-		
+
 		public boolean remove(String name) {
 			return remove(get(name));
 		}
@@ -85,15 +87,16 @@ public class ExcerptionView extends ViewPart {
 		public Set<String> getNames() {
 			return nameToOT.keySet();
 		}
-		
+
 		public OperationTable get(String name) {
-			if (!nameToOT.containsKey(name)) return null;
+			if (!nameToOT.containsKey(name))
+				return null;
 			return nameToOT.get(name);
 		}
 	}
 
 	private Hashtable<IProject, OTSet> projectOTs = new Hashtable<IProject, OTSet>();
-	
+
 	private IProject currentProject = null;
 
 	class TreeObject implements IAdaptable {
@@ -165,7 +168,7 @@ public class ExcerptionView extends ViewPart {
 			children.remove(child);
 			child.setParent(null);
 		}
-		
+
 	}
 
 	class ViewContentProvider implements IStructuredContentProvider,
@@ -220,15 +223,17 @@ public class ExcerptionView extends ViewPart {
 		private void treeBuildAndRefresh() {
 			invisibleRoot = new TreeParent(""); //$NON-NLS-1$
 
-			if (currentProject != null && projectOTs.containsKey(currentProject)) {
+			if (currentProject != null
+					&& projectOTs.containsKey(currentProject)) {
 				for (OperationTable ot : getOTs()) {
-					TreeParent parentFile = new TreeParent(ExcerptionView.nameFromOT(ot));
+					TreeParent parentFile = new TreeParent(ExcerptionView
+							.nameFromOT(ot));
 					for (Integer i : ot.getExcerptions().keySet()) {
 						Excerption exp = ot.getExcerptions().get(i);
 						String expText = exp.getText();
-	
-	//					String expPrefix = expText.length() < 40 ? expText
-	//							: expText.substring(0, 40);
+
+						// String expPrefix = expText.length() < 40 ? expText
+						// : expText.substring(0, 40);
 						String expPrefix = expText;
 						TreeObject temp = new TreeObject(expPrefix);
 						temp.setId(i);
@@ -274,7 +279,7 @@ public class ExcerptionView extends ViewPart {
 	 */
 
 	// private Action doubleClickAction;
-	@SuppressWarnings("unused") //$NON-NLS-1$
+	@SuppressWarnings("unused")//$NON-NLS-1$
 	private DrillDownAdapter drillDownAdapter;
 
 	private IAction linkDiscussionAction;
@@ -287,9 +292,10 @@ public class ExcerptionView extends ViewPart {
 	public ExcerptionView() {
 
 	}
-	
+
 	private void refresh() {
-		((ViewContentProvider) viewer.getContentProvider()).treeBuildAndRefresh();
+		((ViewContentProvider) viewer.getContentProvider())
+				.treeBuildAndRefresh();
 	}
 
 	private void contributeToActionBars() {
@@ -306,7 +312,7 @@ public class ExcerptionView extends ViewPart {
 		drillDownAdapter = new DrillDownAdapter(viewer);
 		viewer.setContentProvider(new ViewContentProvider());
 		viewer.setLabelProvider(new ViewLabelProvider());
-		//viewer.setSorter(new NameSorter());
+		// viewer.setSorter(new NameSorter());
 		viewer.setInput(getViewSite());
 		makeActions();
 		hookContextMenu();
@@ -381,25 +387,27 @@ public class ExcerptionView extends ViewPart {
 
 		deleteAction = new Action() {
 			public void run() {
-				ITreeSelection selection = (ITreeSelection) viewer.getSelection();
-				
+				ITreeSelection selection = (ITreeSelection) viewer
+						.getSelection();
+
 				HashSet<OperationTable> ots = new HashSet<OperationTable>();
-				
+
 				for (Iterator iter = selection.iterator(); iter.hasNext();) {
 					TreeObject element = (TreeObject) iter.next();
-					
+
 					OperationTable operationTable = null;
 					if (element instanceof TreeParent) {
 						// a whole file is selected
 						operationTable = getOTs().get(element.getName());
 						operationTable.clearMarked();
 					} else {
-						operationTable = getOTs().get(element.getParent().getName());
+						operationTable = getOTs().get(
+								element.getParent().getName());
 						operationTable.removeExcerption(element.getId());
 					}
 					ots.add(operationTable);
 				}
-				
+
 				for (OperationTable ot : ots) {
 					ot.refreshDisplay();
 				}
@@ -418,63 +426,67 @@ public class ExcerptionView extends ViewPart {
 	public void setFocus() {
 		viewer.getControl().setFocus();
 	}
-	
+
 	/**
-	 * Updates excerptions of given Operation Table in Excerption View
-	 * If given Operation Table still not monitored - adds it
-	 * @param ot - Operation Table to update
+	 * Updates excerptions of given Operation Table in Excerption View If given
+	 * Operation Table still not monitored - adds it
+	 * 
+	 * @param ot -
+	 *            Operation Table to update
 	 */
 	public void updateMonitoredEditor(OperationTable ot) {
 		currentProject = ot.getProject();
 		if (!projectOTs.containsKey(currentProject))
 			projectOTs.put(currentProject, new OTSet());
-				
+
 		if (!getOTs().contains(ot))
 			getOTs().add(ot);
-		
+
 		refresh();
 	}
-	
+
 	/**
 	 * Removes Operation Table from monitored by excerption view
-	 * @param ot - operation table to remove
+	 * 
+	 * @param ot -
+	 *            operation table to remove
 	 */
 	public void removeMonitoredEditor(OperationTable ot) {
-		if (!projectOTs.containsKey(ot.getProject()) ||
-			!projectOTs.get(ot.getProject()).contains(ot)) return;
-		
+		if (!projectOTs.containsKey(ot.getProject())
+				|| !projectOTs.get(ot.getProject()).contains(ot))
+			return;
+
 		projectOTs.get(ot.getProject()).remove(ot);
 		refresh();
 	}
 
 	/**
-	 * Returns the name of the Operation Table (name of it's source) 
+	 * Returns the name of the Operation Table (name of it's source)
 	 * 
-	 * @param ot - operation table to get name of
+	 * @param ot -
+	 *            operation table to get name of
 	 * @return name to show in excerption view
 	 */
 	public static String nameFromOT(OperationTable ot) {
-		return new Source(((FileEditorInput)ot.getEditorInput()).getFile()).toString();
+		return new Source(((FileEditorInput) ot.getEditorInput()).getFile())
+				.toString();
 	}
 
 	/**
-	 * Returns the ExcerptionView object. If the view not shown
-	 * in current perspective, function shows it
-	 *  
+	 * Returns the ExcerptionView object. If the view not shown in current
+	 * perspective, function shows it
+	 * 
 	 * @return ExceptionView object
 	 */
 	public static ExcerptionView getView() {
-		IWorkbenchPage activePage = 
-			PlatformUI.getWorkbench()
-				.getActiveWorkbenchWindow()
-				.getActivePage();
-		
+		IWorkbenchPage activePage = PlatformUI.getWorkbench()
+				.getActiveWorkbenchWindow().getActivePage();
+
 		if (activePage == null) {
 			return null;
 		}
-		
+
 		IViewPart view = activePage.findView(ExcerptionView.ID);
-		
 
 		try {
 			if (view == null) {
@@ -482,8 +494,8 @@ public class ExcerptionView extends ViewPart {
 			}
 		} catch (PartInitException e) {
 		}
-		
-		return (ExcerptionView)view;
+
+		return (ExcerptionView) view;
 	}
 
 	/**
@@ -496,9 +508,8 @@ public class ExcerptionView extends ViewPart {
 	}
 
 	/**
-	 * Shows Link Discussion wizard
-	 * Shows error message if no roots availible
-	 *
+	 * Shows Link Discussion wizard Shows error message if no roots availible
+	 * 
 	 */
 	public void linkDiscussion() {
 		if (!hasRoots()) {
@@ -514,7 +525,8 @@ public class ExcerptionView extends ViewPart {
 	}
 
 	/**
-	 * Returns whether the view has visible roots 
+	 * Returns whether the view has visible roots
+	 * 
 	 * @return true if view has roots with excerptions, and false if not
 	 */
 	public boolean hasRoots() {
@@ -523,12 +535,14 @@ public class ExcerptionView extends ViewPart {
 
 	/**
 	 * Returns list of roots contained in the view
+	 * 
 	 * @return list of strings with name of the roots
 	 */
 	public List<String> getRoots() {
 		List<String> l = new LinkedList<String>();
 		for (TreeItem i : viewer.getTree().getItems()) {
-			if (new Source(ToK.getProjectToK(getProject()), i.getText()).isRoot())
+			if (new Source(ToK.getProjectToK(getProject()), i.getText())
+					.isRoot())
 				l.add(i.getText());
 		}
 		return l;

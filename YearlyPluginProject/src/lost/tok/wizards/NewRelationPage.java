@@ -31,17 +31,21 @@ import org.eclipse.swt.widgets.TreeItem;
  * @author Team Lost
  * 
  */
-public class NewRelationPage extends WizardPage implements ModifyListener, SelectionListener {
+public class NewRelationPage extends WizardPage implements ModifyListener,
+		SelectionListener {
 
-//	private String projectName;
-	private ToK tok; 
+	// private String projectName;
+	private ToK tok;
 
-//	private String discName;
+	// private String discName;
 	private Discussion discussion;
-	
+
 	private Combo relType;
+
 	private Text comment;
+
 	private Tree leftObjects;
+
 	private Tree rightObjects;
 
 	private Combo discCombo;
@@ -66,7 +70,7 @@ public class NewRelationPage extends WizardPage implements ModifyListener, Selec
 		container.setLayout(layout);
 		layout.numColumns = 3;
 		layout.verticalSpacing = 9;
-		
+
 		Label label;
 		GridData gd;
 
@@ -74,7 +78,8 @@ public class NewRelationPage extends WizardPage implements ModifyListener, Selec
 		label = new Label(container, SWT.NULL);
 		label.setText(Messages.getString("NewRelationWizardPage.Discussion")); //$NON-NLS-1$
 
-		DiscCombo dCombo = new DiscCombo(container, SWT.READ_ONLY | SWT.DROP_DOWN, tok);
+		DiscCombo dCombo = new DiscCombo(container, SWT.READ_ONLY
+				| SWT.DROP_DOWN, tok);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		dCombo.setLayoutData(gd);
@@ -98,7 +103,7 @@ public class NewRelationPage extends WizardPage implements ModifyListener, Selec
 		// Comment line
 		label = new Label(container, SWT.NULL);
 		label.setText(Messages.getString("NewRelationWizardPage.3")); //$NON-NLS-1$
-		
+
 		comment = new Text(container, SWT.BORDER | SWT.SINGLE);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
@@ -121,13 +126,12 @@ public class NewRelationPage extends WizardPage implements ModifyListener, Selec
 		leftObjects.addSelectionListener(this);
 
 		rightObjects.addSelectionListener(this);
-		
-		
+
 		if (discussion != null) {
 			discCombo.setText(discussion.getDiscName());
 			discussionChanged();
 		}
-		
+
 		dialogChanged();
 		setControl(container);
 	}
@@ -138,7 +142,8 @@ public class NewRelationPage extends WizardPage implements ModifyListener, Selec
 
 	private void dialogChanged() {
 		if (discCombo.getSelectionIndex() == -1) {
-			updateStatus(Messages.getString("NewRelationPage.ErrNoDiscSelected")); //$NON-NLS-1$
+			updateStatus(Messages
+					.getString("NewRelationPage.ErrNoDiscSelected")); //$NON-NLS-1$
 			return;
 		}
 
@@ -164,10 +169,12 @@ public class NewRelationPage extends WizardPage implements ModifyListener, Selec
 	public Discussion getDiscussion() {
 		return discussion;
 	}
-	
+
 	/**
-	 * Returns the type of the relation chosen 
-	 * @return the String for relation type which should be written in the xml (and not the display string)
+	 * Returns the type of the relation chosen
+	 * 
+	 * @return the String for relation type which should be written in the xml
+	 *         (and not the display string)
 	 */
 	public String getRelationType() {
 		int chosenIdx = relType.getSelectionIndex();
@@ -201,7 +208,8 @@ public class NewRelationPage extends WizardPage implements ModifyListener, Selec
 				IResource resource = (IResource) obj;
 				tok = ToK.getProjectToK(resource.getProject());
 				try {
-					discussion = tok.getDiscussion(Discussion.getNameFromResource(resource));
+					discussion = tok.getDiscussion(Discussion
+							.getNameFromResource(resource));
 				} catch (CoreException e) {
 				}
 			}
@@ -221,16 +229,15 @@ public class NewRelationPage extends WizardPage implements ModifyListener, Selec
 	}
 
 	public void widgetSelected(SelectionEvent arg0) {
-		if ((discussion == null && 
-			 discCombo.getText() != null && 
-			 discCombo.getText().length() > 0) ||
-			discussion.getDiscName().compareTo(discCombo.getText()) != 0) {
+		if ((discussion == null && discCombo.getText() != null && discCombo
+				.getText().length() > 0)
+				|| discussion.getDiscName().compareTo(discCombo.getText()) != 0) {
 			try {
 				discussion = tok.getDiscussion(discCombo.getText());
 			} catch (CoreException e) {
 				discussion = null;
 			}
-			
+
 			discussionChanged();
 		}
 
@@ -238,10 +245,11 @@ public class NewRelationPage extends WizardPage implements ModifyListener, Selec
 	}
 
 	private void discussionChanged() {
-		if (discussion == null) return;
+		if (discussion == null)
+			return;
 		leftObjects.removeAll();
 		rightObjects.removeAll();
-		
+
 		String[] opinionNames = discussion.getOpinionNames();
 		Integer[] opinionIDs = discussion.getOpinionIDs();
 
@@ -250,7 +258,7 @@ public class NewRelationPage extends WizardPage implements ModifyListener, Selec
 			leftOpinion.setText(opinionNames[i]);
 			leftOpinion.setData(opinionIDs[i]);
 			leftOpinion.setExpanded(true);
-			
+
 			TreeItem rightOpinion = new TreeItem(rightObjects, 0);
 			rightOpinion.setText(opinionNames[i]);
 			rightOpinion.setData(opinionIDs[i]);

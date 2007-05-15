@@ -12,14 +12,16 @@ import org.eclipse.ui.part.FileEditorInput;
  * The action of linking a discussion to the currently marked text
  */
 public class LinkDiscussionAction extends AbstractEditorAction {
-	
+
 	@Override
 	public void setActiveEditor(IAction action, IEditorPart targetEditor) {
 		super.setActiveEditor(action, targetEditor);
 		if (activeEditor instanceof OperationTable) {
 			OperationTable ot = (OperationTable) activeEditor;
-			
-			action.setEnabled(new Source(((FileEditorInput)ot.getEditorInput()).getFile()).isRoot());
+
+			action
+					.setEnabled(new Source(((FileEditorInput) ot
+							.getEditorInput()).getFile()).isRoot());
 		}
 	}
 

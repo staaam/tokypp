@@ -1,8 +1,8 @@
 package lost.tok.opTable.wizards;
 
 import lost.tok.Discussion;
-import lost.tok.ToK;
 import lost.tok.Messages;
+import lost.tok.ToK;
 import lost.tok.wizards.DiscCombo;
 import lost.tok.wizards.OpinionCombo;
 

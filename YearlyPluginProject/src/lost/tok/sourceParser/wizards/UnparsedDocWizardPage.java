@@ -34,8 +34,8 @@ import org.eclipse.ui.model.WorkbenchLabelProvider;
 /**
  * The (only) page of the wizard of the source parser
  * 
- * Supports choosing the project of the file, the file to parse
- * and filling details regarding the new source.
+ * Supports choosing the project of the file, the file to parse and filling
+ * details regarding the new source.
  * 
  * Performs basic checks regarding the validity of the data
  */
@@ -131,7 +131,6 @@ public class UnparsedDocWizardPage extends WizardPage implements ModifyListener 
 			}
 		});
 
-
 		// Last:
 		initialize();
 		dialogChanged();
@@ -148,7 +147,7 @@ public class UnparsedDocWizardPage extends WizardPage implements ModifyListener 
 			}
 			Object obj = ssel.getFirstElement();
 			if (obj instanceof IResource) {
-				IProject proj = ((IResource)obj).getProject();
+				IProject proj = ((IResource) obj).getProject();
 				targetProject.setText(proj.getName());
 			}
 		}
