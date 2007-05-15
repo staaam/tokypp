@@ -133,7 +133,7 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 		IFolder sourceFolder = tok.getRootFolder();
 		for (Node sourceFile : sourceNodes) {
 			String rawPathName = sourceFile.getText();
-			Path path = new Path(sourceFile.getText());
+			IPath path = new Path(sourceFile.getText());
 			if (rawPathName.contains(sourceFolder.getName())) {// check that
 				// the path
 				// doesn't
@@ -141,9 +141,8 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 				// source folder
 				// Itself
 				while (rawPathName.contains(sourceFolder.getName())) {
-					path.removeFirstSegments(1);
+					path = path.removeFirstSegments(1);
 					rawPathName = path.toOSString();
-					continue;
 				}
 			}
 
