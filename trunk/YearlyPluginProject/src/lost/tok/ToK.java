@@ -683,7 +683,10 @@ public class ToK {
 		return discussions;
 	}
 
-	private void loadDiscussions() {
+	/**
+	 * Reloads the discussions in the tree
+	 */
+	public void loadDiscussions() {
 		discussions = new LinkedList<Discussion>();
 
 		try {

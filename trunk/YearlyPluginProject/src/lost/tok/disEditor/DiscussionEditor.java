@@ -571,9 +571,11 @@ public class DiscussionEditor extends TextEditor {
 			FileEditorInput fileEditorInput = (FileEditorInput) super
 					.getEditorInput();
 			IFile file = fileEditorInput.getFile();
+			
+			ToK tok = ToK.getProjectToK(file.getProject());
+			tok.loadDiscussions();
 
-			Discussion d = ToK.getProjectToK(file.getProject()).getDiscussion(
-					Discussion.getNameFromFile(file.getName()));
+			Discussion d = tok.getDiscussion(Discussion.getNameFromFile(file.getName()));
 			return d;
 		} catch (CoreException e) {
 		}
