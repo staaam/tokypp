@@ -23,6 +23,18 @@ public class ToKTest extends TestCase {
 		assertTrue(ResourcesPlugin.getWorkspace().getRoot().getProject(
 				"michalsProj_1").exists());
 	}
+	
+	// checks if a project is created properly without a root
+	public void testCreateProjectNoRoot() throws CoreException, IOException {
+
+		int numProjectsBefore = ResourcesPlugin.getWorkspace().getRoot()
+				.getProjects().length;
+		new ToK("rootlessProject", "arie","");
+
+		assertTrue(ResourcesPlugin.getWorkspace().getRoot().getProjects().length == numProjectsBefore + 1);
+		assertTrue(ResourcesPlugin.getWorkspace().getRoot().getProject(
+				"rootlessProject").exists());
+	}
 
 	// tests to see if the project parameters have been set correctly
 	public void testProjectProperties() throws CoreException, IOException {
