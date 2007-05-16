@@ -4,17 +4,21 @@
 <field id="title">18. Updating Editors</field>
 <field id="severity">normal</field>
 <field id="remainingEstimate">6h</field>
+<field id="resolution">fixed</field>
 <field id="timeSpent">6h</field>
 <field id="assignee">Shay</field>
+<field id="previousStatus">open</field>
 <field id="priority">25.0</field>
 <field id="type">task</field>
 <field id="dueDate">2007-05-15</field>
-<field id="status">open</field>
+<field id="status">resolved</field>
 <field id="description"><![CDATA[<P>When updating a file, the editors must update its contents accordingly</P>
 <P>&nbsp;</P>
 <P>22/4/07 -&nbsp;5 hours</P>
 <P>23/4/07 -&nbsp;1 hour (tried to make tests)</P>
-<P>25/4/07 - 0.25 hour&nbsp;- Still no luck in making tests</P>]]></field>
+<P>25/4/07 - 0.25 hour&nbsp;- Still no luck in making tests</P>
+<P>&nbsp;</P>
+<P>Note: couldn't make tests :(</P>]]></field>
 <field id="initialEstimate">20h</field>
 <field id="author">Shay</field>
 </work-item>

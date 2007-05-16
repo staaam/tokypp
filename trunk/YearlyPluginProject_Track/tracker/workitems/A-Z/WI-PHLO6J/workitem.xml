@@ -3,14 +3,18 @@
 <field id="created">2007-04-23 02:06:21.000 +0300</field>
 <field id="title">11. Update Help</field>
 <field id="severity">normal</field>
-<field id="remainingEstimate">3h</field>
-<field id="timeSpent">0h</field>
+<field id="remainingEstimate">0h</field>
+<field id="resolution">fixed</field>
+<field id="timeSpent">2h</field>
 <field id="assignee">Shay</field>
+<field id="previousStatus">open</field>
 <field id="priority">25.0</field>
 <field id="type">task</field>
-<field id="dueDate">2007-05-15 00:00:00.000 +0300</field>
-<field id="status">open</field>
-<field id="description">&lt;P&gt;Update the help to match the changes you've done so far&lt;/P&gt;</field>
+<field id="dueDate">2007-05-15</field>
+<field id="status">resolved</field>
+<field id="description"><![CDATA[<P>Update the help to match the changes you've done so far</P>
+<P>&nbsp;</P>
+<P>14/5 - 2 hours</P>]]></field>
 <field id="initialEstimate">3h</field>
 <field id="author">Shay</field>
 </work-item>
