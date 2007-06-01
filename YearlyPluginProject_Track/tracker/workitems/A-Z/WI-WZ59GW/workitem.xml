@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <work-item>
+    <field id="initialEstimate">1d</field>
+    <field id="resolution">fixed</field>
     <field id="type">task</field>
+    <field id="timeSpent">1d</field>
     <field id="author">Michael</field>
     <field id="title">17. Scroll to excerption on double click in Excerption View</field>
     <field id="created">2007-06-01 19:12:15.484 +0200</field>
     <field id="priority">25.0</field>
     <field id="description">Scroll to excerption on double click on excerption&amp;nbsp;in Excerption View</field>
-    <field id="status">open</field>
+    <field id="status">closed</field>
+    <field id="assignee">Michael</field>
     <field id="severity">normal</field>
+    <field id="previousStatus">open</field>
 </work-item>

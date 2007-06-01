@@ -9,5 +9,6 @@
     <field id="description">&amp;nbsp;Move buttons that should be in Excerptions View (like link discussion) &amp;nbsp;to it</field>
     <field id="remainingEstimate">1d</field>
     <field id="status">open</field>
+    <field id="assignee">Michael</field>
     <field id="severity">normal</field>
 </work-item>
