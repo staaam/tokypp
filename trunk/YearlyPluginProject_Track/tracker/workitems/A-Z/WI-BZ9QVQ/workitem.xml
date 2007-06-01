@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<work-item>
+    <field id="initialEstimate">4d</field>
+    <field id="type">task</field>
+    <field id="author">Michael</field>
+    <field id="title">13.2. Create methods for searching</field>
+    <field id="created">2007-06-01 18:48:10.500 +0200</field>
+    <field id="priority">25.0</field>
+    <field id="description">Create needed methods for searching for name of source, name of discussion, source content</field>
+    <field id="remainingEstimate">4d</field>
+    <field id="status">open</field>
+    <field id="assignee">Michael</field>
+    <field id="severity">normal</field>
+</work-item>

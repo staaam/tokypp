@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<work-item>
+    <field id="linkedWorkItems">
+        <list>
+            <struct type="workitem">
+                <item id="workItem">WI-SWE0Z8</item>
+                <item id="suspect">true</item>
+                <item id="role">relates_to</item>
+            </struct>
+            <struct type="workitem">
+                <item id="workItem">WI-T8O8DZ</item>
+                <item id="suspect">true</item>
+                <item id="role">relates_to</item>
+            </struct>
+            <struct type="workitem">
+                <item id="workItem">WI-IQU7LS</item>
+                <item id="suspect">true</item>
+                <item id="role">relates_to</item>
+            </struct>
+        </list>
+    </field>
+    <field id="type">task</field>
+    <field id="author">Michael</field>
+    <field id="title">12. Extended root display</field>
+    <field id="created">2007-06-01 19:00:53.328 +0200</field>
+    <field id="priority">25.0</field>
+    <field id="description"><![CDATA[<P>The system will allow highlight of different links types with different colors.</P>
+<P>Also there should be buttons 'next/prev link'</P>]]></field>
+    <field id="status">open</field>
+    <field id="assignee">Michael</field>
+    <field id="severity">normal</field>
+</work-item>
