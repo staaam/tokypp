@@ -319,4 +319,15 @@
          </description>
       </wizard>
    </extension>
+   <extension
+         point="org.eclipse.search.searchPages">
+      <page
+            canSearchEnclosingProjects="true"
+            class="lost.tok.search.ToKSearchPage"
+            enabled="true"
+            extensions="src,dis"
+            id="lost.tok.search"
+            label="ToK Search"
+            showScopeSection="true"/>
+   </extension>
 </plugin>
