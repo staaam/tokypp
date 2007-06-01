@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<work-item>
+    <field id="initialEstimate">1d</field>
+    <field id="type">task</field>
+    <field id="author">Michael</field>
+    <field id="title">16. Remember last Discussion and last Opinion in 'Add Quote' dialog</field>
+    <field id="created">2007-06-01 19:11:02.078 +0200</field>
+    <field id="priority">25.0</field>
+    <field id="description">Remember last Discussion and last Opinion in 'Add Quote' dialog</field>
+    <field id="remainingEstimate">1d</field>
+    <field id="status">open</field>
+    <field id="assignee">Michael</field>
+    <field id="severity">normal</field>
+</work-item>

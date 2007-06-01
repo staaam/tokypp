@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<work-item>
+    <field id="linkedWorkItems">
+        <list>
+            <struct type="workitem">
+                <item id="workItem">WI-B5G8EU</item>
+                <item id="suspect">true</item>
+                <item id="role">relates_to</item>
+            </struct>
+            <struct type="workitem">
+                <item id="workItem">WI-S9JVKN</item>
+                <item id="suspect">true</item>
+                <item id="role">relates_to</item>
+            </struct>
+            <struct type="workitem">
+                <item id="workItem">WI-BZ9QVQ</item>
+                <item id="suspect">true</item>
+                <item id="role">relates_to</item>
+            </struct>
+            <struct type="workitem">
+                <item id="workItem">WI-JN03XE</item>
+                <item id="suspect">true</item>
+                <item id="role">relates_to</item>
+            </struct>
+        </list>
+    </field>
+    <field id="type">task</field>
+    <field id="author">Michael</field>
+    <field id="title">13. Searching</field>
+    <field id="created">2007-06-01 18:57:11.703 +0200</field>
+    <field id="priority">25.0</field>
+    <field id="description"><![CDATA[<P>The system should allow searching of</P>
+<P>- source name</P>
+<P>- discussion name</P>
+<P>- source content</P>
+<P>Results will be shown in the Search View and will allow opening of found discussion/source with found words highlighted</P>]]></field>
+    <field id="status">open</field>
+    <field id="assignee">Michael</field>
+    <field id="severity">normal</field>
+</work-item>
