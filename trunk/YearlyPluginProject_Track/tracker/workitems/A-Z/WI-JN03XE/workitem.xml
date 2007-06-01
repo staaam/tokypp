@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <work-item>
     <field id="initialEstimate">4d</field>
+    <field id="resolution">fixed</field>
     <field id="type">task</field>
+    <field id="timeSpent">4d</field>
     <field id="author">Michael</field>
     <field id="title">13.1. Create Tab in Search Dialog</field>
     <field id="created">2007-06-01 18:46:45.109 +0200</field>
     <field id="priority">25.0</field>
     <field id="description">Create tab in the search dialog which will allow to choose search scope - sources, discussions</field>
-    <field id="remainingEstimate">4d</field>
-    <field id="status">open</field>
+    <field id="remainingEstimate"/>
+    <field id="status">closed</field>
     <field id="assignee">Michael</field>
     <field id="severity">normal</field>
+    <field id="previousStatus">open</field>
 </work-item>
