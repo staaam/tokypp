@@ -365,10 +365,28 @@ public class ExcerptionView extends ViewPart {
 		getSite().registerContextMenu(menuMgr, viewer);
 	}
 
+	/**
+	 * Should handle double click event in Excerption View
+	 * When source double clicked, it becomes active
+	 * When excerption double clicked, it's source becomes
+	 * active and scrolled to selected excerption 
+	 *
+	 */
 	private void hookDoubleClickAction() {
 		viewer.addDoubleClickListener(new IDoubleClickListener() {
 			public void doubleClick(DoubleClickEvent event) {
-				linkDiscussionAction.run();
+				ITreeSelection selection = (ITreeSelection) viewer.getSelection();
+				TreeObject element = (TreeObject) selection.getFirstElement();
+
+				TreeObject sourceElement = element;
+				if (!(element instanceof TreeParent))
+					sourceElement = element.getParent();
+				
+				OperationTable operationTable = getOTs().get(sourceElement.getName());
+				operationTable.activate();
+				
+				if (!(element instanceof TreeParent))
+					operationTable.scrollToExcerption(element.getId());
 			}
 		});
 	}

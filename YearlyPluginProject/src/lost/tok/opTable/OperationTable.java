@@ -468,4 +468,23 @@ public class OperationTable extends TextEditor {
 		return rootDiscussionsView;
 	}
 
+	/**
+	 * Activates this Operation Table. It will be brought to the front and given
+	 * focus.
+	 */
+	public void activate() {
+		getSite().getPage().activate(getSite().getPart());
+	}
+
+	/**
+	 * Scrolls the source to the position of excerption, specified by <code><b>id</b></code>
+	 *  
+	 * @param id - id of the excerption
+	 */
+	public void scrollToExcerption(int id) {
+		// id = offset
+		resetHighlightRange();
+		setHighlightRange(id, markedText.get(id), true);
+	}
+
 }
