@@ -25,11 +25,9 @@ public class Heading implements SrcElem
 	}
 	
 	public String getHTMLText()
-	{
-		// TODO(Shay): Find how deep is this title
-		// TODO(Shay): Set the h's level and id accordingly
-		
-		String hTitle = "h" + depth; 
+	{		
+		// the biggest heading allowed is h2. h1 is reserved for the page's title
+		String hTitle = "h" + (depth + 1); 
 		String id = (getID() == null) ? ("") : ("id=#" + getID());
 		return "<" + hTitle + " " + id + ">" + title + "</" + hTitle + ">";
 	}

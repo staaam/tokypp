@@ -26,14 +26,19 @@ public class SourcePage extends HTMLPage {
 	public static String SOURCE_CSS = DEFAULT_CSS;
 	
 	/** The Source displayed by this page */
-	private Source src;
-	
+	private SourceDocument srcDoc;
+		
 	/** The elements displayed on this page (either headings or paragraphs) */
 	private List<SrcElem> elements;
 	
 	/** A mapping from xPath in the source to paragraph elements */
 	private HashMap<String, LinkedParagraph> xPathToParagraph;
 
+	/**
+	 * Create a source page for the given source
+	 * Links to discussions can be added later
+	 * @param src the source for which this page is built
+	 */
 	public SourcePage(Source src)
 	{
 		super(src.getTok(),
@@ -41,20 +46,18 @@ public class SourcePage extends HTMLPage {
 				getExportPath(src),
 				HTMLPage.getHTMLRelPath(src.getTok().getProject(),src.getFile().getProjectRelativePath()) + SOURCE_CSS);
 		
-		this.src = src;
+		srcDoc = new SourceDocument();
+		srcDoc.set( src );
 		
-		SourceDocument srcDoc = new SourceDocument();
-		srcDoc.set( this.src );
-		this.elements = new LinkedList<SrcElem>();	
-		buildElements( srcDoc );
+		buildElements();
 	}
 	
 	/**
 	 * Splits the SourceDocument and creates the elements attribute from it
-	 * @param srcDoc the source document related to this Source
 	 */
-	private void buildElements( SourceDocument srcDoc )
+	private void buildElements()
 	{
+		elements = new LinkedList<SrcElem>();	
 		for (Chapter c : srcDoc.getAllChapters())
 		{
 			if (c.getDepth() == 0)
@@ -77,6 +80,40 @@ public class SourcePage extends HTMLPage {
 	}
 	
 	/**
+	 * Creates a link from the source to the selected document page
+	 * @param xPath the path of the link inside the source
+	 * @param start the offset of the first char to be linked, inside the chapter
+	 * @param end the offset of the first char to _NOT_ be linked, inside the chapter
+	 * @param disc the target discussion
+	 */
+	public void addLink(String xPath, int start, int end, DiscussionPage disc)
+	{
+		xPathToParagraph.get(xPath).addLink(start, end, disc);
+	}
+	
+	/**
+	 * Generate the source page and all the discussion conflict pages connected to it
+	 */
+	public void generatePage()
+	{
+		// generate this
+		super.generatePage();
+		
+		// generate all the discConflictPages
+		for (SrcElem e : elements)
+		{
+			if (! (e instanceof LinkedParagraph) )
+				continue;
+			
+			LinkedParagraph p = (LinkedParagraph)e;
+			
+			for ( HTMLPage page : p.getUngeneratedPages() )
+				page.generatePage();
+		}
+		
+	}
+	
+	/**
 	 * Returns the path to which the html file of the source should be saved
 	 * @param src the source file
 	 * @return the path of the new .html file
@@ -94,9 +131,20 @@ public class SourcePage extends HTMLPage {
 	@Override
 	protected String getBody() 
 	{
+		StringBuffer s = new StringBuffer();
 		
-				
-		return null;
+		s.append( "<h1>" + srcDoc.getTitle() + "</h1>\n" );
+		s.append( "<p>Written by: <em>" + srcDoc.getAuthor() + "</em></p>\n" );
+		
+		// TODO(Shay, low): Add a list of discussions using this source
+		// TODO(Shay, low): Add a table of contents
+		
+		for (SrcElem e : elements)
+		{
+			s.append ( "\t" + e.getHTMLText().replaceAll("\n", "\t\n") );
+		}
+	
+		return s.toString();
 	}
 
 }
