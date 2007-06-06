@@ -1,6 +1,5 @@
 package lost.tok.sourceParser;
 
-import lost.tok.GeneralFunctions;
 import lost.tok.Messages;
 import lost.tok.opTable.SourceDocumentProvider;
 import lost.tok.opTable.StyleManager;
@@ -62,9 +61,8 @@ public class SourceParser extends TextEditor {
 		// Note(Shay): Bah... looking for this function was tedious!
 		getSourceViewerDecorationSupport(srcview).dispose();
 
-		// using Eclipse' word wrapping, but only in LTR languages
-		if (GeneralFunctions.isLTR())
-			srcview.getTextWidget().setWordWrap(true);
+		// using Eclipse' word wrapping, since now it is working :)
+		srcview.getTextWidget().setWordWrap(true);
 
 		refreshDisplay();
 	}

@@ -38,6 +38,11 @@ public class GeneralFunctions {
 		return Messages
 				.getString("LanguageDirection").toLowerCase().equals("ltr"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
+	
+	/** Returns the 'normal' language code for the current language (i.e. en for English and he for Hebrew) */
+	public static String langCode() {
+		return Messages.getString("LanguageCode").toLowerCase();		
+	}
 
 	public static Document readFromXML(IFile file) {
 		return readFromXML(file.getLocation().toOSString());
@@ -94,6 +99,25 @@ public class GeneralFunctions {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * Returns a copy of the text with:
+	 *   &lt;  replaced by &amp;lt;
+	 *   &gt;  replaced by &amp;gt;
+	 *   \n    replaced by &lt;br /&gt;
+	 *   &amp; replaced by &amp;amp; 
+	 * @param text the text to replaced
+	 * @return an xml-escaped version of the text
+	 */
+	public static String xmlEscape(String text)
+	{
+		String s = text;
+		s = s.replaceAll("<", "&lt;");
+		s = s.replaceAll(">", "&gt;");
+		s = s.replaceAll("\n", "<br />");
+		s = s.replaceAll("&", "&amp;");
+		return s;
 	}
 
 }
