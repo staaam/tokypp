@@ -377,6 +377,9 @@ public class ToK {
 	public void linkDiscussionRoot(Discussion disc, Source sourceFile,
 			Excerption[] exp, String subject, String linkType) {
 
+		disc.setLinkType(linkType);
+		disc.setLinkedSourceFile(sourceFile);
+		
 		String discFileName = disc.getDiscFileName();
 
 		// Open the Links file
