@@ -64,6 +64,10 @@ public class Discussion {
 
 	private Integer id = 1;
 
+	private String linkType=null;
+
+	private Source linkedSource=null;
+
 	/**
 	 * constructor for discussion from an XML file
 	 * 
@@ -558,5 +562,21 @@ public class Discussion {
 		if (tok == null) return false;
 	
 		return GeneralFunctions.fileInFolder(file, tok.getDiscussionFolder());
+	}
+
+	public void setLinkType(String linkType) {
+		this.linkType = linkType;
+	}
+	
+	public String getLinkType() {
+		return linkType;	
+	}
+
+	public void setLinkedSourceFile(Source sourceFile) {
+		this.linkedSource = sourceFile;	
+	}
+	
+	public Source getLinkedSourceFile() {
+		return linkedSource;	
 	}
 }
