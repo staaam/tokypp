@@ -13,7 +13,7 @@ import org.dom4j.Element;
  */
 public class Excerption extends Properties {
 	/**
-	 * The offset in the document of the excerptions end (the first char not
+	 * The offset of the end in the chapter of the excerptions (the first char not
 	 * included in the excerption)
 	 */
 	Integer endPos;
@@ -21,7 +21,7 @@ public class Excerption extends Properties {
 	/** The path in the src file of the excerption */
 	String pathInSourceFile;
 
-	/** The offset in the document of the excerption (inclusive) */
+	/** The offset of the excerption's start in the chapter of the excerption (inclusive) */
 	Integer startPos;
 
 	/** The excerption's text */
@@ -43,7 +43,7 @@ public class Excerption extends Properties {
 	 * Builds an excerption from relevant arguments
 	 * 
 	 * @param path
-	 *            The path to the src file of the excerption
+	 *            The unique xPath of the chapter in the xml document
 	 * @param text
 	 *            The text of the excerption
 	 * @param start
@@ -81,7 +81,7 @@ public class Excerption extends Properties {
 	}
 
 	/** Returns the path of the excerption's source */
-	public String getPathInSourceFile() {
+	public String getXPath() {
 		return pathInSourceFile;
 	}
 
