@@ -3,7 +3,10 @@ package lost.tok;
 import org.eclipse.core.resources.IFile;
 
 public class Source {
+	/** The IFile of the source */
 	IFile file;
+	/** The tree of knowledge this source belongs to */
+	ToK tok;
 
 	/**
 	 * Creates Source object
@@ -14,7 +17,8 @@ public class Source {
 	 *            source file (relative to project dir)
 	 */
 	public Source(ToK tok, String fileName) {
-		file = tok.getProject().getFile(fileName);
+		this.tok = tok;
+		this.file = tok.getProject().getFile(fileName);
 	}
 
 	/**
@@ -54,6 +58,11 @@ public class Source {
 	 */
 	public String toString() {
 		return file.getProjectRelativePath().toPortableString();
+	}
+
+	/** Returns the ToK of the source */
+	public ToK getTok() {
+		return tok;
 	}
 
 }
