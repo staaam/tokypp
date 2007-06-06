@@ -12,6 +12,7 @@ import lost.tok.sourceDocument.Chapter;
 import lost.tok.sourceDocument.ChapterText;
 import lost.tok.sourceDocument.SourceDocument;
 
+import org.eclipse.core.filebuffers.FileBuffers;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceVisitor;
@@ -19,6 +20,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.search.internal.ui.text.FileMatch;
+import org.eclipse.search.ui.NewSearchUI;
 import org.eclipse.search.ui.text.Match;
 
 public class ToKSearchVisitor implements IResourceVisitor {
@@ -112,6 +114,14 @@ public class ToKSearchVisitor implements IResourceVisitor {
 				ChapterText ct = (ChapterText) c;
 				for (TextSelection t : search(searchPattern, ct.getText())) {
 					//searchResult.addMatch(new Match(new SingleResult(file), t.getOffset(), t.getLength()));
+					if (FileBuffers.getTextFileBufferManager().getTextFileBuffer(file.getFullPath()) == null) {
+						try {
+							FileBuffers.getTextFileBufferManager().connect(file.getFullPath(), null);
+						} catch (CoreException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
 					searchResult.addMatch(new FileMatch(file, t.getOffset(), t.getLength()));
 				}
 				

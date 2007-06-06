@@ -220,7 +220,6 @@ public class ToKSearchPage extends DialogPage implements ISearchPage {
 	            break;
         }
 		if (scope.isEmpty()) return null;
-		
         NewSearchUI.activateSearchResultView();
 
         return new ToKSearchQuery(

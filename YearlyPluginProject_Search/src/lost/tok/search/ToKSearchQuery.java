@@ -11,12 +11,15 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.search.internal.ui.text.FileSearchResult;
+import org.eclipse.search.internal.ui.text.SearchResultUpdater;
 import org.eclipse.search.ui.ISearchQuery;
 import org.eclipse.search.ui.ISearchResult;
+import org.eclipse.search.ui.NewSearchUI;
 
 public class ToKSearchQuery implements ISearchQuery {
 
-	private ToKSearchResult searchResult = new ToKSearchResult(this);
+	private ToKSearchResult fResult;
 	
 	private String searchPattern;
 	private EnumSet<SearchOption> searchOptions;
@@ -44,19 +47,17 @@ public class ToKSearchQuery implements ISearchQuery {
 		return "Searching for: '" + searchPattern + "'";
 	}
 
-	public ISearchResult getSearchResult() {
-		return searchResult;
-	}
 
 	public IStatus run(IProgressMonitor monitor) {
+		getSearchResult().removeAll();
+		
 		IResourceVisitor visitor = new ToKSearchVisitor(
-				searchPattern, searchOptions, searchResult
+				searchPattern, searchOptions, getSearchResult()
 				);
 		monitor.beginTask("Searching...", IProgressMonitor.UNKNOWN);
 		for (IResource r : scope) {
 			if (monitor.isCanceled())
-				return new Status(IStatus.CANCEL, "lost.tok", //$NON-NLS-1$
-					IStatus.OK, "Search canceled", null);
+				return Status.CANCEL_STATUS;
 
 			try {
 				r.accept(visitor);
@@ -64,8 +65,15 @@ public class ToKSearchQuery implements ISearchQuery {
 				e.printStackTrace();
 			}
 		}
-		return new Status(IStatus.OK, "lost.tok", //$NON-NLS-1$
-				IStatus.OK, "Ok", null);
+		monitor.done();
+		return Status.OK_STATUS;
 	}
 
+	public ToKSearchResult getSearchResult() {
+		if (fResult == null) {
+			fResult= new ToKSearchResult(this);
+			new SearchResultUpdater(fResult);
+		}
+		return fResult;
+	}
 }
