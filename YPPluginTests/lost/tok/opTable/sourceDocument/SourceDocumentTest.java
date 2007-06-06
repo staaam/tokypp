@@ -121,7 +121,7 @@ public class SourceDocumentTest extends TestCase {
 	/** 
 	 * Checks the preverified abc parsing can be parsed and loaded
 	 */
-	public void testToXml()
+	public void testToXml() throws CoreException
 	{
 		/* create the initial abc document */
 		String text = "a b c d e f g h i j k l m n o p q r s t u v w x y z";
