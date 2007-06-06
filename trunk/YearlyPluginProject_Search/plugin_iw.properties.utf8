@@ -1,0 +1,42 @@
+
+source.editor.name=שולחן הניתוחים
+wizards.catagory=מידע
+wizards.wizard.tok=עץ דעת
+
+action.name.mark=סמן
+action.tooltip.mark=מסמן את המקטע הנבחר
+
+action.name.unmark=בטל סימון
+action.tooltip.unmark=בטל את סימון המקטע הנחבר
+
+action.name.unmarkAll=בטל סימונים
+action.tooltip.unmarkAll=מבטל את כל הסימונים במסמך
+
+action.name.addQuote=הוסף ציטוט
+action.tooltip.addQuote=יוצר ציטוט חדש מהקטעים המסומנים
+
+action.name.addOpinion=הוסף דעה
+
+lost.tok.linkDisToRoot=צור קישור ביון דיון לשורש
+lost.tok.createRelation=צור יחס
+lost.tok.excerptionsView=מבט מקטעים
+action.name.link=קשר
+
+action.name.linkDiscussion=קשר דיון
+action.tooltip.linkDiscussion=קשר את המקטעים המסומנים לדיון
+
+editor.source.parser.name = מכין המקורות
+editor.discussion.linker = קשר דיון לשורש
+editor.discussion.links.viewer = הצג דיונים מקושרים
+editor.discussion = עורך הדיונים
+wizard.source.parser.create = מקור מטקסט
+wizard.quote.add = הוסף ציטוט
+wizard.discussion.create = צור דיון חדש
+menu.label.opTable = תפריט הניתוחים
+action.label.discussions.show = הצג דיונים מקושרים
+action.label.end.chapter = סגור פרק כאן
+action.tooltip.end.chapter = לחץ כאן כדי ליצור פרק חדש המסתיים במקום הסמן
+command.name.end.chapter = סגור פרק כאן
+perspective.tok =עץ דעת
+wizard.discussion.export = ייצוא דיונים
+wizard.discussion.import = ייבוא דיונים

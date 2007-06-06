@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--AgileJ Ltd. (http://www.agilej.com)-->
+<ajsv>
+    <diagram style="standardDiagramStyles.diagramStyle.Standard Basic Style" version="1.4.5">
+        <switch switchID="standardDiagramStyles.styleEnumSwitch.Visibility" switchValue="public, package"/>
+        <switch switchID="standardDiagramStyles.styleEnumSwitch.Signature Length" switchValue="short"/>
+        <switch switchID="standardDiagramStyles.styleEnumSwitch.Manhattan Lines" switchValue="dependence, fields, inheritance"/>
+        <switch switchID="standardDiagramStyles.styleEnumSwitch.Line Types" switchValue="dependence, field, inheritance"/>
+        <switch switchID="standardDiagramStyles.styleEnumSwitch.Members" switchValue="fields, methods, inners, initializers"/>
+        <class className="lost.tok.Author" project="YearlyPluginProject" xLocation="2351" yLocation="2004"/>
+        <class className="lost.tok.Discussion" project="YearlyPluginProject" xLocation="1224" yLocation="1608"/>
+        <class className="lost.tok.Excerption" project="YearlyPluginProject" xLocation="1997" yLocation="1240"/>
+        <class className="lost.tok.GeneralFunctions" project="YearlyPluginProject" xLocation="1641" yLocation="602"/>
+        <class className="lost.tok.Link" project="YearlyPluginProject" xLocation="2962" yLocation="1912"/>
+        <class className="lost.tok.Messages" project="YearlyPluginProject" xLocation="2400" yLocation="1193"/>
+        <class className="lost.tok.Opinion" project="YearlyPluginProject" xLocation="2957" yLocation="2143"/>
+        <class className="lost.tok.Quote" project="YearlyPluginProject" xLocation="1679" yLocation="1241"/>
+        <class className="lost.tok.ToK" project="YearlyPluginProject" xLocation="1549" yLocation="1656"/>
+        <class className="lost.tok.ToKBuilder" project="YearlyPluginProject" xLocation="3656" yLocation="1066"/>
+        <class className="lost.tok.ToKNature" project="YearlyPluginProject" xLocation="4018" yLocation="1426"/>
+        <class className="lost.tok.excerptionsView.ExcerptionView" project="YearlyPluginProject" xLocation="2595" yLocation="1736"/>
+        <class className="lost.tok.disEditor.AddOpinionAction" project="YearlyPluginProject" xLocation="3663" yLocation="1613"/>
+        <class className="lost.tok.disEditor.AddOpinionWizard" project="YearlyPluginProject" xLocation="3204" yLocation="1934"/>
+        <class className="lost.tok.disEditor.AddOpinionWizardPage" project="YearlyPluginProject" xLocation="3230" yLocation="2144"/>
+        <class className="lost.tok.disEditor.DiscussionEditor" project="YearlyPluginProject" xLocation="3309" yLocation="1613"/>
+        <class className="lost.tok.activator.Activator" project="YearlyPluginProject" xLocation="1580" yLocation="2401"/>
+        <class className="lost.tok.opTable.DiscussionLink" project="YearlyPluginProject" xLocation="1909" yLocation="2380"/>
+        <class className="lost.tok.opTable.Messages" project="YearlyPluginProject" xLocation="937" yLocation="2145"/>
+        <class className="lost.tok.opTable.StyleManager" project="YearlyPluginProject" xLocation="4356" yLocation="949"/>
+        <class className="lost.tok.opTable.RootDiscussionsPart" project="YearlyPluginProject" xLocation="2314" yLocation="1378"/>
+        <class className="lost.tok.opTable.RootDisussionsSourceViewerConfiguration" project="YearlyPluginProject" xLocation="3072" yLocation="1368"/>
+        <class className="lost.tok.opTable.SourceDocumentProvider" project="YearlyPluginProject" xLocation="2661" yLocation="1103"/>
+        <class className="lost.tok.opTable.OperationTable" project="YearlyPluginProject" xLocation="2661" yLocation="1272"/>
+        <class className="lost.tok.opTable.actions.UnMarkAllAction" project="YearlyPluginProject" xLocation="3598" yLocation="1279"/>
+        <class className="lost.tok.opTable.actions.LinkDiscussionAction" project="YearlyPluginProject" xLocation="2954" yLocation="1725"/>
+        <class className="lost.tok.opTable.actions.SwitchOpTableViewAction" project="YearlyPluginProject" xLocation="3085" yLocation="1178"/>
+        <class className="lost.tok.opTable.actions.MarkAction" project="YearlyPluginProject" xLocation="3930" yLocation="1241"/>
+        <class className="lost.tok.opTable.actions.AbstractEditorAction" project="YearlyPluginProject" xLocation="3306" yLocation="946"/>
+        <class className="lost.tok.opTable.actions.AddQuoteAction" project="YearlyPluginProject" xLocation="1366" yLocation="1396"/>
+        <class className="lost.tok.opTable.wizards.NewLinkWizardPage" project="YearlyPluginProject" xLocation="1948" yLocation="1674"/>
+        <class className="lost.tok.opTable.wizards.AddQuoteWizard" project="YearlyPluginProject" xLocation="1235" yLocation="2247"/>
+        <class className="lost.tok.opTable.wizards.AddQuoteWizardPage" project="YearlyPluginProject" xLocation="864" yLocation="1614"/>
+        <class className="lost.tok.opTable.wizards.NewLinkWizard" project="YearlyPluginProject" xLocation="2292" yLocation="1739"/>
+        <class className="lost.tok.perspective.Perspective" project="YearlyPluginProject" xLocation="1536" yLocation="2692"/>
+        <class className="lost.tok.sourceDocument.Messages" project="YearlyPluginProject" xLocation="2630" yLocation="498"/>
+        <class className="lost.tok.sourceDocument.LabeledPosition" project="YearlyPluginProject" xLocation="2001" yLocation="996"/>
+        <class className="lost.tok.sourceDocument.Chapter" project="YearlyPluginProject" xLocation="2313" yLocation="569"/>
+        <class className="lost.tok.sourceDocument.SourceDocument" project="YearlyPluginProject" xLocation="1965" yLocation="600"/>
+        <class className="lost.tok.sourceDocument.ChapterText" project="YearlyPluginProject" xLocation="2630" yLocation="686"/>
+        <class className="lost.tok.sourceDocument.RangeSearch" project="YearlyPluginProject" xLocation="1350" yLocation="824"/>
+        <class className="lost.tok.sourceParser.UnparsedDocumentProvider" project="YearlyPluginProject" xLocation="2192" yLocation="393"/>
+        <class className="lost.tok.sourceParser.EnterTitleDialog" project="YearlyPluginProject" xLocation="3308" yLocation="600"/>
+        <class className="lost.tok.sourceParser.SourceParser" project="YearlyPluginProject" xLocation="2952" yLocation="700"/>
+        <class className="lost.tok.sourceParser.EndHereAction" project="YearlyPluginProject" xLocation="4296" yLocation="1386"/>
+        <class className="lost.tok.sourceParser.wizards.UnparsedDocWizard" project="YearlyPluginProject" xLocation="3618" yLocation="657"/>
+        <class className="lost.tok.sourceParser.wizards.UnparsedDocWizardPage" project="YearlyPluginProject" xLocation="3973" yLocation="871"/>
+        <class className="lost.tok.wizards.NewDiscussionPage" project="YearlyPluginProject" xLocation="2243" yLocation="2500"/>
+        <class className="lost.tok.wizards.NewDiscussion" project="YearlyPluginProject" xLocation="2264" yLocation="2217"/>
+        <class className="lost.tok.wizards.NewRelation" project="YearlyPluginProject" xLocation="934" yLocation="1878"/>
+        <class className="lost.tok.wizards.NewProjectPage" project="YearlyPluginProject" xLocation="1327" yLocation="1135"/>
+        <class className="lost.tok.wizards.ExportDiscussionWizard" project="YearlyPluginProject" xLocation="3680" yLocation="1855"/>
+        <class className="lost.tok.wizards.NewRelationPage" project="YearlyPluginProject" xLocation="1644" yLocation="960"/>
+        <class className="lost.tok.wizards.NewProject" project="YearlyPluginProject" xLocation="1036" yLocation="1280"/>
+    </diagram>
+</ajsv>
