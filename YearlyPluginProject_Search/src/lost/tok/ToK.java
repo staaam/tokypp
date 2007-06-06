@@ -124,7 +124,6 @@ public class ToK {
 		
 		IProject p = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
 
-		if (p.exists()) 
 		if (!p.exists())
 			p.create(null);
 			
