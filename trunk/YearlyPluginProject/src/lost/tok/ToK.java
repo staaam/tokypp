@@ -525,7 +525,7 @@ public class ToK {
 		}
 	}
 
-	private Document authorsSkeleton() {
+	public Document authorsSkeleton() {
 		Document authDoc = DocumentHelper.createDocument();
 
 		// Create the Skeleton of the authors file
@@ -535,7 +535,7 @@ public class ToK {
 			Element inAuthElm = authElm.addElement("authorsGroup"); //$NON-NLS-1$
 			inAuthElm.addElement("id").addText(String.valueOf(i)); //$NON-NLS-1$
 			inAuthElm.addElement("name").addText( //$NON-NLS-1$
-					"author group " + String.valueOf(i)); //$NON-NLS-1$
+					"Rank " + String.valueOf(i)); //$NON-NLS-1$
 			inAuthElm.addElement("nextGroupId").addText( //$NON-NLS-1$
 					String.valueOf(nextOf(i)));
 			inAuthElm.addElement("prevGroupId").addText( //$NON-NLS-1$
