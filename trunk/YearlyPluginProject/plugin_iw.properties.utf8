@@ -29,6 +29,8 @@ editor.source.parser.name = מכין המקורות
 editor.discussion.linker = קשר דיון לשורש
 editor.discussion.links.viewer = הצג דיונים מקושרים
 editor.discussion = עורך הדיונים
+editor.author = עורך מחברים
+
 wizard.source.parser.create = מקור מטקסט
 wizard.quote.add = הוסף ציטוט
 wizard.discussion.create = צור דיון חדש
