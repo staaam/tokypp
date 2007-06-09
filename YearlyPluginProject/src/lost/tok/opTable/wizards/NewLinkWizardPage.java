@@ -73,7 +73,7 @@ public class NewLinkWizardPage extends WizardPage implements SelectionListener,
 		discussionCombo = new DiscCombo(container, SWT.NONE, tok);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		discussionCombo.setLayoutData(gd);
-		discussionCombo.discCombo.addSelectionListener(this);
+		discussionCombo.getDiscCombo().addSelectionListener(this);
 
 		// subject
 		label = new Label(container, SWT.NULL);
@@ -123,7 +123,7 @@ public class NewLinkWizardPage extends WizardPage implements SelectionListener,
 	 * 
 	 */
 	private void dialogChanged() {
-		if (discussionCombo.discCombo.getText() == "") { //$NON-NLS-1$
+		if (discussionCombo.getDiscCombo().getText() == "") { //$NON-NLS-1$
 			updateStatus(Messages.getString("NewLinkWizardPage.6")); //$NON-NLS-1$
 			return;
 		}
@@ -147,7 +147,7 @@ public class NewLinkWizardPage extends WizardPage implements SelectionListener,
 	}
 
 	public String getDiscussion() {
-		return discussionCombo.discCombo.getText();
+		return discussionCombo.getDiscCombo().getText();
 	}
 
 	public Excerption[] getExcerptions(String fileName) {
