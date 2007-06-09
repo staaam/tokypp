@@ -83,7 +83,7 @@ public class NewRelationPage extends WizardPage implements ModifyListener,
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
 		dCombo.setLayoutData(gd);
-		discCombo = dCombo.discCombo;
+		discCombo = dCombo.getDiscCombo();
 		discCombo.addSelectionListener(this);
 
 		// Relation type line

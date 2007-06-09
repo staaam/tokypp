@@ -26,7 +26,7 @@ import org.eclipse.swt.widgets.Shell;
 public class DiscCombo extends Composite implements SelectionListener {
 	ToK tok;
 
-	public Combo discCombo;
+	private Combo discCombo;
 
 	Button newDisButton;
 
@@ -79,6 +79,10 @@ public class DiscCombo extends Composite implements SelectionListener {
 	}
 
 	public void widgetDefaultSelected(SelectionEvent e) {
+	}
+
+	public Combo getDiscCombo() {
+		return discCombo;
 	}
 
 }

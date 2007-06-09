@@ -116,7 +116,7 @@ public class AddQuoteWizardPage extends WizardPage {
 				.getString("AddQuoteWizard.Discussion")); //$NON-NLS-1$
 		DiscCombo dc = new DiscCombo(composite, SWT.READ_ONLY, tok);
 		dc.setLayoutData(gridData);
-		discussionCombo = dc.discCombo;
+		discussionCombo = dc.getDiscCombo();
 
 		new Label(composite, SWT.NONE).setText(Messages
 				.getString("AddQuoteWizard.Opinion")); //$NON-NLS-1$
