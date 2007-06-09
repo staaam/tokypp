@@ -603,6 +603,8 @@ public class DiscussionEditor extends TextEditor {
 	 * 
 	 */
 	private void synchronizeQuotes() {
+		//TODO: order quotes display by authors ranking, don't change discussion XML
+		
 		TreeMap<Integer, TreeItem> treeOpinions = new TreeMap<Integer, TreeItem>();
 
 		// map the opinions in the tree: id->treeItem
