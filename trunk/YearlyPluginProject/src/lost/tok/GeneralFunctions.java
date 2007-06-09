@@ -17,7 +17,11 @@ import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.QualifiedName;
+import org.eclipse.core.runtime.Status;
 
 public class GeneralFunctions {
 
@@ -118,6 +122,17 @@ public class GeneralFunctions {
 		s = s.replaceAll("\n", "<br />");
 		s = s.replaceAll("&", "&amp;");
 		return s;
+	}
+
+	public static void throwCoreException(String message) throws CoreException {
+		IStatus status = new Status(IStatus.ERROR, "lost.tok", //$NON-NLS-1$
+				IStatus.OK, message, null);
+		throw new CoreException(status);
+	}
+
+	public static boolean fileInFolder(IFile file, IFolder folder) {
+		String r = folder.getFullPath().toPortableString();
+		return file.getFullPath().toPortableString().startsWith(r);
 	}
 
 }

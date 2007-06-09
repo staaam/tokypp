@@ -1,18 +1,30 @@
 package lost.tok.search;
 
+import java.util.EnumSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+
+import lost.tok.ToK;
+
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.DialogPage;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.search.internal.ui.util.ComboFieldEditor;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.search.ui.ISearchPage;
 import org.eclipse.search.ui.ISearchPageContainer;
 import org.eclipse.search.ui.ISearchQuery;
 import org.eclipse.search.ui.NewSearchUI;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -25,16 +37,9 @@ import org.eclipse.ui.IWorkingSet;
 
 public class ToKSearchPage extends DialogPage implements ISearchPage {
 
+	EnumSet<SearchOption> searchOptions = EnumSet.noneOf(SearchOption.class);
+	
 	private Combo fPattern;
-	private Button fCaseSensitive;
-	private Button fSourceName;
-	private Button fSourceAuthor;
-	private Button fSourceContent;
-	private Button fDiscussionName;
-	private Button fDiscussionSources;
-	private Button fDiscussionLinks;
-	private Button fDiscussionQuotes;
-	private Button fDiscussionQuoteComments;
 	private ISearchPageContainer container;
 
 	public ToKSearchPage() {
@@ -83,11 +88,11 @@ public class ToKSearchPage extends DialogPage implements ISearchPage {
         result.setText("Sources");
         result.setLayout(new GridLayout());
 
-        fSourceName = newButton(result, SWT.CHECK, "Title", true);
+        newButton(result, SWT.CHECK, "Title", true, SearchOption.SRC_TITLE);
         
-        fSourceAuthor = newButton(result, SWT.CHECK, "Author", true);
+        newButton(result, SWT.CHECK, "Author", true, SearchOption.SRC_AUTHOR);
         
-        fSourceContent = newButton(result, SWT.CHECK, "Content", true);
+        newButton(result, SWT.CHECK, "Content", true, SearchOption.SRC_CONTENT);
                
         return result;
 	}
@@ -98,21 +103,41 @@ public class ToKSearchPage extends DialogPage implements ISearchPage {
         //result.setLayout(new GridLayout());
         result.setLayout(new GridLayout(2, true));
         
-        fDiscussionName = newButton(result, SWT.CHECK, "Name", true);
+        newButton(result, SWT.CHECK, "Name", true, SearchOption.DSC_NAME);
 
-        fDiscussionQuotes = newButton(result, SWT.CHECK, "Quotes", true);
+        newButton(result, SWT.CHECK, "Quotes", true, SearchOption.DSC_QUOTES);
 
-        fDiscussionSources = newButton(result, SWT.CHECK, "Sources Names", true);
+        newButton(result, SWT.CHECK, "Source Name", true, SearchOption.DSC_SRC_NAME);
 
-        fDiscussionQuoteComments = newButton(result, SWT.CHECK, "Quote Comments", true);
+        newButton(result, SWT.CHECK, "Quote Comments", true, SearchOption.DSC_QUOTE_COMMENTS);
 
-        fDiscussionLinks = newButton(result, SWT.CHECK, "Links", true);
+        newButton(result, SWT.CHECK, "Links", true, SearchOption.DSC_LINKS);
 
         return result;
 	}
 
-	private Button newButton(Composite parent, int style, String title, boolean selected) {
+	SelectionListener selectionListener = new SelectionAdapter() {
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			if (e.data instanceof SearchOption) {
+				SearchOption so = (SearchOption) e.data;
+				if (((Button)e.widget).getSelection()) {
+					searchOptions.add(so);
+				} else {
+					searchOptions.remove(so);
+				}
+			}
+		}
+	};
+	
+	private Button newButton(Composite parent, int style, String title, boolean selected, SearchOption opt) {
 		Button b = new Button(parent, style);
+
+		if (opt != null) {
+			b.setData(opt);
+			if (selected) searchOptions.add(opt);
+			b.addSelectionListener(selectionListener);
+		}
 		b.setText(title);
 		b.setSelection(selected);
 		return b;
@@ -143,13 +168,8 @@ public class ToKSearchPage extends DialogPage implements ISearchPage {
         fPattern.setLayoutData(data);
 
         // Ignore case checkbox
-        fCaseSensitive = new Button(result, SWT.CHECK);
-        fCaseSensitive.setText("Case sensitive"); //$NON-NLS-1$
-//        fCaseSensitive.addSelectionListener(new SelectionAdapter() {
-//            public void widgetSelected(SelectionEvent e) {
-//            }
-//        });
-        fCaseSensitive.setLayoutData(new GridData(GridData.FILL, GridData.FILL, false, false, 1, 1));
+        newButton(result, SWT.CHECK, "Case sensitive", false, SearchOption.CASE_SENSITIVE)
+        	.setLayoutData(new GridData(GridData.FILL, GridData.FILL, false, false, 1, 1));
 
         return result;
     }
@@ -162,26 +182,62 @@ public class ToKSearchPage extends DialogPage implements ISearchPage {
 	private ISearchQuery getSearchQuery() {
         // Setup search scope
         // SearchScope scope = null;
-        switch (getContainer().getSelectedScope()) {
-        case ISearchPageContainer.WORKSPACE_SCOPE:
-            // scope = SearchScope.newWorkspaceScope();
-            break;
-        case ISearchPageContainer.SELECTION_SCOPE: 
-        	// scope = getSelectedResourcesScope(false);
-        	break;
-        case ISearchPageContainer.SELECTED_PROJECTS_SCOPE:
-        	// scope = getSelectedResourcesScope(true);
-        	break;
-        case ISearchPageContainer.WORKING_SET_SCOPE:
-            //IWorkingSet[] workingSets = getContainer().getSelectedWorkingSets();
-            //String desc = Messages.format(SearchMessages.WorkingSetScope, ScopePart
-            //        .toString(workingSets));
-            // scope = SearchScope.newSearchScope(desc, workingSets);
-        	break;
+		IWorkspaceRoot wsRoot = ResourcesPlugin.getWorkspace().getRoot();
+		List<IResource> scope = new LinkedList<IResource>();
+		switch (getContainer().getSelectedScope()) {
+	        case ISearchPageContainer.WORKSPACE_SCOPE:
+	            for (IProject p : wsRoot.getProjects()) {
+	            	getProjectElements(scope, p);
+	            }
+	            break;
+	        case ISearchPageContainer.SELECTION_SCOPE: 
+	        	ISelection s = getContainer().getSelection();
+	        	if (s==null || !(s instanceof IStructuredSelection)) return null;
+				
+	        	IStructuredSelection ss = (IStructuredSelection) s;
+				for (Iterator iter = ss.iterator(); iter.hasNext();) {
+					IResource r = (IResource) iter.next();
+					scope.add(r);
+				}
+				
+	        	break;
+	        case ISearchPageContainer.SELECTED_PROJECTS_SCOPE:
+	        	for (String pn : getContainer().getSelectedProjectNames()) {
+	        		getProjectElements(scope, wsRoot.getProject(pn));
+	        	}
+	        	break;
+	        case ISearchPageContainer.WORKING_SET_SCOPE:
+	            IWorkingSet[] workingSets = getContainer().getSelectedWorkingSets();
+	            for (IAdaptable a : workingSets[0].getElements()) {
+	            	if (a instanceof IProject) {
+	            		getProjectElements(scope, (IProject)a);
+	            	}
+	            	else if (a instanceof IResource) {
+						IResource r = (IResource) a;
+						scope.add(r);
+					}
+	            }
+	            break;
         }
+		if (scope.isEmpty()) return null;
         NewSearchUI.activateSearchResultView();
 
-        return null;
+        return new ToKSearchQuery(
+        		fPattern.getText(),
+        		searchOptions,
+        		scope
+        		);
+	}
+
+	private void getProjectElements(List<IResource> scope, IProject p) {
+		ToK tok = ToK.getProjectToK(p);
+		if (tok == null) return;
+		
+		System.out.println("Add " + p.getName());
+		
+		scope.add(tok.getDiscussionFolder());
+		scope.add(tok.getSourcesFolder());
+		scope.add(tok.getRootsFolder());
 	}
 
 	private ISearchPageContainer getContainer() {

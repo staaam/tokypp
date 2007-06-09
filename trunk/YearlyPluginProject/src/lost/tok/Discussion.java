@@ -18,6 +18,8 @@ import org.eclipse.ui.part.FileEditorInput;
 
 public class Discussion {
 
+	private static final String DISCUSSION_EXTENSION = "dis"; //$NON-NLS-1$
+
 	public static final String DEFAULT_OPINION = Messages
 			.getString("Discussion.DefOpinion"); //$NON-NLS-1$
 
@@ -42,7 +44,7 @@ public class Discussion {
 			begin = discussionFile.lastIndexOf('\\');
 		}
 		begin++;
-		int end = discussionFile.lastIndexOf(".dis"); //$NON-NLS-1$
+		int end = discussionFile.lastIndexOf("." + DISCUSSION_EXTENSION);
 
 		if (end == -1)
 			return null;
@@ -61,6 +63,10 @@ public class Discussion {
 	private String creatorName;
 
 	private Integer id = 1;
+
+	private String linkType=null;
+
+	private Source linkedSource=null;
 
 	/**
 	 * constructor for discussion from an XML file
@@ -165,7 +171,7 @@ public class Discussion {
 	public void addQuote(Quote quote, String opinion) throws CoreException {
 
 		if (!myToK.getProject().exists() || quote == null) {
-			throwCoreException("problem with atributes to addQuote"); //$NON-NLS-1$
+			GeneralFunctions.throwCoreException("problem with atributes to addQuote"); //$NON-NLS-1$
 			return;
 		}
 
@@ -266,7 +272,7 @@ public class Discussion {
 	}
 
 	public IFile getFile() {
-		return myToK.getDiscussionFolder().getFile(discName + ".dis"); //$NON-NLS-1$
+		return myToK.getDiscussionFolder().getFile(discName + "." + DISCUSSION_EXTENSION); //$NON-NLS-1$
 	}
 
 	/** Returns the file associated with this as an IEditorInput */
@@ -543,14 +549,34 @@ public class Discussion {
 		}
 	}
 
-	private void throwCoreException(String message) throws CoreException {
-		IStatus status = new Status(IStatus.ERROR, "lost.tok", //$NON-NLS-1$
-				IStatus.OK, message, null);
-		throw new CoreException(status);
-	}
-
 	// write the document to the XML file
 	private void writeToXml(Document doc) {
 		GeneralFunctions.writeToXml(getFullFileName(), doc);
+	}
+
+	public static boolean isDiscussion(IFile file) {
+		if (!file.getFileExtension().equals(DISCUSSION_EXTENSION))
+			return false;
+		
+		ToK tok = ToK.getProjectToK(file.getProject());
+		if (tok == null) return false;
+	
+		return GeneralFunctions.fileInFolder(file, tok.getDiscussionFolder());
+	}
+
+	public void setLinkType(String linkType) {
+		this.linkType = linkType;
+	}
+	
+	public String getLinkType() {
+		return linkType;	
+	}
+
+	public void setLinkedSourceFile(Source sourceFile) {
+		this.linkedSource = sourceFile;	
+	}
+	
+	public Source getLinkedSourceFile() {
+		return linkedSource;	
 	}
 }

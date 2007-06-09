@@ -50,8 +50,13 @@ public class NewProject extends Wizard implements INewWizard,
 	 * will create an operation and run it using wizard as execution context.
 	 */
 	public boolean performFinish() {
-		new ToK(page.getProjectName(), page.getCreatorName(), page
-				.getRootName());
+		try {
+			new ToK(page.getProjectName(), page.getCreatorName(), page
+					.getRootName());
+		} catch (CoreException e) {
+			e.printStackTrace();
+			return false;
+		}
 
 		// We need this in order to prompt the perspective change
 		// when the New Project Wizard is finished

@@ -151,7 +151,7 @@ public class DiscussionExportOperation implements IRunnableWithProgress {
 	 */
 	private void buildTempLinksFile() {
 		// TODO Auto-generated method stub
-		tempLinkFile = tok.getResourceFolder().getFile(TEMP_LINKS_XML);
+		tempLinkFile = tok.getSourcesFolder().getFile(TEMP_LINKS_XML);
 
 		Document tempLinkfileDoc = tok.linksSkeleton();
 		Document linkfileDoc = GeneralFunctions.readFromXML(tok.getLinkFile());
