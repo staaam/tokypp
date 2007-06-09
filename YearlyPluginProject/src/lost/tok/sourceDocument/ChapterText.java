@@ -23,8 +23,8 @@ public class ChapterText extends Chapter {
 	 * @param text
 	 *            The text itself
 	 */
-	public ChapterText(String name, String text) {
-		super("", name); //$NON-NLS-1$
+	public ChapterText(String name, String text, String xPath) {
+		super("", name, xPath); //$NON-NLS-1$
 		excerPath = null;
 		length = text.length();
 		pathOffset = offset;
@@ -95,7 +95,7 @@ public class ChapterText extends Chapter {
 		} else {
 			Chapter myOldParent = parent;
 			myOldParent.children.clear();
-			Chapter myNewParent = new Chapter("", name); //$NON-NLS-1$
+			Chapter myNewParent = new Chapter("", name, null); //$NON-NLS-1$
 			myOldParent.add(myNewParent);
 			myNewParent.add(this);
 			myNewParent.updateLabel();
@@ -107,9 +107,9 @@ public class ChapterText extends Chapter {
 		excerPath = null;
 
 		if (!offset.equals(length - 1)) {
-			Chapter textChapParent = new Chapter("", Chapter.UNPARSED_STR); //$NON-NLS-1$
+			Chapter textChapParent = new Chapter("", Chapter.UNPARSED_STR, null); //$NON-NLS-1$
 			ChapterText textChap = new ChapterText(Chapter.UNPARSED_STR,
-					originalText.substring(offset).trim() + "\n"); //$NON-NLS-1$
+					originalText.substring(offset).trim() + "\n", null); //$NON-NLS-1$
 			textChapParent.add(textChap);
 			parent.parent.add(textChapParent);
 			textChapParent.updateLabel();

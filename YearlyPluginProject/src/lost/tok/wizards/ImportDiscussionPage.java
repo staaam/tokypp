@@ -129,7 +129,7 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 		List<String> missingFiles = new ArrayList<String>();
 		Document tempDoc = GeneralFunctions.readFromXML(tempLinksFile);
 		List<Node> sourceNodes = tempDoc.selectNodes("//sublink/sourceFile"); //$NON-NLS-1$
-		IFolder sourceFolder = tok.getRootFolder();
+		IFolder sourceFolder = tok.getRootsFolder();
 		for (Node sourceFile : sourceNodes) {
 			String rawPathName = sourceFile.getText();
 			IPath path = new Path(sourceFile.getText());

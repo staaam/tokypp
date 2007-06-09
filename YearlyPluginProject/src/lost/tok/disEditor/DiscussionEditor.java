@@ -4,7 +4,6 @@ import java.util.TreeMap;
 
 import lost.tok.Discussion;
 import lost.tok.Excerption;
-import lost.tok.GeneralFunctions;
 import lost.tok.Opinion;
 import lost.tok.Quote;
 import lost.tok.ToK;
@@ -12,7 +11,6 @@ import lost.tok.opTable.OperationTable;
 import lost.tok.sourceDocument.ChapterText;
 import lost.tok.sourceDocument.SourceDocument;
 
-import org.dom4j.Document;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.TextSelection;
@@ -181,19 +179,16 @@ public class DiscussionEditor extends TextEditor {
 					OperationTable ot = (OperationTable) editorP;
 					ot.clearMarked();
 
-					// Loading the quote's xml document, and creating a
-					// SourceDocument from it
-					Document xmlSrcDoc = GeneralFunctions.readFromXML(quote
-							.getSource().getFile());
+					// Creating a SourceDocument from source
 					SourceDocument srcDoc = new SourceDocument();
-					srcDoc.set(xmlSrcDoc);
+					srcDoc.set(quote.getSource());
 
 					boolean firstExcerp = true;
 					int qBegining = 0, qLength = 0;
 					for (Excerption ex : quote.getExcerptions()) {
 						// getting the chapter in which the text appears
-						ChapterText ct = srcDoc.getChapterText(ex
-								.getPathInSourceFile());
+						ChapterText ct = srcDoc.getChapterTextFromXPath(ex
+								.getXPath());
 						// adding the offset of the chpater (in the whole doc)
 						// to the offset of the excerption
 						int exBegin = ct.getOffset() + ex.getStartPos();

@@ -39,20 +39,30 @@ public class Chapter {
 
 	/** The length of the chapter, including its subchapters */
 	protected Integer length;
+	
+	/** 
+	 * The xPath of this Element inside the XML document
+	 * 
+	 * If this SourceDocument was not created from an XML (i.e. in the source parser),
+	 *  then this field is null
+	 */
+	protected String xPath;
 
 	/** Creates a childless Chapter */
-	public Chapter(String label, String name) {
+	public Chapter(String label, String name, String xPath) {
 		this.label = label;
 		this.name = name;
 		parent = null;
 		children = new LinkedList<Chapter>();
 		offset = new Integer(0);
 		length = new Integer(label.length());
+		
+		this.xPath = xPath;
 	}
 
 	/** Creates a chapter whose children are derived from the root element */
 	public Chapter(String label, String name, Element root, String chapterLabel) {
-		this(label, name);
+		this(label, name, root.getUniquePath());
 
 		Iterator itr = root.elementIterator("child"); //$NON-NLS-1$
 		// Integer sequenceNumber = 1;
@@ -193,9 +203,9 @@ public class Chapter {
 		Element textElement = el.element("content"); //$NON-NLS-1$
 
 		// Note(Shay): should we really create a new chapter here?
-		Chapter c = new Chapter(chapLabel, chapName);
+		Chapter c = new Chapter(chapLabel, chapName, el.getUniquePath());
 
-		c.add(new ChapterText(chapName, formatText(textElement)));
+		c.add(new ChapterText(chapName, formatText(textElement), el.getUniquePath()));
 
 		return c;
 	}
@@ -258,7 +268,6 @@ public class Chapter {
 				&& (children.getFirst() instanceof ChapterText)) {
 			// Note(Shay): This chapter contains only text
 			// if we decide to remove those lone chpaters, we should remove this
-			// if
 			children.getFirst().addToXml(chapTextElement);
 		} else {
 			// this chapter has other chapters as children
@@ -267,5 +276,24 @@ public class Chapter {
 			for (Chapter c : children)
 				c.addToXml(chapElement);
 		}
+	}
+
+	/**
+	 * Returns the xPath of the element in the source XML file
+	 * Returns null if the SourceDocument was not created from an XML file
+	 */
+	public String getXPath() {
+		return xPath;
+	}
+	
+	/**
+	 * Returns the number of chapters above this one
+	 * Returns zero for root
+	 */
+	public int getDepth() {
+		if (parent == null)
+			return 0;
+		// else
+		return parent.getDepth() + 1;
 	}
 }

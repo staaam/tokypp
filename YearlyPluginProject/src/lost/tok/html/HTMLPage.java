@@ -83,6 +83,19 @@ abstract public class HTMLPage
 	}
 	
 	/**
+	 * Creates the file on the disk
+	 * 
+	 * May create more than one file, if there are other files connected to this page
+	 */
+	public void generatePage()
+	{
+		// TODO(Shay): Walk over the directories and generate them as needed
+		
+		// TODO(Shay): Create an input stream from the page's text
+		// TODO(Shay): Puke the input stream into the file
+	}
+	
+	/**
 	 * Returns the tok related to this page
 	 */
 	public ToK getTok()

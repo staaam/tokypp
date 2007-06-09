@@ -7,13 +7,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.xml.XMLConstants;
 import javax.xml.transform.stream.StreamSource;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
-import javax.xml.validation.Validator;
-
-import lost.tok.activator.Activator;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
@@ -27,11 +21,9 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.QualifiedName;
-import org.eclipse.core.runtime.Status;
 
 /**
  * @author Team LOST
@@ -80,21 +72,31 @@ public class ToK {
 		return true;
 	}
 
+	/**
+	 * Returns ToK object of the given project.
+	 * If the project is not ToK project, returns <code>null</code>
+	 * 
+	 * @param project to get ToK of
+	 * 
+	 * @return assosiated ToK object or <code>null</code> if project
+	 *  is not ToK project
+	 */
 	public static ToK getProjectToK(IProject project) {
 		try {
 			Object o = project.getSessionProperty(tokQName);
-			if (o == null) {
-				throw new CoreException(Status.CANCEL_STATUS);
+			if (o != null) {
+				return (ToK) o;
 			}
-			return (ToK) o;
-		} catch (CoreException e) {
 			return new ToK(project);
+		} catch (CoreException e) {
+			System.out.println("getProjectToK failed\n" + e);
 		}
+		return null;
 	}
 
-	private IProject treeOfKnowledgeProj;
+	private IProject tokProject;
 
-	private IProgressMonitor progMonitor;
+	private IProgressMonitor progMonitor = new NullProgressMonitor();
 
 	private IFolder srcFolder, discFolder, unparsedSrcFolder, rootFolder;
 
@@ -102,7 +104,7 @@ public class ToK {
 
 	private List<Discussion> discussions = null;
 
-	public ToK(IProject project) {
+	public ToK(IProject project) throws CoreException {
 		createToKFromProject(project);
 	}
 
@@ -112,22 +114,27 @@ public class ToK {
 	 * @param projectName
 	 * @param creator
 	 * @param root
+	 * @throws CoreException 
 	 */
-	public ToK(String projectName, String creator, String root) {
+	public ToK(String projectName, String creator, String root) throws CoreException {
 		// checking if a project with the same name already exists
 		if (!checkFileName(projectName)) {
-			return;
+			GeneralFunctions.throwCoreException("Wrong project name specified");
 		}
+		
+		IProject p = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
 
-		createToKFromProject(ResourcesPlugin.getWorkspace().getRoot()
-				.getProject(projectName));
+		if (!p.exists())
+			p.create(null);
+			
+		p.open(null);
+		
+		ToKNature.setNature(p);
+
+		createToKFromProject(p);
 
 		// setting the creator name as a property of the project
-		try {
-			treeOfKnowledgeProj.setPersistentProperty(creatorQName, creator);
-		} catch (CoreException e) {
-			e.printStackTrace();
-		}
+		p.setPersistentProperty(creatorQName, creator);
 
 		if (root.length() != 0)
 			setTokRoot(root);
@@ -147,18 +154,7 @@ public class ToK {
 
 	// Evgeni
 	public void addSource(String filePathGivenByUser) {
-		try {
-			// Validate source.xml file with source.xsd
-			final String sl = XMLConstants.W3C_XML_SCHEMA_NS_URI;
-			SchemaFactory factory = SchemaFactory.newInstance(sl);
-			StreamSource ss = new StreamSource(Activator.sourceXsdPath
-					+ "source.xsd"); //$NON-NLS-1$
-			Schema schema = factory.newSchema(ss);
-			Validator validator = schema.newValidator();
-			File fileToValidate = new File(filePathGivenByUser);
-			validator.validate(new StreamSource(fileToValidate));
-			// System.out.println("Source file is valid ");
-		} catch (Exception e) {
+		if (!Source.isValid(new StreamSource(new File(filePathGivenByUser)))) {
 			System.out.println("FAILED validating source file "); //$NON-NLS-1$
 			return;
 		}
@@ -174,7 +170,7 @@ public class ToK {
 		String fileNameVarified = filePathVarified.substring(beginIndex);
 
 		// check if file with that name exists in Sources folder
-		if (!filePathGivenByUser.equals(treeOfKnowledgeProj.getFullPath()
+		if (!filePathGivenByUser.equals(tokProject.getFullPath()
 				.toString()
 				+ "/" + SOURCES_FOLDER + "/" + fileNameVarified)) { //$NON-NLS-1$  //$NON-NLS-2$
 			try {
@@ -273,10 +269,10 @@ public class ToK {
 	 * @throws CoreException
 	 */
 	public boolean createToKLibraries() throws CoreException {
-		srcFolder = treeOfKnowledgeProj.getFolder(SOURCES_FOLDER);
-		rootFolder = treeOfKnowledgeProj.getFolder(ROOTS_FOLDER);
-		discFolder = treeOfKnowledgeProj.getFolder(DISCUSSION_FOLDER);
-		unparsedSrcFolder = treeOfKnowledgeProj
+		srcFolder = tokProject.getFolder(SOURCES_FOLDER);
+		rootFolder = tokProject.getFolder(ROOTS_FOLDER);
+		discFolder = tokProject.getFolder(DISCUSSION_FOLDER);
+		unparsedSrcFolder = tokProject
 				.getFolder(UNPARSED_SOURCES_FOLDER);
 
 		if (!srcFolder.exists()) {
@@ -307,7 +303,7 @@ public class ToK {
 				return discussion;
 			}
 		}
-		throwCoreException("No such discussion exists!"); //$NON-NLS-1$
+		GeneralFunctions.throwCoreException("No such discussion exists!"); //$NON-NLS-1$
 		return null;
 	}
 
@@ -331,12 +327,12 @@ public class ToK {
 	}
 
 	public IProject getProject() {
-		return treeOfKnowledgeProj;
+		return tokProject;
 	}
 
 	public String getProjectCreator() {
 		try {
-			return treeOfKnowledgeProj.getPersistentProperty(creatorQName);
+			return tokProject.getPersistentProperty(creatorQName);
 		} catch (CoreException e) {
 			e.printStackTrace();
 			return null;
@@ -346,14 +342,14 @@ public class ToK {
 	/**
 	 * Returns the folder in which resource files are stored
 	 */
-	public IFolder getResourceFolder() {
+	public IFolder getSourcesFolder() {
 		return srcFolder;
 	}
 
 	/**
 	 * Returns the folder in which roots files are stored
 	 */
-	public IFolder getRootFolder() {
+	public IFolder getRootsFolder() {
 		return rootFolder;
 	}
 
@@ -365,7 +361,7 @@ public class ToK {
 	 * @return source object for requested source
 	 */
 	public Source getSource(String src) {
-		return new Source(treeOfKnowledgeProj.getFile(src));
+		return new Source(tokProject.getFile(src));
 	}
 
 	public IWorkspace getWorkspace() {
@@ -381,6 +377,9 @@ public class ToK {
 	public void linkDiscussionRoot(Discussion disc, Source sourceFile,
 			Excerption[] exp, String subject, String linkType) {
 
+		disc.setLinkType(linkType);
+		disc.setLinkedSourceFile(sourceFile);
+		
 		String discFileName = disc.getDiscFileName();
 
 		// Open the Links file
@@ -587,7 +586,7 @@ public class ToK {
 	}
 
 	private void createAuthorsFile() {
-		authorFile = treeOfKnowledgeProj.getFile(Messages
+		authorFile = tokProject.getFile(Messages
 				.getString("ToK.authFile")); //$NON-NLS-1$
 		if (!authorFile.exists()) {
 			GeneralFunctions.writeToXml(authorFile, authorsSkeleton());
@@ -595,48 +594,27 @@ public class ToK {
 	}
 
 	private void createLinksFile() {
-		linkFile = treeOfKnowledgeProj.getFile(Messages
+		linkFile = tokProject.getFile(Messages
 				.getString("ToK.linksFile")); //$NON-NLS-1$
 		if (!linkFile.exists()) {
 			GeneralFunctions.writeToXml(linkFile, linksSkeleton());
 		}
 	}
 
-	private void createToKFromProject(IProject project) {
+	private void createToKFromProject(IProject project) throws CoreException {
 		System.out.println("createToKFromProject"); //$NON-NLS-1$
 
-		treeOfKnowledgeProj = project;
-		progMonitor = new NullProgressMonitor();
+		if (project.getNature(ToKNature.NATURE_ID) == null)
+			GeneralFunctions.throwCoreException("Project is not ToK project");
+		
+		tokProject = project;
 
-		if (!treeOfKnowledgeProj.exists()) {
-			try {
-				treeOfKnowledgeProj.create(progMonitor);
-			} catch (CoreException e) {
-				System.out.println("exception in project create: " + e); //$NON-NLS-1$
-			}
-		}
+		tokProject.setSessionProperty(tokQName, this);
 
-		try {
-			treeOfKnowledgeProj.open(progMonitor);
-		} catch (CoreException e) {
-			System.out.println("exception in project open: " + e); //$NON-NLS-1$
-		}
-
-		try {
-			treeOfKnowledgeProj.setSessionProperty(tokQName, this);
-		} catch (CoreException e) {
-			System.out.println("exception in setSessionProperty: " + e); //$NON-NLS-1$
-		}
-
-		ToKNature.setNature(treeOfKnowledgeProj);
-
-		try {
-			createToKLibraries();
-		} catch (CoreException e) {
-			e.printStackTrace();
-		}
+		createToKLibraries();
 
 		createToKFiles();
+
 		refresh();
 	}
 
@@ -682,7 +660,7 @@ public class ToK {
 	 */
 	private void refresh() {
 		try {
-			treeOfKnowledgeProj.refreshLocal(IResource.DEPTH_INFINITE,
+			tokProject.refreshLocal(IResource.DEPTH_INFINITE,
 					progMonitor);
 		} catch (CoreException e) {
 			e.printStackTrace();
@@ -717,11 +695,5 @@ public class ToK {
 			System.out.println("FAILED to remove author from Authors file"); //$NON-NLS-1$
 			return;
 		}
-	}
-
-	private void throwCoreException(String message) throws CoreException {
-		IStatus status = new Status(IStatus.ERROR, "lost.tok", //$NON-NLS-1$
-				IStatus.OK, message, null);
-		throw new CoreException(status);
 	}
 }

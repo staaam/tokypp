@@ -230,6 +230,11 @@ public class LinkedParagraph implements SrcElem
 			return l;
 		}
 	}
+
+	/** Returns pages related to this element which should be generated upon export */
+	public LinkedList<DiscConflictPage> getUngeneratedPages() {
+		return discConfs;
+	}
 	
 
 }

@@ -103,13 +103,13 @@ public class Quote {
 		ID = Integer.valueOf(elem.element("id").getText()); //$NON-NLS-1$
 
 		SourceDocument sd = new SourceDocument();
-		sd.set(GeneralFunctions.readFromXML(source.getFile()));
+		sd.set(source);
 
 		List<Element> exps = elem.elements("excerption"); //$NON-NLS-1$
 		for (Element exp : exps) {
 			Excerption e = new Excerption(exp);
 
-			String text = sd.getChapterText(e.getPathInSourceFile()).getText();
+			String text = sd.getChapterTextFromXPath(e.getXPath()).getText();
 			int start = e.getStartPos();
 			int end = e.getEndPos();
 			String exText = text.substring(start, end);
