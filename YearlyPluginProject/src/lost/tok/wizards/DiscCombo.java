@@ -6,6 +6,7 @@ import lost.tok.ToK;
 
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.SWTException;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -48,15 +49,47 @@ public class DiscCombo extends Composite implements SelectionListener {
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		discCombo.setLayoutData(gd);
 
-		updateDiscussions();
-
 		newDisButton = new Button(this, SWT.NONE);
 		newDisButton.setText(Messages.getString("DiscCombo.new")); //$NON-NLS-1$
 
 		newDisButton.addSelectionListener(this);
 	}
 
+	/**
+	 * Updates the list of discussions presented in the combo box.
+	 * Sets the current discussion to latest used
+	 * 
+	 * This method should be called after all listeners have been added 
+	 *
+	 */
+	public void init() {
+		updateDiscussions();
+
+		String latestDiscussionName = tok.getPersistentProperty(Discussion.LATEST_QNAME);
+		if (latestDiscussionName != null) { 
+			if (discCombo.indexOf(latestDiscussionName) == -1) {
+				tok.setLatestDiscussionOpinion(null, null);
+			}
+			else {
+				setTextNotify(latestDiscussionName);
+			}
+		}
+	}
+
+	/**
+	 * Sets the contents of the receiver's text field to the
+	 * given string and notifies all of the receiver's listeners
+	 * with the <code>SWT.Selection</code> event
+	 * 
+	 * @param discussionName new text field content
+	 */
+	public void setTextNotify(String discussionName) {
+		discCombo.setText(discussionName);
+		discCombo.notifyListeners(SWT.Selection, new Event());
+	}
+	
 	private void updateDiscussions() {
+		discCombo.removeAll();
 		for (Discussion d : tok.getDiscussions()) {
 			discCombo.add(d.getDiscName());
 		}
@@ -74,15 +107,54 @@ public class DiscCombo extends Composite implements SelectionListener {
 			return;
 
 		updateDiscussions();
-		discCombo.setText(w.getDiscussionName());
-		discCombo.notifyListeners(SWT.Selection, new Event());
+		setTextNotify(w.getDiscussionName());
 	}
 
 	public void widgetDefaultSelected(SelectionEvent e) {
 	}
 
-	public Combo getDiscCombo() {
-		return discCombo;
+	/**
+	 * Returns a string containing a copy of the contents of the
+	 * receiver's text field, or an empty string if there are no
+	 * contents.
+	 *
+	 * @return the receiver's text
+	 *
+	 * @exception SWTException <ul>
+	 *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
+	 *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
+	 * </ul>
+	 */
+	public String getText() {
+		return discCombo.getText();
+	}
+
+	/**
+	 * Adds the listener to the collection of listeners who will
+	 * be notified when the receiver's selection changes, by sending
+	 * it one of the messages defined in the <code>SelectionListener</code>
+	 * interface.
+	 * <p>
+	 * <code>widgetSelected</code> is called when the combo's list selection changes.
+	 * <code>widgetDefaultSelected</code> is typically called when ENTER is pressed the combo's text area.
+	 * </p>
+	 *
+	 * @param listener the listener which should be notified
+	 *
+	 * @exception IllegalArgumentException <ul>
+	 *    <li>ERROR_NULL_ARGUMENT - if the listener is null</li>
+	 * </ul>
+	 * @exception SWTException <ul>
+	 *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
+	 *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
+	 * </ul>
+	 *
+	 * @see SelectionListener
+	 * @see #removeSelectionListener
+	 * @see SelectionEvent
+	 */
+	public void addSelectionListener(SelectionListener listener) {
+		discCombo.addSelectionListener(listener);
 	}
 
 }

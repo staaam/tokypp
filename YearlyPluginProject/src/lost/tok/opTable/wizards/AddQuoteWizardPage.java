@@ -2,6 +2,7 @@ package lost.tok.opTable.wizards;
 
 import lost.tok.Discussion;
 import lost.tok.Messages;
+import lost.tok.Opinion;
 import lost.tok.ToK;
 import lost.tok.wizards.DiscCombo;
 import lost.tok.wizards.OpinionCombo;
@@ -13,7 +14,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
@@ -27,27 +27,10 @@ public class AddQuoteWizardPage extends WizardPage {
 		super(Messages.getString("AddQuoteWizardPage.AddQuote")); //$NON-NLS-1$
 
 		setTitle(Messages.getString("AddQuoteWizardPage.AddQuote")); //$NON-NLS-1$
+		updateStatus(Messages.getString("AddQuoteWizardPage.SelectDisc")); //$NON-NLS-1$
 
 		this.tok = tok;
 		quoteText = text;
-	}
-
-	public void createAddQuoteWizard(String comment) {
-		discussionCombo.addSelectionListener(new SelectionListener() {
-			public void widgetDefaultSelected(SelectionEvent e) {
-				widgetSelected(e);
-			}
-
-			public void widgetSelected(SelectionEvent e) {
-				oc.setDiscussion(getDiscussion());
-				oc.opinCombo.select(0);
-				updateStatus(null);
-			}
-		});
-
-		quoteArea.setText(comment);
-
-		updateStatus(Messages.getString("AddQuoteWizardPage.SelectDisc")); //$NON-NLS-1$
 	}
 
 	private void updateStatus(String message) {
@@ -59,23 +42,39 @@ public class AddQuoteWizardPage extends WizardPage {
 		return commentArea.getText();
 	}
 
+	/**
+	 * Returns the selected discussion name
+	 * @return the selected discussion name
+	 */
+	private String getDiscussionName() {
+		return discCombo.getText();
+	}
+	
+	/**
+	 * Returns the selected discussion
+	 * @return the selected discussion
+	 */
 	public Discussion getDiscussion() {
 		try {
-			return tok.getDiscussion(discussionCombo.getText());
+			return tok.getDiscussion(getDiscussionName());
 		} catch (CoreException e) {
 		}
 		return null;
 	}
 
+	/**
+	 * Returns the selected opinion name
+	 * @return the selected opinion
+	 */
 	public String getOpinion() {
-		return oc.opinCombo.getText();
+		return oc.getText();
 	}
 
 	private Text quoteArea = null;
 
 	private Text commentArea = null;
 
-	private Combo discussionCombo = null;
+	private DiscCombo discCombo = null;
 
 	private OpinionCombo oc = null;
 
@@ -92,14 +91,15 @@ public class AddQuoteWizardPage extends WizardPage {
 		quoteArea = new Text(composite, SWT.MULTI | SWT.WRAP | SWT.V_SCROLL
 				| SWT.BORDER | SWT.READ_ONLY);
 		quoteArea.setLayoutData(gridData);
+		quoteArea.setText(quoteText);
 
 		new Label(composite, SWT.NONE).setText(Messages
 				.getString("AddQuoteWizard.QuoteComment")); //$NON-NLS-1$
 		commentArea = new Text(composite, SWT.MULTI | SWT.WRAP | SWT.V_SCROLL
 				| SWT.BORDER);
 		commentArea.setLayoutData(gridData);
-
-		createAddQuoteWizard(quoteText);
+		
+		init();
 		setControl(parent);
 	}
 
@@ -114,13 +114,33 @@ public class AddQuoteWizardPage extends WizardPage {
 
 		new Label(composite, SWT.NONE).setText(Messages
 				.getString("AddQuoteWizard.Discussion")); //$NON-NLS-1$
-		DiscCombo dc = new DiscCombo(composite, SWT.READ_ONLY, tok);
-		dc.setLayoutData(gridData);
-		discussionCombo = dc.getDiscCombo();
+		discCombo = new DiscCombo(composite, SWT.READ_ONLY, tok);
+		discCombo.setLayoutData(gridData);
 
 		new Label(composite, SWT.NONE).setText(Messages
 				.getString("AddQuoteWizard.Opinion")); //$NON-NLS-1$
 		oc = new OpinionCombo(composite, SWT.READ_ONLY, tok);
 		oc.setLayoutData(gridData);
+	}
+	
+	private void init() {
+		discCombo.addSelectionListener(new SelectionListener() {
+			public void widgetDefaultSelected(SelectionEvent e) {
+				widgetSelected(e);
+			}
+			
+			public void widgetSelected(SelectionEvent e) {
+				oc.setDiscussion(getDiscussion());
+				if (tok.getPersistentProperty(Discussion.LATEST_QNAME)
+						.equals(getDiscussionName())) {
+					oc.setText(tok.getPersistentProperty(Opinion.LATEST_QNAME));
+				} else {
+					oc.setText(null);
+				}
+				updateStatus(null);
+			}
+		});
+		
+		discCombo.init();
 	}
 }
