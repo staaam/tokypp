@@ -8,6 +8,7 @@ import lost.tok.disEditor.AddOpinionWizard;
 
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.SWTException;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -28,7 +29,7 @@ import org.eclipse.swt.widgets.Shell;
 public class OpinionCombo extends Composite implements SelectionListener {
 	ToK tok;
 
-	public Combo opinCombo;
+	private Combo opinCombo;
 
 	Button newOpinButton;
 
@@ -92,6 +93,49 @@ public class OpinionCombo extends Composite implements SelectionListener {
 	}
 
 	public void widgetDefaultSelected(SelectionEvent e) {
+	}
+
+	/**
+	 * Returns a string containing a copy of the contents of the
+	 * receiver's text field, or an empty string if there are no
+	 * contents.
+	 *
+	 * @return the receiver's text
+	 *
+	 * @exception SWTException <ul>
+	 *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
+	 *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
+	 * </ul>
+	 */
+	public String getText() {
+		return opinCombo.getText();
+	}
+
+	/**
+	 * Sets the contents of the receiver's text field to the
+	 * given string.
+	 * <p>
+	 * Note: The text field in a <code>Combo</code> is typically
+	 * only capable of displaying a single line of text. Thus,
+	 * setting the text to a string containing line breaks or
+	 * other special characters will probably cause it to 
+	 * display incorrectly.
+	 * </p>
+	 *
+	 * @param opinion the new opinion name. If the opinion is <code>null</code>
+	 * or not exists - sets the <code>default opinion</code>
+	 *
+	 * @exception IllegalArgumentException <ul>
+	 *    <li>ERROR_NULL_ARGUMENT - if the string is null</li>
+	 * </ul>
+	 * @exception SWTException <ul>
+	 *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
+	 *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
+	 * </ul>
+	 */
+	public void setText(String opinion) {
+		opinCombo.setText(
+				(opinion == null || opinCombo.indexOf(opinion) == -1) ? Discussion.DEFAULT_OPINION : opinion);
 	}
 
 }

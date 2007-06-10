@@ -48,7 +48,7 @@ public class NewRelationPage extends WizardPage implements ModifyListener,
 
 	private Tree rightObjects;
 
-	private Combo discCombo;
+	private DiscCombo discCombo;
 
 	/**
 	 * Constructor for NewRelationWizardPage.
@@ -78,12 +78,11 @@ public class NewRelationPage extends WizardPage implements ModifyListener,
 		label = new Label(container, SWT.NULL);
 		label.setText(Messages.getString("NewRelationWizardPage.Discussion")); //$NON-NLS-1$
 
-		DiscCombo dCombo = new DiscCombo(container, SWT.READ_ONLY
+		discCombo = new DiscCombo(container, SWT.READ_ONLY
 				| SWT.DROP_DOWN, tok);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
-		dCombo.setLayoutData(gd);
-		discCombo = dCombo.getDiscCombo();
+		discCombo.setLayoutData(gd);
 		discCombo.addSelectionListener(this);
 
 		// Relation type line
@@ -127,9 +126,11 @@ public class NewRelationPage extends WizardPage implements ModifyListener,
 
 		rightObjects.addSelectionListener(this);
 
-		if (discussion != null) {
-			discCombo.setText(discussion.getDiscName());
-			discussionChanged();
+		String dname = (discussion == null) ? null : discussion.getDiscName();
+		discCombo.init();
+
+		if (dname != null) {
+			discCombo.setTextNotify(dname);
 		}
 
 		dialogChanged();
@@ -141,7 +142,7 @@ public class NewRelationPage extends WizardPage implements ModifyListener,
 	 */
 
 	private void dialogChanged() {
-		if (discCombo.getSelectionIndex() == -1) {
+		if (discCombo.getText().length() == 0) {
 			updateStatus(Messages
 					.getString("NewRelationPage.ErrNoDiscSelected")); //$NON-NLS-1$
 			return;
@@ -226,6 +227,7 @@ public class NewRelationPage extends WizardPage implements ModifyListener,
 	}
 
 	public void widgetDefaultSelected(SelectionEvent arg0) {
+		widgetSelected(arg0);
 	}
 
 	public void widgetSelected(SelectionEvent arg0) {

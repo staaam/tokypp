@@ -4,8 +4,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javax.xml.transform.stream.StreamSource;
 
@@ -102,7 +102,7 @@ public class ToK {
 
 	private IFile authorFile, linkFile;
 
-	private List<Discussion> discussions = null;
+	private SortedSet<Discussion> discussions = null;
 
 	public ToK(IProject project) throws CoreException {
 		createToKFromProject(project);
@@ -149,7 +149,21 @@ public class ToK {
 	public void addDiscussion(String discName) {
 		getDiscussions().add(
 				new Discussion(this, discName, getProjectCreator()));
+		setLatestDiscussionOpinion(discName, null);
 		refresh();
+	}
+
+	/**
+	 * Stores given discussion and opinion as latest used
+	 * Stores it like Persistent Properties of the project
+	 * If discussion == null then opinion = null
+	 * @param discussion - latest discussion
+	 * @param opinion - latest opinion
+	 */
+	public void setLatestDiscussionOpinion(String discussion, String opinion) {
+		if (discussion == null) opinion = null;
+		setPersistentProperty(Discussion.LATEST_QNAME, discussion);
+		setPersistentProperty(Opinion.LATEST_QNAME, opinion);
 	}
 
 	// Evgeni
@@ -297,7 +311,7 @@ public class ToK {
 	}
 
 	public Discussion getDiscussion(String discName) throws CoreException {
-		List<Discussion> discussions = getDiscussions();
+		SortedSet<Discussion> discussions = getDiscussions();
 		for (Discussion discussion : discussions) {
 			if (discussion.getDiscName().equalsIgnoreCase(discName)) {
 				return discussion;
@@ -314,7 +328,7 @@ public class ToK {
 		return discFolder;
 	}
 
-	public List<Discussion> getDiscussions() {
+	public SortedSet<Discussion> getDiscussions() {
 		if (discussions == null) {
 			loadDiscussions();
 		}
@@ -423,7 +437,7 @@ public class ToK {
 	 * Reloads the discussions in the tree
 	 */
 	public void loadDiscussions() {
-		discussions = new LinkedList<Discussion>();
+		discussions = new TreeSet<Discussion>();
 
 		try {
 			IResource[] files = getDiscussionFolder().members();
@@ -695,5 +709,53 @@ public class ToK {
 			System.out.println("FAILED to remove author from Authors file"); //$NON-NLS-1$
 			return;
 		}
+	}
+
+	/**
+	 * Returns the value of the persistent property of this resource identified
+	 * by the given key, or <code>null</code> if this resource has no such property.
+	 *
+	 * @param key the qualified name of the property
+	 * @return the string value of the property, 
+	 *     or <code>null</code> if this resource has no such property
+	 * @see #setPersistentProperty(QualifiedName, String)
+	 */
+	public String getPersistentProperty(QualifiedName key) {
+		try {
+			return getProject().getPersistentProperty(key);
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	/**
+	 * Sets the value of the persistent property of this resource identified
+	 * by the given key. If the supplied value is <code>null</code>,
+	 * the persistent property is removed from this resource. The change
+	 * is made immediately on disk.
+	 * <p>
+	 * Persistent properties are intended to be used by plug-ins to store
+	 * resource-specific information that should be persisted across platform sessions.
+	 * The value of a persistent property is a string that must be short -
+	 * 2KB or less in length. Unlike session properties, persistent properties are
+	 * stored on disk and maintained across workspace shutdown and restart.
+	 * </p>
+	 * <p>
+	 * The qualifier part of the property name must be the unique identifier
+	 * of the declaring plug-in (e.g. <code>"com.example.plugin"</code>).
+	 * </p>
+	 *
+	 * @param key the qualified name of the property
+	 * @param value the string value of the property, 
+	 *     or <code>null</code> if the property is to be removed
+	 * @see #getPersistentProperty(QualifiedName)
+	 */
+	private void setPersistentProperty(QualifiedName key, String value) {
+		try {
+			getProject().setPersistentProperty(key, value);
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}		
 	}
 }

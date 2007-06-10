@@ -11,12 +11,11 @@ import org.dom4j.XPath;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.part.FileEditorInput;
 
-public class Discussion {
+public class Discussion implements Comparable<Discussion> {
 
 	private static final String DISCUSSION_EXTENSION = "dis"; //$NON-NLS-1$
 
@@ -37,6 +36,12 @@ public class Discussion {
 	 * strings should be the same as in the relDisplayNames array
 	 */
 	public static final String[] relXMLTypes = { "disagree", "explain" }; //$NON-NLS-1$ //$NON-NLS-2$
+
+	/**
+	 * Qualified Name of ToK's project that specifies latest discussion used
+	 */
+	public static final QualifiedName LATEST_QNAME = 
+		new QualifiedName("lost.tok", "latest_discussion");  //$NON-NLS-1$ //$NON-NLS-2$
 
 	public static String getNameFromFile(String discussionFile) {
 		int begin = discussionFile.lastIndexOf('/');
@@ -158,6 +163,8 @@ public class Discussion {
 		}
 
 		writeToXml(doc);
+		
+		myToK.setLatestDiscussionOpinion(getDiscName(), opinionName);
 	}
 
 	/**
@@ -192,6 +199,7 @@ public class Discussion {
 
 		writeToXml(doc);
 
+		myToK.setLatestDiscussionOpinion(getDiscName(),	opinion);
 	}
 
 	// demo addQuote for testing
@@ -578,5 +586,9 @@ public class Discussion {
 	
 	public Source getLinkedSourceFile() {
 		return linkedSource;	
+	}
+
+	public int compareTo(Discussion d) {
+		return getDiscName().compareTo(d.getDiscName());
 	}
 }
