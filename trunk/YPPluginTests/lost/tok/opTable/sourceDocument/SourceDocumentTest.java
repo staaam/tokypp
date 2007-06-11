@@ -148,7 +148,12 @@ public class SourceDocumentTest extends TestCase {
 		IProject proj = ResourcesPlugin.getWorkspace().getRoot().getProject("tmlTemp");
 		if (!proj.exists())
 		{
-			new ToK("tmlTemp", "tml", "none");
+			try {
+				new ToK("tmlTemp", "tml", "none");
+			} catch (CoreException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		srcFile = proj.getFile(ToK.SOURCES_FOLDER + "\\mesrc.src");
 		if (srcFile.exists())
