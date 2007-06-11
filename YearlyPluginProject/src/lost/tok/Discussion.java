@@ -68,6 +68,8 @@ public class Discussion implements Comparable<Discussion> {
 	private String creatorName;
 
 	private Integer id = 1;
+	
+	private Link link = null;
 
 	private String linkType=null;
 
@@ -561,7 +563,7 @@ public class Discussion implements Comparable<Discussion> {
 	private void writeToXml(Document doc) {
 		GeneralFunctions.writeToXml(getFullFileName(), doc);
 	}
-
+	
 	public static boolean isDiscussion(IFile file) {
 		if (!file.getFileExtension().equals(DISCUSSION_EXTENSION))
 			return false;
@@ -591,4 +593,18 @@ public class Discussion implements Comparable<Discussion> {
 	public int compareTo(Discussion d) {
 		return getDiscName().compareTo(d.getDiscName());
 	}
+}
+	
+
+	public void setLink(Link link) {
+		this.link = link;
+		
+	}
+	
+	public Link getLink() {
+		return link;
+		
+	}
+	
+	
 }
