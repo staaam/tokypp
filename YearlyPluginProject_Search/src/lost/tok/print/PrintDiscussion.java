@@ -1,6 +1,7 @@
 package lost.tok.print;
 
 import lost.tok.Discussion;
+import lost.tok.Link;
 
 public class PrintDiscussion {
 
@@ -24,15 +25,16 @@ public class PrintDiscussion {
 		//to un-comment when getDescription() will be created
 		//System.out.println("Description: " + d.getDescription());
 		
-		//if the discussion was linked, the source it was linked to:		
-		if (d.getLinkedSourceFile()!=null)
-			System.out.println("Related to: " + d.getLinkedSourceFile());
+		//if the discussion was linked, the source it was linked to:
+		Link link = d.getLink();
+		if (link!=null){
+			System.out.println("Related to: " + link.getLinkedSource());
+			System.out.println("Link Type " + link.getLinkType());
+			
+//			the text of the link:
+			System.out.println(link.getSubject());
+		}
 		
-		//if the discussion was linked:
-		if (d.getLinkType()!=null)
-			System.out.println("Link Type " + d.getLinkType());
-		
-		//the text of the link:
 		
 		//opinions:
 		
