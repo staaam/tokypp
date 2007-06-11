@@ -23,6 +23,8 @@ public class Link {
 		this.linkedDiscussion=linkedDiscussion;
 		this.linkType = linkType;
 		this.linkFile = linkFile;
+		this.exp = exp;
+		this.subject = subject;
 		
 		linkDiscussionRoot();
 	}
