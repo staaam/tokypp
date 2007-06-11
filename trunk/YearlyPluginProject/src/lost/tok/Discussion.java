@@ -593,9 +593,7 @@ public class Discussion implements Comparable<Discussion> {
 	public int compareTo(Discussion d) {
 		return getDiscName().compareTo(d.getDiscName());
 	}
-}
 	
-
 	public void setLink(Link link) {
 		this.link = link;
 		
@@ -605,6 +603,5 @@ public class Discussion implements Comparable<Discussion> {
 		return link;
 		
 	}
-	
-	
 }
+	
