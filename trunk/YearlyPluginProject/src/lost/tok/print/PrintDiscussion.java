@@ -1,13 +1,25 @@
 package lost.tok.print;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import org.dom4j.Element;
+
 import lost.tok.Discussion;
 import lost.tok.Link;
+import lost.tok.Opinion;
+import lost.tok.Quote;
+import lost.tok.Source;
+import lost.tok.sourceDocument.SourceDocument;
 
 public class PrintDiscussion {
 
 	public Discussion discussion;
 	
 	public void createDiscuttionFile(Discussion d){
+		
+		this.discussion = d;
 		
 		if (d==null)
 			return;
@@ -30,15 +42,77 @@ public class PrintDiscussion {
 //			the text of the link:
 			System.out.println(link.getSubject());
 		}
+	
+		System.out.println("");
 		
-		
-		//opinions:
+		int opinionCounter = 1;
+		int pos=1;
+		List<Source> sourceList = new ArrayList<Source>();
+
+		// opinions:		
+		Opinion[] opinions = discussion.getOpinions();
+		for (Opinion o : opinions ){
+			System.out.println(opinionCounter+") " + o.getName());
+			
+			int quoteCounter = 1;
+			
+			//quotes
+			Quote[] quotes = discussion.getQuotes(o.getName());
+			for (Quote q : quotes){
+				
+				//list of sources for bibliography
+				Source quoteSource = q.getSource();
+							
+//				if (sourceList==null || !(sourceList.contains(quoteSource))){
+//					sourceList.add(quoteSource);
+//					//pos++;
+//				}
+				boolean inList=false;
+				for (Iterator i = sourceList.iterator(); i.hasNext();) {
+					Source s = (Source) i.next();
+					if ((s.getFile().getFullPath().toString().equals(
+								quoteSource.getFile().getFullPath().toString()))){
+						inList=true;
+						pos=sourceList.indexOf(s)+1;
+						continue;
+					}
+				}
+				
+				//this source is not yet in the list of sources
+				if (!inList){
+					sourceList.add(quoteSource);
+					pos=sourceList.size();
+				}
+				
+				if (q.getComment()==""){ //no comment on quote
+					System.out.println("	"+opinionCounter + "." + quoteCounter+") "
+							+ q.getText() + " [" + pos + "]");
+				}
+				else{ //with comment
+					System.out.println("	"+opinionCounter + "." + quoteCounter+") "
+							+ q.getText() + ", <comment: " + q.getComment()+"> [" + pos + "]");
+					
+				}
+			
+				quoteCounter++;
+			}
+			opinionCounter++;
+		}
 		
 		
 		//bibliography:
-		
+		System.out.println("");
+		System.out.println("Bibliography:");
+				
+		for (int i=0; i<sourceList.size();i++){
+			SourceDocument sd = new SourceDocument();
+			sd.set(sourceList.get(i));
+			String author = sd.getAuthor();
+			System.out.println("["+ (i+1) +"]" + sourceList.get(i).getFile().getName() + ", " + author);
+		}
 		
 		//signature
+		System.out.println("");
 		System.out.println("=========================================");
 		System.out.println("======= LOST - Tree of Knowladge ========");
 		System.out.println("=========================================");
