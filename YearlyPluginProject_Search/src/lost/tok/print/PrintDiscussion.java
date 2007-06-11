@@ -7,10 +7,6 @@ public class PrintDiscussion {
 
 	public Discussion discussion;
 	
-	
-	
-	
-	
 	public void createDiscuttionFile(Discussion d){
 		
 		if (d==null)
