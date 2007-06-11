@@ -382,49 +382,7 @@ public class ToK {
 		return getProject().getWorkspace();
 	}
 
-	/**
-	 * Links an existing discussion to a segment in the root of the ToK project
-	 * 
-	 * @param disc
-	 *            an object representing an existing discussion
-	 */
-	public void linkDiscussionRoot(Discussion disc, Source sourceFile,
-			Excerption[] exp, String subject, String linkType) {
-
-		disc.setLinkType(linkType);
-		disc.setLinkedSourceFile(sourceFile);
-		
-		String discFileName = disc.getDiscFileName();
-
-		// Open the Links file
-		Document doc = GeneralFunctions.readFromXML(getLinkFile());
-
-		Node link = doc.selectSingleNode("//link/discussionFile[text()=\"" //$NON-NLS-1$
-				+ discFileName + "\"]"); //$NON-NLS-1$
-		Element newLink = null;
-		if (link != null) {
-			newLink = link.getParent();
-		} else {
-
-			Element links = doc.getRootElement();
-			newLink = links.addElement("link"); //$NON-NLS-1$
-			newLink.addElement("discussionFile").addText(discFileName); //$NON-NLS-1$
-			newLink.addElement("type").addText(linkType); //$NON-NLS-1$
-			newLink.addElement("linkSubject").addText(subject); //$NON-NLS-1$
-		}
-
-		Element subLink = newLink.addElement("sublink"); //$NON-NLS-1$
-
-		for (Excerption element : exp) {
-
-			subLink.addElement("sourceFile").addText(sourceFile.toString()); //$NON-NLS-1$
-			subLink.add(element.toXML());
-
-		}
-
-		GeneralFunctions.writeToXml(getLinkFile(), doc);
-	}
-
+	
 	public Document linksSkeleton() {
 		Document linkDoc = DocumentHelper.createDocument();
 
