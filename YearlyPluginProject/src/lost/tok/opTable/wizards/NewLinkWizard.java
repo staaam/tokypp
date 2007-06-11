@@ -1,5 +1,7 @@
 package lost.tok.opTable.wizards;
 
+import lost.tok.Discussion;
+import lost.tok.Link;
 import lost.tok.Messages;
 import lost.tok.Source;
 import lost.tok.ToK;
@@ -63,9 +65,18 @@ public class NewLinkWizard extends Wizard implements INewWizard {
 		// TODO
 		try {
 			for (String root : roots) {
-				tok.linkDiscussionRoot(tok.getDiscussion(page.getDiscussionName()),
-						new Source(tok, root), page.getExcerptions(root), page
-								.getSubject(), page.getLinkType());
+				Discussion d = tok.getDiscussion(page.getDiscussionName());
+				Link link = new Link(new Source(tok, root),d,
+						page.getLinkType(),tok.getLinkFile(),
+						page.getExcerptions(root),page.getSubject());
+				
+				d.setLink(link);
+				
+				//new Link class replaced this
+				//	tok.linkDiscussionRoot(tok.getDiscussion(page.getDiscussion()),
+				//	new Source(tok, root), page.getExcerptions(root), page
+				//			.getSubject(), page.getLinkType());
+
 			}
 
 		} catch (CoreException e) {
