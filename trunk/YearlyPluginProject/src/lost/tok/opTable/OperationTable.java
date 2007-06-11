@@ -8,7 +8,6 @@ import java.util.Vector;
 import java.util.Map.Entry;
 
 import lost.tok.Excerption;
-import lost.tok.ToK;
 import lost.tok.excerptionsView.ExcerptionView;
 import lost.tok.sourceDocument.Chapter;
 import lost.tok.sourceDocument.ChapterText;
@@ -33,15 +32,10 @@ import org.eclipse.ui.part.FileEditorInput;
  * @version 0.2
  */
 public class OperationTable extends TextEditor {
-
 	@Override
 	public void setFocus() {
 		super.setFocus();
-		if (((FileEditorInput) this.getEditorInput()).getFile()
-				.getProjectRelativePath().toPortableString().startsWith(
-						ToK.ROOTS_FOLDER)) {
-			updateExcerptionView();
-		}
+		updateExcerptionView();
 	}
 
 	@Override

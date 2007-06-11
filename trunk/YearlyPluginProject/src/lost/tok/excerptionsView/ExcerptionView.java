@@ -6,7 +6,6 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 import lost.tok.Excerption;
 import lost.tok.Messages;
@@ -17,12 +16,11 @@ import lost.tok.opTable.wizards.NewLinkWizard;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IAdaptable;
-import org.eclipse.jface.action.Action;
-import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.ActionContributionItem;
+import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.IContentProvider;
@@ -41,13 +39,11 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TreeItem;
-import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.part.DrillDownAdapter;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.part.ViewPart;
 
@@ -58,47 +54,8 @@ import org.eclipse.ui.part.ViewPart;
  * 
  */
 public class ExcerptionView extends ViewPart {
-
-	class OTSet extends HashSet<OperationTable> {
-		private static final long serialVersionUID = 8498357334519966448L;
-
-		private Hashtable<String, OperationTable> nameToOT = new Hashtable<String, OperationTable>();
-
-		@Override
-		public boolean add(OperationTable o) {
-			if (!super.add(o))
-				return false;
-			nameToOT.put(ExcerptionView.nameFromOT(o), o);
-			return true;
-		}
-
-		@Override
-		public boolean remove(Object o) {
-			if (!super.remove(o))
-				return false;
-			nameToOT.remove(ExcerptionView.nameFromOT((OperationTable) o));
-			return true;
-		}
-
-		public boolean remove(String name) {
-			return remove(get(name));
-		}
-
-		public Set<String> getNames() {
-			return nameToOT.keySet();
-		}
-
-		public OperationTable get(String name) {
-			if (!nameToOT.containsKey(name))
-				return null;
-			return nameToOT.get(name);
-		}
-	}
-
-	private Hashtable<IProject, OTSet> projectOTs = new Hashtable<IProject, OTSet>();
-
-	private IProject currentProject = null;
-
+	public final static String ID = "lost.tok.excerptionsView.ExcerptionView"; //$NON-NLS-1$
+	
 	class TreeObject implements IAdaptable {
 		private int id;
 
@@ -170,7 +127,14 @@ public class ExcerptionView extends ViewPart {
 		}
 
 	}
-
+	
+	/**
+	 * The content provider class is responsible for providing objects to the
+	 * view. It can wrap existing objects in adapters or simply return objects
+	 * as-is. These objects may be sensitive to the current input of the view,
+	 * or ignore it and always show the same content (like Task List, for
+	 * example).
+	 */
 	class ViewContentProvider implements IStructuredContentProvider,
 			ITreeContentProvider {
 		private TreeParent invisibleRoot;
@@ -266,23 +230,9 @@ public class ExcerptionView extends ViewPart {
 		}
 	}
 
-	public final static String ID = "lost.tok.excerptionsView.ExcerptionView"; //$NON-NLS-1$
+	private Hashtable<IProject, OTSet> projectOTs = new Hashtable<IProject, OTSet>();
 
-	private IAction deleteAction;
-
-	/*
-	 * The content provider class is responsible for providing objects to the
-	 * view. It can wrap existing objects in adapters or simply return objects
-	 * as-is. These objects may be sensitive to the current input of the view,
-	 * or ignore it and always show the same content (like Task List, for
-	 * example).
-	 */
-
-	// private Action doubleClickAction;
-	@SuppressWarnings("unused")//$NON-NLS-1$
-	private DrillDownAdapter drillDownAdapter;
-
-	private IAction linkDiscussionAction;
+	private IProject currentProject = null;
 
 	private TreeViewer viewer;
 
@@ -298,41 +248,40 @@ public class ExcerptionView extends ViewPart {
 				.treeBuildAndRefresh();
 	}
 
-	private void contributeToActionBars() {
-		IActionBars bars = getViewSite().getActionBars();
-		fillLocalPullDown(bars.getMenuManager());
-	}
-
 	/**
 	 * This is a callback that will allow us to create the viewer and initialize
 	 * it.
 	 */
 	public void createPartControl(Composite parent) {
 		viewer = new TreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
-		drillDownAdapter = new DrillDownAdapter(viewer);
+		//drillDownAdapter = new DrillDownAdapter(viewer);
 		viewer.setContentProvider(new ViewContentProvider());
 		viewer.setLabelProvider(new ViewLabelProvider());
 		// viewer.setSorter(new NameSorter());
 		viewer.setInput(getViewSite());
-		makeActions();
-		hookContextMenu();
 		hookDoubleClickAction();
-		contributeToActionBars();
+		hookContextMenu();
+//		contributeToActionBars();
 	}
 
-	private void fillContextMenu(IMenuManager manager) {
-		manager.add(linkDiscussionAction);
-		manager.add(deleteAction);
-	}
+//	private void fillContextMenu(IMenuManager manager) {
+//		manager.add(linkDiscussionAction);
+//		manager.add(deleteAction);
+//	}
 
-	private void fillLocalPullDown(IMenuManager manager) {
-		manager.add(linkDiscussionAction);
-	}
+//	private void contributeToActionBars() {
+//		IActionBars bars = getViewSite().getActionBars();
+//		fillLocalPullDown(bars.getMenuManager());
+//	}
+
+//	private void fillLocalPullDown(IMenuManager manager) {
+//		manager.add(linkDiscussionAction);
+//	}
 
 	public IContentProvider getContentProvider() {
 		return viewer.getContentProvider();
 	}
-
+	
 	/**
 	 * Returns the excerptions from the given file name
 	 */
@@ -357,9 +306,14 @@ public class ExcerptionView extends ViewPart {
 		menuMgr.setRemoveAllWhenShown(true);
 		menuMgr.addMenuListener(new IMenuListener() {
 			public void menuAboutToShow(IMenuManager manager) {
-				ExcerptionView.this.fillContextMenu(manager);
+				for (IContributionItem i : getViewSite().getActionBars().getToolBarManager().getItems()) {
+					if (i instanceof ActionContributionItem) {
+						ActionContributionItem a = (ActionContributionItem) i;
+						manager.add(a.getAction());
+					}
+				}
 			}
-		});
+		});	
 		Menu menu = menuMgr.createContextMenu(viewer.getControl());
 		viewer.getControl().setMenu(menu);
 		getSite().registerContextMenu(menuMgr, viewer);
@@ -389,53 +343,6 @@ public class ExcerptionView extends ViewPart {
 					operationTable.scrollToExcerption(element.getId());
 			}
 		});
-	}
-
-	private void makeActions() {
-		linkDiscussionAction = new Action() {
-			public void run() {
-				linkDiscussion();
-			}
-		};
-		linkDiscussionAction.setText(Messages.getString("ExcerptionView.8")); //$NON-NLS-1$
-		linkDiscussionAction.setToolTipText(Messages
-				.getString("ExcerptionView.9")); //$NON-NLS-1$
-		linkDiscussionAction.setImageDescriptor(ImageDescriptor.createFromFile(
-				this.getClass(), "../../../../icons/link_ico.gif")); //$NON-NLS-1$
-
-		deleteAction = new Action() {
-			public void run() {
-				ITreeSelection selection = (ITreeSelection) viewer
-						.getSelection();
-
-				HashSet<OperationTable> ots = new HashSet<OperationTable>();
-
-				for (Iterator iter = selection.iterator(); iter.hasNext();) {
-					TreeObject element = (TreeObject) iter.next();
-
-					OperationTable operationTable = null;
-					if (element instanceof TreeParent) {
-						// a whole file is selected
-						operationTable = getOTs().get(element.getName());
-						operationTable.clearMarked();
-					} else {
-						operationTable = getOTs().get(
-								element.getParent().getName());
-						operationTable.removeExcerption(element.getId());
-					}
-					ots.add(operationTable);
-				}
-
-				for (OperationTable ot : ots) {
-					ot.refreshDisplay();
-				}
-
-			}
-		};
-		deleteAction.setText(Messages.getString("ExcerptionView.13")); //$NON-NLS-1$
-		deleteAction.setToolTipText(Messages.getString("ExcerptionView.14")); //$NON-NLS-1$
-		deleteAction.setImageDescriptor(ImageDescriptor.createFromFile(this
-				.getClass(), "../../../../icons/delete.gif")); //$NON-NLS-1$
 	}
 
 	/**
@@ -565,4 +472,67 @@ public class ExcerptionView extends ViewPart {
 		}
 		return l;
 	}
+
+	/**
+	 * Clears all excerptions from all projects
+	 *
+	 */
+	public void clearAll() {
+		for (IProject p : projectOTs.keySet())
+			clearProject(p);
+	}
+
+	/**
+	 * Clears all excerptions from current project
+	 *
+	 */
+	public void clearCurrentProject() {
+		clearProject(getProject());
+	}
+	
+	/**
+	 * Clears all excerptions from given project
+	 *
+	 */
+	private void clearProject(IProject p) {
+		for (OperationTable ot : projectOTs.get(p)) {
+			ot.clearMarked();
+			ot.refreshDisplay();
+		}
+	}
+
+	/**
+	 * Clears selected excerptions. If the source is selected
+	 * clears all excerptions of that file
+	 *
+	 */
+	public void delete() {
+		ITreeSelection selection = (ITreeSelection) viewer
+												.getSelection();
+		
+		if (selection == null || selection.isEmpty()) return;
+		
+		HashSet<OperationTable> ots = new HashSet<OperationTable>();
+		
+		for (Iterator iter = selection.iterator(); iter.hasNext();) {
+			TreeObject element = (TreeObject) iter.next();
+		
+			OperationTable operationTable = null;
+			if (element instanceof TreeParent) {
+				// a whole file is selected
+				operationTable = getOTs().get(element.getName());
+				operationTable.clearMarked();
+			} else {
+				operationTable = getOTs().get(
+						element.getParent().getName());
+				operationTable.removeExcerption(element.getId());
+			}
+			ots.add(operationTable);
+		}
+		
+		for (OperationTable ot : ots) {
+			ot.refreshDisplay();
+		}
+	}
+	
 }
