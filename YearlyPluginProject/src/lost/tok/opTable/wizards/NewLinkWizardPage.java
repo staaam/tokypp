@@ -74,7 +74,6 @@ public class NewLinkWizardPage extends WizardPage implements SelectionListener,
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		discussionCombo.setLayoutData(gd);
 		discussionCombo.addSelectionListener(this);
-		discussionCombo.init();
 
 		// subject
 		label = new Label(container, SWT.NULL);
@@ -115,6 +114,7 @@ public class NewLinkWizardPage extends WizardPage implements SelectionListener,
 		excerptions.setLayoutData(gd);
 		excerptions.redraw();
 		initialize();
+		discussionCombo.init();
 		dialogChanged();
 		setControl(container);
 	}

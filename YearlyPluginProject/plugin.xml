@@ -78,15 +78,6 @@
             id="lost.tok.opTable.PopUpMenu.MenuContribution"
             targetID="lost.tok.opTable.PopUpMenu.Menu">
          <action
-               class="lost.tok.opTable.actions.LinkDiscussionAction"
-               icon="icons/main_link_ico.gif"
-               id="lost.tok.opTable.PopUpMenu.LinkDiscussionAction"
-               label="%action.name.linkDiscussion"
-               menubarPath="additions"
-               state="true"
-               style="push"
-               tooltip="%action.name.linkDiscussion"/>
-         <action
                class="lost.tok.opTable.actions.AddQuoteAction"
                icon="icons/AddQuote.bmp"
                id="lost.tok.opTable.PopUpMenu.AddQuoteAction"
@@ -142,16 +133,6 @@
                style="toggle"
                toolbarPath="OpTableGroup"
                tooltip="%action.label.discussions.show"/>
-         <action
-               class="lost.tok.opTable.actions.LinkDiscussionAction"
-               icon="icons/main_link_ico.gif"
-               id="lost.tok.opTable.LinkDiscussionAction"
-               label="%action.name.linkDiscussion"
-               menubarPath="edit/additions"
-               state="true"
-               style="push"
-               toolbarPath="OpTableGroup"
-               tooltip="%action.tooltip.linkDiscussion"/>
          <action
                class="lost.tok.opTable.actions.AddQuoteAction"
                icon="icons/AddQuote.bmp"
@@ -337,5 +318,36 @@
             id="lost.tok.search"
             label="ToK Search"
             showScopeSection="true"/>
+   </extension>
+   <extension
+         point="org.eclipse.ui.viewActions">
+      <viewContribution
+            id="lost.tok.excerptionsView.Contribution"
+            targetID="lost.tok.excerptionsView.ExcerptionView">
+         <action
+               class="lost.tok.excerptionsView.actions.ClearAllAction"
+               icon="icons/UnMarkAll.bmp"
+               id="lost.tok.excerptionsView.ClearAll"
+               label="Clear All"
+               style="push"
+               toolbarPath="ToKGroup"/>
+         <action
+               class="lost.tok.excerptionsView.actions.LinkDiscussionAction"
+               icon="icons/main_link_ico.gif"
+               id="lost.tok.excerptionsView.LinkDiscussionAction"
+               label="%action.name.linkDiscussion"
+               state="true"
+               style="push"
+               toolbarPath="ToKGroup"
+               tooltip="%action.tooltip.linkDiscussion"/>
+         <action
+               class="lost.tok.excerptionsView.actions.DeleteAction"
+               icon="icons/delete.gif"
+               id="lost.tok.excerptionsView.DeleteAction"
+               label="Delete"
+               state="true"
+               style="push"
+               toolbarPath="ToKGroup"/>
+      </viewContribution>
    </extension>
 </plugin>
