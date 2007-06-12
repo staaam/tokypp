@@ -1,6 +1,12 @@
 package lost.tok.html;
 
+import java.io.ByteArrayInputStream;
+import java.io.UnsupportedEncodingException;
+
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 
 import lost.tok.GeneralFunctions;
@@ -22,7 +28,7 @@ abstract public class HTMLPage
 	
 	/** The page's title */
 	protected String title;
-	/** The path underwhich the file is to be saved. Path is relative to the project's root dir */
+	/** The path underwhich the file is to be saved. Path is relative to the project's root dir, / seperated */
 	protected String exportPath;	
 	/** The path to the css file used by this page */
 	private String cssPath;
@@ -87,12 +93,42 @@ abstract public class HTMLPage
 	 * 
 	 * May create more than one file, if there are other files connected to this page
 	 */
-	public void generatePage()
+	public void generatePage() throws CoreException
 	{
-		// TODO(Shay): Walk over the directories and generate them as needed
+		// 1. Create the entire path leading to that file, if it doesn't exist
+		String [] pathSegs = exportPath.split("/");
 		
-		// TODO(Shay): Create an input stream from the page's text
-		// TODO(Shay): Puke the input stream into the file
+		IPath path = tok.getProject().getProjectRelativePath();
+		for (int i=0; i < pathSegs.length-1; i++)
+		{
+			path = path.append( pathSegs[i] + "/" );
+			IFolder f = tok.getProject().getFolder(path);
+			if (!f.exists())
+				f.create(true, true, null);
+		}
+		
+		IFile f = tok.getProject().getFile(exportPath);
+		
+		// Note(Shay): we should delete the old html dir before creating it anew
+		assert(f.exists() == false);
+		
+		// 2. Create an input stream from the page's text
+		String pageString = getPage();
+		
+		byte[] pageBytes;
+		try {
+			pageBytes = pageString.getBytes("UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			pageBytes = pageString.getBytes();
+		}		
+		
+		ByteArrayInputStream bais = new ByteArrayInputStream(pageBytes);
+		
+		// 3. Puke the input stream into the file
+		f.create(bais, true, null);
+		
+		// TODO(Shay): Generate the CSS file, here or in another place
 	}
 	
 	/**
