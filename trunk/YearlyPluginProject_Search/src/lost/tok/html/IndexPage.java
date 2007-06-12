@@ -28,7 +28,7 @@ public class IndexPage extends HTMLPage {
 		super(tok, tok.getProject().getName() + " Index Page", "html/index.html", "html/" + INDEX_CSS);
 		
 		discussions = tok.getDiscussions().toArray( new Discussion[0] );
-		sources = tok.getSources();
+		// sources = tok.getSources();
 	}
 
 	@Override
