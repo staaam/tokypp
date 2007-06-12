@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 
 import lost.tok.Source;
@@ -94,7 +95,7 @@ public class SourcePage extends HTMLPage {
 	/**
 	 * Generate the source page and all the discussion conflict pages connected to it
 	 */
-	public void generatePage()
+	public void generatePage() throws CoreException
 	{
 		// generate this
 		super.generatePage();
