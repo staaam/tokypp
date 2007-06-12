@@ -49,6 +49,7 @@ abstract public class HTMLPage
 	{
 		this.tok = tok;
 		this.title = title;
+		this.exportPath = exportedFilePath;
 		this.cssPath = css;
 		
 		this.ltr = GeneralFunctions.isLTR();
@@ -66,26 +67,29 @@ abstract public class HTMLPage
 	 */
 	public String getPage()
 	{
-		String htmlPage = "";
+		String body = getBody();
 		
-		htmlPage += "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"" +
-						" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n";
-		htmlPage += "\n";
-		htmlPage += "<html xml:lang=\"" + lang + "\" lang=\"" + lang + "\" dir=\"" + (ltr ? "ltr" : "rtl") + "\">\n";
-		htmlPage += "\n";
-		htmlPage += "<head>\n";
-		htmlPage += "\t<title>" + GeneralFunctions.xmlEscape(title) + "</title>\n";
-		htmlPage += "\t<link rel=\"stylesheet\" type=\"text/css\" href=\"" + cssPath + "\" />\n"; 
-		htmlPage += "\t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n"; 
-		htmlPage += "\t<meta name=\"author\" content=\"Tree of Knowledge Site Exporter\" />\n";
-		htmlPage += "\n";
-		htmlPage += "</head>\n";
-		htmlPage += "<body>\n";
-		htmlPage += "\t" + getBody().replaceAll("\n", "\n\t");
-		htmlPage += "</body>\n";
-		htmlPage += "</html>\n";
+ 		StringBuffer htmlPage = new StringBuffer(body.length() + 2000);
 		
-		return htmlPage;
+		htmlPage.append("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"");
+		htmlPage.append(" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n");
+		htmlPage.append("\n");
+		htmlPage.append("<html xml:lang=\"" + lang + "\" lang=\"" + lang + "\" dir=\"" + (ltr ? "ltr" : "rtl") + "\">\n");
+		htmlPage.append("\n");
+		htmlPage.append("<head>\n");
+		htmlPage.append("\t<title>" + GeneralFunctions.xmlEscape(title) + "</title>\n");
+		htmlPage.append("\t<link rel=\"stylesheet\" type=\"text/css\" href=\"" + cssPath + "\" />\n"); 
+		htmlPage.append("\t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n"); 
+		htmlPage.append("\t<meta name=\"author\" content=\"Tree of Knowledge Site Exporter\" />\n");
+		htmlPage.append("\n");
+		htmlPage.append("</head>\n");
+		htmlPage.append("<body>\n");
+		htmlPage.append("\t" + body.replaceAll("\n", "\n\t"));
+		//htmlPage.append("\t" + getBody(); // TODO(Shay, low): Make sure the final xml looks good
+		htmlPage.append("</body>\n");
+		htmlPage.append("</html>\n");
+		
+		return htmlPage.toString();
 	}
 	
 	/**
