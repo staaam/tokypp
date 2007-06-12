@@ -30,6 +30,8 @@ public class Source {
 	 *            source file (relative to project dir)
 	 */
 	public Source(ToK tok, String fileName) {
+		if (tok == null)
+			throw new IllegalArgumentException("ToK must not be null");
 		this.tok = tok;
 		this.file = tok.getProject().getFile(fileName);
 	}
@@ -41,6 +43,7 @@ public class Source {
 	 *            source file
 	 */
 	public Source(IFile file) {
+		this.tok = ToK.getProjectToK( file.getProject() );
 		this.file = file;
 	}
 

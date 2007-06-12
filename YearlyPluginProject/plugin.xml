@@ -117,6 +117,21 @@
                style="push"
                tooltip="%action.name.mark"/>
       </viewerContribution>
+      <objectContribution
+            adaptable="false"
+            id="lost.tok.ExportToHTMLContribution"
+            objectClass="org.eclipse.core.resources.IProject">
+         <action
+               class="lost.tok.html.other.ExportAction"
+               enablesFor="1"
+               icon="icons/sample.gif"
+               id="lost.tok.ExportToHTMLAction"
+               label="Create HTML"
+               tooltip="Exports the entire ToK to an HTML site"/>
+         <filter
+               name="nature"
+               value="lost.tok.ToKNature"/>
+      </objectContribution>
    </extension>
    <extension
          point="org.eclipse.ui.editorActions">

@@ -59,6 +59,7 @@ public class SourcePage extends HTMLPage {
 	private void buildElements()
 	{
 		elements = new LinkedList<SrcElem>();	
+		xPathToParagraph = new HashMap<String, LinkedParagraph>();
 		for (Chapter c : srcDoc.getAllChapters())
 		{
 			if (c.getDepth() == 0)

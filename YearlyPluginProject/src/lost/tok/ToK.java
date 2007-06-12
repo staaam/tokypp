@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -374,7 +375,68 @@ public class ToK {
 	 * @return source object for requested source
 	 */
 	public Source getSource(String src) {
-		return new Source(tokProject.getFile(src));
+		return new Source(this, src);
+	}
+	
+	/**
+	 * Returns all the sources and roots in the ToK
+	 * @return an array containing all the source files (and root files) in the ToK
+	 */
+	public Source[] getSources() {
+		refresh();
+		
+		LinkedList<Source> srcs = new LinkedList<Source>();
+		
+		IFolder sourcesFolder = tokProject.getFolder(SOURCES_FOLDER);
+		IFolder rootsFolder = tokProject.getFolder(ROOTS_FOLDER);
+		
+		srcs.addAll( getSources(sourcesFolder) );
+		srcs.addAll( getSources(rootsFolder) );
+		
+		Source[] srcArray = new Source[ srcs.size() ];
+		
+		return srcs.toArray( srcArray );
+	}
+	
+	/**
+	 * Returns all the sources inside the folder (and subfolders)
+	 * @param folder the folder to search in
+	 * @return a list of all the contained source, in no particular order
+	 */
+	protected LinkedList<Source> getSources(IFolder folder)
+	{
+		IResource[] members = null;
+		try {
+			members = folder.members();
+		} catch (CoreException e) {
+			// shouldn't happen
+			e.printStackTrace();
+		}
+		
+		LinkedList<Source> srcs = new LinkedList<Source>();
+		
+		for (IResource res : members)
+		{
+			if (res instanceof IFile)
+			{
+				IFile file = (IFile)res;
+				if (Source.isSource(file))
+					srcs.add( new Source(file) );
+			}
+			else if (res instanceof IFolder)
+			{
+				IFolder subfolder = (IFolder)res;
+				LinkedList<Source> subsrcs = getSources(subfolder); // rec call
+				srcs.addAll( subsrcs );
+			}
+			else
+			{
+				// Note(Shay): as far as I know, we shouldn't get here
+				System.out.println("Unexpected File Type: " + res.toString());
+			}
+		}
+		
+		return srcs;
 	}
 
 	public IWorkspace getWorkspace() {

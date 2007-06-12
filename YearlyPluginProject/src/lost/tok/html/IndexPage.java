@@ -1,5 +1,13 @@
 package lost.tok.html;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.HashMap;
+
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
+import org.dom4j.io.OutputFormat;
+import org.dom4j.io.XMLWriter;
 import org.eclipse.core.runtime.CoreException;
 
 import lost.tok.Discussion;
@@ -19,24 +27,49 @@ public class IndexPage extends HTMLPage {
 	static final public String INDEX_CSS = DEFAULT_CSS;
 	
 	/** The discussions of the ToK, during it's creation */
-	@SuppressWarnings("unused")
 	private Discussion[] discussions;
 	/** The sources (and roots) of the ToK, during it's creation */
-	@SuppressWarnings("unused")
 	private Source[] sources;
 	
 	public IndexPage(ToK tok)
 	{
-		super(tok, tok.getProject().getName() + " Index Page", "html/index.html", "html/" + INDEX_CSS);
+		super(tok, tok.getProject().getName() + " Tree of Knowledge", "html/index.html", "html/" + INDEX_CSS);
 		
 		discussions = tok.getDiscussions().toArray( new Discussion[0] );
-		// Note(Shay): Disabled until I make a getSource method: sources = tok.getSources();
+		sources = tok.getSources();
 	}
 
 	@Override
 	protected String getBody() {
-		// TODO Auto-generated method stub
-		return null;
+		// Document doc = DocumentHelper.createDocument();
+
+
+		Element body = DocumentHelper.createElement("body");
+		
+		body.addElement("h1").addText( tok.getProject().getName() );
+		
+		Element author = body.addElement("p").addText("Created By: ");
+		author.addElement("em").addText(tok.getProjectCreator());
+		
+		
+		OutputFormat outformat = OutputFormat.createPrettyPrint();
+		outformat.setEncoding("UTF-8"); //$NON-NLS-1$
+		
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		String retVal;
+		try {
+			XMLWriter writer = new XMLWriter(baos, outformat);
+			writer.write(body);
+			writer.flush();
+			retVal = baos.toString("UTF-8");
+		} catch (IOException e) {
+			retVal = "Error " + e.getMessage();
+			e.printStackTrace();
+		}
+
+		// TODO(Shay): Add the sources and discussions to the file (a href)
+		// TODO(Shay): Make sure the xml looks nice :P
+		return retVal;
 	}
 	
 	@Override
@@ -44,9 +77,31 @@ public class IndexPage extends HTMLPage {
 	{
 		super.generatePage();
 		
-		// TODO(Shay): Iterate over the source and discussions and generate them
-		// TODO(Shay): Parse the links file and connect it with the sources
+		// 1. Find all the sub pages
+		HashMap<String, SourcePage> srcPathToPage = new HashMap<String, SourcePage>();
+		for (Source source : sources)
+		{
+			SourcePage sPage = new SourcePage(source);
+			String srcPath = source.getFile().getProjectRelativePath().toString();
+			srcPathToPage.put( srcPath, sPage );
+		}
 		
+		HashMap<String, DiscussionPage> discNameToPage = new HashMap<String, DiscussionPage>();
+		for (Discussion disc : discussions)
+		{
+			DiscussionPage dPage = new DiscussionPage(disc);
+			String discName = disc.getDiscName();
+			discNameToPage.put(discName, dPage);
+		}
+		
+		// TODO(Shay): 2. Parse the links file and connect it with the sources
+		
+		// 3. Generate all the sub pages
+		for (SourcePage sPage : srcPathToPage.values())
+			sPage.generatePage();
+		
+		for (DiscussionPage dPage : discNameToPage.values())
+			dPage.generatePage();		
 	}
 
 }
