@@ -55,7 +55,7 @@ public class IndexPage extends HTMLPage {
 		discNameToPage = new HashMap<String, DiscussionPage>();
 		for (Discussion disc : discussions)
 		{
-			DiscussionPage dPage = new DiscussionPage(disc);
+			DiscussionPage dPage = new DiscussionPage(disc, srcPathToPage);
 			String discName = disc.getDiscName();
 			discNameToPage.put(discName, dPage);
 		}
