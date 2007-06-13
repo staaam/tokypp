@@ -1,18 +1,15 @@
 package lost.tok.html;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.HashMap;
+
+import lost.tok.Discussion;
+import lost.tok.GeneralFunctions;
+import lost.tok.Source;
+import lost.tok.ToK;
 
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
-import org.dom4j.io.OutputFormat;
-import org.dom4j.io.XMLWriter;
 import org.eclipse.core.runtime.CoreException;
-
-import lost.tok.Discussion;
-import lost.tok.Source;
-import lost.tok.ToK;
 
 /**
  * The main page of the ToK site
@@ -31,54 +28,23 @@ public class IndexPage extends HTMLPage {
 	/** The sources (and roots) of the ToK, during it's creation */
 	private Source[] sources;
 	
+	/** A map from the path of a source file to its HTMLPage */
+	private HashMap<String, SourcePage> srcPathToPage;
+	/** A map from the name of a discussion file to its HTMLPage */
+	private HashMap<String, DiscussionPage> discNameToPage;
+	
 	public IndexPage(ToK tok)
 	{
-		super(tok, tok.getProject().getName() + " Tree of Knowledge", "html/index.html", "html/" + INDEX_CSS);
+		super(tok,
+				tok.getProject().getName() + ", Tree of Knowledge",
+				ToK.HTML_FOLDER + "/index.html",
+				ToK.HTML_FOLDER + "/" + INDEX_CSS);
 		
 		discussions = tok.getDiscussions().toArray( new Discussion[0] );
 		sources = tok.getSources();
-	}
-
-	@Override
-	protected String getBody() {
-		// Document doc = DocumentHelper.createDocument();
-
-
-		Element body = DocumentHelper.createElement("body");
-		
-		body.addElement("h1").addText( tok.getProject().getName() );
-		
-		Element author = body.addElement("p").addText("Created By: ");
-		author.addElement("em").addText(tok.getProjectCreator());
-		
-		
-		OutputFormat outformat = OutputFormat.createPrettyPrint();
-		outformat.setEncoding("UTF-8"); //$NON-NLS-1$
-		
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		String retVal;
-		try {
-			XMLWriter writer = new XMLWriter(baos, outformat);
-			writer.write(body);
-			writer.flush();
-			retVal = baos.toString("UTF-8");
-		} catch (IOException e) {
-			retVal = "Error " + e.getMessage();
-			e.printStackTrace();
-		}
-
-		// TODO(Shay): Add the sources and discussions to the file (a href)
-		// TODO(Shay): Make sure the xml looks nice :P
-		return retVal;
-	}
-	
-	@Override
-	public void generatePage() throws CoreException
-	{
-		super.generatePage();
 		
 		// 1. Find all the sub pages
-		HashMap<String, SourcePage> srcPathToPage = new HashMap<String, SourcePage>();
+		srcPathToPage = new HashMap<String, SourcePage>();
 		for (Source source : sources)
 		{
 			SourcePage sPage = new SourcePage(source);
@@ -86,17 +52,116 @@ public class IndexPage extends HTMLPage {
 			srcPathToPage.put( srcPath, sPage );
 		}
 		
-		HashMap<String, DiscussionPage> discNameToPage = new HashMap<String, DiscussionPage>();
+		discNameToPage = new HashMap<String, DiscussionPage>();
 		for (Discussion disc : discussions)
 		{
 			DiscussionPage dPage = new DiscussionPage(disc);
 			String discName = disc.getDiscName();
 			discNameToPage.put(discName, dPage);
 		}
+	}
+
+	@Override
+	protected String getBody() {
+		Element body = DocumentHelper.createElement("body");
 		
-		// TODO(Shay): 2. Parse the links file and connect it with the sources
+		body.addElement("h1").addText( tok.getProject().getName() );
 		
-		// 3. Generate all the sub pages
+		Element author = body.addElement("p").addText("Created By: ");
+		author.addElement("em").addText(tok.getProjectCreator());
+		
+		body.add( getSourcesElement(true) );
+		body.add( getSourcesElement(false) );
+		body.add( getDiscussionElement() );
+		
+		return GeneralFunctions.elementToString(body);
+	}
+	
+	/**
+	 * Returns a list of either sources or roots as an html elements
+	 * If the list is empty, returns an empty div element instead
+	 * @param isRoot true if the list should be of roots
+	 * @return an html div element containing the entire list
+	 */
+	public Element getSourcesElement(boolean genRoot)
+	{
+		Element main = DocumentHelper.createElement("div");
+		String listTitle = genRoot ? "Roots" : "Sources";
+		
+		main.addElement("h2").addText(listTitle);
+		
+		int numItems = 0; // the number of items in the list
+		
+		Element rootsList = main.addElement("ul");
+		for (Source src : sources)
+		{
+			if (src.isRoot() == genRoot)
+				continue;
+			
+			Element item = rootsList.addElement("li");
+			
+			String srcPath = src.getFile().getProjectRelativePath().toString();
+			
+			Element a = item.addElement("a");
+			SourcePage sPage = srcPathToPage.get( srcPath );
+			a.addAttribute("href", getPathTo(sPage) );
+			// a.addAttribute("tooltip", value)
+			a.addText( src.getTitle() );
+			
+			item.addText(", by ");
+			item.addElement("em").addText( src.getAuthor() );
+			item.addText(" (" + srcPath + ")" );
+			
+			numItems ++;
+		}
+		
+		if (numItems > 0)
+			return main;
+		// else, we return an empty div
+		return DocumentHelper.createElement("div");
+	}
+	
+	/**
+	 * Returns a list of links to discussions, or empty div if no discussions exist
+	 * @return an html div element containing the entire list
+	 */
+	public Element getDiscussionElement()
+	{
+		Element main = DocumentHelper.createElement("div");
+		
+		if (discussions.length == 0)
+			return main; // empty div
+		
+		main.addElement("h2").addText("Discussions");
+			
+		Element rootsList = main.addElement("ul");
+		for (Discussion disc : discussions)
+		{	
+			Element item = rootsList.addElement("li");
+			
+			Element a = item.addElement("a");
+			DiscussionPage dPage = discNameToPage.get( disc.getDiscName() );
+			a.addAttribute("href", getPathTo(dPage) );
+			// TODO(Shay, low): Add a normal tooltip in the index page
+			//   a.addAttribute("tooltip", disc.getLinkType() );
+			a.addText( disc.getDiscName() );
+			
+			item.addText(", by ");
+			item.addElement("em").addText( disc.getCreatorName() );
+			item.addText(" (" + disc.getDiscFileName() + ")" );
+		}
+		
+		return main;
+	}
+	
+	
+	@Override
+	public void generatePage() throws CoreException
+	{
+		super.generatePage();
+		// TODO(Shay): 1. Parse the links file and connect it with the sources
+		
+		// 2. Generate all the sub pages
 		for (SourcePage sPage : srcPathToPage.values())
 			sPage.generatePage();
 		

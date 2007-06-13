@@ -2,6 +2,8 @@ package lost.tok.html;
 
 import java.util.LinkedList;
 
+import lost.tok.ToK;
+
 /**
  * In case two discussions are linked to the same text
  * Clicking on that text in the source opens a window
@@ -20,7 +22,7 @@ public class DiscConflictPage extends HTMLPage {
 	{
 		super( d.getFirst().getTok(), 
 				"Select Discussion", 
-				"html/other/conf" + counter + ".html", 
+				ToK.HTML_FOLDER + "/other/conf" + counter + ".html", 
 				"../" + HTMLPage.DEFAULT_CSS );
 		
 		discs = d;
