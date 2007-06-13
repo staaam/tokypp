@@ -5,7 +5,6 @@ import java.util.TreeMap;
 
 import lost.tok.Author;
 import lost.tok.AuthorsHandler;
-import lost.tok.Discussion;
 import lost.tok.Rank;
 import lost.tok.ToK;
 
@@ -22,6 +21,9 @@ import org.eclipse.ui.part.FileEditorInput;
 public class AuthorsEditor extends TextEditor {
 	
 	/******* M E M B E R S *******************************/
+	
+	// Note(Shay): I've moved this from the discussion, since we cannot trust the def opinion id
+	public static final int DEFAULT_OPINION_ID = 1;
 	
 	public static final String EDITOR_ID = "lost.tok.authEditor.AuthorsEditor";
 	private static final String DISCUSSION = "discussion";
@@ -626,7 +628,7 @@ public class AuthorsEditor extends TextEditor {
 //	move diven quote to default
 	public void moveAuthorToDefault(TreeItem itemToMove) {
 		Author author = getAuthor(itemToMove);
-		authHandler.relocateAuthor(author.getName(), Discussion.DEFAULT_OPINION_ID);
+		authHandler.relocateAuthor(author.getName(), AuthorsEditor.DEFAULT_OPINION_ID);
 	}
 
 //	move given quote to opinion

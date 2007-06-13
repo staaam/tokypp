@@ -135,7 +135,7 @@ public class OpinionCombo extends Composite implements SelectionListener {
 	 */
 	public void setText(String opinion) {
 		opinCombo.setText(
-				(opinion == null || opinCombo.indexOf(opinion) == -1) ? Discussion.DEFAULT_OPINION : opinion);
+				(opinion == null || opinCombo.indexOf(opinion) == -1) ? Discussion.DEFAULT_OPINION_DISPLAY : opinion);
 	}
 
 }

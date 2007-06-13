@@ -15,14 +15,17 @@ public class Opinion {
 	int id;
 
 	public Opinion(String name, int id) {
-		super();
 		this.name = name;
 		this.id = id;
 	}
 
 	public Opinion(Element e) {
-		this(e.element("name").getText(), Integer.valueOf(e.element("id") //$NON-NLS-1$ //$NON-NLS-2$
-				.getText()));
+		name = e.element("name").getText();  //$NON-NLS-1$
+		id = Integer.valueOf(e.element("id").getText());  //$NON-NLS-1$
+		
+		// Note(Shay): Sets the name as the display name
+		if ( name.equals(Discussion.DEFAULT_OPINION_XML) )
+			name = Discussion.DEFAULT_OPINION_DISPLAY;
 	}
 
 	public int getId() {
