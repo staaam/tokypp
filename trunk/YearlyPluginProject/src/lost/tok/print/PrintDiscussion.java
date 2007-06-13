@@ -11,6 +11,7 @@ import lost.tok.Link;
 import lost.tok.Opinion;
 import lost.tok.Quote;
 import lost.tok.Source;
+import lost.tok.SubLink;
 import lost.tok.sourceDocument.SourceDocument;
 
 public class PrintDiscussion {
@@ -35,12 +36,19 @@ public class PrintDiscussion {
 		
 		//if the discussion was linked, the source it was linked to:
 		Link link = d.getLink();
+		
 		if (link!=null){
-			System.out.println("Related to: " + link.getLinkedSource());
-			System.out.println("Link Type " + link.getLinkType());
 			
-//			the text of the link:
+			//the text of the link:
 			System.out.println(link.getSubject());
+			//the link type
+			System.out.println("Link Type " + link.getDisplayLinkType());
+			
+			//links to sources:
+			System.out.println("Related to: ");
+			for (SubLink sl: link.getSubLinkList()){
+				System.out.println(sl.getLinkedSource());
+			}
 		}
 	
 		System.out.println("");
