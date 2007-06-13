@@ -82,12 +82,14 @@ public class DiscussionEditor extends TextEditor {
 		disTree.addKeyListener(new KeyListener() {
 			public void keyPressed(KeyEvent e) {
 				if (e.keyCode == SWT.DEL) {
-					// deletion of descussion or default opinion is NOT allowed
-					if (disTree.getSelection()[0].getData().equals(DISCUSSION)
-							|| (disTree.getSelection()[0].getData().equals(
-									OPINION) && discussion.getOpinionsId(
-									disTree.getSelection()[0].getText())
-									.equals(Discussion.DEFAULT_OPINION_ID))) {
+					// deletion of discussion is not allowed
+					if (disTree.getSelection()[0].getData().equals(DISCUSSION))
+						return;
+					
+					// deletion of default opinion is NOT allowed
+					if (disTree.getSelection()[0].getData().equals(OPINION) && 
+							discussion.isDefaultOpinion(disTree.getSelection()[0].getText())) 
+					{
 						return;
 					}
 
@@ -96,18 +98,19 @@ public class DiscussionEditor extends TextEditor {
 						TreeItem defOp = null;
 						TreeItem itmArr[] = disTree.getItem(0).getItems();
 
-						// fatch default opinion
+						// fetch default opinion
 						for (TreeItem element : itmArr) {
-							if (discussion.getOpinionsId(element.getText())
-									.equals(Discussion.DEFAULT_OPINION_ID)) {
+							if (discussion.isDefaultOpinion(element.getText()) )
+							{
 								defOp = element;
 							}
 						}
 
 						// if no default opinion create one
 						if (defOp == null) {
+							System.out.println("Shay: Shouldn't be here");
 							defOp = new TreeItem(disTree.getItem(0), SWT.NONE);
-							defOp.setText(Discussion.DEFAULT_OPINION);
+							defOp.setText(Discussion.DEFAULT_OPINION_DISPLAY);
 							defOp.setData(OPINION);
 						}
 
@@ -729,7 +732,7 @@ public class DiscussionEditor extends TextEditor {
 //	move diven quote to default
 	public void moveQuoteToDefault(TreeItem itemToMove) {
 		Quote quote = getQuote(itemToMove);
-		discussion.relocateQuote(quote.getID(), Discussion.DEFAULT_OPINION_ID);// discussion.getOpinionsId(Discussion.DEFAULT_OPINION));
+		discussion.relocateQuote(quote.getID(), discussion.getDefOpID());// discussion.getOpinionsId(Discussion.DEFAULT_OPINION));
 	}
 
 //	move given quote to opinion

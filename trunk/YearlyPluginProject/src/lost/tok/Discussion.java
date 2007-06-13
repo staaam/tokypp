@@ -7,6 +7,7 @@ import java.util.List;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.dom4j.Node;
 import org.dom4j.XPath;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -19,10 +20,12 @@ public class Discussion implements Comparable<Discussion> {
 
 	private static final String DISCUSSION_EXTENSION = "dis"; //$NON-NLS-1$
 
-	public static final String DEFAULT_OPINION = Messages
+	/** The Default opinion's display name (as displayed to the user) */
+	public static final String DEFAULT_OPINION_DISPLAY = Messages
 			.getString("Discussion.DefOpinion"); //$NON-NLS-1$
-
-	public static final int DEFAULT_OPINION_ID = 1;
+	
+	/** The Default opinion's name, as appearing in the xml file */
+	public static final String DEFAULT_OPINION_XML = "General"; //$NON-NLS-1$
 
 	/**
 	 * The types of the relations, as strings displayable to the user The order
@@ -67,6 +70,7 @@ public class Discussion implements Comparable<Discussion> {
 
 	private String creatorName;
 
+	/** The highest id in the discussion */
 	private Integer id = 1;
 	
 	private Link link = null;
@@ -74,15 +78,21 @@ public class Discussion implements Comparable<Discussion> {
 	private String linkType=null;
 
 	private Source linkedSource=null;
+	
+	/** The id of the default opinion (might not be 1) */
+	private int defaultOpinionID;
 
 	/**
 	 * constructor for discussion from an XML file
-	 * 
-	 * @param myToK
-	 * @param filename
 	 */
 	public Discussion(ToK myToK, String filename) {
-		super();
+		loadDiscussionFromFile(myToK, filename);
+	}
+
+	/**
+	 * Updates the Discussion with information from the disk
+	 */
+	private void loadDiscussionFromFile(ToK myToK, String filename) {
 		int max = 0;
 		this.myToK = myToK;
 
@@ -92,6 +102,10 @@ public class Discussion implements Comparable<Discussion> {
 				.selectSingleNode(d).getText());
 		setCreatorName(DocumentHelper.createXPath("/discussion/user") //$NON-NLS-1$
 				.selectSingleNode(d).getText());
+		
+		XPath defOpSelector = DocumentHelper.createXPath("/discussion/opinion[name='" + DEFAULT_OPINION_XML + "']/id"); 
+		Node defOpIdNode = defOpSelector.selectSingleNode(d); 
+		defaultOpinionID = Integer.valueOf( defOpIdNode.getText() );
 
 		List result = DocumentHelper.createXPath("//id").selectNodes(d); //$NON-NLS-1$
 		for (Iterator i = result.iterator(); i.hasNext();) {
@@ -101,7 +115,6 @@ public class Discussion implements Comparable<Discussion> {
 			}
 		}
 		id = max;
-
 	}
 
 	/**
@@ -112,13 +125,15 @@ public class Discussion implements Comparable<Discussion> {
 	 * @param creatorName
 	 */
 	public Discussion(ToK myToK, String discName, String creatorName) {
-		super();
 		this.myToK = myToK;
 		this.discName = discName;
 		this.creatorName = creatorName;
+		this.defaultOpinionID = 1;
+		this.id = 1;
 
 		if (new File(getFullFileName()).exists()) {
 			System.out.println("discussion " + discName + " already exists"); //$NON-NLS-1$ //$NON-NLS-2$
+			loadDiscussionFromFile(myToK, getFullFileName());
 			return;
 		}
 
@@ -141,6 +156,10 @@ public class Discussion implements Comparable<Discussion> {
 			// does nothing if opinion already exist
 			return;
 		}
+		
+		// Can't add an opinion with the same name as the default opinion
+		if (opinionName.equals(DEFAULT_OPINION_DISPLAY))
+			return;
 
 		// detach all the relations
 		// Note(Shay): We do this in order to maintein the order enforced in the
@@ -174,21 +193,25 @@ public class Discussion implements Comparable<Discussion> {
 	 * 
 	 * @param quote -
 	 *            the quote to add
-	 * @param opinion
+	 * @param opinionDisp The display name of the opinion to which the quote should be added
 	 * @throws CoreException
 	 */
-	public void addQuote(Quote quote, String opinion) throws CoreException {
+	public void addQuote(Quote quote, String opinionDisp) throws CoreException {
 
 		if (!myToK.getProject().exists() || quote == null) {
 			GeneralFunctions.throwCoreException("problem with atributes to addQuote"); //$NON-NLS-1$
 			return;
 		}
-
+		
+		String opinionXML = opinionDisp;
+		if (opinionXML.equals(DEFAULT_OPINION_DISPLAY))
+			opinionXML = DEFAULT_OPINION_XML;
+			
 		Document doc = readFromXML();
 
 		// creating the xPath
 		XPath xpathSelector = DocumentHelper.createXPath("//opinion[name='" //$NON-NLS-1$
-				+ opinion + "']"); //$NON-NLS-1$
+				+ opinionXML + "']"); //$NON-NLS-1$
 		List result = xpathSelector.selectNodes(doc);
 		if (result.size() != 1) {
 			// cant found the defult opinion
@@ -201,7 +224,7 @@ public class Discussion implements Comparable<Discussion> {
 
 		writeToXml(doc);
 
-		myToK.setLatestDiscussionOpinion(getDiscName(),	opinion);
+		myToK.setLatestDiscussionOpinion(getDiscName(),	opinionDisp);
 	}
 
 	// demo addQuote for testing
@@ -313,6 +336,9 @@ public class Discussion implements Comparable<Discussion> {
 
 		for (int i = 0; i < ops.length; i++) {
 			ss[i] = ops[i].getName();
+			// Note(Shay): Discussion hides the opinion XML name
+			if (ss[i].equals(DEFAULT_OPINION_XML))
+				ss[i] = DEFAULT_OPINION_DISPLAY;
 		}
 
 		return ss;
@@ -333,6 +359,22 @@ public class Discussion implements Comparable<Discussion> {
 
 		return ss;
 	}
+	
+	/**
+	 * Returns true if the opinion's display name is the same as the def opinion's display name
+	 * @param opinionName the name of the opinion
+	 * @return true if it is the default opinion, false otherwise
+	 */
+	public boolean isDefaultOpinion(String opinionName)
+	{
+		return opinionName.equals( DEFAULT_OPINION_DISPLAY );
+	}
+	
+	/** Returns true iff this is the def opinion */
+	public boolean isDefaultOpinion(int opinionID)
+	{
+		return opinionID == defaultOpinionID;
+	}
 
 	public Integer getOpinionsId(String opinionName) {
 		for (Opinion opinion : getOpinions()) {
@@ -347,16 +389,20 @@ public class Discussion implements Comparable<Discussion> {
 	/**
 	 * getting the quotes from an opinion
 	 * 
-	 * @param opinion
+	 * @param opinionDisp The display name of the opinion
 	 * @return quotes
 	 */
-	public Quote[] getQuotes(String opinion) {
+	public Quote[] getQuotes(String opinionDisp) {
 
 		int j = 0;
 		Document doc = readFromXML();
+		
+		String opinionXML = opinionDisp;
+		if (opinionXML.equals(DEFAULT_OPINION_DISPLAY))
+			opinionXML = DEFAULT_OPINION_XML;
 
 		List result = doc
-				.selectNodes("//opinion[name='" + opinion + "']/quote"); //$NON-NLS-1$ //$NON-NLS-2$
+				.selectNodes("//opinion[name='" + opinionXML + "']/quote"); //$NON-NLS-1$ //$NON-NLS-2$
 
 		Quote[] quotes = new Quote[result.size()];
 		for (Object object : result) {
@@ -515,8 +561,8 @@ public class Discussion implements Comparable<Discussion> {
 		disc.addElement("name").addText(discName); //$NON-NLS-1$
 		disc.addElement("user").addText(creatorName); //$NON-NLS-1$
 		Element defOpin = disc.addElement("opinion"); //$NON-NLS-1$
-		defOpin.addElement("id").addText("1"); //$NON-NLS-1$ //$NON-NLS-2$
-		defOpin.addElement("name").addText(DEFAULT_OPINION); //$NON-NLS-1$
+		defOpin.addElement("id").addText("" + defaultOpinionID); //$NON-NLS-1$ //$NON-NLS-2$
+		defOpin.addElement("name").addText(DEFAULT_OPINION_XML); //$NON-NLS-1$
 		return doc;
 	}
 
@@ -602,6 +648,12 @@ public class Discussion implements Comparable<Discussion> {
 	public Link getLink() {
 		return link;
 		
+	}
+	
+	/** Returns the id of the default opinion in this discussion */
+	public int getDefOpID()
+	{
+		return defaultOpinionID;
 	}
 }
 	

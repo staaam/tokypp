@@ -71,6 +71,8 @@ public class AddOpinionWizardPage extends WizardPage implements ModifyListener {
 		} else if (opinions.contains(opinionArea.getText())) {
 			updateStatus(Messages
 					.getString("AddOpinionWizardPage.ErrOpinionExists")); //$NON-NLS-1$
+		} else if (opinionArea.getText().equals(Discussion.DEFAULT_OPINION_XML)) {
+			updateStatus("The name \"" + Discussion.DEFAULT_OPINION_XML + "\" is not a valid opinion name");
 		} else {
 			updateStatus(null);
 		}
