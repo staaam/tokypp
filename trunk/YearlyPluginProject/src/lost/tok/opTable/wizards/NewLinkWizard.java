@@ -62,27 +62,30 @@ public class NewLinkWizard extends Wizard implements INewWizard {
 	public boolean performFinish() {
 		tok = page.getTok();
 		String[] roots = page.getSourceFiles();
-		// TODO
+		Discussion d = null;
+		
 		try {
-			for (String root : roots) {
-				Discussion d = tok.getDiscussion(page.getDiscussionName());
-				Link link = new Link(new Source(tok, root),d,
-						page.getLinkType(),tok.getLinkFile(),
-						page.getExcerptions(root),page.getSubject());
-				
-				d.setLink(link);
-				
-				//new Link class replaced this
-				//	tok.linkDiscussionRoot(tok.getDiscussion(page.getDiscussion()),
-				//	new Source(tok, root), page.getExcerptions(root), page
-				//			.getSubject(), page.getLinkType());
-
-			}
-
-		} catch (CoreException e) {
+			d = tok.getDiscussion(page.getDiscussionName());
+		} catch (CoreException e1) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			e1.printStackTrace();
 		}
+		
+		Link link = new Link(d, page.getLinkType(),tok.getLinkFile(),page.getSubject());
+		
+		
+		for (String root : roots) {
+			
+			link.linkDiscussionRoot(new Source(tok, root),page.getExcerptions(root));
+						
+			//new Link class replaced this
+			//	tok.linkDiscussionRoot(tok.getDiscussion(page.getDiscussion()),
+			//	new Source(tok, root), page.getExcerptions(root), page
+			//			.getSubject(), page.getLinkType());
+
+		}
+		
+		d.setLink(link);
 		return true;
 	}
 
