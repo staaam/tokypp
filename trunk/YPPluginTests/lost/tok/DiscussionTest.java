@@ -65,7 +65,7 @@ public class DiscussionTest extends TestCase {
 		tok.addDiscussion("test");
 		Discussion disc = tok.getDiscussion("test");
 		disc.addOpinion("one");
-		disc.addOpinion(Discussion.DEFAULT_OPINION);
+		disc.addOpinion(Discussion.DEFAULT_OPINION_DISPLAY);
 		disc.addOpinion("one");
 
 		Document doc = DocumentHelper.createDocument();
