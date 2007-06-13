@@ -2,6 +2,7 @@ package lost.tok;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -13,6 +14,7 @@ import java.util.HashMap;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
@@ -133,6 +135,26 @@ public class GeneralFunctions {
 	public static boolean fileInFolder(IFile file, IFolder folder) {
 		String r = folder.getFullPath().toPortableString();
 		return file.getFullPath().toPortableString().startsWith(r);
+	}
+	
+	public static String elementToString(Element elem)
+	{
+		OutputFormat outformat = OutputFormat.createPrettyPrint();
+		outformat.setEncoding("UTF-8"); //$NON-NLS-1$
+		
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		String retVal;
+		try {
+			XMLWriter writer = new XMLWriter(baos, outformat);
+			writer.write(elem);
+			writer.flush();
+			retVal = baos.toString("UTF-8");
+		} catch (IOException e) {
+			retVal = "Error " + e.getMessage();
+			e.printStackTrace();
+		}
+		
+		return retVal;
 	}
 
 }

@@ -58,7 +58,7 @@ abstract public class HTMLPage
 	
 	/**
 	 * Returns the body of the html page
-	 * Should return all the content between the \<body\> and \</body\> tages  
+	 * Should return the element &lt;body&gt; with all its content as a string
 	 */
 	protected abstract String getBody(); 
 	
@@ -83,10 +83,9 @@ abstract public class HTMLPage
 		htmlPage.append("\t<meta name=\"author\" content=\"Tree of Knowledge Site Exporter\" />\n");
 		htmlPage.append("\n");
 		htmlPage.append("</head>\n");
-		htmlPage.append("<body>\n");
+		// htmlPage.append("<body>\n");
 		htmlPage.append("\t" + body.replaceAll("\n", "\n\t"));
-		//htmlPage.append("\t" + getBody(); // TODO(Shay, low): Make sure the final xml looks good
-		htmlPage.append("</body>\n");
+		// htmlPage.append("</body>\n");
 		htmlPage.append("</html>\n");
 		
 		return htmlPage.toString();
@@ -183,12 +182,15 @@ abstract public class HTMLPage
 			pathIdx ++;
 		}
 		
-		while (pathIdx < targetExportPath.length)
+		while (pathIdx < targetExportPath.length - 1)
 		{
 			// now we ascend directories to the target path
 			path += targetExportPath[pathIdx] + "/";
 			pathIdx ++;
 		}
+		
+		// we want to add the last file without a trailing "/"
+		path += targetExportPath[ targetExportPath.length - 1 ];
 		
 		return path;	
 	}

@@ -29,7 +29,7 @@ public class Heading implements SrcElem
 		// the biggest heading allowed is h2. h1 is reserved for the page's title
 		String hTitle = "h" + (depth + 1); 
 		String id = (getID() == null) ? ("") : ("id=#" + getID());
-		return "<" + hTitle + " " + id + ">" + title + "</" + hTitle + ">";
+		return "<" + hTitle + " " + id + ">" + title + "</" + hTitle + ">\n";
 	}
 	
 	public String getID() 

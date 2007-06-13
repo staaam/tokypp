@@ -8,6 +8,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 
 import lost.tok.Source;
+import lost.tok.ToK;
 import lost.tok.html.srcElem.Heading;
 import lost.tok.html.srcElem.LinkedParagraph;
 import lost.tok.html.srcElem.SrcElem;
@@ -123,11 +124,12 @@ public class SourcePage extends HTMLPage {
 	static protected String getExportPath(Source src)
 	{
 		IPath emptyPath = src.getTok().getProject().getProjectRelativePath();
-		IPath htmlDirPath = emptyPath.append("html/");
+		IPath htmlDirPath = emptyPath.append(ToK.HTML_FOLDER + "/");
 		IPath srcPath = htmlDirPath.append(src.getFile().getProjectRelativePath());
 		
-		// FIXME(Shay): Verify this is correct
-		return srcPath.removeFileExtension().addFileExtension(".html").toString();
+		IPath fixedExtension = srcPath.removeFileExtension().addFileExtension("html"); 
+		
+		return fixedExtension.removeTrailingSeparator().toString();
 	}
 	
 	@Override
@@ -135,6 +137,7 @@ public class SourcePage extends HTMLPage {
 	{
 		StringBuffer s = new StringBuffer();
 		
+		s.append( "<body>" );
 		s.append( "<h1>" + srcDoc.getTitle() + "</h1>\n" );
 		s.append( "<p>Written by: <em>" + srcDoc.getAuthor() + "</em></p>\n" );
 		
@@ -145,6 +148,8 @@ public class SourcePage extends HTMLPage {
 		{
 			s.append ( "\t" + e.getHTMLText().replaceAll("\n", "\t\n") );
 		}
+		
+		s.append( "</body>\n" );
 	
 		return s.toString();
 	}

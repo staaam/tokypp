@@ -133,7 +133,7 @@ public class LinkedParagraph implements SrcElem
 	public String getHTMLText() {
 		StringBuffer s = new StringBuffer( text.length() * 2 );
 		
-		s.append("<p>\n");
+		s.append("<p>");
 		
 		int currOffset = 0;
 		
@@ -178,7 +178,7 @@ public class LinkedParagraph implements SrcElem
 		if (currOffset != text.length())
 		{
 			String unlinkedText = text.substring(currOffset, text.length());
-			s.append( "\t" + GeneralFunctions.xmlEscape(unlinkedText) + "\n" );
+			s.append( "\t" + GeneralFunctions.xmlEscape(unlinkedText) );
 		}
 		s.append("</p>\n");
 		

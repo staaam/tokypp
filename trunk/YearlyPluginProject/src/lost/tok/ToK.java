@@ -59,6 +59,8 @@ public class ToK {
 	/** The name of the folder in which we store our unparsed sources */
 	static public final String UNPARSED_SOURCES_FOLDER = Messages
 			.getString("ToK.UnparsedFolder"); //$NON-NLS-1$
+	
+	static public final String HTML_FOLDER = "html";
 
 	public static boolean checkFileName(String projectName) {
 		if (projectName.replace('\\', '/').indexOf('/', 1) > 0)

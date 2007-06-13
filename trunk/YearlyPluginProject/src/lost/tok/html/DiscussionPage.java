@@ -1,9 +1,13 @@
 package lost.tok.html;
 
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 
 import lost.tok.Discussion;
+import lost.tok.GeneralFunctions;
+import lost.tok.ToK;
 
 /**
  * An HTML exported version of a Discussion file
@@ -14,6 +18,8 @@ import lost.tok.Discussion;
 public class DiscussionPage extends HTMLPage {
 	
 	public static String DISCUSSION_CSS = DEFAULT_CSS;
+	
+	private Discussion disc;
 
 	public DiscussionPage(Discussion disc)
 	{
@@ -21,6 +27,8 @@ public class DiscussionPage extends HTMLPage {
 				disc.getDiscFileName(),
 				getExportPath(disc),
 				getCSSPath(disc));
+		
+		this.disc = disc;
 				
 	}
 	
@@ -33,10 +41,10 @@ public class DiscussionPage extends HTMLPage {
 	{
 		IProject proj = disc.getMyToK().getProject();
 		
-		IPath path = proj.getProjectRelativePath().append("html/");
+		IPath path = proj.getProjectRelativePath().append(ToK.HTML_FOLDER + "/");
 		path = path.append(disc.getFile().getProjectRelativePath());
 		
-		path = path.removeFileExtension().addFileExtension(".html");
+		path = path.removeFileExtension().addFileExtension("html").removeTrailingSeparator();
 		
 		return path.toString();
 	}
@@ -55,9 +63,18 @@ public class DiscussionPage extends HTMLPage {
 	}
 	
 	@Override
-	protected String getBody() {
-		// TODO(Shay) Auto-generated method stub
-		return null;
+	protected String getBody() 
+	{
+		Element body = DocumentHelper.createElement("body");
+		
+		body.addElement("h1").addText(disc.getDiscName());
+		
+		body.addText("Created By: ");
+		body.addElement("em").addText(disc.getCreatorName());
+		
+		
+		// TODO(Shay) continue working on the getBody method
+		return GeneralFunctions.elementToString(body);
 	}
 
 }
