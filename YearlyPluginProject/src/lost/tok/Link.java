@@ -1,39 +1,65 @@
 package lost.tok;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.Node;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
 
 //this class represents a link between the discussion and the source
 public class Link {
 
-	private String linkType;
+	/**
+	 * The types of the links, as strings displayable to the user The order of
+	 * the strings should be the same as in the linkXMLTypes array
+	 */
+	public static final String[] linkDisplayNames = {
+			Messages.getString("Link.General"), Messages.getString("Link.Difficulty"), //$NON-NLS-1$ //$NON-NLS-2$
+			Messages.getString("Link.Interpretation") }; //$NON-NLS-1$
+
+	/**
+	 * The types of the links, as the xml scheme defines The order of the
+	 * strings should be the same as in the linkDisplayNames array
+	 */
+	public static final String[] linkXMLTypes = {
+			"general", "difficulty", "interpretation" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+
+	
+	private String linkTypeXML;
 	private Discussion linkedDiscussion;
-	private Source linkedSource;
+	private List<SubLink> subLinkList;
 	private IFile linkFile;
-	private Excerption[] exp;
 	private String subject;
 	
 	
-	public Link(Source linkedSource,Discussion linkedDiscussion,
-					String linkType,IFile linkFile, Excerption[] exp, String subject){
+//	public Link(Source linkedSource,Discussion linkedDiscussion,
+//					String linkType,IFile linkFile, Excerption[] exp, String subject){
+	public Link(Discussion linkedDiscussion, String linkTypeXML,
+									IFile linkFile, String subject){
 		
-		this.linkedSource=linkedSource;
+		subLinkList = new LinkedList<SubLink>();
+		
 		this.linkedDiscussion=linkedDiscussion;
-		this.linkType = linkType;
+		this.linkTypeXML = linkTypeXML;
 		this.linkFile = linkFile;
-		this.exp = exp;
 		this.subject = subject;
 		
-		linkDiscussionRoot();
+		//linkDiscussionRoot();
 	}
+	
+
 	
 	/**
 	 * Links an existing discussion to a segment in the root of the ToK project
 	 */
-	public void linkDiscussionRoot() {
-
+	public void linkDiscussionRoot(Source linkedSource, Excerption[]exp) {
+		
+		SubLink sl = new SubLink(linkedSource,exp);
+		subLinkList.add(sl);
+		
 		String discFileName = linkedDiscussion.getDiscFileName();
 
 		// Open the Links file
@@ -49,7 +75,7 @@ public class Link {
 			Element links = doc.getRootElement();
 			newLink = links.addElement("link"); //$NON-NLS-1$
 			newLink.addElement("discussionFile").addText(discFileName); //$NON-NLS-1$
-			newLink.addElement("type").addText(linkType); //$NON-NLS-1$
+			newLink.addElement("type").addText(linkTypeXML); //$NON-NLS-1$
 			newLink.addElement("linkSubject").addText(subject); //$NON-NLS-1$
 		}
 
@@ -65,20 +91,13 @@ public class Link {
 		GeneralFunctions.writeToXml(linkFile, doc);
 	}
 
-	public Source getLinkedSource() {
-		return linkedSource;
-	}
-	
-	public void setLinkedSource(Source s){
-		this.linkedSource = s;
-	}
 
 	public String getLinkType() {
-		return linkType;
+		return linkTypeXML;
 	}
 	
 	public void setLinkType(String lt) {
-		this.linkType=lt;
+		this.linkTypeXML=lt;
 	}
 	
 	public Discussion getLinkedDiscussion() {
@@ -97,20 +116,27 @@ public class Link {
 		this.linkFile = lf;
 	}
 	
-	public Excerption[] getExcerption() {
-		return exp;
-	}
-	
-	public void setExcerption(Excerption[] e){
-		this.exp = e;
-	}
-	
 	public String getSubject() {
 		return subject;
 	}
 	
 	public void setSubject(String s){
 		this.subject = s;
+	}
+
+
+
+	public String getDisplayLinkType() {
+		for (int i = 0; i < linkXMLTypes.length; i++) {
+			if (linkXMLTypes[i].equals(linkTypeXML))
+				return linkDisplayNames[i];
+		}
+		// if not found, perhaps this is a newly defined type of link
+		return linkTypeXML;
+	}
+
+	public List<SubLink> getSubLinkList() {
+		return subLinkList;
 	}
 	
 }
