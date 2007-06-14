@@ -11,13 +11,15 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.search.internal.ui.text.FileSearchQuery;
 import org.eclipse.search.internal.ui.text.FileSearchResult;
 import org.eclipse.search.internal.ui.text.SearchResultUpdater;
 import org.eclipse.search.ui.ISearchQuery;
 import org.eclipse.search.ui.ISearchResult;
 import org.eclipse.search.ui.NewSearchUI;
+import org.eclipse.search.ui.text.FileTextSearchScope;
 
-public class ToKSearchQuery implements ISearchQuery {
+public class ToKSearchQuery extends FileSearchQuery implements ISearchQuery {
 
 	private ToKSearchResult fResult;
 	
@@ -28,6 +30,8 @@ public class ToKSearchQuery implements ISearchQuery {
 	public ToKSearchQuery(String searchPattern,
 			EnumSet<SearchOption> searchOptions,
 			List<IResource> scope) {
+		super(searchPattern, false, searchOptions.contains(SearchOption.CASE_SENSITIVE),
+				FileTextSearchScope.newSearchScope(scope.toArray(new IResource[scope.size()]), new String[0], true));
 		this.searchPattern = searchPattern;
 		this.searchOptions = searchOptions;
 		this.scope = scope;

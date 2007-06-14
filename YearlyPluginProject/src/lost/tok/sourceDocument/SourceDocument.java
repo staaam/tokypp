@@ -20,6 +20,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.Document;
+import org.eclipse.jface.text.TextSelection;
 
 /**
  * A document which can be displayed to the user From this document the user
@@ -29,12 +30,12 @@ public class SourceDocument extends Document {
 	/** The root chapter of the sourceDocument */
 	private Chapter rootChapter;
 
-	/** The title of the document (includes the source path) */
-	private String title;
-
-	/** The author of the document */
-	private String author;
-
+//	/** The title of the document (includes the source path) */
+//	private String title;
+//
+//	/** The author of the document */
+//	private String author;
+//
 	/** A list of all the documents chapters */
 	private List<Chapter> chapters;
 
@@ -141,8 +142,8 @@ public class SourceDocument extends Document {
 		r = new RangeSearch();
 
 		Element root = d.getRootElement();
-		title = root.elementTextTrim("name"); //$NON-NLS-1$
-		author = root.elementTextTrim("author"); //$NON-NLS-1$
+		keywordsMap.put(KEYWORD.TITLE, root.elementTextTrim("name")); //$NON-NLS-1$
+		keywordsMap.put(KEYWORD.AUTHOR, root.elementTextTrim("author")); //$NON-NLS-1$
 
 		rootChapter = new Chapter(getHeader(),
 				"", root, Chapter.CHAPTER_STR + " "); //$NON-NLS-1$ //$NON-NLS-2$
@@ -162,8 +163,8 @@ public class SourceDocument extends Document {
 	public void setUnparsed(String s, String title, String author) {
 		chapters = new LinkedList<Chapter>();
 		r = new RangeSearch();
-		this.title = title;
-		this.author = author;
+		keywordsMap.put(KEYWORD.TITLE, title);
+		keywordsMap.put(KEYWORD.AUTHOR, author);
 
 		ChapterText ctext = new ChapterText(Chapter.UNPARSED_STR, s.trim() + "\n", null); //$NON-NLS-1$
 		Chapter firstChapter = new Chapter(Chapter.CHAPTER_STR + " 1:\t" + //$NON-NLS-1$
@@ -232,8 +233,8 @@ public class SourceDocument extends Document {
 		// Create the Skeleton of the source file
 		org.dom4j.Document sourceDoc = DocumentHelper.createDocument();
 		Element e = sourceDoc.addElement("source"); //$NON-NLS-1$
-		e.addElement("name").addText(title); //$NON-NLS-1$
-		e.addElement("author").addText(author); //$NON-NLS-1$
+		e.addElement("name").addText(keywordsMap.get(KEYWORD.TITLE)); //$NON-NLS-1$
+		e.addElement("author").addText(keywordsMap.get(KEYWORD.AUTHOR)); //$NON-NLS-1$
 
 		for (Chapter c : rootChapter.getChildren())
 			c.addToXml(e); // will add the chapter and its offsprings
@@ -241,21 +242,6 @@ public class SourceDocument extends Document {
 		return sourceDoc;
 	}
 
-	/** Returns the title (the upper label) of the source document */
-	protected String getHeader() {
-		return Messages.getString("SourceDocument.TitleLabel") + ":\t" + title + "\n" + //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				Messages.getString("SourceDocument.AuthorLabel") + ":\t" + author + "\n" + //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				"\n"; //$NON-NLS-1$
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public String getAuthor() {
-		return author;
-	}
-	
 	private void initXPathToChapter()
 	{
 		xPathToChapter = new HashMap<String, Chapter>( getAllChapters().size() );
@@ -271,4 +257,52 @@ public class SourceDocument extends Document {
 			xPathToChapter.put( c.getXPath(), c );
 		}
 	}
+
+	///////////////////////// 
+	String header = Messages.getString("SourceDocument.TitleLabel") + ":\t" //$NON-NLS-1$ //$NON-NLS-2$
+	              + toTemplateKeyword(KEYWORD.TITLE) + "\n"
+	              + Messages.getString("SourceDocument.AuthorLabel") + ":\t" //$NON-NLS-1$ //$NON-NLS-2$
+	              + toTemplateKeyword(KEYWORD.AUTHOR) + "\n\n";
+	
+	HashMap<KEYWORD, String> keywordsMap = new HashMap<KEYWORD, String>();
+	public enum KEYWORD { NULL, AUTHOR, TITLE }
+	
+	{
+		for (KEYWORD k : KEYWORD.values())
+			keywordsMap.put(k, "");
+	}
+	
+	static private String toTemplateKeyword(KEYWORD k) {
+		return "__" + k + "__";
+	}
+
+	/** Returns the title (the upper label) of the source document */
+	protected String getHeader() {
+		return substituteAllBut(header, KEYWORD.NULL);
+	}
+
+	private String substituteAllBut(String template, KEYWORD keyword) {
+		String substituted = header;
+		for (KEYWORD k : keywordsMap.keySet()) {
+			if (k.compareTo(keyword) == 0) continue;
+			substituted = substituted.replaceAll(toTemplateKeyword(k), keywordsMap.get(k));
+		}
+		return substituted;
+	}
+
+	public int getKeywordOffset(KEYWORD k) {
+		return substituteAllBut(header, k).indexOf(toTemplateKeyword(k));
+	}
+	public String getKeywordValue(KEYWORD keyword) {
+		return keywordsMap.get(keyword);
+	}
+
+	public String getTitle() {
+		return getKeywordValue(KEYWORD.TITLE);
+	}
+
+	public String getAuthor() {
+		return getKeywordValue(KEYWORD.AUTHOR);
+	}
+	
 }

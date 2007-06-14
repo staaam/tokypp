@@ -365,4 +365,19 @@
                toolbarPath="ToKGroup"/>
       </viewContribution>
    </extension>
+   <extension
+         point="org.eclipse.ui.editors.documentProviders">
+      <provider
+            class="lost.tok.opTable.SourceDocumentProvider"
+            extensions="src"
+            id="lost.tok.opTable.SourceDocumentProvider"/>
+   </extension>
+   <extension
+         point="org.eclipse.search.searchResultViewPages">
+      <viewPage
+            class="org.eclipse.search.internal.ui.text.FileSearchPage"
+            id="lost.tok.search.ToKSearchResultPage"
+            label="ToK Search Result Page"
+            searchResultClass="lost.tok.search.ToKSearchResult"/>
+   </extension>
 </plugin>
