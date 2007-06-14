@@ -22,12 +22,13 @@ import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.part.FileEditorInput;
 
 //public class ToKSearchResult extends FileSearchResult {
-public class ToKSearchResult extends AbstractTextSearchResult implements IEditorMatchAdapter, IFileMatchAdapter {
+public class ToKSearchResult extends FileSearchResult implements IEditorMatchAdapter, IFileMatchAdapter {
 	private final Match[] EMPTY_ARR= new Match[0];
 	
 	private ToKSearchQuery searchQuery;
 	
 	public ToKSearchResult(ToKSearchQuery query) {
+		super(query);
 		this.searchQuery = query;
 	}
 

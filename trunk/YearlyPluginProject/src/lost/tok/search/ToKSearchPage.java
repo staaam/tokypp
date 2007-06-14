@@ -1,5 +1,6 @@
 package lost.tok.search;
 
+import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -17,10 +18,27 @@ import org.eclipse.jface.dialogs.DialogPage;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.search.internal.ui.SearchPlugin;
+import org.eclipse.search.internal.ui.SearchPreferencePage;
+import org.eclipse.search.internal.ui.text.FileSearchPage;
+import org.eclipse.search.internal.ui.text.FileSearchQuery;
+import org.eclipse.search.internal.ui.text.SearchResultUpdater;
+import org.eclipse.search.internal.ui.text.TextSearchPage;
+import org.eclipse.search.ui.IQueryListener;
 import org.eclipse.search.ui.ISearchPage;
 import org.eclipse.search.ui.ISearchPageContainer;
 import org.eclipse.search.ui.ISearchQuery;
+import org.eclipse.search.ui.ISearchResult;
+import org.eclipse.search.ui.ISearchResultListener;
+import org.eclipse.search.ui.ISearchResultViewPart;
 import org.eclipse.search.ui.NewSearchUI;
+import org.eclipse.search.ui.SearchResultEvent;
+import org.eclipse.search.ui.text.FileTextSearchScope;
+import org.eclipse.search.ui.text.Match;
+import org.eclipse.search.ui.text.MatchEvent;
+import org.eclipse.search.ui.text.RemoveAllEvent;
+import org.eclipse.search2.internal.ui.SearchPageRegistry;
+import org.eclipse.search2.internal.ui.SearchView;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -175,7 +193,11 @@ public class ToKSearchPage extends DialogPage implements ISearchPage {
     }
     
     public boolean performAction() {
+    	//String[][] a = SearchPlugin.getDefault().getTextSearchEngineRegistry().getAvailableEngines();
+    	//SearchPlugin.getDefault().getPluginPreferences().setValue(SearchPreferencePage.TEXT_SEARCH_ENGINE, "lost.tok.textSearchEngine");
     	NewSearchUI.runQueryInBackground(getSearchQuery());
+    	//NewSearchUI.runQueryInBackground(getMySearchQuery());
+    	//NewSearchUI.runQueryInBackground();
 		return true;
 	}
 
