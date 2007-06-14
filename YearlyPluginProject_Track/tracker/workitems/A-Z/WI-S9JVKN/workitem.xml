@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <work-item>
     <field id="initialEstimate">2d</field>
+    <field id="resolution">fixed</field>
     <field id="type">task</field>
+    <field id="timeSpent">2d</field>
     <field id="author">Michael</field>
     <field id="title">13.3. Display the search results</field>
     <field id="created">2007-06-01 18:50:04.421 +0200</field>
     <field id="priority">25.0</field>
     <field id="description">Display the search results in the eclipse way (Search View)</field>
-    <field id="remainingEstimate">2d</field>
-    <field id="status">open</field>
+    <field id="status">closed</field>
     <field id="assignee">Michael</field>
     <field id="severity">normal</field>
+    <field id="previousStatus">open</field>
 </work-item>
