@@ -32,10 +32,14 @@ public class SwitchOpTableViewAction extends AbstractEditorAction {
 			}
 		}
 	}
-
-	public void run(IAction action) {
-		assert (activeEditor != null);
-
+	
+	
+	/**
+	 * The actual run method
+	 * Split from run in order to easily catch and print runtime exceptions
+	 */
+	private void actualRun(IAction action)
+	{
 		// return an error messege if called from a source that is not a root
 		if (((FileEditorInput) activeEditor.getEditorInput()).getFile()
 				.getProjectRelativePath().toPortableString().startsWith(
@@ -63,7 +67,16 @@ public class SwitchOpTableViewAction extends AbstractEditorAction {
 			if (AddQuoteAction.getQuoteAction() != null)
 				AddQuoteAction.getQuoteAction().setEnabled(true);
 		}
+	}
 
+	public void run(IAction action) {	
+		try {
+			assert (activeEditor != null);
+			actualRun(action);
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 	void messageBox(String title, String message) {

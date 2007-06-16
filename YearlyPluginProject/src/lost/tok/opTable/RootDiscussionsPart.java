@@ -4,9 +4,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 import lost.tok.Discussion;
-import lost.tok.DiscussionLink;
 import lost.tok.Excerption;
 import lost.tok.GeneralFunctions;
+import lost.tok.Link;
 import lost.tok.Messages;
 import lost.tok.Source;
 import lost.tok.ToK;
@@ -59,6 +59,7 @@ public class RootDiscussionsPart extends AbstractEditorAction implements
 
 	private OperationTable operationTable;
 
+	@SuppressWarnings("unused")
 	private ToK tok;
 
 	public RootDiscussionsPart(OperationTable ot) {
@@ -79,7 +80,7 @@ public class RootDiscussionsPart extends AbstractEditorAction implements
 		List<Excerption> exs = getLinks(viewer.getSelectedRange().x);
 
 		for (Excerption excerption : exs) {
-			openDiscussionLink((DiscussionLink) excerption
+			openDiscussionLink((Link) excerption
 					.getProperty(discussionLinkQName));
 		}
 	}
@@ -96,11 +97,10 @@ public class RootDiscussionsPart extends AbstractEditorAction implements
 		List<Excerption> exs = getLinks(hoverRegion.getOffset());
 		String s = new String();
 		for (Excerption excerption : exs) {
-			DiscussionLink discussionLink = (DiscussionLink) excerption
-					.getProperty(discussionLinkQName);
-			s += Messages.getString("RootDiscussionsPart.disc") + discussionLink.getDiscussionFile() + "\n" //$NON-NLS-1$ //$NON-NLS-2$
-					+ Messages.getString("RootDiscussionsPart.type") + discussionLink.getDisplayType() + "\n" + Messages.getString("RootDiscussionsPart.subj") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-					+ discussionLink.getLinkSubject() + "\n" + "\n"; //$NON-NLS-1$ //$NON-NLS-2$
+			Link discussionLink = (Link) excerption.getProperty(discussionLinkQName);
+			s += Messages.getString("RootDiscussionsPart.disc") + discussionLink.getLinkedDiscussion().getDiscName() + "\n" //$NON-NLS-1$ //$NON-NLS-2$
+					+ Messages.getString("RootDiscussionsPart.type") + discussionLink.getDisplayLinkType() + "\n" + Messages.getString("RootDiscussionsPart.subj") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+					+ discussionLink.getSubject() + "\n" + "\n"; //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		return s.trim();
 	}
@@ -147,29 +147,38 @@ public class RootDiscussionsPart extends AbstractEditorAction implements
 
 		for (Object os : xpathSelector.selectNodes(GeneralFunctions
 				.readFromXML(tok.getLinkFile()))) {
-			Element s = (Element) os;
+			Element sublinkElm = (Element)os;
+			Element linkElm = sublinkElm.getParent();
+			
+			Link discussionLink = null;
+			try {
+				String discFileName = ToK.DISCUSSION_FOLDER + "/" + linkElm.element("discussionFile").getText();
+				String discRealName = Discussion.getNameFromFile(discFileName); // real name == discussion title
+				Discussion disc = tok.getDiscussion(discRealName);
+				String linkXMLType = linkElm.element("type").getText();
+				String linkSubject = linkElm.element("linkSubject").getText();
 
-			DiscussionLink discussionLink = new DiscussionLink(s.getParent());
+				discussionLink = new Link(disc, linkXMLType, tok.getLinkFile(), linkSubject);
+			} catch (CoreException e1) {
+				e1.printStackTrace();
+				continue;
+			}
 
-			for (Object oe : s.elements("excerption")) { //$NON-NLS-1$
+			for (Object oe : sublinkElm.elements("excerption")) { //$NON-NLS-1$
 				Excerption e = new Excerption((Element) oe);
 				e.setProperty(discussionLinkQName, discussionLink);
 
 				SourceDocument document = operationTable.getDocument();
 
-				ChapterText ct = document.getChapterTextFromXPath(e
-						.getXPath());
+				ChapterText ct = document.getChapterTextFromXPath(e.getXPath());
 				if (ct == null) {
 					System.out.println("wrong excerption found (chapter '" //$NON-NLS-1$
 							+ e.getXPath() + "' not found)"); //$NON-NLS-1$
 					continue;
 				}
 
-				e.setText(ct.toString().substring(e.getStartPos(),
-						e.getEndPos()));
-				e
-						.setProperty(textOffsetQName, ct.getOffset()
-								+ e.getStartPos());
+				e.setText(ct.toString().substring(e.getStartPos(), e.getEndPos()));
+				e.setProperty(textOffsetQName, ct.getOffset() + e.getStartPos());
 
 				rootExcerptions.add(e);
 
@@ -179,14 +188,8 @@ public class RootDiscussionsPart extends AbstractEditorAction implements
 		}
 	}
 
-	private void openDiscussionLink(DiscussionLink discussionLink) {
-		Discussion d;
-		try {
-			d = tok.getDiscussion(discussionLink.getDiscussionFile());
-		} catch (CoreException e) {
-			e.printStackTrace();
-			return;
-		}
+	private void openDiscussionLink(Link discussionLink) {
+		Discussion d = discussionLink.getLinkedDiscussion();
 
 		try {
 			IWorkbenchWindow ww = operationTable.getSite().getWorkbenchWindow();
