@@ -1,6 +1,7 @@
 package lost.tok.html;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
@@ -8,10 +9,13 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 
 import lost.tok.Discussion;
+import lost.tok.Excerption;
 import lost.tok.GeneralFunctions;
+import lost.tok.Link;
 import lost.tok.Opinion;
 import lost.tok.Quote;
 import lost.tok.Source;
+import lost.tok.SubLink;
 import lost.tok.ToK;
 
 /**
@@ -88,15 +92,61 @@ public class DiscussionPage extends HTMLPage {
 		body.addText("Created By: ");
 		body.addElement("em").addText(disc.getCreatorName());
 		
+		body.add(getLinkInfoElement());
+		
 		// TODO(Shay): Add the link and some info about it
 		// TODO(Shay, low): Consider adding related root and source files
 		
+		Element opinionList = body.addElement("ol");
 		for (Opinion o : disc.getOpinions())
-			body.add( getOpinionElement(o) );
+		{
+			Element listItem = opinionList.addElement("li");
+			listItem.add( getOpinionElement(o) );
+		}
 		
 		
 		// TODO(Shay) continue working on the getBody method
 		return GeneralFunctions.elementToString(body);
+	}
+	
+	/**
+	 * Returns a div element containing all the information related to the discussion's link
+	 */
+	private Element getLinkInfoElement()
+	{
+		Element div = DocumentHelper.createElement("div");
+		
+		Link l = disc.getLink();
+		
+		div.addAttribute("class", "linkInfo");
+		div.addElement("h2").addText( l.getSubject() );
+		Element typeElement = div.addElement("p");
+		
+		typeElement.addText("Type: ");
+		typeElement.addElement("em").addText( l.getDisplayLinkType() );
+		
+		Element sublinksList = div.addElement("ul");
+		for (SubLink sl : l.getSubLinkList())
+		{
+			LinkedList<Excerption> excerptions = new LinkedList<Excerption>();
+			for (Excerption e : sl.getExcerption())
+				excerptions.add(e);
+			
+			String eText = Excerption.concat(excerptions);
+			Source src = sl.getLinkedSource();
+			
+			Element listItem = sublinksList.addElement("li");
+			
+			Element quoteElm = listItem.addElement("blockquote");
+			quoteElm.addAttribute("class", "sublink");
+			quoteElm.addAttribute("cite", getPathToSrc(src));
+			quoteElm.addElement("p").addText(eText);
+			
+			Element srcLinkParagraph = listItem.addElement("p");
+			srcLinkParagraph.addText("Source: ").add( getLinkSrcElm(src) );
+		}
+		
+		return div;		
 	}
 	
 	/**
@@ -113,15 +163,31 @@ public class DiscussionPage extends HTMLPage {
 		opTitle.addText( o.getName() );
 		opTitle.addAttribute("id", "discItem" + o.getId());
 		
+		Element quotesList = div.addElement("ul");
+		
 		// 2. Add the quotes
 		for ( Quote q : disc.getQuotes(o.getName()) )
 		{
 			// TODO(Shay, medium-low): Sort the quotes according to author importance
-			div.add( getQuoteElement(q) );	
+			
+			Element listItem = quotesList.addElement("li");
+			listItem.add( getQuoteElement(q) );	
 		}
 		// TODO(Shay, low): Consider adding relation data
 		
 		return div;
+	}
+	
+	/**
+	 * Returns a path to the src specified
+	 * @param src a source existing in the system
+	 * @return a String which can be used in &lta href&gt tags and links to the given source page
+	 */
+	private String getPathToSrc(Source src)
+	{
+		String srcPath = src.getFile().getProjectRelativePath().toString();
+		SourcePage sPage = srcPathToPage.get(srcPath);
+		return getPathTo(sPage);
 	}
 	
 	/**
@@ -133,41 +199,62 @@ public class DiscussionPage extends HTMLPage {
 	{
 		Element div = DocumentHelper.createElement("div");
 		
+		// 1. Get the quote's text and find a good title for it
 		String qText = q.getText();
 		int actualLen = qText.indexOf(' ', QUOTE_TITLE_LENGTH);
 		actualLen = (actualLen != -1) ? actualLen : qText.length();
 		String qTitle = qText.substring(0, actualLen);
 		
+		// 2. Get the src we should link to
+		Source src = q.getSource();
+		
+		// 3. Add the title
 		Element quoteTitle = div.addElement("h3");
 		quoteTitle.addText( qTitle );
 		quoteTitle.addAttribute("id", "discItem" + q.getID());
 		
-		div.addElement("p").addText(qText);
+		// 4. Add the quote itself
+		Element quoteElm = div.addElement("blockquote");
+		quoteElm.addAttribute("class", "quote");
+		quoteElm.addAttribute("cite", getPathToSrc(src));
+		quoteElm.addElement("p").addText(qText);
 		
+		// 5. Add a comment, if there is one
 		if (!q.getComment().equals(""))
 		{
 			Element pComment = div.addElement("p");
 			pComment.addText("Comment: ");
 			pComment.addElement("em").addText(q.getComment());
+			
+			quoteElm.addAttribute("title", q.getComment());
 		}
 		
-		Source src = q.getSource();
-		String srcPath = src.getFile().getProjectRelativePath().toString();
-		SourcePage sPage = srcPathToPage.get(srcPath);
-		
+		// 6. Add a link to the related source
 		Element srcLinkParagraph = div.addElement("p");
-		srcLinkParagraph.addText("From: ");
-		
-		Element srcLink = srcLinkParagraph.addElement("a");
-		srcLink.addAttribute("href", getPathTo(sPage) );
-		srcLink.addText( src.getTitle() );
-		
-		srcLinkParagraph.addText(" by: ");
-		srcLinkParagraph.addElement("em").addText(src.getAuthor());
-		
-		// TODO(Shay, low): Consider adding relation data
+		srcLinkParagraph.addText("From: ").add( getLinkSrcElm(src) );
+				
+		// TODO(Shay, low): 7. Consider adding relation data
 		
 		return div;
+	}
+	
+	/**
+	 * Returns a paragraph Element linking to the selected source
+	 * @param src the source to link to
+	 * @return a p element which can be added to the page
+	 */
+	private Element getLinkSrcElm(Source src)
+	{
+		Element cite = DocumentHelper.createElement("cite");
+		
+		Element srcLink = cite.addElement("a");
+		srcLink.addAttribute("href", getPathToSrc(src) );
+		srcLink.addText( src.getTitle() );
+		
+		cite.addText(" by: ");
+		cite.addElement("em").addText(src.getAuthor());
+		
+		return cite;
 	}
 
 }

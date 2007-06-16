@@ -81,6 +81,9 @@ public class Discussion implements Comparable<Discussion> {
 	
 	/** The id of the default opinion (might not be 1) */
 	private int defaultOpinionID;
+	
+	/** The name of the discussion file */
+	private IFile discussionFile = null; 
 
 	/**
 	 * constructor for discussion from an XML file
@@ -95,6 +98,8 @@ public class Discussion implements Comparable<Discussion> {
 	private void loadDiscussionFromFile(ToK myToK, String filename) {
 		int max = 0;
 		this.myToK = myToK;
+		
+		this.discussionFile = myToK.getProject().getFile(filename);
 
 		Document d = GeneralFunctions.readFromXML(filename);
 
@@ -115,6 +120,28 @@ public class Discussion implements Comparable<Discussion> {
 			}
 		}
 		id = max;
+		
+		loadLinkFromFile();
+	}
+	
+	/** Loads the discussion's link (if exists) from the links.xml file */
+	private void loadLinkFromFile()
+	{
+		// Load the link from XML
+		Document d = GeneralFunctions.readFromXML(myToK.getLinkFile());
+
+		// Check if the link exist in the xml
+		String filename = discussionFile.getFullPath().lastSegment();
+		Node node = DocumentHelper.createXPath("/links/link[discussionFile=\'" + filename + "']").selectSingleNode(d);  //$NON-NLS-1$  //$NON-NLS-2$
+		
+		if (node == null)
+		{
+			// if it doesn't, do nothing
+			return;
+		}
+		
+		// else, create the link from the Element's information
+		this.link = new Link(this, (Element)node);
 	}
 
 	/**
@@ -250,7 +277,7 @@ public class Discussion implements Comparable<Discussion> {
 	 * @param comment
 	 * @param type
 	 */
-	public void createLink(Integer element1, Integer element2, String comment,
+	public void createRelation(Integer element1, Integer element2, String comment,
 			String type) {
 
 		Document doc = readFromXML();
@@ -449,7 +476,7 @@ public class Discussion implements Comparable<Discussion> {
 	 * @param element1
 	 * @param element2
 	 */
-	public void removeLink(Integer element1, Integer element2) {
+	public void removeRelation(Integer element1, Integer element2) {
 
 		// create a Document containing the discussion
 		Document doc = readFromXML();

@@ -64,7 +64,7 @@ public class NewRelation extends Wizard implements INewWizard {
 		// tok = ToK.getProjectToK(project);
 
 		Integer[] ids = page.getSelectedQuotes();
-		page.getDiscussion().createLink(ids[0], ids[1], page.getComment(),
+		page.getDiscussion().createRelation(ids[0], ids[1], page.getComment(),
 				page.getRelationType());
 
 		return true;

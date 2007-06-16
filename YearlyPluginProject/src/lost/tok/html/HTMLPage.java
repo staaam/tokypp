@@ -161,36 +161,38 @@ abstract public class HTMLPage
 		assert(this != otherPage);
 		
 		String[] srcExportPath = this.exportPath.split("/");
-		String[] targetExportPath = otherPage.exportPath.split("/");
+		String[] dstExportPath = otherPage.exportPath.split("/");
 		
 		String path = "";
-		int pathIdx = 0;
+		int srcPathIdx = 0;
+		int dstPathIdx = 0;
 		
-		while (pathIdx < srcExportPath.length - 1 && 
-				pathIdx < targetExportPath.length - 1 &&
-				targetExportPath[pathIdx].equals( srcExportPath[pathIdx]) )
+		while (srcPathIdx < srcExportPath.length - 1 && 
+				dstPathIdx < dstExportPath.length - 1 &&
+				dstExportPath[dstPathIdx].equals( srcExportPath[srcPathIdx]) )
 		{
 			// so far the directories are similar
 			// so we do not include them in the relative path
-			pathIdx ++;
+			srcPathIdx ++;
+			dstPathIdx ++;
 		}
 		
-		while (pathIdx < srcExportPath.length - 1)
+		while (srcPathIdx < srcExportPath.length - 1)
 		{
 			// now we descend directories back to the closest common ancestor
 			path += "../";
-			pathIdx ++;
+			srcPathIdx ++;
 		}
 		
-		while (pathIdx < targetExportPath.length - 1)
+		while (dstPathIdx < dstExportPath.length - 1)
 		{
 			// now we ascend directories to the target path
-			path += targetExportPath[pathIdx] + "/";
-			pathIdx ++;
+			path += dstExportPath[dstPathIdx] + "/";
+			dstPathIdx ++;
 		}
 		
 		// we want to add the last file without a trailing "/"
-		path += targetExportPath[ targetExportPath.length - 1 ];
+		path += dstExportPath[ dstExportPath.length - 1 ];
 		
 		return path;	
 	}
