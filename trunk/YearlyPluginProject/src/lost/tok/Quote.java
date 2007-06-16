@@ -68,15 +68,7 @@ public class Quote {
 	}
 
 	public String getText() {
-		String s = new String();
-		Iterator i = excerptions.iterator();
-		while (i.hasNext()) {
-			s += ((Excerption) i.next()).getText();
-			if (i.hasNext()) {
-				s += " [...] "; //$NON-NLS-1$
-			}
-		}
-		return s;
+		return Excerption.concat( excerptions );
 	}
 
 	/**

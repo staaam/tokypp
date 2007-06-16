@@ -1,5 +1,8 @@
 package lost.tok;
 
+import java.util.Iterator;
+import java.util.List;
+
 import lost.tok.GeneralFunctions.Properties;
 
 import org.dom4j.DocumentHelper;
@@ -92,6 +95,11 @@ public class Excerption extends Properties {
 
 	/** Returns the text of the excerption */
 	public String getText() {
+		if (text == null)
+		{
+			System.out.println("ERROR: getText was called and text was null");
+			assert(false);
+		}
 		return text;
 	}
 
@@ -106,5 +114,24 @@ public class Excerption extends Properties {
 
 	public String toString() {
 		return pathInSourceFile + "[" + startPos + ":" + endPos + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+	}
+	
+	/**
+	 * Concatinates a bunch of excerptions into a long string, seperated by ellipsis
+	 * @param excerpts the excerptions to join
+	 * @return a string containing the text of all the excerptions
+	 */
+	static public String concat(List<Excerption> excerpts) 
+	{
+		StringBuffer s = new StringBuffer();
+		Iterator<Excerption> i = excerpts.iterator();
+		while (i.hasNext()) {
+			Excerption e = i.next();
+			s.append( e.getText() );
+			if (i.hasNext()) {
+				s.append(" [...] "); //$NON-NLS-1$
+			}
+		}
+		return s.toString();
 	}
 }

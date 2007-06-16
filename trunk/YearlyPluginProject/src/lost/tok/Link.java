@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.Node;
 import org.eclipse.core.resources.IFile;
@@ -49,6 +50,32 @@ public class Link {
 		//linkDiscussionRoot();
 	}
 	
+	/**
+	 * Loads a discussion link from an XML element
+	 * @param linkedDiscussion the discussion linked by this link
+	 * @param linkElm the XML element describing this link
+	 */
+	public Link(Discussion linkedDiscussion, Element linkElm)
+	{
+		subLinkList = new LinkedList<SubLink>();
+		
+		this.linkedDiscussion=linkedDiscussion;
+		this.linkFile = linkedDiscussion.getMyToK().getLinkFile();
+		
+		Node typeNode = DocumentHelper.createXPath("type").selectSingleNode(linkElm);  //$NON-NLS-1$
+		Node subjNode = DocumentHelper.createXPath("linkSubject").selectSingleNode(linkElm);  //$NON-NLS-1$
+		this.linkTypeXML = typeNode.getText();
+		this.subject = subjNode.getText();
+		
+		List sublinkElms = DocumentHelper.createXPath("sublink").selectNodes(linkElm);
+		for (Object oSublinkElm : sublinkElms )
+		{
+			Element sublinkElm = (Element) oSublinkElm;
+			
+			subLinkList.add( new SubLink(linkedDiscussion.getMyToK(), sublinkElm) );
+		}
+		
+	}
 
 	
 	/**
