@@ -7,13 +7,12 @@ import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.Node;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IResource;
 
 //this class represents a link between the discussion and the source
 public class Link {
 
 	/**
-	 * The types of the links, as strings displayable to the user The order of
+	 * The types of the links, as strings displayable to the user. The order of
 	 * the strings should be the same as in the linkXMLTypes array
 	 */
 	public static final String[] linkDisplayNames = {
@@ -21,7 +20,7 @@ public class Link {
 			Messages.getString("Link.Interpretation") }; //$NON-NLS-1$
 
 	/**
-	 * The types of the links, as the xml scheme defines The order of the
+	 * The types of the links, as the xml scheme defines. The order of the
 	 * strings should be the same as in the linkDisplayNames array
 	 */
 	public static final String[] linkXMLTypes = {

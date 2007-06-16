@@ -1,7 +1,5 @@
 package lost.tok;
 
-import org.eclipse.core.resources.IFile;
-
 public class SubLink {
 
 	private Source linkedSource;
