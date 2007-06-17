@@ -3,20 +3,15 @@ package lost.tok.search;
 import java.util.EnumSet;
 import java.util.List;
 
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.search.internal.ui.text.FileSearchQuery;
-import org.eclipse.search.internal.ui.text.FileSearchResult;
 import org.eclipse.search.internal.ui.text.SearchResultUpdater;
 import org.eclipse.search.ui.ISearchQuery;
-import org.eclipse.search.ui.ISearchResult;
-import org.eclipse.search.ui.NewSearchUI;
 import org.eclipse.search.ui.text.FileTextSearchScope;
 
 public class ToKSearchQuery extends FileSearchQuery implements ISearchQuery {
@@ -37,18 +32,8 @@ public class ToKSearchQuery extends FileSearchQuery implements ISearchQuery {
 		this.scope = scope;
 	}
 
-	public boolean canRerun() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	public boolean canRunInBackground() {
-		// TODO Auto-generated method stub
-		return true;
-	}
-
 	public String getLabel() {
-		return "Searching for: '" + searchPattern + "'";
+		return "ToK search of: '" + searchPattern + "'";
 	}
 
 

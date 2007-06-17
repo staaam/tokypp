@@ -6,6 +6,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import lost.tok.Discussion;
+import lost.tok.Opinion;
+import lost.tok.Quote;
 import lost.tok.Source;
 import lost.tok.ToK;
 import lost.tok.sourceDocument.Chapter;
@@ -82,11 +84,50 @@ public class ToKSearchVisitor implements IResourceVisitor {
 	}
 
 	private void discussionSearch(IFile file) {
-		//System.out.println("Discussion search: " + file.getName());
+		Discussion d = null;
+		try {
+			d = new Discussion(file);
+		} catch (RuntimeException e) {
+		}
+		
+		if (d == null) return;
+		
+		if (searchOptions.contains(SearchOption.DSC_CREATOR)) {
+			search(file, d.getCreatorName(), 0);
+		}
+		
+		if (searchOptions.contains(SearchOption.DSC_NAME)) {
+			search(file, d.getDiscName(), 0);
+		}
+
+		if (searchOptions.contains(SearchOption.DSC_LINK_SUBJ) && d.getLink() != null) {
+			search(file, d.getLink().getSubject(), 0);
+		}
+
+		if (!(searchOptions.contains(SearchOption.DSC_OPINIONS) ||
+			  searchOptions.contains(SearchOption.DSC_QUOTES) || 
+			  searchOptions.contains(SearchOption.DSC_QUOTE_COMMENTS)))
+			return;
+		
+		for (Opinion opinion : d.getOpinions()) {
+			if (searchOptions.contains(SearchOption.DSC_OPINIONS))
+				search(file, opinion.getName(), 0);
+			
+			if (searchOptions.contains(SearchOption.DSC_QUOTES) || 
+				searchOptions.contains(SearchOption.DSC_QUOTE_COMMENTS))
+				for (Quote quote : d.getQuotes(opinion.getName())) {
+					if (searchOptions.contains(SearchOption.DSC_QUOTES))
+						search(file, quote.getText(), 0);
+					
+					if (searchOptions.contains(SearchOption.DSC_QUOTE_COMMENTS))
+						search(file, quote.getComment(), 0);
+				}
+		}
+		
+		
 	}
 
 	private void sourceSearch(IFile file) {
-		//System.out.println("Source search: " + file.getName());
 		if (!(searchOptions.contains(SearchOption.SRC_AUTHOR) ||
 			  searchOptions.contains(SearchOption.SRC_TITLE) ||
 			  searchOptions.contains(SearchOption.SRC_CONTENT)))
@@ -108,17 +149,19 @@ public class ToKSearchVisitor implements IResourceVisitor {
 			if (!(c instanceof ChapterText)) continue;
 			
 			ChapterText ct = (ChapterText) c;
-			for (TextSelection t : search(searchPattern, ct.getText())) {
-				searchResult.addMatch(new FileMatch(file, ct.getOffset() + t.getOffset(), t.getLength()));
-			}
-			
+			search(file, ct.getText(), ct.getOffset());
 		}
 	}
 
 	private void keywordSearch(IFile file, SourceDocument sd, KEYWORD keyword) {
-		int o = sd.getKeywordOffset(keyword);
-		for (TextSelection t : search(searchPattern, sd.getKeywordValue(keyword))) {
-			searchResult.addMatch(new FileMatch(file, o + t.getOffset(), t.getLength()));
+		int offset = sd.getKeywordOffset(keyword);
+		String text = sd.getKeywordValue(keyword);
+		search(file, text, offset);
+	}
+
+	private void search(IFile file, String text, int offset) {
+		for (TextSelection t : search(searchPattern, text)) {
+			searchResult.addMatch(new FileMatch(file, offset + t.getOffset(), t.getLength()));
 		}
 	}
 

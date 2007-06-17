@@ -147,8 +147,9 @@ public class ToK {
 	 * 
 	 * @param discName
 	 *            the name of the discussion to be created
+	 * @throws FileNotFoundException 
 	 */
-	public void addDiscussion(String discName) {
+	public void addDiscussion(String discName) throws FileNotFoundException {
 		getDiscussions().add(
 				new Discussion(this, discName, getProjectCreator()));
 		setLatestDiscussionOpinion(discName, null);
@@ -465,9 +466,8 @@ public class ToK {
 			for (IResource resource : files) {
 				if (resource instanceof IFile) {
 					IFile file = (IFile) resource;
-					if (isExtentionLegel(file.getName(), "dis")) { //$NON-NLS-1$
-						discussions.add(new Discussion(this, file.getLocation()
-								.toOSString()));
+					if (Discussion.isDiscussion(file)) {
+						discussions.add(new Discussion(file));
 					}
 				}
 			}
@@ -665,19 +665,6 @@ public class ToK {
 		}
 
 		return rootPath;
-	}
-
-	private boolean isExtentionLegel(String rootPath, String ext) {
-		int dotLoc = rootPath.lastIndexOf('.');
-		if (dotLoc == -1) {
-			return false;
-		} else {
-			String extension = rootPath.substring(dotLoc + 1);
-			if (extension.equalsIgnoreCase(ext) == false) {
-				return false;
-			}
-		}
-		return true;
 	}
 
 	private int nextOf(int i) {

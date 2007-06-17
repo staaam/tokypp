@@ -1,5 +1,7 @@
 package lost.tok.wizards;
 
+import java.io.FileNotFoundException;
+
 import lost.tok.Messages;
 import lost.tok.ToK;
 
@@ -43,7 +45,11 @@ public class NewDiscussion extends Wizard implements INewWizard {
 	 * will create an operation and run it using wizard as execution context.
 	 */
 	public boolean performFinish() {
-		ToK.getProjectToK(project).addDiscussion(page.getDiscussionName());
+		try {
+			ToK.getProjectToK(project).addDiscussion(page.getDiscussionName());
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 		return true;
 	}
 
