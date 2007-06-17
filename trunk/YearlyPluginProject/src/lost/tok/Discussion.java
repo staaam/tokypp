@@ -1,6 +1,7 @@
 package lost.tok;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Iterator;
 import java.util.List;
 
@@ -88,20 +89,20 @@ public class Discussion implements Comparable<Discussion> {
 	/**
 	 * constructor for discussion from an XML file
 	 */
-	public Discussion(ToK myToK, String filename) {
-		loadDiscussionFromFile(myToK, filename);
+	public Discussion(IFile file) {
+		loadDiscussionFromFile(file);
 	}
 
 	/**
 	 * Updates the Discussion with information from the disk
 	 */
-	private void loadDiscussionFromFile(ToK myToK, String filename) {
+	private void loadDiscussionFromFile(IFile file) {
 		int max = 0;
-		this.myToK = myToK;
+		myToK = ToK.getProjectToK(file.getProject());
 		
-		this.discussionFile = myToK.getProject().getFile(filename);
+		discussionFile = file;
 
-		Document d = GeneralFunctions.readFromXML(filename);
+		Document d = GeneralFunctions.readFromXML(file);
 
 		setDiscName(DocumentHelper.createXPath("/discussion/name") //$NON-NLS-1$
 				.selectSingleNode(d).getText());
@@ -150,8 +151,9 @@ public class Discussion implements Comparable<Discussion> {
 	 * @param myToK
 	 * @param discName
 	 * @param creatorName
+	 * @throws FileNotFoundException 
 	 */
-	public Discussion(ToK myToK, String discName, String creatorName) {
+	public Discussion(ToK myToK, String discName, String creatorName) throws FileNotFoundException {
 		this.myToK = myToK;
 		this.discName = discName;
 		this.creatorName = creatorName;
@@ -159,9 +161,7 @@ public class Discussion implements Comparable<Discussion> {
 		this.id = 1;
 
 		if (new File(getFullFileName()).exists()) {
-			System.out.println("discussion " + discName + " already exists"); //$NON-NLS-1$ //$NON-NLS-2$
-			loadDiscussionFromFile(myToK, getFullFileName());
-			return;
+			throw new FileNotFoundException();
 		}
 
 		writeToXml(discussionSkeleton(discName, creatorName));
