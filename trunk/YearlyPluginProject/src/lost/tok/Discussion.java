@@ -89,6 +89,13 @@ public class Discussion implements Comparable<Discussion> {
 	/**
 	 * constructor for discussion from an XML file
 	 */
+	public Discussion(ToK myToK, String filename) {
+		loadDiscussionFromFile(myToK, filename);
+	}
+
+	/**
+	 * constructor for discussion from an XML file
+	 */
 	public Discussion(IFile file) {
 		loadDiscussionFromFile(file);
 	}
@@ -96,14 +103,26 @@ public class Discussion implements Comparable<Discussion> {
 	/**
 	 * Updates the Discussion with information from the disk
 	 */
+	private void loadDiscussionFromFile(ToK myToK, String filename) {
+		this.myToK = myToK;
+		
+		this.discussionFile = myToK.getProject().getFile(filename);
+
+		loadDiscussion(GeneralFunctions.readFromXML(filename));
+	}
+
+	/**
+	 * Updates the Discussion with information from the disk
+	 */
 	private void loadDiscussionFromFile(IFile file) {
-		int max = 0;
 		myToK = ToK.getProjectToK(file.getProject());
 		
 		discussionFile = file;
 
-		Document d = GeneralFunctions.readFromXML(file);
-
+		loadDiscussion(GeneralFunctions.readFromXML(file));
+	}
+	
+	private void loadDiscussion(Document d) {
 		setDiscName(DocumentHelper.createXPath("/discussion/name") //$NON-NLS-1$
 				.selectSingleNode(d).getText());
 		setCreatorName(DocumentHelper.createXPath("/discussion/user") //$NON-NLS-1$
@@ -114,13 +133,13 @@ public class Discussion implements Comparable<Discussion> {
 		defaultOpinionID = Integer.valueOf( defOpIdNode.getText() );
 
 		List result = DocumentHelper.createXPath("//id").selectNodes(d); //$NON-NLS-1$
+		id = 0;
 		for (Iterator i = result.iterator(); i.hasNext();) {
 			Element element = (Element) i.next();
-			if (Integer.valueOf(element.getText()) > max) {
-				max = Integer.valueOf(element.getText());
+			if (Integer.valueOf(element.getText()) > id) {
+				id = Integer.valueOf(element.getText());
 			}
 		}
-		id = max;
 		
 		loadLinkFromFile();
 	}
