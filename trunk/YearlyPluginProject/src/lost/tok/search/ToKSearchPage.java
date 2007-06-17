@@ -137,8 +137,8 @@ public class ToKSearchPage extends DialogPage implements ISearchPage {
 	SelectionListener selectionListener = new SelectionAdapter() {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			if (e.data instanceof SearchOption) {
-				SearchOption so = (SearchOption) e.data;
+			if (e.widget.getData() instanceof SearchOption) {
+				SearchOption so = (SearchOption) e.widget.getData();
 				if (((Button)e.widget).getSelection()) {
 					searchOptions.add(so);
 				} else {
