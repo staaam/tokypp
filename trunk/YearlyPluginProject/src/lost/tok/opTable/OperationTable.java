@@ -14,12 +14,14 @@ import lost.tok.sourceDocument.ChapterText;
 import lost.tok.sourceDocument.SourceDocument;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.text.source.SourceViewerConfiguration;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.part.FileEditorInput;
 
@@ -138,6 +140,9 @@ public class OperationTable extends TextEditor {
 	 * Updates the colored lines and the general display of the editor.
 	 */
 	public void refreshDisplay() {
+		ISourceViewer srcview = getSourceViewer();
+		if (srcview == null) return;
+
 		if (rootDiscussionsView) {
 			rootDiscussions.refreshDisplay();
 		}
@@ -146,15 +151,13 @@ public class OperationTable extends TextEditor {
 		StyleRange markedTextStyle = StyleManager.getMarkedStyle();
 		StyleRange chapterTextStyle = StyleManager.getChapterStyle();
 
-		ISourceViewer srcview = getSourceViewer();
-
 		/*
 		 * CursorLinePainter a = new CursorLinePainter(srcview);
 		 * a.deactivate(true);
 		 * srcview.getTextWidget().addLineBackgroundListener(a);
 		 */
 
-		SourceDocument document = (SourceDocument) srcview.getDocument();
+		SourceDocument document = getDocument();
 		Integer docLen = document.getLength();
 
 		LinkedList<Chapter> allChapters = new LinkedList<Chapter>();
@@ -477,6 +480,23 @@ public class OperationTable extends TextEditor {
 		// id = offset
 		resetHighlightRange();
 		setHighlightRange(id, markedText.get(id), true);
+	}
+
+	/*
+	 * @see AbstractTextEditor#doSetInput(IEditorInput)
+	 */
+	@Override
+	protected void doSetInput(IEditorInput input) throws CoreException {
+		super.doSetInput(input);
+		refreshDisplay();
+	}
+	
+	/*
+	 * @see AbstractTextEditor#isPrefQuickDiffAlwaysOn()
+	 */
+	@Override
+	protected boolean isPrefQuickDiffAlwaysOn() {
+		return false;
 	}
 
 }
