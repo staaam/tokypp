@@ -5,11 +5,14 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.Map.Entry;
 
+import lost.tok.Excerption;
 import lost.tok.GeneralFunctions;
+import lost.tok.Link;
 import lost.tok.html.DiscConflictPage;
 import lost.tok.html.DiscussionPage;
 import lost.tok.html.HTMLPage;
 import lost.tok.html.SourcePage;
+import lost.tok.html.srcElem.LinkInfo;
 
 public class LinkedParagraph implements SrcElem
 {
@@ -39,12 +42,21 @@ public class LinkedParagraph implements SrcElem
 		this.discConfs = new LinkedList<DiscConflictPage>();
 	}
 	
-	public void addLink(int start, int end, DiscussionPage disc)
+	/**
+	 * Adds a link to this Paragraph
+	 * @param e the excerption to link
+	 * @param l the whole link (used for metadata)
+	 * @param disc the target discussion page
+	 */
+	public void addLink(Excerption e, Link l, DiscussionPage disc)
 	{
+		int start = e.getStartPos();
+		int end = e.getEndPos();
+		
 		SortedMap<Integer, LinkInfo> lower = links.subMap(0, start);
 		
 		// there's a link that started before us :( 
-		if (!lower.isEmpty() && links.get(lower.lastKey()).end > start)
+		if (!lower.isEmpty() && links.get(lower.lastKey()).getEnd() > start)
 		{
 			// break it to two parts. We will later add ourselves to the second part
 			splitLink(lower.lastKey(), start);
@@ -54,27 +66,29 @@ public class LinkedParagraph implements SrcElem
 		if (links.containsKey(start))
 		{
 			// the link ends after us
-			if (links.get(start).end > end)
+			if (links.get(start).getEnd() > end)
 			{
 				splitLink(start, end+1);
 				// we don't stop here
 			}
 			
 			// the link ends before us
-			if (links.get(start).end < end)
+			if (links.get(start).getEnd() < end)
 			{
 				// add the start of the link to the existing link info
-				links.get(start).discs.add(disc);
+				links.get(start).add(disc, e.getText(), l);
 				// add the rest of the link
-				addLink(lower.get(start).end + 1, end, disc);
+				int newStart = links.get(start).getEnd() + 1;
+				Excerption eNew = new Excerption(e.getXPath(), e.getText(), newStart, end);
+				addLink(eNew, l, disc);
 				return;
 			}
 			
 			// the link ends exactly with us
-			if (links.get(start).end == end)
+			if (links.get(start).getEnd() == end)
 			{
 				// add the link to the existing link info
-				links.get(start).discs.add(disc);
+				links.get(start).add(disc, e.getText(), l);
 				return;
 			}
 		}
@@ -86,18 +100,21 @@ public class LinkedParagraph implements SrcElem
 		while (!higher.isEmpty() && higher.firstKey() < end)
 		{
 			// add ourselves before that link
-			LinkInfo info = new LinkInfo(higher.firstKey(), disc);
+			LinkInfo info = new LinkInfo(higher.firstKey(), disc, e.getText(), l);
 			links.put(currStart, info);
 			
 			// if we do not contain that evil link, break it
-			if (links.get(higher.firstKey()).end > end)
+			if (links.get(higher.firstKey()).getEnd() > end)
 				splitLink(higher.firstKey(), end);
 			
 			// add ourselves to that link
-			links.get(higher.firstKey()).discs.add(disc);
+			links.get(higher.firstKey()).add(disc, e.getText(), l);
 			
 			// repeat the process from the existing link's end
-			currStart = links.get(higher.firstKey()).end;
+			currStart = links.get(higher.firstKey()).getEnd();
+			if (currStart + 1 > end)
+				break;
+			
 			higher = links.subMap(currStart+1, end);
 		}
 		
@@ -106,7 +123,7 @@ public class LinkedParagraph implements SrcElem
 		// in normal cases, this is the code that gets executed eventaully
 		if (currStart != end)
 		{
-			LinkInfo info = new LinkInfo(end, disc);
+			LinkInfo info = new LinkInfo(end, disc, e.getText(), l);
 			links.put(currStart, info);
 		}
 	}
@@ -119,14 +136,14 @@ public class LinkedParagraph implements SrcElem
 	 */
 	private void splitLink(int start, int end)
 	{
-		assert(links.get(start).end > end);
+		assert(links.get(start).getEnd() > end);
 		
 		LinkInfo oldInfo = links.get(start);
 		LinkInfo newInfo = oldInfo.clone();
 		
-		newInfo.end = oldInfo.end;
-		oldInfo.end = end;
-		
+		newInfo.setEnd( oldInfo.getEnd() );
+		oldInfo.setEnd( end );
+
 		links.put(end, newInfo);
 	}
 	
@@ -143,35 +160,40 @@ public class LinkedParagraph implements SrcElem
 			if (e.getKey() != currOffset)
 			{
 				String unlinkedText = text.substring(currOffset, e.getKey());
-				s.append( "\t" + GeneralFunctions.xmlEscape(unlinkedText) + "\n");
+				s.append( GeneralFunctions.xmlEscape(unlinkedText) );
 			}
 				
 			LinkInfo info = e.getValue();
 			HTMLPage targetPage = null;
-			// TODO(Shay): add tooltips. Do not forget to escape them!
-			String tooltip = "";
+
 			// Add a conflict page if needed
-			if (info.discs.size() > 1)
+			if (info.size() > 1)
 			{
-				DiscConflictPage confPage = new DiscConflictPage(info.discs);
+				DiscConflictPage confPage = new DiscConflictPage(info);
 				discConfs.add( confPage );
 				targetPage = confPage;
 			}
 			else
 			{
-				targetPage = info.discs.getFirst();
+				targetPage = info.getOnlyPage();
 			}
 			
-			// TODO(Shay): Add styles to the links using span
-			s.append( "\t<a href=\"");
+			String tooltip = GeneralFunctions.xmlEscape(info.getNames());
+			String type = info.getType(); // the class (type) of the link
+			
+			// TODO(Shay): Add styles to the links using class
+			s.append( "<a href=\"");
 			
 			s.append( source.getPathTo(targetPage) );
-			s.append( "\" title=\"" + tooltip + "\" >");
+			s.append( "\" title=\"" + tooltip + "\" ");
+			s.append( " class=\"" + type + "\" >");
 			
-			String linkedText = text.substring(e.getKey(), info.end);
+			String linkedText = text.substring(e.getKey(), info.getEnd());
 			s.append( GeneralFunctions.xmlEscape(linkedText) );
 			
-			s.append( "</a>\n" );			
+			s.append( "</a>" );
+			
+			currOffset = info.getEnd();
 		}
 		
 		// add the rest of the text
@@ -192,49 +214,9 @@ public class LinkedParagraph implements SrcElem
 		return null;
 	}
 	
-	
-	/* ************************************************************ */
-	/*                        Private Classes                       */
-	/* ************************************************************ */
-	
-	
-	/**
-	 * A small struct defining where a link ends and what discussions it includes
-	 * @author Team Lost
-	 */
-	private class LinkInfo 
-	{
-		/** The offset of the link's end (exclusive) */
-		public int end;
-		/** The linked discussions, 1 or more */
-		public LinkedList<DiscussionPage> discs;
-		
-		public LinkInfo(int end)
-		{
-			this.end = end;
-			this.discs = new LinkedList<DiscussionPage>();
-		}
-		
-		public LinkInfo(int end, DiscussionPage disc)
-		{
-			this(end);
-			this.discs.add(disc);
-		}
-		
-		/** Retruns a 2-lvl copy of this (Discussions are not cloned) */
-		public LinkInfo clone()
-		{
-			LinkInfo l = new LinkInfo(end);
-			for (DiscussionPage d : discs)
-				l.discs.add(d);
-			return l;
-		}
-	}
-
 	/** Returns pages related to this element which should be generated upon export */
 	public LinkedList<DiscConflictPage> getUngeneratedPages() {
 		return discConfs;
 	}
-	
 
 }
