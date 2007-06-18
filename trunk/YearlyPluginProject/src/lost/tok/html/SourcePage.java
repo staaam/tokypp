@@ -7,6 +7,8 @@ import java.util.List;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 
+import lost.tok.Excerption;
+import lost.tok.Link;
 import lost.tok.Source;
 import lost.tok.ToK;
 import lost.tok.html.srcElem.Heading;
@@ -84,14 +86,13 @@ public class SourcePage extends HTMLPage {
 	
 	/**
 	 * Creates a link from the source to the selected document page
-	 * @param xPath the path of the link inside the source
-	 * @param start the offset of the first char to be linked, inside the chapter
-	 * @param end the offset of the first char to _NOT_ be linked, inside the chapter
+	 * @param e the specific excerption to add
+	 * @param l the link itself
 	 * @param disc the target discussion
 	 */
-	public void addLink(String xPath, int start, int end, DiscussionPage disc)
+	public void addLink(Excerption e, Link l, DiscussionPage disc)
 	{
-		xPathToParagraph.get(xPath).addLink(start, end, disc);
+		xPathToParagraph.get(e.getXPath()).addLink(e, l, disc);
 	}
 	
 	/**

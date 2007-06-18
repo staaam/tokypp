@@ -3,8 +3,10 @@ package lost.tok.html;
 import java.util.HashMap;
 
 import lost.tok.Discussion;
+import lost.tok.Excerption;
 import lost.tok.GeneralFunctions;
 import lost.tok.Source;
+import lost.tok.SubLink;
 import lost.tok.ToK;
 
 import org.dom4j.DocumentHelper;
@@ -59,6 +61,26 @@ public class IndexPage extends HTMLPage {
 			String discName = disc.getDiscName();
 			discNameToPage.put(discName, dPage);
 		}
+		
+		// 2. Link the Roots to the discussions
+		for (Discussion disc : discussions)
+		{
+			if (disc.getLink() == null)
+				continue;
+			
+			DiscussionPage dPage = discNameToPage.get( disc.getDiscName() );
+			
+			for (SubLink sublink : disc.getLink().getSubLinkList())
+			{
+				Source src = sublink.getLinkedSource();
+				String srcPath = src.getFile().getProjectRelativePath().toString();
+				SourcePage sPage = srcPathToPage.get ( srcPath );
+				
+				for (Excerption e : sublink.getExcerption())
+					sPage.addLink( e, disc.getLink(), dPage);
+			}
+
+		}
 	}
 
 	@Override
@@ -95,7 +117,7 @@ public class IndexPage extends HTMLPage {
 		Element rootsList = main.addElement("ul");
 		for (Source src : sources)
 		{
-			if (src.isRoot() == genRoot)
+			if (src.isRoot() != genRoot)
 				continue;
 			
 			Element item = rootsList.addElement("li");
@@ -159,9 +181,8 @@ public class IndexPage extends HTMLPage {
 	public void generatePage() throws CoreException
 	{
 		super.generatePage();
-		// TODO(Shay): 1. Parse the links file and connect it with the sources
 		
-		// 2. Generate all the sub pages
+		// Generate all the sub pages
 		for (SourcePage sPage : srcPathToPage.values())
 			sPage.generatePage();
 		

@@ -118,6 +118,7 @@ public class Link {
 	}
 
 
+	/** Returns the type of the link, as written in the xml */
 	public String getLinkType() {
 		return linkTypeXML;
 	}
