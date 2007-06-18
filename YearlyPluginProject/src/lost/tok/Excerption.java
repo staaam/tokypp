@@ -4,6 +4,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import lost.tok.GeneralFunctions.Properties;
+import lost.tok.sourceDocument.ChapterText;
+import lost.tok.sourceDocument.SourceDocument;
 
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
@@ -19,16 +21,16 @@ public class Excerption extends Properties {
 	 * The offset of the end in the chapter of the excerptions (the first char not
 	 * included in the excerption)
 	 */
-	Integer endPos;
+	private Integer endPos;
 
 	/** The path in the src file of the excerption */
-	String pathInSourceFile;
+	private String pathInSourceFile;
 
 	/** The offset of the excerption's start in the chapter of the excerption (inclusive) */
-	Integer startPos;
+	private Integer startPos;
 
 	/** The excerption's text */
-	String text;
+	private String text;
 
 	/**
 	 * Builds an excerption from an XML element
@@ -110,6 +112,13 @@ public class Excerption extends Properties {
 	/** Sets the text of the excerption to the given text */
 	public void setText(String text) {
 		this.text = text;
+	}
+	
+	/** Sets the excerption's text field according to the given source document */
+	public void loadText(SourceDocument srcDoc)
+	{
+		ChapterText c = srcDoc.getChapterTextFromXPath(pathInSourceFile);
+		text = c.getText().substring(startPos, endPos);
 	}
 
 	public String toString() {

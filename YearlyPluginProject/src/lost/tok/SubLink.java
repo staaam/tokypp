@@ -2,6 +2,8 @@ package lost.tok;
 
 import java.util.LinkedList;
 
+import lost.tok.sourceDocument.SourceDocument;
+
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
@@ -23,13 +25,16 @@ public class SubLink {
 		String srcName = DocumentHelper.createXPath("sourceFile").selectSingleNode(sublinkElm).getText();
 		this.linkedSource = new Source(tok, srcName);
 		
-		for (Object exElm : DocumentHelper.createXPath("excerption").selectNodes(sublinkElm) )
-		{
-			Element e = (Element) exElm;
-			exList.add ( new Excerption(e) );
-		}
+		SourceDocument srcDoc = new SourceDocument();
+		srcDoc.set(linkedSource);
 		
-		// FIXME(Shay): These excerptions' text field is not initialized
+		for (Object exElmObj : DocumentHelper.createXPath("excerption").selectNodes(sublinkElm) )
+		{
+			Element exElm = (Element) exElmObj;
+			Excerption excerption = new Excerption(exElm);
+			excerption.loadText(srcDoc);
+			exList.add ( excerption );
+		}
 		this.exp = exList.toArray( new Excerption [ exList.size() ] );
 	}
 	
