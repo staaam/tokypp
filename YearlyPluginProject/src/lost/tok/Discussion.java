@@ -84,7 +84,9 @@ public class Discussion implements Comparable<Discussion> {
 	private int defaultOpinionID;
 	
 	/** The name of the discussion file */
-	private IFile discussionFile = null; 
+	private IFile discussionFile = null;
+
+	private String actualFile; 
 
 	/**
 	 * constructor for discussion from an XML file
@@ -103,12 +105,13 @@ public class Discussion implements Comparable<Discussion> {
 	/**
 	 * Updates the Discussion with information from the disk
 	 */
-	private void loadDiscussionFromFile(ToK myToK, String filename) {
+	private void loadDiscussionFromFile(ToK myToK, String fileName) {
 		this.myToK = myToK;
 		
-		this.discussionFile = myToK.getProject().getFile(filename);
+		this.discussionFile = myToK.getProject().getFile(fileName);
+		this.actualFile = fileName;
 
-		loadDiscussion(GeneralFunctions.readFromXML(filename));
+		loadDiscussion(GeneralFunctions.readFromXML(fileName));
 	}
 
 	/**
