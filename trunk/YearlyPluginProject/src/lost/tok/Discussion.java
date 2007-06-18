@@ -48,12 +48,12 @@ public class Discussion implements Comparable<Discussion> {
 		new QualifiedName("lost.tok", "latest_discussion");  //$NON-NLS-1$ //$NON-NLS-2$
 
 	public static String getNameFromFile(String discussionFile) {
-		int begin = discussionFile.lastIndexOf('/');
+		int begin = discussionFile.lastIndexOf('/'); //$NON-NLS-1$
 		if (begin == -1) {
-			begin = discussionFile.lastIndexOf('\\');
+			begin = discussionFile.lastIndexOf('\\'); //$NON-NLS-1$
 		}
 		begin++;
-		int end = discussionFile.lastIndexOf("." + DISCUSSION_EXTENSION);
+		int end = discussionFile.lastIndexOf("." + DISCUSSION_EXTENSION); //$NON-NLS-1$
 
 		if (end == -1)
 			return null;
@@ -128,7 +128,7 @@ public class Discussion implements Comparable<Discussion> {
 		setCreatorName(DocumentHelper.createXPath("/discussion/user") //$NON-NLS-1$
 				.selectSingleNode(d).getText());
 		
-		XPath defOpSelector = DocumentHelper.createXPath("/discussion/opinion[name='" + DEFAULT_OPINION_XML + "']/id"); 
+		XPath defOpSelector = DocumentHelper.createXPath("/discussion/opinion[name='" + DEFAULT_OPINION_XML + "']/id");  //$NON-NLS-1$ //$NON-NLS-2$
 		Node defOpIdNode = defOpSelector.selectSingleNode(d); 
 		defaultOpinionID = Integer.valueOf( defOpIdNode.getText() );
 

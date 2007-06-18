@@ -4,7 +4,6 @@
 package lost.tok;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import lost.tok.sourceDocument.SourceDocument;

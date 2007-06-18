@@ -61,10 +61,10 @@ public class DiscussionPage extends HTMLPage {
 	{
 		IProject proj = disc.getMyToK().getProject();
 		
-		IPath path = proj.getProjectRelativePath().append(ToK.HTML_FOLDER + "/");
+		IPath path = proj.getProjectRelativePath().append(ToK.HTML_FOLDER + "/"); //$NON-NLS-1$
 		path = path.append(disc.getFile().getProjectRelativePath());
 		
-		path = path.removeFileExtension().addFileExtension("html").removeTrailingSeparator();
+		path = path.removeFileExtension().addFileExtension("html").removeTrailingSeparator(); //$NON-NLS-1$
 		
 		return path.toString();
 	}
@@ -85,17 +85,15 @@ public class DiscussionPage extends HTMLPage {
 	@Override
 	protected String getBody() 
 	{
-		Element body = DocumentHelper.createElement("body");
+		Element body = DocumentHelper.createElement("body"); //$NON-NLS-1$
 		
-		body.addElement("h1").addText(disc.getDiscName());
+		body.addElement("h1").addText(disc.getDiscName()); //$NON-NLS-1$
 		
 		body.addText("Created By: ");
-		body.addElement("em").addText(disc.getCreatorName());
+		body.addElement("em").addText(disc.getCreatorName()); //$NON-NLS-1$
 		
-		body.add(getLinkInfoElement());
-		
-		// TODO(Shay): Add the link and some info about it
-		// TODO(Shay, low): Consider adding related root and source files
+		if (disc.getLink() != null)
+			body.add(getLinkInfoElement());
 		
 		Element opinionList = body.addElement("ol");
 		for (Opinion o : disc.getOpinions())
@@ -104,8 +102,8 @@ public class DiscussionPage extends HTMLPage {
 			listItem.add( getOpinionElement(o) );
 		}
 		
+		// TODO(Shay, low): Consider adding related root and source files
 		
-		// TODO(Shay) continue working on the getBody method
 		return GeneralFunctions.elementToString(body);
 	}
 	
