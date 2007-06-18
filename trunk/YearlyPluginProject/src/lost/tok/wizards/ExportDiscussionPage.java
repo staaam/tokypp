@@ -15,7 +15,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.IDialogSettings;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Font;
@@ -105,9 +104,10 @@ public class ExportDiscussionPage extends WizardFileSystemResourceExportPage1 {
 					String fileName = file.getName();
 					String[] name = fileName.split("\\."); //$NON-NLS-1$
 					if (name[1].compareTo("dis") != 0) { //$NON-NLS-1$
-						MessageDialog.openWarning(null, Messages
-								.getString("ExportDiscussionPage.4"), //$NON-NLS-1$
-								Messages.getString("ExportDiscussionPage.5")); //$NON-NLS-1$
+						setMessage(Messages.getString("ExportDiscussionPage.5"), WARNING);
+//						MessageDialog.openWarning(null, Messages
+//								.getString("ExportDiscussionPage.4"), //$NON-NLS-1$
+//								Messages.getString("ExportDiscussionPage.5")); //$NON-NLS-1$
 						return false;
 					}
 				}
@@ -351,9 +351,10 @@ public class ExportDiscussionPage extends WizardFileSystemResourceExportPage1 {
 			return executeExportOperation(new DiscussionExportOperation(null,
 					resourcesToExport, getDestinationValue(), tok));
 		}
-		MessageDialog.openInformation(getContainer().getShell(),
-				DataTransferMessages.DataTransfer_information,
-				DataTransferMessages.FileExport_noneSelected);
+		setMessage(DataTransferMessages.FileExport_noneSelected, INFORMATION);
+//		MessageDialog.openInformation(getContainer().getShell(),
+//				DataTransferMessages.DataTransfer_information,
+//				DataTransferMessages.FileExport_noneSelected);
 
 		return false;
 	}
