@@ -52,8 +52,6 @@ public class PrintDiscussion {
 			return null;
 		
 		File discFile = new File(d.getDiscName() + ".txt");
-		System.out.println("path: "+ discFile.getAbsolutePath());
-		//discFile.deleteOnExit();
 		
 		FileWriter fw = new FileWriter(discFile);
 		//fw.write("testing 123");
@@ -170,7 +168,6 @@ public class PrintDiscussion {
 		if (file != null) {
 			 // Have user select a printer
 		     PrintDialog dialog = new PrintDialog(shell);
-		     dialog.setPrintToFile(true);
 		     PrinterData printerData = dialog.open();
 		     if (printerData != null) {
 		    	 // Create the printer
