@@ -179,7 +179,6 @@ public class UnparsedDocWizardPage extends WizardPage implements ModifyListener 
 		dialog.setLabelProvider(new WorkbenchLabelProvider());
 		dialog.setInput(iwr);
 
-		// TODO(Shay): Filter the project and choose only those that are ToK
 		dialog.setTitle(Messages.getString("SPWizardP.ProjectBrowse.title")); //$NON-NLS-1$
 		dialog.setMessage(Messages
 				.getString("SPWizardP.ProjectBrowse.Description")); //$NON-NLS-1$
@@ -229,7 +228,7 @@ public class UnparsedDocWizardPage extends WizardPage implements ModifyListener 
 			updateStatus(Messages.getString("SPWizardP.ErrorInvalidProject")); //$NON-NLS-1$
 			return;
 		}
-		// TODO(Shay): Verify that the project is a ToK
+
 		IProject proj = ResourcesPlugin.getWorkspace().getRoot().getProject(
 				targetProject.getText());
 		if (!proj.exists()) {

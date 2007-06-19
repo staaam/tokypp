@@ -60,7 +60,6 @@ public class ChapterText extends Chapter {
 		return excerPath;
 	}
 
-	// TODO: Michael, could you verify that this comment is correct?
 	/**
 	 * Returns the offset of this excerption in the original document (original
 	 * document = a document in which there are no chapters and only text)

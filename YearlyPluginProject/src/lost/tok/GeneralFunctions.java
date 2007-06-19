@@ -74,13 +74,12 @@ public class GeneralFunctions {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
 		try {
 			inputStream.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		;
 		return doc;
 	}
 
