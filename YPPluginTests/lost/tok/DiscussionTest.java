@@ -250,9 +250,9 @@ public class DiscussionTest extends TestCase {
 		disc.addOpinion("one");
 		disc.addOpinion("two");
 		disc.addOpinion("three");
-		disc.createLink(2, 3, "link between 'one' and 'two'",
+		disc.createRelation(2, 3, "link between 'one' and 'two'",
 				Discussion.relXMLTypes[0]);
-		disc.createLink(2, 4, "link between 'one' and 'three'",
+		disc.createRelation(2, 4, "link between 'one' and 'three'",
 				Discussion.relXMLTypes[0]);
 
 		Document doc = DocumentHelper.createDocument();
@@ -287,9 +287,9 @@ public class DiscussionTest extends TestCase {
 		Discussion disc = tok.getDiscussion("test");
 		disc.addOpinion("one");
 		disc.addOpinion("two");
-		disc.createLink(2, 3, "good link", Discussion.relXMLTypes[0]);
-		disc.createLink(2, 3, "cant link (already exist)", Discussion.relXMLTypes[0]);
-		disc.createLink(2, 7, "cant link (opinion doesnt exist)",
+		disc.createRelation(2, 3, "good link", Discussion.relXMLTypes[0]);
+		disc.createRelation(2, 3, "cant link (already exist)", Discussion.relXMLTypes[0]);
+		disc.createRelation(2, 7, "cant link (opinion doesnt exist)",
 				Discussion.relXMLTypes[0]);
 
 		Document doc = DocumentHelper.createDocument();
@@ -316,11 +316,11 @@ public class DiscussionTest extends TestCase {
 		disc.addOpinion("one");
 		disc.addOpinion("two");
 		disc.addOpinion("three");
-		disc.createLink(2, 3, "link between 'one' and 'two'",
+		disc.createRelation(2, 3, "link between 'one' and 'two'",
 				Discussion.relXMLTypes[0]);
-		disc.createLink(2, 4, "link between 'one' and 'three'",
+		disc.createRelation(2, 4, "link between 'one' and 'three'",
 				Discussion.relXMLTypes[0]);
-		disc.removeLink(4, 2);
+		disc.removeRelation(4, 2);
 
 		Document doc = DocumentHelper.createDocument();
 		SAXReader reader = new SAXReader();
@@ -346,11 +346,11 @@ public class DiscussionTest extends TestCase {
 		disc.addOpinion("one");
 		disc.addOpinion("two");
 		disc.addOpinion("three");
-		disc.createLink(2, 3, "link between 'one' and 'two'",
+		disc.createRelation(2, 3, "link between 'one' and 'two'",
 				Discussion.relXMLTypes[0]);
-		disc.createLink(2, 4, "link between 'one' and 'three'",
+		disc.createRelation(2, 4, "link between 'one' and 'three'",
 				Discussion.relXMLTypes[0]);
-		disc.removeLink(2, 7);
+		disc.removeRelation(2, 7);
 
 		Document doc = DocumentHelper.createDocument();
 		SAXReader reader = new SAXReader();
@@ -376,9 +376,9 @@ public class DiscussionTest extends TestCase {
 		disc.addOpinion("one");
 		disc.addOpinion("two");
 		disc.addOpinion("three");
-		disc.createLink(2, 3, "should be removed", Discussion.relXMLTypes[0]);
-		disc.createLink(2, 4, "should be removed", Discussion.relXMLTypes[0]);
-		disc.createLink(3, 4, "shouldn't be removed", Discussion.relXMLTypes[0]);
+		disc.createRelation(2, 3, "should be removed", Discussion.relXMLTypes[0]);
+		disc.createRelation(2, 4, "should be removed", Discussion.relXMLTypes[0]);
+		disc.createRelation(3, 4, "shouldn't be removed", Discussion.relXMLTypes[0]);
 		disc.addQuoteTest(11, 2);
 		disc.addQuoteTest(12, 2);
 		disc.removeOpinion(2);
@@ -409,9 +409,9 @@ public class DiscussionTest extends TestCase {
 		disc.addQuoteTest(11, 1);
 		disc.addQuoteTest(12, 1);
 		disc.addQuoteTest(13, 1);
-		disc.createLink(11, 12, "link between '1' and '2'",
+		disc.createRelation(11, 12, "link between '1' and '2'",
 				Discussion.relXMLTypes[0]);
-		disc.createLink(11, 13, "link between '1' and '3'",
+		disc.createRelation(11, 13, "link between '1' and '3'",
 				Discussion.relXMLTypes[0]);
 
 		Document doc = DocumentHelper.createDocument();
@@ -447,9 +447,9 @@ public class DiscussionTest extends TestCase {
 		disc.addQuoteTest(11, 1);
 		disc.addQuoteTest(12, 1);
 		disc.addQuoteTest(13, 1);
-		disc.createLink(11, 12, "good link", Discussion.relXMLTypes[0]);
-		disc.createLink(11, 12, "cant link (already exist)", Discussion.relXMLTypes[0]);
-		disc.createLink(11, 17, "cant link (quote doesnt exist)",
+		disc.createRelation(11, 12, "good link", Discussion.relXMLTypes[0]);
+		disc.createRelation(11, 12, "cant link (already exist)", Discussion.relXMLTypes[0]);
+		disc.createRelation(11, 17, "cant link (quote doesnt exist)",
 				Discussion.relXMLTypes[0]);
 
 		Document doc = DocumentHelper.createDocument();
@@ -476,11 +476,11 @@ public class DiscussionTest extends TestCase {
 		disc.addQuoteTest(11, 1);
 		disc.addQuoteTest(12, 1);
 		disc.addQuoteTest(13, 1);
-		disc.createLink(11, 12, "link between '1' and '2'",
+		disc.createRelation(11, 12, "link between '1' and '2'",
 				Discussion.relXMLTypes[0]);
-		disc.createLink(11, 13, "link between '1' and '3'",
+		disc.createRelation(11, 13, "link between '1' and '3'",
 				Discussion.relXMLTypes[0]);
-		disc.removeLink(11, 12);
+		disc.removeRelation(11, 12);
 
 		Document doc = DocumentHelper.createDocument();
 		SAXReader reader = new SAXReader();
@@ -506,10 +506,10 @@ public class DiscussionTest extends TestCase {
 		disc.addQuoteTest(11, 1);
 		disc.addQuoteTest(12, 1);
 		disc.addQuoteTest(13, 1);
-		disc.createLink(11, 12, "link between '1' and '2'",
+		disc.createRelation(11, 12, "link between '1' and '2'",
 				Discussion.relXMLTypes[0]);
-		disc.removeLink(11, 13);
-		disc.removeLink(12, 17);
+		disc.removeRelation(11, 13);
+		disc.removeRelation(12, 17);
 
 		Document doc = DocumentHelper.createDocument();
 		SAXReader reader = new SAXReader();
@@ -534,7 +534,7 @@ public class DiscussionTest extends TestCase {
 		Discussion disc = tok.getDiscussion("test");
 		disc.addOpinion("one");
 		disc.addQuoteTest(11, 1);
-		disc.createLink(2, 11, "link between 'one' and '1'",
+		disc.createRelation(2, 11, "link between 'one' and '1'",
 				Discussion.relXMLTypes[0]);
 
 		Document doc = DocumentHelper.createDocument();
@@ -566,9 +566,9 @@ public class DiscussionTest extends TestCase {
 		disc.addOpinion("one");
 		disc.addQuoteTest(11, 1);
 		disc.addQuoteTest(12, 1);
-		disc.createLink(2, 11, "good link", Discussion.relXMLTypes[0]);
-		disc.createLink(2, 11, "cant link (already exist)", Discussion.relXMLTypes[0]);
-		disc.createLink(1, 17, "cant link (quote doesnt exist)",
+		disc.createRelation(2, 11, "good link", Discussion.relXMLTypes[0]);
+		disc.createRelation(2, 11, "cant link (already exist)", Discussion.relXMLTypes[0]);
+		disc.createRelation(1, 17, "cant link (quote doesnt exist)",
 				Discussion.relXMLTypes[0]);
 
 		Document doc = DocumentHelper.createDocument();
@@ -595,11 +595,11 @@ public class DiscussionTest extends TestCase {
 		disc.addOpinion("one");
 		disc.addQuoteTest(11, 1);
 		disc.addQuoteTest(12, 1);
-		disc.createLink(2, 11, "link between 'one' and '1'",
+		disc.createRelation(2, 11, "link between 'one' and '1'",
 				Discussion.relXMLTypes[0]);
-		disc.createLink(2, 12, "link between 'one' and '2'",
+		disc.createRelation(2, 12, "link between 'one' and '2'",
 				Discussion.relXMLTypes[0]);
-		disc.removeLink(2, 11);
+		disc.removeRelation(2, 11);
 
 		Document doc = DocumentHelper.createDocument();
 		SAXReader reader = new SAXReader();
@@ -625,10 +625,10 @@ public class DiscussionTest extends TestCase {
 		disc.addOpinion("one");
 		disc.addQuoteTest(11, 1);
 		disc.addQuoteTest(12, 1);
-		disc.createLink(2, 11, "link between 'one' and '1'",
+		disc.createRelation(2, 11, "link between 'one' and '1'",
 				Discussion.relXMLTypes[0]);
-		disc.removeLink(2, 12);
-		disc.removeLink(2, 17);
+		disc.removeRelation(2, 12);
+		disc.removeRelation(2, 17);
 
 		Document doc = DocumentHelper.createDocument();
 		SAXReader reader = new SAXReader();
@@ -654,9 +654,9 @@ public class DiscussionTest extends TestCase {
 		disc.addOpinion("one");
 		disc.addQuoteTest(11, 1);
 		disc.addQuoteTest(12, 1);
-		disc.createLink(2, 11, "should be removed", Discussion.relXMLTypes[0]);
-		disc.createLink(2, 12, "should be removed", Discussion.relXMLTypes[0]);
-		disc.createLink(1, 11, "shouldn't be removed", Discussion.relXMLTypes[0]);
+		disc.createRelation(2, 11, "should be removed", Discussion.relXMLTypes[0]);
+		disc.createRelation(2, 12, "should be removed", Discussion.relXMLTypes[0]);
+		disc.createRelation(1, 11, "shouldn't be removed", Discussion.relXMLTypes[0]);
 		disc.removeOpinion(2);
 
 		Document doc = DocumentHelper.createDocument();
@@ -683,9 +683,9 @@ public class DiscussionTest extends TestCase {
 		disc.addOpinion("one");
 		disc.addQuoteTest(11, 1);
 		disc.addQuoteTest(12, 1);
-		disc.createLink(2, 11, "should be removed", Discussion.relXMLTypes[0]);
-		disc.createLink(2, 12, "shouldn't be removed", Discussion.relXMLTypes[0]);
-		disc.createLink(1, 11, "should be removed", Discussion.relXMLTypes[0]);
+		disc.createRelation(2, 11, "should be removed", Discussion.relXMLTypes[0]);
+		disc.createRelation(2, 12, "shouldn't be removed", Discussion.relXMLTypes[0]);
+		disc.createRelation(1, 11, "should be removed", Discussion.relXMLTypes[0]);
 		disc.removeQuote(11);
 
 		Document doc = DocumentHelper.createDocument();
@@ -716,7 +716,7 @@ public class DiscussionTest extends TestCase {
 		
 		disc.addOpinion("hello1");
 		disc.addOpinion("hello2");
-		disc.createLink(1, 2, "no comment", Discussion.relXMLTypes[1]);
+		disc.createRelation(1, 2, "no comment", Discussion.relXMLTypes[1]);
 		disc.addOpinion("hello3"); // hopefully, this won't destroy the order
 
 		Document doc = DocumentHelper.createDocument();
@@ -747,13 +747,13 @@ public class DiscussionTest extends TestCase {
 		
 		disc.addOpinion("hello1");
 		disc.addOpinion("hello2");
-		disc.createLink(1, 2, "no comment", Discussion.relXMLTypes[1]);
+		disc.createRelation(1, 2, "no comment", Discussion.relXMLTypes[1]);
 		disc.addOpinion("hello3");
-		disc.createLink(3, 2, "no comment", Discussion.relXMLTypes[0]);
+		disc.createRelation(3, 2, "no comment", Discussion.relXMLTypes[0]);
 		disc.addOpinion("hello4");
 		disc.addOpinion("hello5");
-		disc.createLink(4, 5, "no comment", Discussion.relXMLTypes[1]);
-		disc.createLink(5, 1, "no comment", Discussion.relXMLTypes[0]);
+		disc.createRelation(4, 5, "no comment", Discussion.relXMLTypes[1]);
+		disc.createRelation(5, 1, "no comment", Discussion.relXMLTypes[0]);
 		disc.addOpinion("hello6");
 
 		Document doc = DocumentHelper.createDocument();
