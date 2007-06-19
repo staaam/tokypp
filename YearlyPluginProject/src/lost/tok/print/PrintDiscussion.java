@@ -1,10 +1,22 @@
 package lost.tok.print;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import org.dom4j.Element;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.printing.PrintDialog;
+import org.eclipse.swt.printing.Printer;
+import org.eclipse.swt.printing.PrinterData;
+import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Shell;
 
 import lost.tok.Discussion;
 import lost.tok.Link;
@@ -18,21 +30,43 @@ public class PrintDiscussion {
 
 	public Discussion discussion;
 	
-	public void createDiscuttionFile(Discussion d){
-		
+	public PrintDiscussion(Shell shell, Discussion d) {	 
+	     
+		//create the discussion file
+		 File tmp = null;
+		 
+		try {
+			tmp = createDiscuttionFile(d);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//print the discussion file
+		 printDiscussionFile(shell, tmp);
+	}
+	
+	public File createDiscuttionFile(Discussion d) throws IOException{
 		this.discussion = d;
 		
 		if (d==null)
-			return;
+			return null;
 		
-		System.out.println("=========================================");
-		System.out.println("=========== DISCUSSION PRINT ============");
-		System.out.println("=========================================");
+		File discFile = new File(d.getDiscName() + ".txt");
+		System.out.println("path: "+ discFile.getAbsolutePath());
+		//discFile.deleteOnExit();
 		
-		System.out.println("Discussion Name: " + d.getDiscName());
-		System.out.println("Author: " + d.getCreatorName());
-		//to un-comment when getDescription() will be created
-		//System.out.println("Description: " + d.getDescription());
+		FileWriter fw = new FileWriter(discFile);
+		//fw.write("testing 123");
+		
+		
+		fw.write("=========================================\n");
+		fw.write("=========== DISCUSSION PRINT ============\n");
+		fw.write("=========================================\n");
+		
+		fw.write("Discussion Name: " + d.getDiscName() + "\n");
+		fw.write("Author: " + d.getCreatorName() + "\n");
+		//MICHAL - to un-comment when getDescription() will be created
+		//fw.write("Description: " + d.getDescription());
 		
 		//if the discussion was linked, the source it was linked to:
 		Link link = d.getLink();
@@ -40,18 +74,18 @@ public class PrintDiscussion {
 		if (link!=null){
 			
 			//the text of the link:
-			System.out.println(link.getSubject());
+			fw.write("\nLink Description:" + link.getSubject() + "\n");
 			//the link type
-			System.out.println("Link Type " + link.getDisplayLinkType());
+			fw.write("Link Type: " + link.getDisplayLinkType() + "\n");
 			
 			//links to sources:
-			System.out.println("Related to: ");
+			fw.write("Related to: \n");
 			for (SubLink sl: link.getSubLinkList()){
-				System.out.println(sl.getLinkedSource());
+				fw.write("\t"+sl.getLinkedSource().toString() + "\n");
 			}
 		}
 	
-		System.out.println("");
+		fw.write("\n");
 		
 		int opinionCounter = 1;
 		int pos=1;
@@ -60,7 +94,7 @@ public class PrintDiscussion {
 		// opinions:		
 		Opinion[] opinions = discussion.getOpinions();
 		for (Opinion o : opinions ){
-			System.out.println(opinionCounter+") " + o.getName());
+			fw.write(opinionCounter+") " + o.getName() + "\n");
 			
 			int quoteCounter = 1;
 			
@@ -93,12 +127,12 @@ public class PrintDiscussion {
 				}
 				
 				if (q.getComment()==""){ //no comment on quote
-					System.out.println("	"+opinionCounter + "." + quoteCounter+") "
-							+ q.getText() + " [" + pos + "]");
+					fw.write("\t"+opinionCounter + "." + quoteCounter+") "
+							+ q.getText() + " [" + pos + "]\n");
 				}
 				else{ //with comment
-					System.out.println("	"+opinionCounter + "." + quoteCounter+") "
-							+ q.getText() + ", <comment: " + q.getComment()+"> [" + pos + "]");
+					fw.write("\t"+opinionCounter + "." + quoteCounter+") "
+							+ q.getText() + ", <comment: " + q.getComment()+"> [" + pos + "]\n");
 					
 				}
 			
@@ -109,24 +143,71 @@ public class PrintDiscussion {
 		
 		
 		//bibliography:
-		System.out.println("");
-		System.out.println("Bibliography:");
+		fw.write("\n");
+		fw.write("Bibliography:\n");
 				
 		for (int i=0; i<sourceList.size();i++){
 			SourceDocument sd = new SourceDocument();
 			sd.set(sourceList.get(i));
 			String author = sd.getAuthor();
-			System.out.println("["+ (i+1) +"]" + sourceList.get(i).getFile().getName() + ", " + author);
+			fw.write("["+ (i+1) +"]" + sourceList.get(i).getFile().getName() + ", " + author + "\n");
 		}
 		
 		//signature
-		System.out.println("");
-		System.out.println("=========================================");
-		System.out.println("======= LOST - Tree of Knowladge ========");
-		System.out.println("=========================================");
+		fw.write("\n");
+		fw.write("=========================================\n");
+		fw.write("======= LOST - Tree of Knowladge ========\n");
+		fw.write("=========================================\n");
+		
+		fw.flush();
+		fw.close();
+		
+		return discFile;
 		
 	}
 	
+	public void printDiscussionFile(Shell shell,File file){
+		if (file != null) {
+			 // Have user select a printer
+		     PrintDialog dialog = new PrintDialog(shell);
+		     dialog.setPrintToFile(true);
+		     PrinterData printerData = dialog.open();
+		     if (printerData != null) {
+		    	 // Create the printer
+		         Printer printer = new Printer(printerData);
+		         try {
+		        	 // Print the contents of the file
+		        	 new WrappingPrinter(printer, file.getName(), getFileContents(file)).print();
+		         } catch (Exception e) {
+		           MessageBox mb = new MessageBox(shell, SWT.ICON_ERROR | SWT.OK);
+		           mb.setMessage(e.getMessage());
+		           mb.open();
+		         }
+
+		        // Dispose the printer
+		        printer.dispose();
+		      }
+		    }
+	}
+	
+	private String getFileContents(File file) throws IOException {
+		  StringBuffer contents = new StringBuffer();
+		  BufferedReader reader = null;
+		  try {
+			  // Read in the file
+			  reader = new BufferedReader(new FileReader(file));
+			  while (reader.ready()) {
+				  contents.append(reader.readLine());
+				  contents.append("\n"); // Throw away LF chars, and just replace CR
+			  }
+		  } 
+		  finally {
+			  if (reader != null) try {
+				  reader.close();
+			  } catch (IOException e) {}
+		  }
+		  return contents.toString();
+	  }
 	
 	public void setDiscussion(Discussion d){
 		this.discussion = d;
@@ -166,5 +247,5 @@ public class PrintDiscussion {
 	=============================================
 	  LOST - Tree of Knowladge
 	============================================= 
-	link class??
+
 */
