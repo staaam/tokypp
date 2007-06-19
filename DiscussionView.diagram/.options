@@ -1,0 +1,7 @@
+# Debugging options for the DiscussionView.diagram plug-in
+
+# Turn on general debugging for the DiscussionView.diagram plug-in
+DiscussionView.diagram/debug=false
+
+# Turn on debugging of visualID processing
+DiscussionView.diagram/debug/visualID=true

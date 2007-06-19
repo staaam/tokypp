@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<plugin>
+
+   <extension point="org.eclipse.core.runtime.preferences">
+      <initializer class="editor.diagram.part.DiscussionDiagramPreferenceInitializer"/>
+   </extension>
+
+  <extension point="org.eclipse.team.core.fileTypes">
+      <fileTypes
+         type="text"
+         extension="dis">
+      </fileTypes>
+  </extension>
+
+   <extension point="org.eclipse.emf.ecore.extension_parser">
+      <parser
+         type="dis"
+         class="org.eclipse.gmf.runtime.emf.core.resources.GMFResourceFactory">
+      </parser>
+   </extension>
+
+   <extension point="org.eclipse.ui.editors">
+     <editor
+        id="editor.diagram.part.DiscussionDiagramEditorID"
+        name="Discussion Diagram Editor"
+        icon="icons/obj16/EditorDiagramFile.gif"
+        extensions="dis"
+        default="false"
+        class="editor.diagram.part.DiscussionDiagramEditor"
+        matchingStrategy="editor.diagram.part.DiscussionMatchingStrategy"
+        contributorClass="editor.diagram.part.DiscussionDiagramActionBarContributor">
+     </editor>
+   </extension>
+
+   <extension point="org.eclipse.ui.newWizards">
+  	  <wizard
+  	     name="Discussion Diagram"
+  	     icon="icons/obj16/EditorDiagramFile.gif"
+  	     category="lost.tok.wizards.newDiscussionEditor"
+  	     class="editor.diagram.part.DiscussionCreationWizard"
+  	     id="editor.diagram.part.DiscussionCreationWizardID">
+  	  	 <description>
+  	  		Creates Discussion diagram.
+  	  	 </description>  
+      </wizard>
+     <category
+           id="lost.tok.wizards.newDiscussionEditor"
+           name="Discussion Editor"/>
+   </extension>
+
+   <extension point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            id="DiscussionView.diagram.ui.objectContribution.IFile1"
+            nameFilter="*.editor"
+            objectClass="org.eclipse.core.resources.IFile">
+         <action
+               label="Initialize editor_diagram diagram file"
+               class="editor.diagram.part.DiscussionInitDiagramFileAction"
+               menubarPath="additions"
+               enablesFor="1"
+               id="editor.diagram.part.DiscussionInitDiagramFileActionID">
+         </action>
+      </objectContribution>  
+      <objectContribution
+            adaptable="false"
+            id="DiscussionView.diagram.ui.objectContribution.OpinionEditPart2"
+            objectClass="editor.diagram.edit.parts.OpinionEditPart">
+         <action
+               class="editor.diagram.part.DiscussionLoadResourceAction"
+               enablesFor="1"
+               id="editor.diagram.part.DiscussionLoadResourceActionID"
+               label="Load Resource..."
+               menubarPath="additions">
+         </action>
+      </objectContribution>                      
+  </extension>
+
+   <extension point="org.eclipse.gmf.runtime.common.ui.services.action.contributionItemProviders">
+      <contributionItemProvider
+            class="org.eclipse.gmf.runtime.diagram.ui.providers.DiagramContributionItemProvider"
+            checkPluginLoaded="false">
+         <Priority name="Low"/>
+         <popupContribution class="org.eclipse.gmf.runtime.diagram.ui.providers.DiagramContextMenuProvider">
+            <popupStructuredContributionCriteria objectClass="editor.diagram.edit.parts.RelationEditPart"/>
+            <popupPredefinedItem id="deleteFromDiagramAction" remove="true"/>
+         </popupContribution>
+         <popupContribution class="org.eclipse.gmf.runtime.diagram.ui.providers.DiagramContextMenuProvider">
+            <popupStructuredContributionCriteria objectClass="editor.diagram.edit.parts.RelationSecondEditPart"/>
+            <popupAction path="/editGroup" id="deleteFromModelAction"/>
+            <popupPredefinedItem id="deleteFromDiagramAction" remove="true"/>
+         </popupContribution>
+         <popupContribution class="org.eclipse.gmf.runtime.diagram.ui.providers.DiagramContextMenuProvider">
+            <popupStructuredContributionCriteria objectClass="editor.diagram.edit.parts.RelationFirstEditPart"/>
+            <popupAction path="/editGroup" id="deleteFromModelAction"/>
+            <popupPredefinedItem id="deleteFromDiagramAction" remove="true"/>
+         </popupContribution>
+      </contributionItemProvider>
+   </extension>
+
+   <extension point="org.eclipse.gmf.runtime.common.ui.services.action.globalActionHandlerProviders">
+      <GlobalActionHandlerProvider
+         class="org.eclipse.gmf.runtime.diagram.ui.providers.DiagramGlobalActionHandlerProvider"
+         id="DiscussionPresentation">
+         <Priority name="Lowest"/>
+         <ViewId id="editor.diagram.part.DiscussionDiagramEditorID">
+            <ElementType class="org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart">
+               <GlobalActionId actionId="delete"/>
+            </ElementType>
+            <ElementType class="org.eclipse.gmf.runtime.diagram.ui.editparts.DiagramEditPart">
+               <GlobalActionId actionId="save"/>
+            </ElementType>
+         </ViewId>
+      </GlobalActionHandlerProvider>
+      <GlobalActionHandlerProvider
+         class="org.eclipse.gmf.runtime.diagram.ui.providers.ide.providers.DiagramIDEGlobalActionHandlerProvider"
+         id="DiscussionPresentationIDE">
+         <Priority name="Lowest"/>
+         <ViewId id="editor.diagram.part.DiscussionDiagramEditorID">
+            <ElementType class="org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart">
+               <GlobalActionId actionId="bookmark"/>
+            </ElementType>
+         </ViewId>
+      </GlobalActionHandlerProvider>
+      <GlobalActionHandlerProvider
+            class="org.eclipse.gmf.runtime.diagram.ui.render.providers.DiagramUIRenderGlobalActionHandlerProvider"
+            id="DiscussionRender">
+         <Priority name="Lowest"/>
+         <ViewId id="editor.diagram.part.DiscussionDiagramEditorID">
+            <ElementType class="org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart">
+               <GlobalActionId actionId="cut"/>
+               <GlobalActionId actionId="copy"/>
+               <GlobalActionId actionId="paste"/>
+            </ElementType>
+         </ViewId>
+      </GlobalActionHandlerProvider>
+   </extension>
+
+   <extension point="org.eclipse.gmf.runtime.diagram.core.viewProviders">
+      <viewProvider class="editor.diagram.providers.DiscussionViewProvider">
+         <Priority name="Lowest"/>
+         <context viewClass="org.eclipse.gmf.runtime.notation.Diagram" semanticHints="Discussion"/>
+         <context viewClass="org.eclipse.gmf.runtime.notation.Node" semanticHints=""/>
+         <context viewClass="org.eclipse.gmf.runtime.notation.Edge" semanticHints=""/>
+      </viewProvider>
+   </extension>
+
+   <extension point="org.eclipse.gmf.runtime.diagram.ui.editpartProviders">
+      <editpartProvider class="editor.diagram.providers.DiscussionEditPartProvider">
+         <Priority name="Lowest"/>
+      </editpartProvider>
+   </extension>
+
+   <extension point="org.eclipse.gmf.runtime.diagram.ui.paletteProviders">
+      <paletteProvider class="editor.diagram.providers.DiscussionPaletteProvider">
+         <Priority name="Lowest"/>
+         <editor id="editor.diagram.part.DiscussionDiagramEditorID"/>
+      </paletteProvider>
+   </extension>
+
+   <extension point="org.eclipse.gmf.runtime.emf.ui.modelingAssistantProviders">
+      <modelingAssistantProvider class="editor.diagram.providers.DiscussionModelingAssistantProvider">
+         <Priority name="Lowest"/>
+      </modelingAssistantProvider>
+   </extension>
+
+   <extension point="org.eclipse.gmf.runtime.common.ui.services.properties.propertiesProviders">
+      <PropertiesProvider
+            verifyPluginLoaded="false"
+            class="editor.diagram.providers.DiscussionPropertyProvider">
+         <Priority name="Lowest"/>
+      </PropertiesProvider>
+   </extension>
+
+   <extension point="org.eclipse.gmf.runtime.common.ui.services.iconProviders">
+      <IconProvider class="editor.diagram.providers.DiscussionIconProvider">
+         <Priority name="Low"/>
+      </IconProvider>
+   </extension>
+
+   <extension point="org.eclipse.gmf.runtime.common.ui.services.parserProviders">
+      <ParserProvider class="editor.diagram.providers.DiscussionParserProvider">
+         <Priority name="Lowest"/>
+      </ParserProvider>
+   </extension>
+
+   <extension point="org.eclipse.gmf.runtime.emf.type.core.elementTypes">
+
+      <metamodel nsURI="lost.tok.discussion">
+         <metamodelType
+               id="DiscussionView.diagram.Opinion_79"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+               eclass="Opinion"
+               edithelper="editor.diagram.edit.helpers.OpinionEditHelper">
+            <param name="semanticHint" value="79"/>
+         </metamodelType>
+      </metamodel>
+
+      <metamodel nsURI="lost.tok.discussion">
+         <metamodelType
+               id="DiscussionView.diagram.Relation_1001"
+               name="Opinion"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+               eclass="Relation"
+               edithelper="editor.diagram.edit.helpers.RelationEditHelper">
+            <param name="semanticHint" value="1001"/>
+         </metamodelType>
+      </metamodel>
+
+      <metamodel nsURI="lost.tok.discussion">
+         <specializationType
+               id="DiscussionView.diagram.RelationSecond_3001"
+               name="Quote"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+               edithelperadvice="editor.diagram.edit.helpers.RelationSecondEditHelperAdvice">
+            <specializes id="org.eclipse.gmf.runtime.emf.type.core.null"/>
+            <param name="semanticHint" value="3001"/>
+         </specializationType>
+      </metamodel>
+
+      <metamodel nsURI="lost.tok.discussion">
+         <specializationType
+               id="DiscussionView.diagram.RelationFirst_3002"
+               name="Relation"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+               edithelperadvice="editor.diagram.edit.helpers.RelationFirstEditHelperAdvice">
+            <specializes id="org.eclipse.gmf.runtime.emf.type.core.null"/>
+            <param name="semanticHint" value="3002"/>
+         </specializationType>
+      </metamodel>
+   </extension>
+
+   <extension point="org.eclipse.gmf.runtime.emf.type.core.elementTypeBindings">
+      <clientContext id="DiscussionClientContext">
+         <enablement>
+            <test
+               property="org.eclipse.gmf.runtime.emf.core.editingDomain"
+               value="DiscussionView.diagram.EditingDomain"/>
+         </enablement>
+      </clientContext> 
+      <binding context="DiscussionClientContext">
+         <elementType ref="DiscussionView.diagram.Opinion_79"/>
+         <elementType ref="DiscussionView.diagram.Relation_1001"/>
+         <elementType ref="DiscussionView.diagram.RelationSecond_3001"/>
+         <elementType ref="DiscussionView.diagram.RelationFirst_3002"/>
+         <advice ref="org.eclipse.gmf.runtime.diagram.core.advice.notationDepdendents"/>
+      </binding>
+   </extension>
+   <extension
+         point="org.eclipse.gmf.runtime.diagram.ui.resources.editor.documentProviders">
+      <provider
+            class="editor.diagram.providers.DiscussionDocumentProvider"
+            documentType="org.eclipse.gmf.runtime.diagram.ui.editor.IDocument"
+            extensions=".dis"
+            id="editor.diagram.providers.DiscussionDocumentProvider"/>
+   </extension>
+
+</plugin>
