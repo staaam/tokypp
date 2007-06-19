@@ -1,6 +1,5 @@
 package lost.tok.authEditor;
 
-
 import java.util.TreeMap;
 
 import lost.tok.Author;
@@ -10,9 +9,21 @@ import lost.tok.ToK;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.DragSource;
+import org.eclipse.swt.dnd.DragSourceEvent;
+import org.eclipse.swt.dnd.DragSourceListener;
+import org.eclipse.swt.dnd.DropTarget;
+import org.eclipse.swt.dnd.DropTargetAdapter;
+import org.eclipse.swt.dnd.DropTargetEvent;
+import org.eclipse.swt.dnd.TextTransfer;
+import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.editors.text.TextEditor;
@@ -20,17 +31,16 @@ import org.eclipse.ui.part.FileEditorInput;
 
 public class AuthorsEditor extends TextEditor {
 	
-	/******* M E M B E R S *******************************/
+	//******* M E M B E R S *******************************
 	
 	// Note(Shay): I've moved this from the discussion, since we cannot trust the def opinion id
 	public static final int DEFAULT_OPINION_ID = 1;
 	
 	public static final String EDITOR_ID = "lost.tok.authEditor.AuthorsEditor";
-	private static final String DISCUSSION = "discussion";
-	private static final String QUOTE = "Quote";
-	private static final String OPINION = "Opinion";
+	private static final String AUTHORS_GROUPS = "Authors Groups";
+	private static final String AUTHOR = "Author";
+	private static final String RANK = "Rank";
 	private AuthorsHandler authHandler = null;
-//	private Composite editor = null;
 	private TreeItem rootItem = null;
 	private int ctrlCurrentWidth = 0;
 	
@@ -45,161 +55,8 @@ public class AuthorsEditor extends TextEditor {
 	
 	public void createPartControl(Composite parent) {
 		final Composite par = parent;
-//		editor = par;
 		final Tree authTree = new Tree(parent, SWT.MULTI | SWT.WRAP | SWT.BORDER);
 
-		/**************************************************************
-		 * T E M P O R A R Y   S H A D O W E D
-		 **************************************************************
-		
-		// ***********************************************************
-		// ************************ DELETE QUOTES AND OPINIONS *******
-		// ***********************************************************
-		disTree.addKeyListener(new KeyListener() {
-			public void keyPressed(KeyEvent e) {
-				if (e.keyCode == SWT.DEL) {
-					// deletion of descussion or default opinion is NOT allowed
-					if (disTree.getSelection()[0].getData().equals(DISCUSSION)
-							|| (disTree.getSelection()[0].getData().equals(
-									OPINION) && discussion.getOpinionsId(
-									disTree.getSelection()[0].getText())
-									.equals(Discussion.DEFAULT_OPINION_ID))) {
-						return;
-					}
-
-					// deleting an opinion
-					if (disTree.getSelection()[0].getData().equals(OPINION)) {
-						TreeItem defOp = null;
-						TreeItem itmArr[] = disTree.getItem(0).getItems();
-
-						// fatch default opinion
-						for (TreeItem element : itmArr) {
-							if (discussion.getOpinionsId(element.getText())
-									.equals(Discussion.DEFAULT_OPINION_ID)) {
-								defOp = element;
-							}
-						}
-
-						// if no default opinion create one
-						if (defOp == null) {
-							defOp = new TreeItem(disTree.getItem(0), SWT.NONE);
-							defOp.setText(Discussion.DEFAULT_OPINION);
-							defOp.setData(OPINION);
-						}
-
-						TreeItem itemArr[] = disTree.getSelection()[0]
-								.getItems();
-
-						for (int i = 0; i < itemArr.length; i++) {
-							TreeItem tempItem = new TreeItem(defOp, SWT.NONE);
-							setTreeQuote((Quote) itemArr[i].getData(QUOTE),
-									tempItem);
-							moveQuoteToDefault(itemArr[i]);
-
-							itemArr[i].dispose();
-							itemArr[i] = null;
-						}
-						removeOpinionFromFile(disTree.getSelection()[0]);
-						disTree.getSelection()[0].dispose();
-						disTree.getSelection()[0] = null;
-
-						return;
-					}
-					removeQuoteFromFile(disTree.getSelection()[0]);
-					disTree.getSelection()[0].dispose();
-					disTree.getSelection()[0] = null;
-				}
-			}
-
-			public void keyReleased(KeyEvent e) {
-			}
-		});
-
-		// ***********************************************************
-		// ************************ DOUBLE CLICK ON QUOTE *******
-		// ***********************************************************
-		disTree.addMouseListener(new MouseListener() {
-
-			public void mouseDoubleClick(MouseEvent e) {
-				if (e.widget == null) {
-					return;
-				}
-
-				Tree tree = (Tree) e.widget;
-				TreeItem treeItem = tree.getSelection()[0];
-				if (treeItem.getData(QUOTE) == null) {
-					return;
-				}
-
-				// a double on a quote will lead to:
-				// 1. "jumping" to the quote origin document
-				// 2. highlighting the quote
-				// 3. scrolling the editor to the begining of the quote
-				if (treeItem.getData(QUOTE) instanceof Quote) {
-					Quote quote = (Quote) treeItem.getData(QUOTE);
-
-					IWorkbenchWindow ww = getSite().getWorkbenchWindow();
-					String editorId = OperationTable.EDITOR_ID;
-
-					// oppening the source document
-					IFile source = quote.getSource().getFile();
-					IEditorPart editorP = null;
-					try {
-						editorP = ww.getActivePage().openEditor(
-								new FileEditorInput(source), editorId);
-					} catch (PartInitException e1) {
-						e1.printStackTrace();
-					}
-
-					// Marking the text in the editor
-					OperationTable ot = (OperationTable) editorP;
-					ot.clearMarked();
-
-					// Loading the quote's xml document, and creating a
-					// SourceDocument from it
-					Document xmlSrcDoc = GeneralFunctions.readFromXML(quote
-							.getSource().getFile());
-					SourceDocument srcDoc = new SourceDocument();
-					srcDoc.set(xmlSrcDoc);
-
-					boolean firstExcerp = true;
-					int qBegining = 0, qLength = 0;
-					for (Excerption ex : quote.getExcerptions()) {
-						// getting the chapter in which the text appears
-						ChapterText ct = srcDoc.getChapterText(ex
-								.getPathInSourceFile());
-						// adding the offset of the chpater (in the whole doc)
-						// to the offset of the excerption
-						int exBegin = ct.getOffset() + ex.getStartPos();
-						int exLength = ex.getEndPos() - ex.getStartPos();
-						TextSelection ts = new TextSelection(exBegin, exLength);
-						ot.mark(ts);
-
-						// setting the begining and length of the quote
-						if (firstExcerp) {
-							qBegining = exBegin;
-							qLength = exLength;
-							firstExcerp = false;
-						}
-					}
-					ot.refreshDisplay();
-
-					// scrolling the editor to the position of the quote
-					ot.resetHighlightRange();
-					ot.setHighlightRange(qBegining, qLength, true);
-				}
-
-			}
-
-			public void mouseDown(MouseEvent e) {
-				// nothing
-			}
-
-			public void mouseUp(MouseEvent e) {
-				// nothing
-			}
-
-		});
 
 		// *************************************************
 		// ***************** DRAG AND DROP *****************
@@ -207,28 +64,49 @@ public class AuthorsEditor extends TextEditor {
 		Transfer[] types = new Transfer[] { TextTransfer.getInstance() };
 		int operations = DND.DROP_MOVE | DND.DROP_COPY | DND.DROP_LINK;
 
-		final DragSource source = new DragSource(disTree, operations);
+		final DragSource source = new DragSource(authTree, operations);
 		source.setTransfer(types);
 
 		final TreeItem[] dragSourceItem = new TreeItem[1];
 
 		source.addDragListener(new DragSourceListener() {
 			public void dragFinished(DragSourceEvent event) {
+				
+				/**** DEBUG *************************************/
+//				MessageBox d = new MessageBox(par.getShell());
+//				d.setMessage("Drag Finished");
+//				d.open();
+				/************************************************/
+				
 				if (event.detail == DND.DROP_MOVE) {
-					// RemoveQuoteFromOpinion(dragSourceItem[0]);
 					dragSourceItem[0].dispose();
 				}
 				dragSourceItem[0] = null;
 			};
 
 			public void dragSetData(DragSourceEvent event) {
+				
+				/**** DEBUG *************************************/
+//				MessageBox d = new MessageBox(par.getShell());
+//				d.setMessage("Drag Set Data");
+//				d.open();
+				/************************************************/
+				
 				event.data = dragSourceItem[0].getText();
 			}
 
 			public void dragStart(DragSourceEvent event) {
-				TreeItem[] selection = disTree.getSelection();
-				if (selection.length > 0
-						&& ((String) selection[0].getData()).equals(QUOTE)) {
+				
+				/**** DEBUG *************************************/
+//				MessageBox d = new MessageBox(par.getShell());
+//				d.setMessage("Drag Start");
+//				d.open();
+				/************************************************/
+				
+				//enable drag only if one author is selected
+				TreeItem[] selection = authTree.getSelection();
+				if (selection.length == 1 && 
+						((String) selection[0].getData()).equals(AUTHOR)) {
 					event.doit = true;
 					dragSourceItem[0] = selection[0];
 				} else {
@@ -237,15 +115,21 @@ public class AuthorsEditor extends TextEditor {
 			}
 		});
 
-		DropTarget target = new DropTarget(disTree, operations);
+		DropTarget target = new DropTarget(authTree, operations);
 		target.setTransfer(types);
 		target.addDropListener(new DropTargetAdapter() {
 			public void dragOver(DropTargetEvent event) {
+				
+				/**** DEBUG *************************************/
+//				MessageBox d = new MessageBox(par.getShell());
+//				d.setMessage("Drag Over");
+//				d.open();
+				/************************************************/
+				
 				event.feedback = DND.FEEDBACK_EXPAND | DND.FEEDBACK_SCROLL;
 				if (event.item != null) {
 					TreeItem item = (TreeItem) event.item;
-					Point pt = par.getDisplay().map(null, disTree, event.x,
-							event.y);
+					Point pt = par.getDisplay().map(null, authTree, event.x, event.y);
 					Rectangle bounds = item.getBounds();
 					if (pt.y < bounds.y + bounds.height / 3) {
 						event.feedback |= DND.FEEDBACK_INSERT_BEFORE;
@@ -258,23 +142,24 @@ public class AuthorsEditor extends TextEditor {
 			}
 
 			public void drop(DropTargetEvent event) {
-				if (((TreeItem) event.item).getData().equals(QUOTE)
-						|| ((TreeItem) event.item).getData().equals(DISCUSSION)) {
+				if (((TreeItem) event.item).getData().equals(AUTHOR)
+						|| ((TreeItem) event.item).getData().equals(AUTHORS_GROUPS)) {
 					event.detail = DND.DROP_NONE;
 					return;
 				}
+				
 				if (event.data == null) {
 					event.detail = DND.DROP_NONE;
 					return;
 				}
 
-				Quote quote = (Quote) dragSourceItem[0].getData(QUOTE);
+				Author author = (Author) dragSourceItem[0].getData(AUTHOR);
 				if (event.item == null) {
-					TreeItem item = new TreeItem(disTree, SWT.NONE);
-					item.setText("basa"); //$NON-NLS-1$
+					TreeItem item = new TreeItem(authTree, SWT.NONE);
+					item.setText("error");
 				} else {
 					TreeItem item = (TreeItem) event.item;
-					Point pt = par.getDisplay().map(null, disTree, event.x,
+					Point pt = par.getDisplay().map(null, authTree, event.x,
 							event.y);
 					Rectangle bounds = item.getBounds();
 					TreeItem parent = item.getParentItem();
@@ -288,34 +173,37 @@ public class AuthorsEditor extends TextEditor {
 							}
 						}
 						if (pt.y < bounds.y + bounds.height / 3) {
-							if (((String) parent.getData()).equals(OPINION)) {
+							if (((String) parent.getData()).equals(RANK)) {
 								TreeItem newItem = new TreeItem(parent,
 										SWT.NONE, index);
-								setTreeQuote(quote, newItem);
-								moveQuoteToOpinion(newItem);
+								setTreeAuthor(author, newItem);
+								moveAuthorToRank(newItem);
+								
 								return;
 							}
 							event.detail = DND.DROP_NONE;
 						} else if (pt.y > bounds.y + 2 * bounds.height / 3) {
-							if (((String) parent.getData()).equals(OPINION)) {
+							if (((String) parent.getData()).equals(RANK)) {
 								TreeItem newItem = new TreeItem(parent,
 										SWT.NONE, index + 1);
-								setTreeQuote(quote, newItem);
-								moveQuoteToOpinion(newItem);
+								setTreeAuthor(author, newItem);
+								moveAuthorToRank(newItem);
+								
 								return;
 							}
 							event.detail = DND.DROP_NONE;
 						} else {
-							if (((String) item.getData()).equals(OPINION)) {
+							if (((String) item.getData()).equals(RANK)) {
 								TreeItem newItem = new TreeItem(item, SWT.NONE);
-								setTreeQuote(quote, newItem);
-								moveQuoteToOpinion(newItem);
+								setTreeAuthor(author, newItem);
+								moveAuthorToRank(newItem);
+								
 								return;
 							}
 							event.detail = DND.DROP_NONE;
 						}
 					} else {
-						TreeItem[] items = disTree.getItems();
+						TreeItem[] items = authTree.getItems();
 						int index = 0;
 						for (int i = 0; i < items.length; i++) {
 							if (items[i] == item) {
@@ -324,28 +212,31 @@ public class AuthorsEditor extends TextEditor {
 							}
 						}
 						if (pt.y < bounds.y + bounds.height / 3) {
-							if (((String) disTree.getData()).equals(OPINION)) {
-								TreeItem newItem = new TreeItem(disTree,
+							if (((String) authTree.getData()).equals(RANK)) {
+								TreeItem newItem = new TreeItem(authTree,
 										SWT.NONE, index);
-								setTreeQuote(quote, newItem);
-								moveQuoteToOpinion(newItem);
+								setTreeAuthor(author, newItem);
+								moveAuthorToRank(newItem);
+								
 								return;
 							}
 							event.detail = DND.DROP_NONE;
 						} else if (pt.y > bounds.y + 2 * bounds.height / 3) {
-							if (((String) disTree.getData()).equals(OPINION)) {
-								TreeItem newItem = new TreeItem(disTree,
+							if (((String) authTree.getData()).equals(RANK)) {
+								TreeItem newItem = new TreeItem(authTree,
 										SWT.NONE, index + 1);
-								setTreeQuote(quote, newItem);
-								moveQuoteToOpinion(newItem);
+								setTreeAuthor(author, newItem);
+								moveAuthorToRank(newItem);
+								
 								return;
 							}
 							event.detail = DND.DROP_NONE;
 						} else {
-							if (((String) item.getData()).equals(OPINION)) {
+							if (((String) item.getData()).equals(RANK)) {
 								TreeItem newItem = new TreeItem(item, SWT.NONE);
-								setTreeQuote(quote, newItem);
-								moveQuoteToOpinion(newItem);
+								setTreeAuthor(author, newItem);
+								moveAuthorToRank(newItem);
+								
 								return;
 							}
 							event.detail = DND.DROP_NONE;
@@ -355,7 +246,7 @@ public class AuthorsEditor extends TextEditor {
 			}
 		});
 
-*/
+
 		// ***********************************************************************
 		// *************************** ASSIGN TREE EDITOR  *********************
 		// **********************************************************************
@@ -364,7 +255,7 @@ public class AuthorsEditor extends TextEditor {
 		rootItem = new TreeItem(authTree, SWT.MULTI | SWT.WRAP);
 
 		rootItem.setText("Authors rank groups");
-		rootItem.setData(DISCUSSION);
+		rootItem.setData(AUTHORS_GROUPS);
 
 		parent.getChildren()[0].addControlListener(new ControlAdapter() {
 			public void controlResized(ControlEvent e) {
@@ -432,12 +323,12 @@ public class AuthorsEditor extends TextEditor {
 
 //	return opinion from tree item
 	private Rank getRank(TreeItem rankToRemove) {
-		Rank rank = (Rank) rankToRemove.getData(OPINION);
+		Rank rank = (Rank) rankToRemove.getData(RANK);
 		return rank;
 	}
 
 	private Author getAuthor(TreeItem itemToMove) {
-		Author author = (Author) itemToMove.getData(QUOTE);
+		Author author = (Author) itemToMove.getData(AUTHOR);
 		return author;
 	}
 
@@ -445,8 +336,8 @@ public class AuthorsEditor extends TextEditor {
 //	set opinion properties
 	private void setTreeRank(Rank rank, TreeItem rankItem) {
 		rankItem.setText(rank.getName());
-		rankItem.setData(OPINION, rank);
-		rankItem.setData(OPINION);
+		rankItem.setData(RANK, rank);
+		rankItem.setData(RANK);
 		// opinionItem.setImage(imageOpin);
 	}
 
@@ -455,8 +346,8 @@ public class AuthorsEditor extends TextEditor {
 
 		authorItem.setText(author.getName());
 
-		authorItem.setData(QUOTE, author);
-		authorItem.setData(QUOTE);
+		authorItem.setData(AUTHOR, author);
+		authorItem.setData(AUTHOR);
 	}
 
 	/**
@@ -633,7 +524,7 @@ public class AuthorsEditor extends TextEditor {
 
 //	move given quote to opinion
 	public void moveAuthorToRank(TreeItem authorToAdd) {
-		Rank rank = (Rank) authorToAdd.getParentItem().getData(OPINION);
+		Rank rank = (Rank) authorToAdd.getParentItem().getData(RANK);
 		Author author = getAuthor(authorToAdd);
 		authHandler.relocateAuthor(author.getName(), rank.getId());
 	}
