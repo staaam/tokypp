@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="editor"
+    nsURI="lost.tok.discussion" nsPrefix="DiscussionEditor">
+  <eClassifiers xsi:type="ecore:EClass" name="Opinion" eSuperTypes="#//DiscussionObject">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="General"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="relates" eType="#//Relation"
+        containment="true" eOpposite="#//Relation/First"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Quote" eSuperTypes="#//DiscussionObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="opinion" eType="#//Relation"
+        defaultValueLiteral="" containment="true" eOpposite="#//Relation/Second"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Relation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="First" eType="#//DiscussionObject"
+        eOpposite="#//Opinion/relates"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Second" eType="#//DiscussionObject"
+        eOpposite="#//Quote/opinion"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DiscussionObject" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral=""/>
+  </eClassifiers>
+</ecore:EPackage>
