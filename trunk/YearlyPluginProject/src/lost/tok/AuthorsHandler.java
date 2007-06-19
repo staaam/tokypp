@@ -25,8 +25,7 @@ public class AuthorsHandler {
 	private Integer id = 1;
 	public String name;
 	public int rank;
-	public static final String DEFAULT_RANK = Messages
-	.getString("AuthorsHandler.DefRank");
+	public static final String DEFAULT_RANK = Messages.getString("AuthorsHandler.DefRank");
 
 
 	/**********************************************************************
@@ -213,11 +212,11 @@ public class AuthorsHandler {
 		Document doc = readFromXML();
 
 		List result = doc.selectNodes("//authorsGroup[name='" + authorsGroup + "']/author");
-
+		
 		Author[] authors = new Author[result.size()];
 		for (Object object : result) {
 			Element elem = (Element) object;
-			authors[j++] = new Author(Integer.valueOf(authorsGroup), elem.getText());
+			authors[j++] = new Author(getRank(authorsGroup), elem.getText());
 		}
 		
 		return authors;
@@ -293,6 +292,10 @@ public class AuthorsHandler {
 	// write the document to the XML file
 	private void writeToXml(Document doc) {
 		GeneralFunctions.writeToXml(getFullFileName(), doc);
+	}
+	
+	private Integer getRank(String authorsGroup){
+		return Integer.valueOf(authorsGroup.substring(authorsGroup.length()-1));
 	}
 
 }
