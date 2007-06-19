@@ -181,7 +181,6 @@ public class LinkedParagraph implements SrcElem
 			String tooltip = GeneralFunctions.xmlEscape(info.getNames());
 			String type = info.getType(); // the class (type) of the link
 			
-			// TODO(Shay): Add styles to the links using class
 			s.append( "<a href=\"");
 			
 			s.append( source.getPathTo(targetPage) );

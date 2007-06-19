@@ -28,7 +28,6 @@ import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
 import org.eclipse.ui.internal.wizards.datatransfer.DataTransferMessages;
 import org.eclipse.ui.internal.wizards.datatransfer.IFileExporter;
 
-// TODO: Auto-generated Javadoc
 /**
  * Operation for exporting a resource and its children to a new .zip or .tar.gz
  * file.
@@ -248,7 +247,7 @@ public class DiscussionExportOperation implements IRunnableWithProgress {
 		// try {
 		// tok.getProject().refreshLocal(IResource.DEPTH_INFINITE, null);
 		// } catch (CoreException e) {
-		// // TODO Auto-generated catch block
+		// // Auto-generated catch block
 		// e.printStackTrace();
 		// }
 		return true;

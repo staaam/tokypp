@@ -218,7 +218,6 @@ abstract public class HTMLPage
 		for (int i=0; i < segCount - 1; i++)
 			currPath.append("../");
 		
-		// TODO(Shay): Verify correctness
 		return currPath.toString();
 	}
 	
