@@ -20,7 +20,7 @@
             name="%editor.source.parser.name"/>
        <editor
             class="lost.tok.disEditor.DiscussionEditor"
-            contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
+            contributorClass="lost.tok.disEditor.PrintActionContributor"
             default="true"
             extensions="dis"
             icon="icons/opinion.gif"
