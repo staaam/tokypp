@@ -1,5 +1,7 @@
 package lost.tok.opTable;
 
+import lost.tok.Link;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.graphics.Color;
@@ -98,6 +100,44 @@ public class StyleManager {
 	static public StyleRange getUnparsedChapterStyle() {
 		return new StyleRange(0, 0, UNPARSED_CHAPTER_FG_TEXT_COLOR,
 				CHAPTER_BG_TEXT_COLOR, SWT.BOLD);
+	}
+
+	private static final Color LINK_TYPE_GENERAL_FG_TEXT_COLOR = new Color(Display
+			.getCurrent(), 0, 0, 0);
+
+	private static final Color LINK_TYPE_GENERAL_BG_TEXT_COLOR = new Color(Display
+			.getCurrent(), 25, 180, 225);
+
+	private static final StyleRange LINK_TYPE_GENERAL_STYLE = new StyleRange(0, 0, 
+			LINK_TYPE_GENERAL_FG_TEXT_COLOR, LINK_TYPE_GENERAL_BG_TEXT_COLOR);
+
+	private static final Color LINK_TYPE_DIFFICULTY_FG_TEXT_COLOR = new Color(Display
+			.getCurrent(), 0, 0, 0);
+
+	private static final Color LINK_TYPE_DIFFICULTY_BG_TEXT_COLOR = new Color(Display
+			.getCurrent(), 225, 25, 25);
+
+	private static final StyleRange LINK_TYPE_DIFFICULTY_STYLE = new StyleRange(0, 0, 
+			LINK_TYPE_DIFFICULTY_FG_TEXT_COLOR, LINK_TYPE_DIFFICULTY_BG_TEXT_COLOR);
+
+	private static final Color LINK_TYPE_INTERPRETATION_FG_TEXT_COLOR = new Color(Display
+			.getCurrent(), 0, 0, 0);
+
+	private static final Color LINK_TYPE_INTERPRETATION_BG_TEXT_COLOR = new Color(Display
+			.getCurrent(), 100, 225, 25);
+
+	private static final StyleRange LINK_TYPE_INTERPRETATION_STYLE = new StyleRange(0, 0, 
+			LINK_TYPE_INTERPRETATION_FG_TEXT_COLOR, LINK_TYPE_INTERPRETATION_BG_TEXT_COLOR);
+
+	public static StyleRange getLinkStyle(String linkType) {
+		if (linkType.equals(Link.TYPE_GENERAL))
+			return LINK_TYPE_GENERAL_STYLE;
+		if (linkType.equals(Link.TYPE_DIFFICULTY))
+			return LINK_TYPE_DIFFICULTY_STYLE;
+		if (linkType.equals(Link.TYPE_INTERPRETATION))
+			return LINK_TYPE_INTERPRETATION_STYLE;
+		
+		return null;
 	}
 
 }

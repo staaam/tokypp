@@ -12,20 +12,31 @@ import org.eclipse.core.resources.IFile;
 //this class represents a link between the discussion and the source
 public class Link {
 
+	public static final String TYPE_INTERPRETATION = "interpretation";
+
+	public static final String TYPE_DIFFICULTY = "difficulty";
+
+	public static final String TYPE_GENERAL = "general";
+	
 	/**
 	 * The types of the links, as strings displayable to the user. The order of
 	 * the strings should be the same as in the linkXMLTypes array
 	 */
 	public static final String[] linkDisplayNames = {
-			Messages.getString("Link.General"), Messages.getString("Link.Difficulty"), //$NON-NLS-1$ //$NON-NLS-2$
-			Messages.getString("Link.Interpretation") }; //$NON-NLS-1$
+			Messages.getString("Link.General"), //$NON-NLS-1$
+			Messages.getString("Link.Difficulty"), //$NON-NLS-1$
+			Messages.getString("Link.Interpretation"), //$NON-NLS-1$
+	};
 
 	/**
 	 * The types of the links, as the xml scheme defines. The order of the
 	 * strings should be the same as in the linkDisplayNames array
 	 */
 	public static final String[] linkXMLTypes = {
-			"general", "difficulty", "interpretation" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			TYPE_GENERAL, //$NON-NLS-1$
+			TYPE_DIFFICULTY, //$NON-NLS-1$
+			TYPE_INTERPRETATION, //$NON-NLS-1$
+	};
 
 	
 	private String linkTypeXML;
