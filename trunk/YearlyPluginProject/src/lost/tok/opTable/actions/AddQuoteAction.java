@@ -29,7 +29,7 @@ public class AddQuoteAction extends AbstractEditorAction {
 		AddQuoteAction.action = action;
 
 		List<Excerption> excerptions = ((OperationTable) activeEditor)
-				.getMarked();
+				.getExcerptions();
 
 		if (excerptions.isEmpty()) {
 			messageBox(

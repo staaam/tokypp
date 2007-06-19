@@ -4,8 +4,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
-import java.util.Vector;
-import java.util.Map.Entry;
 
 import lost.tok.Excerption;
 import lost.tok.excerptionsView.ExcerptionView;
@@ -67,8 +65,6 @@ public class OperationTable extends TextEditor {
 
 		rootDiscussions = new RootDiscussionsPart(this);
 		setDocumentProvider(new SourceDocumentProvider());
-		markedExcerptions = new TreeMap<Integer, Excerption>();
-		markedText = new TreeMap<Integer, Integer>();
 	}
 
 	/*
@@ -111,20 +107,62 @@ public class OperationTable extends TextEditor {
 		srcview.getTextWidget().setWordWrap(true);
 		refreshDisplay();
 	}
+	
+	public class MarkedData {
+		private Excerption excerption;
+		private Integer length;
+		private StyleRange style;
+		
+		public MarkedData(Excerption excerption, Integer length, StyleRange style) {
+			super();
+			this.excerption = excerption;
+			this.length = length;
+			this.style = style;
+		}
+		
+		public MarkedData(Excerption e, StyleRange style) {
+			this(e, e.getEndPos() - e.getStartPos(), style);
+		}
+		
+		public MarkedData(Excerption e) {
+			this(e, null);
+		}
 
-	/**
-	 * These excerptions contain all the marked text. The dictionary is the
-	 * function: offset->Excerption
-	 */
-	SortedMap<Integer, Excerption> markedExcerptions;
+		public Excerption getExcerption() {
+			return excerption;
+		}
 
-	/**
-	 * Contains the offset and length all the marked text. The dictionary is the
-	 * function: offset->length Marked text should be highlighted when
-	 * displayed. This Map should corrospond to the Excerption list (ie - the
-	 * forth element should point to the text of the forth excerption)
-	 */
-	SortedMap<Integer, Integer> markedText;
+		public Integer getLength() {
+			return length;
+		}
+
+		public StyleRange getStyle() {
+			return style;
+		}
+		
+		
+	}
+	
+	SortedMap<Integer, MarkedData> marked = new TreeMap<Integer, MarkedData>();
+
+//	/**
+//	 * These excerptions contain all the marked text. The dictionary is the
+//	 * function: offset->Excerption
+//	 */
+//	SortedMap<Integer, Excerption> markedExcerptions = new TreeMap<Integer, Excerption>();
+//
+//	/**
+//	 * Contains the offset and length all the marked text. The dictionary is the
+//	 * function: offset->length Marked text should be highlighted when
+//	 * displayed. This Map should corrospond to the Excerption list (ie - the
+//	 * forth element should point to the text of the forth excerption)
+//	 */
+//	SortedMap<Integer, Integer> markedText = new TreeMap<Integer, Integer>();
+//
+//	/**
+//	 * The dictionary is the function: offset->Style with witch highlight the mark
+//	 */
+//	SortedMap<Integer, StyleRange> markedStyle = new TreeMap<Integer, StyleRange>();
 
 	/**
 	 * Update excerption view.
@@ -167,17 +205,21 @@ public class OperationTable extends TextEditor {
 			}
 		}
 
-		int nStyles = markedText.size();
+		int nStyles = marked.size();
 		// nStyles += allChapters.size();
 
 		int[] styleOffsetSize = new int[nStyles * 2];
 		StyleRange[] styles = new StyleRange[nStyles];
 
 		int i = 0;
-		for (Entry<Integer, Integer> olEntry : markedText.entrySet()) {
-			styleOffsetSize[2 * i] = olEntry.getKey();
-			styleOffsetSize[2 * i + 1] = olEntry.getValue();
-			styles[i] = markedTextStyle;
+		for (Integer offset : marked.keySet()) {
+			styleOffsetSize[2 * i] = offset;
+			styleOffsetSize[2 * i + 1] = marked.get(offset).getLength();
+			
+			styles[i] = marked.get(offset).style;
+			if (styles[i] == null)
+				styles[i] = markedTextStyle;
+			
 			i++;
 		}
 
@@ -207,8 +249,7 @@ public class OperationTable extends TextEditor {
 		mark(t, true);
 	}
 
-	/**
-	 * Adds/Removes the selected text to/from the marked text set.
+	/** Adds/Removes the selected text to/from the marked text set.
 	 * 
 	 * @param t
 	 *            the current selection, which should be added
@@ -262,6 +303,14 @@ public class OperationTable extends TextEditor {
 		markChapterExcerption(offset, length, c, true);
 	}
 
+	protected void markChapterExcerption(int offset, int length, ChapterText c, StyleRange style) {
+		markChapterExcerption(offset, length, c, true, style);
+	}
+
+	protected void markChapterExcerption(int offset, int length, ChapterText c, boolean include) {
+		markChapterExcerption(offset, length, c, include, null);
+	}
+	
 	/**
 	 * Updates markedExcerptions and markedText The mark should be inside a
 	 * single ChapterText.
@@ -276,18 +325,18 @@ public class OperationTable extends TextEditor {
 	 *            whether the mark is inclusive (mark/unmark)
 	 */
 	protected void markChapterExcerption(int offset, int length, ChapterText c,
-			boolean include) {
+			boolean include, StyleRange style) {
 		int[] m = findMergedExcerptions(offset, offset + length);
 
 		if (include) {
-			putExcerption(m[0], m[1], c);
+			putExcerption(m[0], m[1], c, style);
 		} else {
-			putExcerption(m[0], offset, c);
-			putExcerption(offset + length, m[1], c);
+			putExcerption(m[0], offset, c, style);
+			putExcerption(offset + length, m[1], c, style);
 		}
 	}
 
-	private void putExcerption(int mergedBegin, int mergedEnd, ChapterText c) {
+	private void putExcerption(int mergedBegin, int mergedEnd, ChapterText c, StyleRange style) {
 		int startInText = (mergedBegin - c.getOffset()) + c.getPathOffset();
 		int endInText = (mergedEnd - c.getOffset()) + c.getPathOffset();
 		String excerptionText = c.toString().substring(startInText, endInText);
@@ -308,38 +357,35 @@ public class OperationTable extends TextEditor {
 		Excerption e = new Excerption(c.getXPath(), excerptionText,
 				startInText, endInText);
 
-		markedText.put(mergedBegin, mergedEnd - mergedBegin);
-		markedExcerptions.put(mergedBegin, e);
+		marked.put(mergedBegin, new MarkedData(e, style));
 	}
 
 	private int[] findMergedExcerptions(int mergedBegin, int mergedEnd) {
 		// Searching for a previous marked to merge
-		SortedMap<Integer, Integer> prefixMap = markedText.headMap(mergedBegin);
+		SortedMap<Integer, MarkedData> prefixMap = marked.headMap(mergedBegin);
 		while (!prefixMap.isEmpty()) {
 			Integer beginBefore = prefixMap.lastKey();
-			Integer endBefore = beginBefore + prefixMap.get(beginBefore);
+			Integer endBefore = beginBefore + prefixMap.get(beginBefore).getLength();
 
 			// have we reached a marked text that ends before we start?
 			if (endBefore < mergedBegin)
 				break;
 
-			markedText.remove(beginBefore);
-			markedExcerptions.remove(beginBefore);
+			marked.remove(beginBefore);
 
 			mergedBegin = Math.min(beginBefore, mergedBegin);
 			mergedEnd = Math.max(endBefore, mergedEnd);
 		}
 
 		// Searching for a later marked to merge
-		SortedMap<Integer, Integer> suffixMap = markedText.tailMap(mergedBegin);
+		SortedMap<Integer, MarkedData> suffixMap = marked.tailMap(mergedBegin);
 		while (!suffixMap.isEmpty()) {
 			Integer beginAfter = suffixMap.firstKey();
-			Integer endAfter = beginAfter + suffixMap.get(beginAfter);
+			Integer endAfter = beginAfter + suffixMap.get(beginAfter).getLength();
 			if (mergedEnd < beginAfter)
 				break;
 
-			markedText.remove(beginAfter);
-			markedExcerptions.remove(beginAfter);
+			marked.remove(beginAfter);
 
 			// mergedBegin = Math.min(beginAfter, mergedBegin);
 			// mergedBegin is always <=
@@ -356,8 +402,8 @@ public class OperationTable extends TextEditor {
 	 * 
 	 * @return the excerptions
 	 */
-	public SortedMap<Integer, Excerption> getExcerptions() {
-		return markedExcerptions;
+	public SortedMap<Integer, MarkedData> getExcerptionsMap() {
+		return marked;
 	}
 
 	/**
@@ -365,16 +411,18 @@ public class OperationTable extends TextEditor {
 	 * 
 	 * @return the marked
 	 */
-	public List<Excerption> getMarked() {
-		return new Vector<Excerption>(markedExcerptions.values());
+	public List<Excerption> getExcerptions() {
+		List<Excerption> l = new LinkedList<Excerption>();
+		for (MarkedData d : getExcerptionsMap().values())
+			l.add(d.getExcerption());
+		return l;
 	}
 
 	/**
 	 * Clears all the marked excerptions from the editor.
 	 */
 	public void clearMarked() {
-		markedText.clear();
-		markedExcerptions.clear();
+		marked.clear();
 		refreshDisplay();
 	}
 
@@ -450,8 +498,7 @@ public class OperationTable extends TextEditor {
 	 *            text)
 	 */
 	public void removeExcerption(int i) {
-		markedExcerptions.remove(i);
-		markedText.remove(i);
+		marked.remove(i);
 	}
 
 	/**
@@ -479,7 +526,7 @@ public class OperationTable extends TextEditor {
 	public void scrollToExcerption(int id) {
 		// id = offset
 		resetHighlightRange();
-		setHighlightRange(id, markedText.get(id), true);
+		setHighlightRange(id, marked.get(id).getLength(), true);
 	}
 
 	/*

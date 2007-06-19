@@ -182,8 +182,10 @@ public class RootDiscussionsPart extends AbstractEditorAction implements
 
 				rootExcerptions.add(e);
 
-				operationTable.markChapterExcerption(ct.getOffset()
-						+ e.getStartPos(), e.getEndPos() - e.getStartPos(), ct);
+				operationTable.markChapterExcerption(
+						ct.getOffset() + e.getStartPos(),
+						e.getEndPos() - e.getStartPos(), 
+						ct, StyleManager.getLinkStyle(discussionLink.getLinkType()));
 			}
 		}
 	}

@@ -192,8 +192,8 @@ public class ExcerptionView extends ViewPart {
 				for (OperationTable ot : getOTs()) {
 					TreeParent parentFile = new TreeParent(ExcerptionView
 							.nameFromOT(ot));
-					for (Integer i : ot.getExcerptions().keySet()) {
-						Excerption exp = ot.getExcerptions().get(i);
+					for (Integer i : ot.getExcerptionsMap().keySet()) {
+						Excerption exp = ot.getExcerptionsMap().get(i).getExcerption();
 						String expText = exp.getText();
 
 						// String expPrefix = expText.length() < 40 ? expText
@@ -286,7 +286,7 @@ public class ExcerptionView extends ViewPart {
 	 * Returns the excerptions from the given file name
 	 */
 	public List<Excerption> getExcerptions(String filename) {
-		return getOTs().get(filename).getMarked();
+		return getOTs().get(filename).getExcerptions();
 	}
 
 	private OTSet getOTs() {
@@ -466,9 +466,12 @@ public class ExcerptionView extends ViewPart {
 	public List<String> getRoots() {
 		List<String> l = new LinkedList<String>();
 		for (TreeItem i : viewer.getTree().getItems()) {
-			if (new Source(ToK.getProjectToK(getProject()), i.getText())
-					.isRoot())
-				l.add(i.getText());
+			ToK tok = ToK.getProjectToK(getProject());
+			String sourceName = i.getText();
+			OperationTable ot = getOTs().get(sourceName);
+			if (!ot.isRootDiscussionsView() && 
+					new Source(tok, sourceName).isRoot())
+				l.add(sourceName);
 		}
 		return l;
 	}
