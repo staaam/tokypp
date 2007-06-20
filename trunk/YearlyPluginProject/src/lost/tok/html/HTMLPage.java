@@ -3,14 +3,14 @@ package lost.tok.html;
 import java.io.ByteArrayInputStream;
 import java.io.UnsupportedEncodingException;
 
+import lost.tok.GeneralFunctions;
+import lost.tok.ToK;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
-
-import lost.tok.GeneralFunctions;
-import lost.tok.ToK;
 
 /**
  * An abstract xhtml page
@@ -19,10 +19,7 @@ import lost.tok.ToK;
  * @author Team Lost
  */
 abstract public class HTMLPage 
-{
-	/** The CSS file used by most of the html project */
-	public static String DEFAULT_CSS = "other/nice.css";
-	
+{	
 	/** The ToK connected to this page */
 	protected ToK tok;
 	
@@ -31,7 +28,7 @@ abstract public class HTMLPage
 	/** The path underwhich the file is to be saved. Path is relative to the project's root dir, / seperated */
 	protected String exportPath;	
 	/** The path to the css file used by this page */
-	private String cssPath;
+	protected String cssPath;
 	
 	/** True if the page should be left to right */
 	protected boolean ltr;
@@ -71,27 +68,27 @@ abstract public class HTMLPage
 		
  		StringBuffer htmlPage = new StringBuffer(body.length() + 2000);
 		
-		htmlPage.append("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"");
-		htmlPage.append(" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n");
-		htmlPage.append("\n");
-		htmlPage.append("<html xml:lang=\"" + lang + "\" lang=\"" + lang + "\" dir=\"" + (ltr ? "ltr" : "rtl") + "\">\n");
-		htmlPage.append("\n");
-		htmlPage.append("<head>\n");
-		htmlPage.append("\t<title>" + GeneralFunctions.xmlEscape(title) + "</title>\n");
-		htmlPage.append("\t<link rel=\"stylesheet\" type=\"text/css\" href=\"" + cssPath + "\" />\n"); 
-		htmlPage.append("\t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n"); 
-		htmlPage.append("\t<meta name=\"author\" content=\"Tree of Knowledge Site Exporter\" />\n");
-		htmlPage.append("\n");
-		htmlPage.append("</head>\n");
-		htmlPage.append("<body>\n");
+		htmlPage.append("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\""); //$NON-NLS-1$
+		htmlPage.append(" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n"); //$NON-NLS-1$
+		htmlPage.append("\n"); //$NON-NLS-1$
+		htmlPage.append("<html xml:lang=\"" + lang + "\" lang=\"" + lang + "\" dir=\"" + (ltr ? "ltr" : "rtl") + "\">\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
+		htmlPage.append("\n"); //$NON-NLS-1$
+		htmlPage.append("<head>\n"); //$NON-NLS-1$
+		htmlPage.append("\t<title>" + GeneralFunctions.xmlEscape(title) + "</title>\n"); //$NON-NLS-1$ //$NON-NLS-2$
+		htmlPage.append("\t<link rel=\"stylesheet\" type=\"text/css\" href=\"" + cssPath + "\" />\n");  //$NON-NLS-1$ //$NON-NLS-2$
+		htmlPage.append("\t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n");  //$NON-NLS-1$
+		htmlPage.append("\t<meta name=\"author\" content=\"Tree of Knowledge Site Exporter\" />\n"); //$NON-NLS-1$
+		htmlPage.append("\n"); //$NON-NLS-1$
+		htmlPage.append("</head>\n"); //$NON-NLS-1$
+		htmlPage.append("<body>\n"); //$NON-NLS-1$
 		
 		// TODO(Shay, medium-low): add menu
-		htmlPage.append("<div id=\"menu\"><p>this will be the menu</p></div>\n");
+		htmlPage.append("<div id=\"menu\"><p>this will be the menu</p></div>\n"); //$NON-NLS-1$
 		
 		
-		htmlPage.append("\t" + body.replaceAll("\n", "\n\t"));
-		htmlPage.append("</body>\n");
-		htmlPage.append("</html>\n");
+		htmlPage.append("\t" + body.replaceAll("\n", "\n\t")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		htmlPage.append("</body>\n"); //$NON-NLS-1$
+		htmlPage.append("</html>\n"); //$NON-NLS-1$
 		
 		return htmlPage.toString();
 	}
@@ -106,12 +103,12 @@ abstract public class HTMLPage
 	 */
 	static public void generatePath(IProject proj, String path) throws CoreException
 	{
-		String [] pathSegs = path.split("/");
+		String [] pathSegs = path.split("/"); //$NON-NLS-1$
 		
 		IPath ipath = proj.getProjectRelativePath();
 		for (int i=0; i < pathSegs.length-1; i++)
 		{
-			ipath = ipath.append( pathSegs[i] + "/" );
+			ipath = ipath.append( pathSegs[i] + "/" ); //$NON-NLS-1$
 			IFolder f = proj.getFolder(ipath);
 			if (!f.exists())
 				f.create(true, true, null);
@@ -138,7 +135,7 @@ abstract public class HTMLPage
 		
 		byte[] pageBytes;
 		try {
-			pageBytes = pageString.getBytes("UTF-8");
+			pageBytes = pageString.getBytes("UTF-8"); //$NON-NLS-1$
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 			pageBytes = pageString.getBytes();
@@ -178,10 +175,10 @@ abstract public class HTMLPage
 		// not handling this case
 		assert(this != otherPage);
 		
-		String[] srcExportPath = this.exportPath.split("/");
-		String[] dstExportPath = otherPage.exportPath.split("/");
+		String[] srcExportPath = this.exportPath.split("/"); //$NON-NLS-1$
+		String[] dstExportPath = otherPage.exportPath.split("/"); //$NON-NLS-1$
 		
-		String path = "";
+		String path = ""; //$NON-NLS-1$
 		int srcPathIdx = 0;
 		int dstPathIdx = 0;
 		
@@ -198,14 +195,14 @@ abstract public class HTMLPage
 		while (srcPathIdx < srcExportPath.length - 1)
 		{
 			// now we descend directories back to the closest common ancestor
-			path += "../";
+			path += "../"; //$NON-NLS-1$
 			srcPathIdx ++;
 		}
 		
 		while (dstPathIdx < dstExportPath.length - 1)
 		{
 			// now we ascend directories to the target path
-			path += dstExportPath[dstPathIdx] + "/";
+			path += dstExportPath[dstPathIdx] + "/"; //$NON-NLS-1$
 			dstPathIdx ++;
 		}
 		
@@ -213,7 +210,7 @@ abstract public class HTMLPage
 		path += dstExportPath[ dstExportPath.length - 1 ];
 		
 		// now we need to escape spaces in the path
-		path = path.replace(" ", "%20");
+		path = path.replace(" ", "%20"); //$NON-NLS-1$ //$NON-NLS-2$
 		
 		return path;	
 	}
@@ -232,12 +229,12 @@ abstract public class HTMLPage
 		int segCount = path.segmentCount();
 		
 		// start with an empty path
-		String currPath = "";
+		String currPath = ""; //$NON-NLS-1$
 		
 		// descend all the directories
 		// -1 for the filename segment (which is not a dir)
 		for (int i=0; i < segCount - 1; i++)
-			currPath += "../";
+			currPath += "../"; //$NON-NLS-1$
 		
 		return currPath;
 	}

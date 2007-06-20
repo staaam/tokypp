@@ -150,7 +150,7 @@ public class LinkedParagraph implements SrcElem
 	public String getHTMLText() {
 		StringBuffer s = new StringBuffer( text.length() * 2 );
 		
-		s.append("<p>");
+		s.append("<p>"); //$NON-NLS-1$
 		
 		int currOffset = 0;
 		
@@ -169,7 +169,7 @@ public class LinkedParagraph implements SrcElem
 			// Add a conflict page if needed
 			if (info.size() > 1)
 			{
-				DiscConflictPage confPage = new DiscConflictPage(info);
+				DiscConflictPage confPage = new DiscConflictPage(info, source.getCSSMan());
 				discConfs.add( confPage );
 				targetPage = confPage;
 			}
@@ -181,16 +181,16 @@ public class LinkedParagraph implements SrcElem
 			String tooltip = GeneralFunctions.xmlEscape(info.getNames());
 			String type = info.getType(); // the class (type) of the link
 			
-			s.append( "<a href=\"");
+			s.append( "<a href=\""); //$NON-NLS-1$
 			
 			s.append( source.getPathTo(targetPage) );
-			s.append( "\" title=\"" + tooltip + "\" ");
-			s.append( " class=\"" + type + "\" >");
+			s.append( "\" title=\"" + tooltip + "\" "); //$NON-NLS-1$ //$NON-NLS-2$
+			s.append( " class=\"" + type + "\" >"); //$NON-NLS-1$ //$NON-NLS-2$
 			
 			String linkedText = text.substring(e.getKey(), info.getEnd());
 			s.append( GeneralFunctions.xmlEscape(linkedText) );
 			
-			s.append( "</a>" );
+			s.append( "</a>" ); //$NON-NLS-1$
 			
 			currOffset = info.getEnd();
 		}
@@ -199,9 +199,9 @@ public class LinkedParagraph implements SrcElem
 		if (currOffset != text.length())
 		{
 			String unlinkedText = text.substring(currOffset, text.length());
-			s.append( "\t" + GeneralFunctions.xmlEscape(unlinkedText) );
+			s.append( "\t" + GeneralFunctions.xmlEscape(unlinkedText) ); //$NON-NLS-1$
 		}
-		s.append("</p>\n");
+		s.append("</p>\n"); //$NON-NLS-1$
 		
 		return s.toString();
 	}

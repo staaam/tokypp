@@ -3,6 +3,7 @@ package lost.tok.html.srcElem;
 import java.util.LinkedList;
 
 import lost.tok.Link;
+import lost.tok.Messages;
 import lost.tok.ToK;
 import lost.tok.html.DiscussionPage;
 
@@ -12,7 +13,7 @@ import lost.tok.html.DiscussionPage;
  */
 public class LinkInfo 
 {
-	public static String TYPE_COMBINED = "combined";
+	public static String TYPE_COMBINED = "combined"; //$NON-NLS-1$
 	
 	/** The offset of the link's end (exclusive) */
 	private int end;
@@ -116,14 +117,14 @@ public class LinkInfo
 			String discName = links.getFirst().getLinkedDiscussion().getDiscName();
 			String linkName = links.getFirst().getSubject();
 			
-			return "Discussion: " + discName + ", " + linkName;
+			return Messages.getString("LinkInfo.Discussion") + discName + ", " + linkName; //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		// else
-		String retVal = "Combined: ";
+		String retVal = Messages.getString("LinkInfo.Combined"); //$NON-NLS-1$
 		for (int i=0; i < links.size() - 1; i++)
 		{
 			Link l = links.get(i);
-			retVal += l.getLinkedDiscussion().getDiscName() + " ,";
+			retVal += l.getLinkedDiscussion().getDiscName() + " ,"; //$NON-NLS-1$
 		}
 		retVal += links.getLast().getLinkedDiscussion().getDiscName();
 		

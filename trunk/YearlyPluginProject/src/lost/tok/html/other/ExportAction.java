@@ -36,7 +36,7 @@ public class ExportAction implements IObjectActionDelegate{
 		try {
 			if (! (selection instanceof TreeSelection) )
 			{
-				System.out.println("lost.tok.html.other.ExportAction was actiavated on non tree selection");
+				System.out.println("lost.tok.html.other.ExportAction was actiavated on non tree selection"); //$NON-NLS-1$
 				return;
 			}
 			

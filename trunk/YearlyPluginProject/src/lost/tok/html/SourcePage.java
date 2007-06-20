@@ -4,12 +4,9 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
-
 import lost.tok.Excerption;
 import lost.tok.Link;
+import lost.tok.Messages;
 import lost.tok.Source;
 import lost.tok.ToK;
 import lost.tok.html.srcElem.Heading;
@@ -19,6 +16,9 @@ import lost.tok.sourceDocument.Chapter;
 import lost.tok.sourceDocument.ChapterText;
 import lost.tok.sourceDocument.SourceDocument;
 
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
+
 /**
  * An HTML exported version of a source file
  * 
@@ -27,8 +27,6 @@ import lost.tok.sourceDocument.SourceDocument;
  */
 public class SourcePage extends HTMLPage {
 	
-	/** The path of the CSS used by Source Pages */
-	public static String SOURCE_CSS = DEFAULT_CSS;
 	/** The Source displayed by this page */
 	private SourceDocument srcDoc;
 	/** The elements displayed on this page (either headings or paragraphs) */
@@ -37,38 +35,33 @@ public class SourcePage extends HTMLPage {
 	private boolean isRoot;
 	/** A mapping from xPath in the source to paragraph elements */
 	private HashMap<String, LinkedParagraph> xPathToParagraph;
+	/** The css manager of this class */
+	private CSSManager cssMan;
 
 	/**
 	 * Create a source page for the given source
 	 * Links to discussions can be added later
 	 * @param src the source for which this page is built
 	 */
-	public SourcePage(Source src)
+	public SourcePage(Source src, CSSManager cssMan)
 	{
 		super(src.getTok(),
 				src.getFile().getFullPath().lastSegment(),
 				getExportPath(src),
-				getCSSPath(src));
+				cssMan.add(src));
 		
 		srcDoc = new SourceDocument();
 		srcDoc.set( src );
 		
 		isRoot = src.isRoot();
+		this.cssMan = cssMan;
 		
 		buildElements();
 	}
 	
-	/**
-	 * Returns the path of the css file for the given source
-	 * @param src the source for which a SourcePage is generated
-	 * @return the path from the source page to the css file
-	 */
-	static protected String getCSSPath(Source src)
+	public CSSManager getCSSMan()
 	{
-		IProject proj = src.getTok().getProject();
-		IPath path = src.getFile().getProjectRelativePath();
-		
-		return HTMLPage.getHTMLRelPath(proj, path) + SOURCE_CSS;
+		return cssMan;
 	}
 	
 	/**
@@ -140,10 +133,10 @@ public class SourcePage extends HTMLPage {
 	static protected String getExportPath(Source src)
 	{
 		IPath emptyPath = src.getTok().getProject().getProjectRelativePath();
-		IPath htmlDirPath = emptyPath.append(ToK.HTML_FOLDER + "/");
+		IPath htmlDirPath = emptyPath.append(ToK.HTML_FOLDER + "/"); //$NON-NLS-1$
 		IPath srcPath = htmlDirPath.append(src.getFile().getProjectRelativePath());
 		
-		IPath fixedExtension = srcPath.removeFileExtension().addFileExtension("html"); 
+		IPath fixedExtension = srcPath.removeFileExtension().addFileExtension("html");  //$NON-NLS-1$
 		
 		return fixedExtension.removeTrailingSeparator().toString();
 	}
@@ -153,21 +146,21 @@ public class SourcePage extends HTMLPage {
 	{
 		StringBuffer s = new StringBuffer();
 		
-		String srcType = isRoot ? "root" : "source";
+		String srcType = isRoot ? "root" : "source"; //$NON-NLS-1$ //$NON-NLS-2$
 		
-		s.append( "<div class=\"main_content\" id=\"" + srcType + "\">" );
-		s.append( "<h1>" + srcDoc.getTitle() + "</h1>\n" );
-		s.append( "<p>Written by: <em>" + srcDoc.getAuthor() + "</em></p>\n" );
+		s.append( "<div class=\"main_content\" id=\"" + srcType + "\">" ); //$NON-NLS-1$ //$NON-NLS-2$
+		s.append( "<h1>" + srcDoc.getTitle() + "</h1>\n" ); //$NON-NLS-1$ //$NON-NLS-2$
+		s.append( Messages.getString("SourcePage.WrittenBy") + srcDoc.getAuthor() + "</em></p>\n" ); //$NON-NLS-1$ //$NON-NLS-2$
 		
 		// TODO(Shay, low): Add a list of discussions using this source
 		// TODO(Shay, low): Add a table of contents
 		
 		for (SrcElem e : elements)
 		{
-			s.append ( "\t" + e.getHTMLText().replaceAll("\n", "\t\n") );
+			s.append ( "\t" + e.getHTMLText().replaceAll("\n", "\t\n") ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		}
 		
-		s.append( "</div>\n" );
+		s.append( "</div>\n" ); //$NON-NLS-1$
 	
 		return s.toString();
 	}
