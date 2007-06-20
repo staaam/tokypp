@@ -19,7 +19,6 @@ import lost.tok.html.srcElem.LinkInfo;
 public class DiscConflictPage extends HTMLPage {
 	
 	static private int counter = 0;
-	@SuppressWarnings("unused")
 	static private LinkInfo info;
 	
 	
@@ -39,7 +38,9 @@ public class DiscConflictPage extends HTMLPage {
 
 	@Override
 	protected String getBody() {
-		Element body = DocumentHelper.createElement("body"); //$NON-NLS-1$
+		Element body = DocumentHelper.createElement("div"); //$NON-NLS-1$
+		body.addAttribute("id", "conflict");
+		body.addAttribute("class", "main_content");
 		
 		// main title of Discussion conflict page
 		body.addElement("h1").addText("Choose Discussion");

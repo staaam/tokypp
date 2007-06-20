@@ -120,10 +120,13 @@ public class LinkInfo
 		}
 		// else
 		String retVal = "Combined: ";
-		for (Link l : links)
+		for (int i=0; i < links.size() - 1; i++)
 		{
+			Link l = links.get(i);
 			retVal += l.getLinkedDiscussion().getDiscName() + " ,";
 		}
+		retVal += links.getLast().getLinkedDiscussion().getDiscName();
+		
 		return retVal;
 	}
 	

@@ -1,0 +1,78 @@
+@charset "UTF-8";
+
+body
+{
+	line-height : 1.3em;
+	background-color : #DA9A38;
+    /*background-image: url(bg/orang052.jpg);*/
+}
+
+/****    THE MENU       ****/
+#menu
+{
+    background-image: url(bg/orang117.gif);
+
+	padding : 0.5em;
+	margin: 0;
+
+	background-color : #ffbf3f;
+	font: normal normal 0.75em/1 sans-serif;
+
+	width: 8em;
+	height: 100%;
+    
+    position: fixed;
+}
+
+/****    CONTENT    ****/
+
+div.main_content
+{ 
+	padding-left : 8em;
+}
+
+blockquote 
+{
+    border : solid;
+    padding: 0.1em 1.5em;
+}
+
+h2
+{
+    padding: 0.5em 0;
+    background : orange;
+}
+
+h3
+{
+    padding: 0.25em 0;
+    background: rgb(236, 161, 28)
+}
+
+h4
+{
+    padding: 0.125em 0;
+    background: rgb(227, 157, 42);
+}
+
+
+/**** ROOT ****/
+
+#root a:link.general            { color : #C874CF; }
+#root a:visited.general         { color : #A962AF; }
+
+#root a:link.difficulty         { color : #4DDF45 }
+#root a:visited.difficulty      { color : #3DAF36 }
+
+#root a:link.interpretation     { color : #4F659F }
+#root a:visited.interpretation  { color : #6783CF }
+ 
+#root a:link.combined           { color : #EF5E2C }
+#root a:visited.combined        { color : #BF4B23 }
+
+#root a:hover.difficulty, #root a:hover.general, #root a:hover.interpretation, #root a:hover.combined
+{
+    color : #000000;
+}
+
+

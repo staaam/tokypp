@@ -57,8 +57,8 @@ abstract public class HTMLPage
 	}
 	
 	/**
-	 * Returns the body of the html page
-	 * Should return the element &lt;body&gt; with all its content as a string
+	 * Returns the main content of the html page
+	 * Should return a &lt;div&gt; element with all its content as a string
 	 */
 	protected abstract String getBody(); 
 	
@@ -83,12 +83,39 @@ abstract public class HTMLPage
 		htmlPage.append("\t<meta name=\"author\" content=\"Tree of Knowledge Site Exporter\" />\n");
 		htmlPage.append("\n");
 		htmlPage.append("</head>\n");
-		// htmlPage.append("<body>\n");
+		htmlPage.append("<body>\n");
+		
+		// TODO(Shay, medium-low): add menu
+		htmlPage.append("<div id=\"menu\"><p>this will be the menu</p></div>\n");
+		
+		
 		htmlPage.append("\t" + body.replaceAll("\n", "\n\t"));
-		// htmlPage.append("</body>\n");
+		htmlPage.append("</body>\n");
 		htmlPage.append("</html>\n");
 		
 		return htmlPage.toString();
+	}
+	
+	/**
+	 * Generates the directories leading the the given path
+	 * Works even if a certain directory on the path already exist
+	 * 
+	 * @param proj the project under which the directories should be created
+	 * @param path a / seperated path, with / after the last directory
+	 * @throws CoreException if cannot create folder
+	 */
+	static public void generatePath(IProject proj, String path) throws CoreException
+	{
+		String [] pathSegs = path.split("/");
+		
+		IPath ipath = proj.getProjectRelativePath();
+		for (int i=0; i < pathSegs.length-1; i++)
+		{
+			ipath = ipath.append( pathSegs[i] + "/" );
+			IFolder f = proj.getFolder(ipath);
+			if (!f.exists())
+				f.create(true, true, null);
+		}
 	}
 	
 	/**
@@ -99,20 +126,11 @@ abstract public class HTMLPage
 	public void generatePage() throws CoreException
 	{
 		// 1. Create the entire path leading to that file, if it doesn't exist
-		String [] pathSegs = exportPath.split("/");
-		
-		IPath path = tok.getProject().getProjectRelativePath();
-		for (int i=0; i < pathSegs.length-1; i++)
-		{
-			path = path.append( pathSegs[i] + "/" );
-			IFolder f = tok.getProject().getFolder(path);
-			if (!f.exists())
-				f.create(true, true, null);
-		}
-		
+		generatePath(tok.getProject(), exportPath);
+				
 		IFile f = tok.getProject().getFile(exportPath);
 		
-		// Note(Shay): we should delete the old html dir before creating it anew
+		// Note(Shay): we delete the old html dir before creating it anew
 		assert(f.exists() == false);
 		
 		// 2. Create an input stream from the page's text
@@ -194,6 +212,9 @@ abstract public class HTMLPage
 		// we want to add the last file without a trailing "/"
 		path += dstExportPath[ dstExportPath.length - 1 ];
 		
+		// now we need to escape spaces in the path
+		path = path.replace(" ", "%20");
+		
 		return path;	
 	}
 	
@@ -211,14 +232,14 @@ abstract public class HTMLPage
 		int segCount = path.segmentCount();
 		
 		// start with an empty path
-		IPath currPath = proj.getProjectRelativePath();
+		String currPath = "";
 		
 		// descend all the directories
 		// -1 for the filename segment (which is not a dir)
 		for (int i=0; i < segCount - 1; i++)
-			currPath.append("../");
+			currPath += "../";
 		
-		return currPath.toString();
+		return currPath;
 	}
 	
 
