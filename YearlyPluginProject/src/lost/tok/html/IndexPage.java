@@ -5,6 +5,7 @@ import java.util.HashMap;
 import lost.tok.Discussion;
 import lost.tok.Excerption;
 import lost.tok.GeneralFunctions;
+import lost.tok.Messages;
 import lost.tok.Source;
 import lost.tok.SubLink;
 import lost.tok.ToK;
@@ -22,9 +23,7 @@ import org.eclipse.core.runtime.CoreException;
  * @author Team Lost
  */
 public class IndexPage extends HTMLPage {
-	
-	static final public String INDEX_CSS = DEFAULT_CSS;
-	
+
 	/** The discussions of the ToK, during it's creation */
 	private Discussion[] discussions;
 	/** The sources (and roots) of the ToK, during it's creation */
@@ -41,10 +40,13 @@ public class IndexPage extends HTMLPage {
 	public IndexPage(ToK tok)
 	{
 		super(tok,
-				tok.getProject().getName() + ", Tree of Knowledge",
-				ToK.HTML_FOLDER + "/index.html",
-				INDEX_CSS);
+				tok.getProject().getName() + Messages.getString("IndexPage.ToK"), //$NON-NLS-1$
+				ToK.HTML_FOLDER + "/index.html", //$NON-NLS-1$
+				null);
 		
+		
+		cssManager = new CSSManager(tok);
+		this.cssPath = cssManager.addIndexPage();
 		discussions = tok.getDiscussions().toArray( new Discussion[0] );
 		sources = tok.getSources();
 		
@@ -54,7 +56,7 @@ public class IndexPage extends HTMLPage {
 		srcPathToPage = new HashMap<String, SourcePage>();
 		for (Source source : sources)
 		{
-			SourcePage sPage = new SourcePage(source);
+			SourcePage sPage = new SourcePage(source, cssManager);
 			String srcPath = source.getFile().getProjectRelativePath().toString();
 			srcPathToPage.put( srcPath, sPage );
 		}
@@ -62,7 +64,7 @@ public class IndexPage extends HTMLPage {
 		discNameToPage = new HashMap<String, DiscussionPage>();
 		for (Discussion disc : discussions)
 		{
-			DiscussionPage dPage = new DiscussionPage(disc, srcPathToPage);
+			DiscussionPage dPage = new DiscussionPage(disc, srcPathToPage, cssManager);
 			String discName = disc.getDiscName();
 			discNameToPage.put(discName, dPage);
 		}
@@ -90,14 +92,14 @@ public class IndexPage extends HTMLPage {
 
 	@Override
 	protected String getBody() {
-		Element body = DocumentHelper.createElement("div");
-		body.addAttribute("id", "index");
-		body.addAttribute("class", "main_content");
+		Element body = DocumentHelper.createElement("div"); //$NON-NLS-1$
+		body.addAttribute("id", "index"); //$NON-NLS-1$ //$NON-NLS-2$
+		body.addAttribute("class", "main_content"); //$NON-NLS-1$ //$NON-NLS-2$
 		
-		body.addElement("h1").addText( tok.getProject().getName() );
+		body.addElement("h1").addText( tok.getProject().getName() ); //$NON-NLS-1$
 		
-		Element author = body.addElement("p").addText("Created By: ");
-		author.addElement("em").addText(tok.getProjectCreator());
+		Element author = body.addElement("p").addText(Messages.getString("IndexPage.CreatedBy")); //$NON-NLS-1$ //$NON-NLS-2$
+		author.addElement("em").addText(tok.getProjectCreator()); //$NON-NLS-1$
 		
 		body.add( getSourcesElement(true) );
 		body.add( getSourcesElement(false) );
@@ -114,32 +116,32 @@ public class IndexPage extends HTMLPage {
 	 */
 	public Element getSourcesElement(boolean genRoot)
 	{
-		Element main = DocumentHelper.createElement("div");
-		String listTitle = genRoot ? "Roots" : "Sources";
+		Element main = DocumentHelper.createElement("div"); //$NON-NLS-1$
+		String listTitle = genRoot ? Messages.getString("IndexPage.Roots") : Messages.getString("IndexPage.Sources"); //$NON-NLS-1$ //$NON-NLS-2$
 		
-		main.addElement("h2").addText(listTitle);
+		main.addElement("h2").addText(listTitle); //$NON-NLS-1$
 		
 		int numItems = 0; // the number of items in the list
 		
-		Element rootsList = main.addElement("ul");
+		Element rootsList = main.addElement("ul"); //$NON-NLS-1$
 		for (Source src : sources)
 		{
 			if (src.isRoot() != genRoot)
 				continue;
 			
-			Element item = rootsList.addElement("li");
+			Element item = rootsList.addElement("li"); //$NON-NLS-1$
 			
 			String srcPath = src.getFile().getProjectRelativePath().toString();
 			
-			Element a = item.addElement("a");
+			Element a = item.addElement("a"); //$NON-NLS-1$
 			SourcePage sPage = srcPathToPage.get( srcPath );
-			a.addAttribute("href", getPathTo(sPage) );
+			a.addAttribute("href", getPathTo(sPage) ); //$NON-NLS-1$
 			// a.addAttribute("tooltip", value)
 			a.addText( src.getTitle() );
 			
-			item.addText(", by ");
-			item.addElement("em").addText( src.getAuthor() );
-			item.addText(" (" + srcPath + ")" );
+			item.addText(Messages.getString("IndexPage.by")); //$NON-NLS-1$
+			item.addElement("em").addText( src.getAuthor() ); //$NON-NLS-1$
+			item.addText(" (" + srcPath + ")" ); //$NON-NLS-1$ //$NON-NLS-2$
 			
 			numItems ++;
 		}
@@ -147,7 +149,7 @@ public class IndexPage extends HTMLPage {
 		if (numItems > 0)
 			return main;
 		// else, we return an empty div
-		return DocumentHelper.createElement("div");
+		return DocumentHelper.createElement("div"); //$NON-NLS-1$
 	}
 	
 	/**
@@ -156,28 +158,28 @@ public class IndexPage extends HTMLPage {
 	 */
 	public Element getDiscussionElement()
 	{
-		Element main = DocumentHelper.createElement("div");
+		Element main = DocumentHelper.createElement("div"); //$NON-NLS-1$
 		
 		if (discussions.length == 0)
 			return main; // empty div
 		
-		main.addElement("h2").addText("Discussions");
+		main.addElement("h2").addText(Messages.getString("IndexPage.Discussions")); //$NON-NLS-1$ //$NON-NLS-2$
 			
-		Element rootsList = main.addElement("ul");
+		Element rootsList = main.addElement("ul"); //$NON-NLS-1$
 		for (Discussion disc : discussions)
 		{	
-			Element item = rootsList.addElement("li");
+			Element item = rootsList.addElement("li"); //$NON-NLS-1$
 			
-			Element a = item.addElement("a");
+			Element a = item.addElement("a"); //$NON-NLS-1$
 			DiscussionPage dPage = discNameToPage.get( disc.getDiscName() );
-			a.addAttribute("href", getPathTo(dPage) );
+			a.addAttribute("href", getPathTo(dPage) ); //$NON-NLS-1$
 			// TODO(Shay, low): Add a normal tooltip in the index page
 			//   a.addAttribute("tooltip", disc.getLinkType() );
 			a.addText( disc.getDiscName() );
 			
-			item.addText(", by ");
-			item.addElement("em").addText( disc.getCreatorName() );
-			item.addText(" (" + disc.getDiscFileName() + ")" );
+			item.addText(Messages.getString("IndexPage.by")); //$NON-NLS-1$
+			item.addElement("em").addText( disc.getCreatorName() ); //$NON-NLS-1$
+			item.addText(" (" + disc.getDiscFileName() + ")" ); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		
 		return main;

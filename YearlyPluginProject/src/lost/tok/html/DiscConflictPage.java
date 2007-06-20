@@ -1,13 +1,14 @@
 package lost.tok.html;
 
-import org.dom4j.DocumentHelper;
-import org.dom4j.Element;
-
 import lost.tok.Discussion;
 import lost.tok.GeneralFunctions;
 import lost.tok.Link;
+import lost.tok.Messages;
 import lost.tok.ToK;
 import lost.tok.html.srcElem.LinkInfo;
+
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
 
 /**
  * In case two discussions are linked to the same text
@@ -22,12 +23,12 @@ public class DiscConflictPage extends HTMLPage {
 	static private LinkInfo info;
 	
 	
-	public DiscConflictPage(LinkInfo li)
+	public DiscConflictPage(LinkInfo li, CSSManager cssMan)
 	{
 		super( li.getTok(), 
-				"Select Discussion", 
-				ToK.HTML_FOLDER + "/other/conf" + counter + ".html", 
-				"../" + HTMLPage.DEFAULT_CSS );
+				Messages.getString("DiscConflictPage.SelectDiscussion"),  //$NON-NLS-1$
+				ToK.HTML_FOLDER + "/other/conf" + counter + ".html",  //$NON-NLS-1$ //$NON-NLS-2$
+				cssMan.addDiscConflict(counter) ); //$NON-NLS-1$
 		
 		info = li;
 		counter ++;
@@ -39,11 +40,11 @@ public class DiscConflictPage extends HTMLPage {
 	@Override
 	protected String getBody() {
 		Element body = DocumentHelper.createElement("div"); //$NON-NLS-1$
-		body.addAttribute("id", "conflict");
-		body.addAttribute("class", "main_content");
+		body.addAttribute("id", "conflict"); //$NON-NLS-1$ //$NON-NLS-2$
+		body.addAttribute("class", "main_content"); //$NON-NLS-1$ //$NON-NLS-2$
 		
 		// main title of Discussion conflict page
-		body.addElement("h1").addText("Choose Discussion");
+		body.addElement("h1").addText(Messages.getString("DiscConflictPage.ChooseDiscussion")); //$NON-NLS-1$ //$NON-NLS-2$
 		
 		
 		for (int i =0; i < info.size(); i++)
@@ -55,22 +56,22 @@ public class DiscConflictPage extends HTMLPage {
 			String text = info.getLinkText(i);
 		
 			// 2. Add the i'th discussion title
-			Element div = body.addElement("div");
-			div.addElement("h2").addText(link.getDisplayLinkType() + ": " + link.getSubject());
+			Element div = body.addElement("div"); //$NON-NLS-1$
+			div.addElement("h2").addText(link.getDisplayLinkType() + ": " + link.getSubject()); //$NON-NLS-1$ //$NON-NLS-2$
 			
 			// 3. Add the i'th excerption's text
-			Element quoteElm = div.addElement("blockquote");
-			quoteElm.addAttribute("class", "sublink");
-			quoteElm.addAttribute("cite", getPathTo(dPage));
-			quoteElm.addElement("p").addText(text);
+			Element quoteElm = div.addElement("blockquote"); //$NON-NLS-1$
+			quoteElm.addAttribute("class", "sublink"); //$NON-NLS-1$ //$NON-NLS-2$
+			quoteElm.addAttribute("cite", getPathTo(dPage)); //$NON-NLS-1$
+			quoteElm.addElement("p").addText(text); //$NON-NLS-1$
 			
 			// 4. Add the link to the discussion + creator's name
-			Element p = div.addElement("p");
-			Element linkElm = p.addElement("a");
-			linkElm.addAttribute("href", getPathTo(dPage));
+			Element p = div.addElement("p"); //$NON-NLS-1$
+			Element linkElm = p.addElement("a"); //$NON-NLS-1$
+			linkElm.addAttribute("href", getPathTo(dPage)); //$NON-NLS-1$
 			linkElm.addText(disc.getDiscName());
-			p.addText(" Created By: ");
-			p.addElement("em").addText(disc.getCreatorName());
+			p.addText(Messages.getString("DiscConflictPage.CreatedBy")); //$NON-NLS-1$
+			p.addElement("em").addText(disc.getCreatorName()); //$NON-NLS-1$
 		}
 		
 		return GeneralFunctions.elementToString(body);

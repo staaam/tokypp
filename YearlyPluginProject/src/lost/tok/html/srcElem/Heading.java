@@ -8,7 +8,7 @@ public class Heading implements SrcElem
 	/** The depth of the heading (i.e. h1,h2,h3...) */
 	private int depth;
 	/** The path in the xml source document of this heading */
-	@SuppressWarnings("unused")
+	@SuppressWarnings("unused") //$NON-NLS-1$
 	private String xPath;
 	
 	/**
@@ -27,9 +27,9 @@ public class Heading implements SrcElem
 	public String getHTMLText()
 	{		
 		// the biggest heading allowed is h2. h1 is reserved for the page's title
-		String hTitle = "h" + (depth + 1); 
-		String id = (getID() == null) ? ("") : ("id=#" + getID());
-		return "<" + hTitle + " " + id + ">" + title + "</" + hTitle + ">\n";
+		String hTitle = "h" + (depth + 1);  //$NON-NLS-1$
+		String id = (getID() == null) ? ("") : ("id=#" + getID()); //$NON-NLS-1$ //$NON-NLS-2$
+		return "<" + hTitle + " " + id + ">" + title + "</" + hTitle + ">\n"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 	}
 	
 	public String getID() 
