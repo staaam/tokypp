@@ -85,7 +85,9 @@ public class DiscussionPage extends HTMLPage {
 	@Override
 	protected String getBody() 
 	{
-		Element body = DocumentHelper.createElement("body"); //$NON-NLS-1$
+		Element body = DocumentHelper.createElement("div"); //$NON-NLS-1$
+		body.addAttribute("id", "discussion");
+		body.addAttribute("class", "main_content");
 		
 		body.addElement("h1").addText(disc.getDiscName()); //$NON-NLS-1$
 		
@@ -161,15 +163,21 @@ public class DiscussionPage extends HTMLPage {
 		opTitle.addText( o.getName() );
 		opTitle.addAttribute("id", "discItem" + o.getId());
 		
-		Element quotesList = div.addElement("ul");
+		Quote[] quotes = disc.getQuotes(o.getName());
 		
-		// 2. Add the quotes
-		for ( Quote q : disc.getQuotes(o.getName()) )
+		// add quotes only if there are any
+		if (quotes.length > 0)
 		{
-			// TODO(Shay, medium-low): Sort the quotes according to author importance
+			Element quotesList = div.addElement("ul");
 			
-			Element listItem = quotesList.addElement("li");
-			listItem.add( getQuoteElement(q) );	
+			// 2. Add the quotes
+			for ( Quote q : quotes )
+			{
+				// TODO(Shay, medium-low): Sort the quotes according to author importance
+				
+				Element listItem = quotesList.addElement("li");
+				listItem.add( getQuoteElement(q) );	
+			}
 		}
 		// TODO(Shay, low): Consider adding relation data
 		

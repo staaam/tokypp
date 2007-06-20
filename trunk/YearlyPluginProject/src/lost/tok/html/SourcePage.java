@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 
@@ -28,13 +29,12 @@ public class SourcePage extends HTMLPage {
 	
 	/** The path of the CSS used by Source Pages */
 	public static String SOURCE_CSS = DEFAULT_CSS;
-	
 	/** The Source displayed by this page */
 	private SourceDocument srcDoc;
-		
 	/** The elements displayed on this page (either headings or paragraphs) */
 	private List<SrcElem> elements;
-	
+	/** True iff the source is a root file */
+	private boolean isRoot;
 	/** A mapping from xPath in the source to paragraph elements */
 	private HashMap<String, LinkedParagraph> xPathToParagraph;
 
@@ -48,12 +48,27 @@ public class SourcePage extends HTMLPage {
 		super(src.getTok(),
 				src.getFile().getFullPath().lastSegment(),
 				getExportPath(src),
-				HTMLPage.getHTMLRelPath(src.getTok().getProject(),src.getFile().getProjectRelativePath()) + SOURCE_CSS);
+				getCSSPath(src));
 		
 		srcDoc = new SourceDocument();
 		srcDoc.set( src );
 		
+		isRoot = src.isRoot();
+		
 		buildElements();
+	}
+	
+	/**
+	 * Returns the path of the css file for the given source
+	 * @param src the source for which a SourcePage is generated
+	 * @return the path from the source page to the css file
+	 */
+	static protected String getCSSPath(Source src)
+	{
+		IProject proj = src.getTok().getProject();
+		IPath path = src.getFile().getProjectRelativePath();
+		
+		return HTMLPage.getHTMLRelPath(proj, path) + SOURCE_CSS;
 	}
 	
 	/**
@@ -138,7 +153,9 @@ public class SourcePage extends HTMLPage {
 	{
 		StringBuffer s = new StringBuffer();
 		
-		s.append( "<body>" );
+		String srcType = isRoot ? "root" : "source";
+		
+		s.append( "<div class=\"main_content\" id=\"" + srcType + "\">" );
 		s.append( "<h1>" + srcDoc.getTitle() + "</h1>\n" );
 		s.append( "<p>Written by: <em>" + srcDoc.getAuthor() + "</em></p>\n" );
 		
@@ -150,7 +167,7 @@ public class SourcePage extends HTMLPage {
 			s.append ( "\t" + e.getHTMLText().replaceAll("\n", "\t\n") );
 		}
 		
-		s.append( "</body>\n" );
+		s.append( "</div>\n" );
 	
 		return s.toString();
 	}

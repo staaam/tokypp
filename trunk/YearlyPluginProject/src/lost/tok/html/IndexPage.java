@@ -35,15 +35,20 @@ public class IndexPage extends HTMLPage {
 	/** A map from the name of a discussion file to its HTMLPage */
 	private HashMap<String, DiscussionPage> discNameToPage;
 	
+	/** The manager of all our css files */
+	private CSSManager cssManager;
+	
 	public IndexPage(ToK tok)
 	{
 		super(tok,
 				tok.getProject().getName() + ", Tree of Knowledge",
 				ToK.HTML_FOLDER + "/index.html",
-				ToK.HTML_FOLDER + "/" + INDEX_CSS);
+				INDEX_CSS);
 		
 		discussions = tok.getDiscussions().toArray( new Discussion[0] );
 		sources = tok.getSources();
+		
+		this.cssManager = new CSSManager(tok);
 		
 		// 1. Find all the sub pages
 		srcPathToPage = new HashMap<String, SourcePage>();
@@ -85,7 +90,9 @@ public class IndexPage extends HTMLPage {
 
 	@Override
 	protected String getBody() {
-		Element body = DocumentHelper.createElement("body");
+		Element body = DocumentHelper.createElement("div");
+		body.addAttribute("id", "index");
+		body.addAttribute("class", "main_content");
 		
 		body.addElement("h1").addText( tok.getProject().getName() );
 		
@@ -187,7 +194,9 @@ public class IndexPage extends HTMLPage {
 			sPage.generatePage();
 		
 		for (DiscussionPage dPage : discNameToPage.values())
-			dPage.generatePage();		
+			dPage.generatePage();
+		
+		cssManager.generatePages();
 	}
 
 }
