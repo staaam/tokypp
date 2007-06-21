@@ -46,6 +46,8 @@ public class Discussion implements Comparable<Discussion> {
 	 */
 	public static final QualifiedName LATEST_QNAME = 
 		new QualifiedName("lost.tok", "latest_discussion");  //$NON-NLS-1$ //$NON-NLS-2$
+	
+	private long localModificationStamp = 0;
 
 	public static String getNameFromFile(String discussionFile) {
 		int begin = discussionFile.lastIndexOf('/'); //$NON-NLS-1$
@@ -656,6 +658,7 @@ public class Discussion implements Comparable<Discussion> {
 
 	// write the document to the XML file
 	private void writeToXml(Document doc) {
+		localModificationStamp++;
 		GeneralFunctions.writeToXml(getFullFileName(), doc);
 	}
 	
@@ -703,6 +706,14 @@ public class Discussion implements Comparable<Discussion> {
 	public int getDefOpID()
 	{
 		return defaultOpinionID;
+	}
+
+	/** Returns stamp of last modification. If modification stamp
+	 * changed, the discussion was changed
+	 * @return last modification stamp
+	 **/ 
+	public long getModificationStamp() {
+		return localModificationStamp;
 	}
 }
 	

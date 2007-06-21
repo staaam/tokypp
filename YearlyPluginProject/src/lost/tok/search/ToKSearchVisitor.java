@@ -84,25 +84,21 @@ public class ToKSearchVisitor implements IResourceVisitor {
 	}
 
 	private void discussionSearch(IFile file) {
-		Discussion d = null;
-		try {
-			d = new Discussion(file);
-		} catch (RuntimeException e) {
-		}
+		Discussion d = ToK.getProjectToK(file.getProject()).getDiscussion(file);
 		
 		if (d == null) return;
 		
 		if (searchOptions.contains(SearchOption.DSC_CREATOR)) {
-			search(file, d.getCreatorName(), 0);
+			search(file, d.getCreatorName(), 1);
 		}
 		
 		if (searchOptions.contains(SearchOption.DSC_NAME)) {
-			search(file, d.getDiscName(), 0);
+			search(file, d.getDiscName(), 1);
 		}
 
-		if (searchOptions.contains(SearchOption.DSC_LINK_SUBJ) && d.getLink() != null) {
-			search(file, d.getLink().getSubject(), 0);
-		}
+//		if (searchOptions.contains(SearchOption.DSC_LINK_SUBJ) && d.getLink() != null) {
+//			search(file, d.getLink().getSubject(), 1);
+//		}
 
 		if (!(searchOptions.contains(SearchOption.DSC_OPINIONS) ||
 			  searchOptions.contains(SearchOption.DSC_QUOTES) || 
@@ -111,16 +107,16 @@ public class ToKSearchVisitor implements IResourceVisitor {
 		
 		for (Opinion opinion : d.getOpinions()) {
 			if (searchOptions.contains(SearchOption.DSC_OPINIONS))
-				search(file, opinion.getName(), 0);
+				search(file, opinion.getName(), (opinion.getId() << 20));
 			
 			if (searchOptions.contains(SearchOption.DSC_QUOTES) || 
 				searchOptions.contains(SearchOption.DSC_QUOTE_COMMENTS))
 				for (Quote quote : d.getQuotes(opinion.getName())) {
 					if (searchOptions.contains(SearchOption.DSC_QUOTES))
-						search(file, quote.getText(), 0);
+						search(file, quote.getText(), ((quote.getID() << 1) + 0) << 19);
 					
 					if (searchOptions.contains(SearchOption.DSC_QUOTE_COMMENTS))
-						search(file, quote.getComment(), 0);
+						search(file, quote.getComment(), ((quote.getID() << 1) + 1) << 19);
 				}
 		}
 		

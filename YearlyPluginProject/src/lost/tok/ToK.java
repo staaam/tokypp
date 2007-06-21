@@ -3,6 +3,7 @@ package lost.tok;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.SortedSet;
@@ -459,18 +460,30 @@ public class ToK {
 	 * Reloads the discussions in the tree
 	 */
 	public void loadDiscussions() {
-		discussions = new TreeSet<Discussion>();
+		TreeSet<Discussion> newDiscussions = new TreeSet<Discussion>();
+		
+		HashMap<String, Discussion> dscs = new HashMap<String, Discussion>();
+		if (discussions != null)
+			for (Discussion d : discussions) {
+				dscs.put(d.getFile().getProjectRelativePath().toPortableString(), d);
+			}
 
 		try {
 			IResource[] files = getDiscussionFolder().members();
 			for (IResource resource : files) {
 				if (resource instanceof IFile) {
 					IFile file = (IFile) resource;
-					if (Discussion.isDiscussion(file)) {
-						discussions.add(new Discussion(file));
-					}
+					if (!Discussion.isDiscussion(file))
+						continue;
+					
+					String filename = file.getProjectRelativePath().toPortableString();
+					if (dscs.containsKey(filename))
+						newDiscussions.add(dscs.get(filename));
+					else
+						newDiscussions.add(new Discussion(file));
 				}
 			}
+			discussions = newDiscussions;
 		} catch (CoreException e) {
 			e.printStackTrace();
 		}
@@ -765,5 +778,19 @@ public class ToK {
 		} catch (CoreException e) {
 			e.printStackTrace();
 		}		
+	}
+
+	public Discussion getDiscussion(IFile file) {
+		if (!Discussion.isDiscussion(file)) {
+			return null;
+		}
+		
+		loadDiscussions();
+		
+		try {
+			return getDiscussion(Discussion.getNameFromFile(file.getName()));
+		} catch (CoreException e) {
+			return null;
+		}
 	}
 }
