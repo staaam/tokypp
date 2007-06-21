@@ -104,15 +104,15 @@ public class ToKSearchPage extends DialogPage implements ISearchPage {
         
         newButton(result, SWT.CHECK, "Name", true, SearchOption.DSC_NAME);
         
-        newButton(result, SWT.CHECK, "Link Subject", true, SearchOption.DSC_LINK_SUBJ);
-        
-        newButton(result, SWT.CHECK, "Creator", true, SearchOption.DSC_CREATOR);
+        //newButton(result, SWT.CHECK, "Link Subject", true, SearchOption.DSC_LINK_SUBJ);
         
         newButton(result, SWT.CHECK, "Quote Text", true, SearchOption.DSC_QUOTES);
         
-        newButton(result, SWT.CHECK, "Opinion Name", true, SearchOption.DSC_OPINIONS);
-
+        newButton(result, SWT.CHECK, "Creator", true, SearchOption.DSC_CREATOR);
+        
         newButton(result, SWT.CHECK, "Quote Comment", true, SearchOption.DSC_QUOTE_COMMENTS);
+        
+        newButton(result, SWT.CHECK, "Opinion Name", true, SearchOption.DSC_OPINIONS);
         
         return result;
 	}

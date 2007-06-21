@@ -1,5 +1,6 @@
 package lost.tok.disEditor;
 
+import java.util.LinkedList;
 import java.util.TreeMap;
 
 import lost.tok.Discussion;
@@ -35,9 +36,11 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.editors.text.StorageDocumentProvider;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.part.FileEditorInput;
 
@@ -53,6 +56,8 @@ public class DiscussionEditor extends TextEditor {
 
 	private static final String OPINION = "Opinion";
 
+	private static final String COMMENT_LINE = "Comment line";
+
 	private Discussion discussion = null;
 
 	private TreeItem rootItem = null;
@@ -60,6 +65,8 @@ public class DiscussionEditor extends TextEditor {
 	private Composite editor = null;
 
 	private int ctrlCurrentWidth = 0;
+
+	private long localModificationStamp;
 	
 	
 	//******* C ' T O R *************************************
@@ -382,11 +389,9 @@ public class DiscussionEditor extends TextEditor {
 		// ***********************************************************************
 		// *************************** ASSIGN TREE EDITOR  *********************
 		// **********************************************************************
-		discussion = getDiscussion();
-
 		rootItem = new TreeItem(disTree, SWT.MULTI | SWT.WRAP);
 
-		rootItem.setText(discussion.getDiscName());
+		rootItem.setText(discussion.getDiscName() + " (" + "Creator: " + discussion.getCreatorName() + ")");
 		rootItem.setData(DISCUSSION);
 
 		parent.getChildren()[0].addControlListener(new ControlAdapter() {
@@ -469,16 +474,6 @@ public class DiscussionEditor extends TextEditor {
 		return quote;
 	}
 
-//	check if quote word wrapping is cutting in the middle of word 
-	private boolean IsInMiddleOfWord(String quoteText, int totalLineNum,
-			int lineNumber, int lineSize) {
-		if (quoteText.charAt((lineNumber + 1) * lineSize - 1) != ' '
-				&& quoteText.charAt((lineNumber + 1) * lineSize) != ' ')
-			return true;
-
-		return false;
-	}
-
 //	set opinion properties
 	private void setTreeOpinion(Opinion opinion, TreeItem opinionItem) {
 		opinionItem.setText(opinion.getName());
@@ -490,10 +485,9 @@ public class DiscussionEditor extends TextEditor {
 //	set quote properties
 	private void setTreeQuote(Quote quote, TreeItem quoteItem) {
 
-		String quoteText = new String(quote.getText());
-		quoteItem.setText(quoteText.substring(0, java.lang.Math.min(10,
-				quoteText.length()))
-				+ "..."); //$NON-NLS-1$
+		String quoteText = quote.getText();
+		quoteItem.setText(quoteText.substring(0, java.lang.Math.min(40,
+				quoteText.length())) + "..."); //$NON-NLS-1$
 
 		quoteItem.setData(QUOTE, quote);
 		quoteItem.setData(QUOTE);
@@ -508,57 +502,46 @@ public class DiscussionEditor extends TextEditor {
 			lineSize = 100;
 		}
 
-		// QUOTE SONS ARE THIS QOUTE ONLY WORD WRAPPED
-		int lineCnt = quoteText.length() / lineSize;
+		int wrappedLines = addSplitted(quoteItem, quoteText, lineSize);
+		
+		if (quote.getComment().trim().length() != 0) {
+			// make son saparator
+			String saparator = ""; //$NON-NLS-1$
+			for (int i = 0; i < lineSize; i++)
+				saparator += "-"; //$NON-NLS-1$
 
-		for (int i = 0; i <= lineCnt; i++) {
-			TreeItem qText = new TreeItem(quoteItem, SWT.WRAP);
+			new TreeItem(quoteItem, SWT.WRAP).setText(saparator);
+			wrappedLines++;
+			quoteItem.setData(COMMENT_LINE, wrappedLines);
+			addSplitted(quoteItem, quote.getComment(), lineSize);
 
-			if (i == lineCnt) {
-				qText.setText(quoteText.substring((i) * lineSize));
+			new TreeItem(quoteItem, SWT.WRAP).setText(saparator);
+		}
+	}
+
+
+	private int addSplitted(TreeItem quoteItem, String quoteText, int lineSize) {
+		LinkedList<String> splitWrap = splitWrap(quoteText, lineSize);
+		for (String s : splitWrap)
+			new TreeItem(quoteItem, SWT.WRAP).setText(s);
+		
+		return splitWrap.size();
+	}
+
+
+	private LinkedList<String> splitWrap(String quoteText, int lineSize) {
+		LinkedList<String> ss = new LinkedList<String>();
+		while (true) {
+			if (quoteText.length() <= lineSize) {
+				ss.add(quoteText);
 				break;
 			}
-			if (IsInMiddleOfWord(quoteText, lineCnt, i, lineSize))
-				qText.setText(quoteText.substring((i) * lineSize,
-						((i + 1) * lineSize))
-						+ "-"); //$NON-NLS-1$
-			else
-				qText.setText(quoteText.substring((i) * lineSize,
-						((i + 1) * lineSize)));
+			String s = quoteText.substring(0, lineSize);
+			int upto = s.lastIndexOf(' ');
+			ss.add(quoteText.substring(0, upto));
+			quoteText = quoteText.substring(upto + 1);
 		}
-
-		// MAKE SONS QUOTE COMMENTS
-		String quoteComment = new String(quote.getComment());
-
-		if (quoteComment.trim().length() != 0) {
-			// make son saparator
-			String saparator = new String("-"); //$NON-NLS-1$
-			for (int i = 0; i < lineSize; i++) {
-				saparator += "-"; //$NON-NLS-1$
-			}
-			TreeItem saparatQuote = new TreeItem(quoteItem, SWT.WRAP);
-			saparatQuote.setText(saparator);
-
-			int commentLineCnt = quoteComment.length() / lineSize;
-
-			for (int i = 0; i <= commentLineCnt; i++) {
-				TreeItem qComment = new TreeItem(quoteItem, SWT.WRAP);
-				if (i == commentLineCnt) {
-					qComment.setText(quoteComment.substring((i) * lineSize));
-					break;
-				}
-				if (IsInMiddleOfWord(quoteComment, commentLineCnt, i, lineSize))
-					qComment.setText(quoteComment.substring((i) * lineSize,
-							((i + 1) * lineSize))
-							+ "-"); //$NON-NLS-1$
-				else
-					qComment.setText(quoteComment.substring((i) * lineSize,
-							((i + 1) * lineSize)));
-			}
-
-			TreeItem sprtQuote = new TreeItem(quoteItem, SWT.WRAP);
-			sprtQuote.setText(saparator);
-		}
+		return ss;
 	}
 
 	/**
@@ -659,29 +642,7 @@ public class DiscussionEditor extends TextEditor {
 	
 //	return the discussion
 	public Discussion getDiscussion() {
-		if (discussion != null) {
-			return discussion;
-		}
-
-		if (!(super.getEditorInput() instanceof FileEditorInput)) {
-			// todo - print error message
-			return null;
-		}
-
-		try {
-			FileEditorInput fileEditorInput = (FileEditorInput) super
-					.getEditorInput();
-			IFile file = fileEditorInput.getFile();
-
-			ToK tok = ToK.getProjectToK(file.getProject());
-			tok.loadDiscussions();
-
-			Discussion d = tok.getDiscussion(Discussion.getNameFromFile(file
-					.getName()));
-			return d;
-		} catch (CoreException e) {
-		}
-		return null;
+		return discussion;
 	}
 
 	/**
@@ -761,7 +722,69 @@ public class DiscussionEditor extends TextEditor {
 		discussion.removeQuote(quote.getID());
 	}
 	
+	/*
+	 * @see ITextEditor#selectAndReveal(int, int)
+	 */
+	public void selectAndReveal(int start, int length) {
+		int id = start >> 19;
+		int offset = start - (id << 19);
+		boolean isComment = (id & 1) == 1;
+		id >>= 1;
+		//System.out.println("id: " + id + ", offset: " + offset);
+		if (id == 0) {
+			activateItem(rootItem);
+			return;
+		}
+		
+		for (TreeItem item : rootItem.getItems()) {
+			if (getOpinion(item).getId() == id) {
+				activateItem(item);
+				break;
+			}
+			for (TreeItem qItem : item.getItems()) {
+				if (getQuote(qItem).getID() == id) {
+					activateItems(findQuoteItem(qItem, offset, length, isComment));
+					break;
+				}
+			}
+		}
+	}
+
+	private TreeItem[] findQuoteItem(TreeItem item, int offset, int length, boolean isComment) {
+		TreeItem[] def = new TreeItem[] { item };
+		
+		Integer i = isComment ? (Integer)item.getData(COMMENT_LINE) : 0;
+		if (i == null) {
+			return def;
+		}
+		
+		TreeItem[] items = item.getItems();
+		for (; i < items.length && offset >= items[i].getText().length(); i++)
+			offset -= items[i].getText().length();
+		
+		if (i == items.length)
+			return def;
+		
+		LinkedList<TreeItem> l = new LinkedList<TreeItem>();
+		offset += length;
+		for (; i < items.length && offset > 0; i++) {
+			l.add(items[i]);
+			offset -= items[i].getText().length();
+		}
+		
+		return l.toArray(new TreeItem[l.size()]);
+	}
+
+	private void activateItem(TreeItem item) {
+		item.setExpanded(true);
+		item.getParent().setSelection(item);
+		item.getParent().setFocus();
+	}
 	
+	private void activateItems(TreeItem[] item) {
+		item[0].getParent().setSelection(item);
+		item[0].getParent().setFocus();
+	}
 	
 //	****** P R O T E C T E D  F U N C T I O N S *****************************************
 	
@@ -772,13 +795,31 @@ public class DiscussionEditor extends TextEditor {
 	 * entries
 	 */
 	@Override
-	protected void handleEditorInputChanged() {
-
-		discussion = null; // lose the previous discussion
-		discussion = getDiscussion(); // update all the data
-
-		synchronizeOpinions();
-		// now the opinions should be synchronized with the file
-		synchronizeQuotes();
+	public void setFocus() {
+		super.setFocus();
+		long t = discussion.getModificationStamp();
+		if (t != localModificationStamp) {
+			localModificationStamp = t;
+			synchronizeOpinions();
+			// now the opinions should be synchronized with the file
+			synchronizeQuotes();
+		}
 	}
+	
+	@Override
+	protected void doSetInput(IEditorInput input) throws CoreException {
+		setDocumentProvider(new StorageDocumentProvider());
+		
+		super.doSetInput(input);
+		
+		if (!(input instanceof FileEditorInput))
+			return;
+
+		FileEditorInput fileEditorInput = (FileEditorInput) input;
+		IFile file = fileEditorInput.getFile();
+
+		discussion = ToK.getProjectToK(file.getProject()).getDiscussion(file);
+		localModificationStamp = discussion.getModificationStamp();
+	}
+	
 }
