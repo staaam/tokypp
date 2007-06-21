@@ -150,6 +150,7 @@
                tooltip="%action.label.discussions.show"/>
          <action
                class="lost.tok.opTable.actions.AddQuoteAction"
+               definitionId="lost.tok.opTable.command.addQuote"
                icon="icons/AddQuote.bmp"
                id="lost.tok.opTable.AddQuoteAction"
                label="%action.name.addQuote"
@@ -160,6 +161,7 @@
                tooltip="%action.tooltip.addQuote"/>
          <action
                class="lost.tok.opTable.actions.UnMarkAllAction"
+               definitionId="lost.tok.opTable.command.unMarkQuote"
                icon="icons/UnMarkAll.bmp"
                id="lost.tok.opTable.UnMarkAllAction"
                label="%action.name.unmarkAll"
@@ -181,6 +183,7 @@
                tooltip="%action.tooltip.unmark"/>
          <action
                class="lost.tok.opTable.actions.MarkAction"
+               definitionId="lost.tok.opTable.command.markQuote"
                enablesFor="+"
                icon="icons/Mark.bmp"
                id="lost.tok.opTable.MarkAction"
@@ -213,6 +216,7 @@
             targetID="lost.tok.disEditor.DiscussionEditor">
          <action
                class="lost.tok.disEditor.AddOpinionAction"
+               definitionId="lost.tok.disEditor.command.addOpinion"
                icon="icons/link_ico.gif"
                id="lost.tok.disEditor.addOpinion"
                label="%action.name.addOpinion"
@@ -235,7 +239,47 @@
             commandId="lost.tok.sourceParser.command.endHereAction"
             contextId="org.eclipse.ui.contexts.window"
             keyConfigurationId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            keySequence="ALT+C"
+            scope="org.eclipse.ui.contexts.window"/>
+      <command
+            category="Operation Table"
+            id="lost.tok.opTable.command.markQuote"
+            name="%command.name.mark.quote"/>
+      <keyBinding
+            commandId="lost.tok.opTable.command.markQuote"
+            contextId="org.eclipse.ui.contexts.window"
+            keyConfigurationId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            keySequence="ALT+M"
+            scope="org.eclipse.ui.contexts.window"/>
+      <command
+            category="Operation Table"
+            id="lost.tok.opTable.command.addQuote"
+            name="%command.name.add.quote"/>
+      <keyBinding
+            commandId="lost.tok.opTable.command.addQuote"
+            contextId="org.eclipse.ui.contexts.window"
+            keyConfigurationId="org.eclipse.ui.defaultAcceleratorConfiguration"
             keySequence="ALT+Q"
+            scope="org.eclipse.ui.contexts.window"/>
+      <command
+            category="Operation Table"
+            id="lost.tok.opTable.command.unMarkQuote"
+            name="%command.name.unmark.quote"/>
+      <keyBinding
+            commandId="lost.tok.opTable.command.unMarkQuote"
+            contextId="org.eclipse.ui.contexts.window"
+            keyConfigurationId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            keySequence="ALT+U"
+            scope="org.eclipse.ui.contexts.window"/>
+      <command
+            category="Discussion Editor"
+            id="lost.tok.disEditor.command.addOpinion"
+            name="%command.name.add.opinion"/>
+      <keyBinding
+            commandId="lost.tok.disEditor.command.addOpinion"
+            contextId="org.eclipse.ui.contexts.window"
+            keyConfigurationId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            keySequence="ALT+O"
             scope="org.eclipse.ui.contexts.window"/>
    </extension>
    <extension
