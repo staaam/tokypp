@@ -14,6 +14,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.DialogPage;
+import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -39,10 +40,22 @@ import org.eclipse.ui.IWorkingSet;
 
 public class ToKSearchPage extends DialogPage implements ISearchPage {
 
-	EnumSet<SearchOption> searchOptions = EnumSet.noneOf(SearchOption.class);
-	
+	// For dialog settings
+	private static final String PAGE_NAME = "LostTokSearchPage"; //$NON-NLS-1$
+
+	private static final String STORE_HISTORY = "HISTORY"; //$NON-NLS-1$
+
+	private static final String STORE_HISTORY_SIZE = "HISTORY_SIZE"; //$NON-NLS-1$
+
+	private static final int HISTORY_SIZE = 20;
+
+	EnumSet<SearchOption> searchOptions = EnumSet.allOf(SearchOption.class);
+
 	private Combo fPattern;
+
 	private ISearchPageContainer container;
+
+	private LinkedList<String> history = new LinkedList<String>();
 
 	public ToKSearchPage() {
 	}
@@ -57,64 +70,69 @@ public class ToKSearchPage extends DialogPage implements ISearchPage {
 
 	public void createControl(Composite parent) {
 		initializeDialogUnits(parent);
-		
+		readConfiguration();
+
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridLayout layout = new GridLayout(2, false);
-        layout.horizontalSpacing = 10;
-        composite.setLayout(layout);
+		layout.horizontalSpacing = 10;
+		composite.setLayout(layout);
 
 		Control expression = createExpression(composite);
-		expression.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false, 2, 1));
+		expression.setLayoutData(new GridData(GridData.FILL, GridData.CENTER,
+				true, false, 2, 1));
 
 		Label separator = new Label(composite, SWT.NONE);
-        separator.setVisible(false);
-        GridData data = new GridData(GridData.FILL, GridData.FILL, false, false, 2, 1);
-        data.heightHint = convertHeightInCharsToPixels(1) / 3;
-        separator.setLayoutData(data);
-        
-        Control sourceSrch = createSourceSrch(composite);
-        sourceSrch.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, false, 1, 1));
-        		
-        Control discussionSrch = createDiscussionSrch(composite);
-        discussionSrch.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, false, 1, 1));
-        
+		separator.setVisible(false);
+		GridData data = new GridData(GridData.FILL, GridData.FILL, false,
+				false, 2, 1);
+		data.heightHint = convertHeightInCharsToPixels(1) / 3;
+		separator.setLayoutData(data);
+
+		Control sourceSrch = createSourceSrch(composite);
+		sourceSrch.setLayoutData(new GridData(GridData.FILL, GridData.FILL,
+				true, false, 1, 1));
+
+		Control discussionSrch = createDiscussionSrch(composite);
+		discussionSrch.setLayoutData(new GridData(GridData.FILL, GridData.FILL,
+				true, false, 1, 1));
+
 		setControl(composite);
 		Dialog.applyDialogFont(composite);
 	}
 
-    private Control createSourceSrch(Composite parent) {
-        Group result = new Group(parent, SWT.NONE);
-        result.setText("Sources");
-        result.setLayout(new GridLayout());
+	private Control createSourceSrch(Composite parent) {
+		Group result = new Group(parent, SWT.NONE);
+		result.setText("Sources");
+		result.setLayout(new GridLayout());
 
-        newButton(result, SWT.CHECK, "Title", true, SearchOption.SRC_TITLE);
-        
-        newButton(result, SWT.CHECK, "Author", true, SearchOption.SRC_AUTHOR);
-        
-        newButton(result, SWT.CHECK, "Content", true, SearchOption.SRC_CONTENT);
-               
-        return result;
+		newButton(result, "Title", SearchOption.SRC_TITLE);
+
+		newButton(result, "Author", SearchOption.SRC_AUTHOR);
+
+		newButton(result, "Content", SearchOption.SRC_CONTENT);
+
+		return result;
 	}
 
 	private Control createDiscussionSrch(Composite parent) {
-        Group result = new Group(parent, SWT.NONE);
-        result.setText("Discussions");
-        //result.setLayout(new GridLayout());
-        result.setLayout(new GridLayout(2, true));
-        
-        newButton(result, SWT.CHECK, "Name", true, SearchOption.DSC_NAME);
-        
-        //newButton(result, SWT.CHECK, "Link Subject", true, SearchOption.DSC_LINK_SUBJ);
-        
-        newButton(result, SWT.CHECK, "Quote Text", true, SearchOption.DSC_QUOTES);
-        
-        newButton(result, SWT.CHECK, "Creator", true, SearchOption.DSC_CREATOR);
-        
-        newButton(result, SWT.CHECK, "Quote Comment", true, SearchOption.DSC_QUOTE_COMMENTS);
-        
-        newButton(result, SWT.CHECK, "Opinion Name", true, SearchOption.DSC_OPINIONS);
-        
-        return result;
+		Group result = new Group(parent, SWT.NONE);
+		result.setText("Discussions");
+		//result.setLayout(new GridLayout());
+		result.setLayout(new GridLayout(2, true));
+
+		newButton(result, "Name", SearchOption.DSC_NAME);
+
+		//newButton(result, "Link Subject", SearchOption.DSC_LINK_SUBJ);
+
+		newButton(result, "Quote Text", SearchOption.DSC_QUOTES);
+
+		newButton(result, "Creator", SearchOption.DSC_CREATOR);
+
+		newButton(result, "Quote Comment", SearchOption.DSC_QUOTE_COMMENTS);
+
+		newButton(result, "Opinion Name", SearchOption.DSC_OPINIONS);
+
+		return result;
 	}
 
 	SelectionListener selectionListener = new SelectionAdapter() {
@@ -122,7 +140,7 @@ public class ToKSearchPage extends DialogPage implements ISearchPage {
 		public void widgetSelected(SelectionEvent e) {
 			if (e.widget.getData() instanceof SearchOption) {
 				SearchOption so = (SearchOption) e.widget.getData();
-				if (((Button)e.widget).getSelection()) {
+				if (((Button) e.widget).getSelection()) {
 					searchOptions.add(so);
 				} else {
 					searchOptions.remove(so);
@@ -130,113 +148,119 @@ public class ToKSearchPage extends DialogPage implements ISearchPage {
 			}
 		}
 	};
-	
-	private Button newButton(Composite parent, int style, String title, boolean selected, SearchOption opt) {
-		Button b = new Button(parent, style);
+
+	private Button newButton(Composite parent, String title, SearchOption opt) {
+		Button b = new Button(parent, SWT.CHECK);
 
 		if (opt != null) {
 			b.setData(opt);
-			if (selected) searchOptions.add(opt);
+			b.setSelection(searchOptions.contains(opt));
 			b.addSelectionListener(selectionListener);
 		}
 		b.setText(title);
-		b.setSelection(selected);
 		return b;
 	}
-	
+
 	private Control createExpression(Composite parent) {
-        Composite result = new Composite(parent, SWT.NONE);
-        GridLayout layout = new GridLayout(2, false);
-        layout.marginWidth = 0;
-        layout.marginHeight = 0;
-        result.setLayout(layout);
-        
-        Label label = new Label(result, SWT.LEFT);
-        label.setText("Search string (* = any string, ? = any character):"); //$NON-NLS-1$
-        label.setLayoutData(new GridData(GridData.FILL, GridData.FILL, false, false, 2, 1));
+		Composite result = new Composite(parent, SWT.NONE);
+		GridLayout layout = new GridLayout(2, false);
+		layout.marginWidth = 0;
+		layout.marginHeight = 0;
+		result.setLayout(layout);
 
-        fPattern = new Combo(result, SWT.SINGLE | SWT.BORDER);
-//        fPattern.addSelectionListener(new SelectionAdapter() {
-//            public void widgetSelected(SelectionEvent e) {
-//            }
-//        });
-//        fPattern.addModifyListener(new ModifyListener() {
-//            public void modifyText(ModifyEvent e) {
-//            }
-//        });
-        GridData data = new GridData(GridData.FILL, GridData.FILL, true, false, 1, 1);
-        data.widthHint = convertWidthInCharsToPixels(50);
-        fPattern.setLayoutData(data);
+		Label label = new Label(result, SWT.LEFT);
+		label.setText("Search string (* = any string, ? = any character):"); //$NON-NLS-1$
+		label.setLayoutData(new GridData(GridData.FILL, GridData.FILL, false,
+				false, 2, 1));
 
-        // Ignore case checkbox
-        newButton(result, SWT.CHECK, "Case sensitive", false, SearchOption.CASE_SENSITIVE)
-        	.setLayoutData(new GridData(GridData.FILL, GridData.FILL, false, false, 1, 1));
+		fPattern = new Combo(result, SWT.SINGLE | SWT.BORDER);
+		fPattern.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				String s = fPattern.getText();
+				history.remove(s);
+				history.addFirst(s);
+			}
+		});
+		//        fPattern.addModifyListener(new ModifyListener() {
+		//            public void modifyText(ModifyEvent e) {
+		//            }
+		//        });
+		GridData data = new GridData(GridData.FILL, GridData.FILL, true, false,
+				1, 1);
+		data.widthHint = convertWidthInCharsToPixels(50);
+		fPattern.setFocus();
+		fPattern.setLayoutData(data);
 
-        return result;
-    }
-    
-    public boolean performAction() {
-    	SearchPlugin.getDefault().getPreferenceStore().setValue(SearchPreferencePage.REUSE_EDITOR, false);
+		// Ignore case checkbox
+		newButton(result, "Case sensitive", SearchOption.CASE_SENSITIVE)
+				.setLayoutData(
+						new GridData(GridData.FILL, GridData.FILL, false,
+								false, 1, 1));
+
+		return result;
+	}
+
+	public boolean performAction() {
+		SearchPlugin.getDefault().getPreferenceStore().setValue(
+				SearchPreferencePage.REUSE_EDITOR, false);
 		NewSearchUI.runQueryInBackground(getSearchQuery());
 		return true;
 	}
 
 	private ISearchQuery getSearchQuery() {
-        // Setup search scope
-        // SearchScope scope = null;
+		// Setup search scope
+		// SearchScope scope = null;
 		IWorkspaceRoot wsRoot = ResourcesPlugin.getWorkspace().getRoot();
 		List<IResource> scope = new LinkedList<IResource>();
 		switch (getContainer().getSelectedScope()) {
-	        case ISearchPageContainer.WORKSPACE_SCOPE:
-	            for (IProject p : wsRoot.getProjects()) {
-	            	getProjectElements(scope, p);
-	            }
-	            break;
-	        case ISearchPageContainer.SELECTION_SCOPE: 
-	        	ISelection s = getContainer().getSelection();
-	        	if (s==null || !(s instanceof IStructuredSelection)) return null;
-				
-	        	IStructuredSelection ss = (IStructuredSelection) s;
-				for (Iterator iter = ss.iterator(); iter.hasNext();) {
-					IResource r = (IResource) iter.next();
+		case ISearchPageContainer.WORKSPACE_SCOPE:
+			for (IProject p : wsRoot.getProjects()) {
+				getProjectElements(scope, p);
+			}
+			break;
+		case ISearchPageContainer.SELECTION_SCOPE:
+			ISelection s = getContainer().getSelection();
+			if (s == null || !(s instanceof IStructuredSelection))
+				return null;
+
+			IStructuredSelection ss = (IStructuredSelection) s;
+			for (Iterator iter = ss.iterator(); iter.hasNext();) {
+				IResource r = (IResource) iter.next();
+				scope.add(r);
+			}
+
+			break;
+		case ISearchPageContainer.SELECTED_PROJECTS_SCOPE:
+			for (String pn : getContainer().getSelectedProjectNames()) {
+				getProjectElements(scope, wsRoot.getProject(pn));
+			}
+			break;
+		case ISearchPageContainer.WORKING_SET_SCOPE:
+			IWorkingSet[] workingSets = getContainer().getSelectedWorkingSets();
+			for (IAdaptable a : workingSets[0].getElements()) {
+				if (a instanceof IProject) {
+					getProjectElements(scope, (IProject) a);
+				} else if (a instanceof IResource) {
+					IResource r = (IResource) a;
 					scope.add(r);
 				}
-				
-	        	break;
-	        case ISearchPageContainer.SELECTED_PROJECTS_SCOPE:
-	        	for (String pn : getContainer().getSelectedProjectNames()) {
-	        		getProjectElements(scope, wsRoot.getProject(pn));
-	        	}
-	        	break;
-	        case ISearchPageContainer.WORKING_SET_SCOPE:
-	            IWorkingSet[] workingSets = getContainer().getSelectedWorkingSets();
-	            for (IAdaptable a : workingSets[0].getElements()) {
-	            	if (a instanceof IProject) {
-	            		getProjectElements(scope, (IProject)a);
-	            	}
-	            	else if (a instanceof IResource) {
-						IResource r = (IResource) a;
-						scope.add(r);
-					}
-	            }
-	            break;
-        }
-		if (scope.isEmpty()) return null;
-        NewSearchUI.activateSearchResultView();
+			}
+			break;
+		}
+		if (scope.isEmpty())
+			return null;
+		NewSearchUI.activateSearchResultView();
 
-        return new ToKSearchQuery(
-        		fPattern.getText(),
-        		searchOptions,
-        		scope
-        		);
+		return new ToKSearchQuery(fPattern.getText(), searchOptions, scope);
 	}
 
 	private void getProjectElements(List<IResource> scope, IProject p) {
 		ToK tok = ToK.getProjectToK(p);
-		if (tok == null) return;
-		
+		if (tok == null)
+			return;
+
 		System.out.println("Add " + p.getName());
-		
+
 		scope.add(tok.getDiscussionFolder());
 		scope.add(tok.getSourcesFolder());
 		scope.add(tok.getRootsFolder());
@@ -248,6 +272,61 @@ public class ToKSearchPage extends DialogPage implements ISearchPage {
 
 	public void setContainer(ISearchPageContainer container) {
 		this.container = container;
+	}
+
+	//--------------- Configuration handling --------------
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.dialogs.DialogPage#dispose()
+	 */
+	public void dispose() {
+		writeConfiguration();
+		super.dispose();
+	}
+
+	/**
+	 * Returns the page settings for this Text search page.
+	 * 
+	 * @return the page settings to be used
+	 */
+	private IDialogSettings getDialogSettings() {
+		return SearchPlugin.getDefault().getDialogSettingsSection(PAGE_NAME);
+	}
+
+	/**
+	 * Initializes itself from the stored page settings.
+	 */
+	private void readConfiguration() {
+		IDialogSettings s = getDialogSettings();
+		for (SearchOption so : SearchOption.values())
+			if (s.getBoolean(so.toString()))
+				searchOptions.add(so);
+			else
+				searchOptions.remove(so);
+
+		try {
+			int historySize = s.getInt(STORE_HISTORY_SIZE);
+			for (int i = 0; i < historySize; i++) {
+				history.add(s.get(STORE_HISTORY + i));
+			}
+		} catch (NumberFormatException e) {
+			// ignore
+		}
+	}
+
+	/**
+	 * Stores it current configuration in the dialog store.
+	 */
+	private void writeConfiguration() {
+		IDialogSettings s = getDialogSettings();
+		for (SearchOption so : SearchOption.values())
+			s.put(so.toString(), searchOptions.contains(so));
+
+		int historySize = Math.min(history.size(), HISTORY_SIZE);
+		s.put(STORE_HISTORY_SIZE, historySize);
+		for (int i = 0; i < historySize; i++) {
+			s.put(STORE_HISTORY + i, history.get(i));
+		}
 	}
 
 }

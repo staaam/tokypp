@@ -373,7 +373,8 @@
             canSearchEnclosingProjects="true"
             class="lost.tok.search.ToKSearchPage"
             enabled="true"
-            extensions="src,dis"
+            extensions="dis:101,src:100,*:9"
+            icon="icons/tree.jpg"
             id="lost.tok.search"
             label="ToK Search"
             showScopeSection="true"/>
