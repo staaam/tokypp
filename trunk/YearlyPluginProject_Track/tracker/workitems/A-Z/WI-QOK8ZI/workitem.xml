@@ -24,6 +24,7 @@
             </struct>
         </list>
     </field>
+    <field id="resolution">fixed</field>
     <field id="type">task</field>
     <field id="author">Michael</field>
     <field id="title">13. Searching</field>
@@ -34,7 +35,8 @@
 <P>- discussion name</P>
 <P>- source content</P>
 <P>Results will be shown in the Search View and will allow opening of found discussion/source with found words highlighted</P>]]></field>
-    <field id="status">open</field>
+    <field id="status">closed</field>
     <field id="assignee">Michael</field>
     <field id="severity">normal</field>
+    <field id="previousStatus">open</field>
 </work-item>
