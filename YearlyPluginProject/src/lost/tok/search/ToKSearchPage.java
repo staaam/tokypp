@@ -1,5 +1,6 @@
 package lost.tok.search;
 
+import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -37,25 +38,93 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IWorkingSet;
+import org.eclipse.ui.IWorkingSetManager;
+import org.eclipse.ui.PlatformUI;
 
 public class ToKSearchPage extends DialogPage implements ISearchPage {
 
 	// For dialog settings
 	private static final String PAGE_NAME = "LostTokSearchPage"; //$NON-NLS-1$
-
 	private static final String STORE_HISTORY = "HISTORY"; //$NON-NLS-1$
-
 	private static final String STORE_HISTORY_SIZE = "HISTORY_SIZE"; //$NON-NLS-1$
-
 	private static final int HISTORY_SIZE = 20;
+	private LinkedList<SearchPatternData> history = new LinkedList<SearchPatternData>();
+	private boolean fFirstTime = true;
 
-	EnumSet<SearchOption> searchOptions = EnumSet.allOf(SearchOption.class);
+	// By default - all options are on, case sensivity is off
+	protected EnumSet<SearchOption> searchOptions = EnumSet.complementOf(EnumSet.of(SearchOption.CASE_SENSITIVE));
+	private EnumMap<SearchOption, Button> checkboxes = new EnumMap<SearchOption, Button>(SearchOption.class);
 
+	private static class SearchPatternData {
+		private static final String STORE_WORKING_SETS = "WORKING_SETS";
+		private static final String STORE_TEXT_PATTERN = "TEXT_PATTERN";
+		private static final String STORE_SCOPE = "SCOPE";
+		
+		public final String textPattern;
+		public final EnumSet<SearchOption> searchOptions;
+		public final int scope;
+		public final IWorkingSet[] workingSets;
+		
+		public SearchPatternData(String textPattern, EnumSet<SearchOption> searchOptions, int scope, IWorkingSet[] workingSets) {
+			this.textPattern = textPattern;
+			this.searchOptions = searchOptions;
+			this.scope = scope;
+			this.workingSets = workingSets;
+		}
+
+		public void store(IDialogSettings settings) {
+			settings.put(STORE_TEXT_PATTERN, textPattern); //$NON-NLS-1$
+			settings.put(STORE_SCOPE, scope); //$NON-NLS-1$
+			if (workingSets != null) {
+				String[] wsIds= new String[workingSets.length];
+				for (int i= 0; i < workingSets.length; i++) {
+					wsIds[i]= workingSets[i].getLabel();
+				}
+				settings.put(STORE_WORKING_SETS, wsIds); //$NON-NLS-1$
+			} else {
+				settings.put(STORE_WORKING_SETS, new String[0]); //$NON-NLS-1$
+			}
+
+			for (SearchOption so : SearchOption.values())
+				settings.put(so.toString(), searchOptions.contains(so));
+		}
+		
+		public static SearchPatternData create(IDialogSettings settings) {
+			String textPattern= settings.get(STORE_TEXT_PATTERN); //$NON-NLS-1$
+
+			String[] wsIds= settings.getArray(STORE_WORKING_SETS); //$NON-NLS-1$
+			IWorkingSet[] workingSets= null;
+			if (wsIds != null && wsIds.length > 0) {
+				IWorkingSetManager workingSetManager= PlatformUI.getWorkbench().getWorkingSetManager();
+				workingSets= new IWorkingSet[wsIds.length];
+				for (int i= 0; workingSets != null && i < wsIds.length; i++) {
+					workingSets[i]= workingSetManager.getWorkingSet(wsIds[i]);
+					if (workingSets[i] == null) {
+						workingSets= null;
+					}
+				}
+			}
+			
+			EnumSet<SearchOption> searchOptions = EnumSet.noneOf(SearchOption.class);
+			for (SearchOption so : SearchOption.values()) {
+				if (settings.getBoolean(so.toString()))
+					searchOptions.add(so);
+				else
+					searchOptions.remove(so);
+			}
+
+			try {
+				int scope= settings.getInt(STORE_SCOPE); //$NON-NLS-1$
+
+				return new SearchPatternData(textPattern, searchOptions, scope, workingSets);
+			} catch (NumberFormatException e) {
+				return null;
+			}
+		}
+	}
+	
 	private Combo fPattern;
-
 	private ISearchPageContainer container;
-
-	private LinkedList<String> history = new LinkedList<String>();
 
 	public ToKSearchPage() {
 	}
@@ -155,6 +224,7 @@ public class ToKSearchPage extends DialogPage implements ISearchPage {
 		if (opt != null) {
 			b.setData(opt);
 			b.setSelection(searchOptions.contains(opt));
+			checkboxes.put(opt, b);
 			b.addSelectionListener(selectionListener);
 		}
 		b.setText(title);
@@ -176,19 +246,13 @@ public class ToKSearchPage extends DialogPage implements ISearchPage {
 		fPattern = new Combo(result, SWT.SINGLE | SWT.BORDER);
 		fPattern.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				String s = fPattern.getText();
-				history.remove(s);
-				history.addFirst(s);
+				handleWidgetSelected();
 			}
 		});
-		//        fPattern.addModifyListener(new ModifyListener() {
-		//            public void modifyText(ModifyEvent e) {
-		//            }
-		//        });
+
 		GridData data = new GridData(GridData.FILL, GridData.FILL, true, false,
 				1, 1);
 		data.widthHint = convertWidthInCharsToPixels(50);
-		fPattern.setFocus();
 		fPattern.setLayoutData(data);
 
 		// Ignore case checkbox
@@ -200,11 +264,71 @@ public class ToKSearchPage extends DialogPage implements ISearchPage {
 		return result;
 	}
 
+	private void handleWidgetSelected() {
+		int selectionIndex= fPattern.getSelectionIndex();
+		if (selectionIndex < 0 || selectionIndex >= history.size())
+			return;
+		
+		SearchPatternData patternData= history.get(selectionIndex);
+		if (!fPattern.getText().equals(patternData.textPattern))
+			return;
+		
+		searchOptions = EnumSet.copyOf(patternData.searchOptions);
+		fPattern.setText(patternData.textPattern);
+		getContainer().setSelectedScope(patternData.scope);
+		if (patternData.workingSets != null)
+			getContainer().setSelectedWorkingSets(patternData.workingSets);
+
+		for (SearchOption so : SearchOption.values())
+			checkboxes.get(so).setSelection(patternData.searchOptions.contains(so));
+	}
+
+	private String[] getPreviousSearchPatterns() {
+		int size= history.size();
+		String [] patterns= new String[size];
+		for (int i= 0; i < size; i++)
+			patterns[i]= history.get(i).textPattern;
+		
+		return patterns;
+	}
+		
+	@Override
+	public void setVisible(boolean visible) {
+		if (visible && fPattern != null) {
+			if (fFirstTime) {
+				fFirstTime= false;
+				fPattern.setItems(getPreviousSearchPatterns());
+				fPattern.select(0);
+				handleWidgetSelected();
+			}
+			fPattern.setFocus();
+		}
+		super.setVisible(visible);
+	}
+
+	
 	public boolean performAction() {
+		updateHistoryData();
+		
 		SearchPlugin.getDefault().getPreferenceStore().setValue(
 				SearchPreferencePage.REUSE_EDITOR, false);
 		NewSearchUI.runQueryInBackground(getSearchQuery());
 		return true;
+	}
+
+	private void updateHistoryData() {
+		for (int i = 0; i < history.size(); i++) {
+			SearchPatternData d = history.get(i);
+			if (!d.textPattern.equals(fPattern.getText())) continue;
+			history.remove(i);
+		} 
+		
+		history.addFirst(new SearchPatternData(
+				fPattern.getText(),
+				searchOptions,
+				getContainer().getSelectedScope(),
+				getContainer().getSelectedWorkingSets()
+		));
 	}
 
 	private ISearchQuery getSearchQuery() {
@@ -247,8 +371,6 @@ public class ToKSearchPage extends DialogPage implements ISearchPage {
 			}
 			break;
 		}
-		if (scope.isEmpty())
-			return null;
 		NewSearchUI.activateSearchResultView();
 
 		return new ToKSearchQuery(fPattern.getText(), searchOptions, scope);
@@ -265,7 +387,7 @@ public class ToKSearchPage extends DialogPage implements ISearchPage {
 		scope.add(tok.getSourcesFolder());
 		scope.add(tok.getRootsFolder());
 	}
-
+	
 	private ISearchPageContainer getContainer() {
 		return container;
 	}
@@ -298,16 +420,19 @@ public class ToKSearchPage extends DialogPage implements ISearchPage {
 	 */
 	private void readConfiguration() {
 		IDialogSettings s = getDialogSettings();
-		for (SearchOption so : SearchOption.values())
+		for (SearchOption so : SearchOption.values()) {
+			if (s.get(so.toString()) == null) continue;
 			if (s.getBoolean(so.toString()))
 				searchOptions.add(so);
 			else
 				searchOptions.remove(so);
+		}
 
 		try {
 			int historySize = s.getInt(STORE_HISTORY_SIZE);
 			for (int i = 0; i < historySize; i++) {
-				history.add(s.get(STORE_HISTORY + i));
+				IDialogSettings histSettings = s.getSection(STORE_HISTORY + i);
+				history.addLast(SearchPatternData.create(histSettings));
 			}
 		} catch (NumberFormatException e) {
 			// ignore
@@ -325,7 +450,8 @@ public class ToKSearchPage extends DialogPage implements ISearchPage {
 		int historySize = Math.min(history.size(), HISTORY_SIZE);
 		s.put(STORE_HISTORY_SIZE, historySize);
 		for (int i = 0; i < historySize; i++) {
-			s.put(STORE_HISTORY + i, history.get(i));
+			IDialogSettings histSettings = s.addNewSection(STORE_HISTORY + i);
+			history.get(i).store(histSettings);
 		}
 	}
 
