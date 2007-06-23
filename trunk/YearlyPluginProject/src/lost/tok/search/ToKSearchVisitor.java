@@ -21,15 +21,22 @@ import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.search.internal.ui.text.FileMatch;
+import org.eclipse.search.internal.ui.text.FileSearchResult;
 
+/**
+ * Used to search single resource
+ * 
+ * @author Michael Gelfand
+ *
+ */
 public class ToKSearchVisitor implements IResourceVisitor {
 
 	private String searchPattern;
 	private EnumSet<SearchOption> searchOptions;
-	private ToKSearchResult searchResult;
+	private FileSearchResult searchResult;
 	private Pattern pattern;
 
-	public ToKSearchVisitor(String searchPattern, EnumSet<SearchOption> searchOptions, ToKSearchResult searchResult) {
+	public ToKSearchVisitor(String searchPattern, EnumSet<SearchOption> searchOptions, FileSearchResult searchResult) {
 		this.searchPattern = searchPattern;
 		this.searchOptions = searchOptions;
 		this.searchResult = searchResult;
@@ -37,6 +44,10 @@ public class ToKSearchVisitor implements IResourceVisitor {
 		compilePattern();
 	}
 
+	/**
+	 * Creates search pattern from entered text
+	 *
+	 */
 	private void compilePattern() {
 		String s = "";
 		int last = 0;
@@ -66,23 +77,32 @@ public class ToKSearchVisitor implements IResourceVisitor {
 				(searchOptions.contains(SearchOption.CASE_SENSITIVE) ? 0 : Pattern.CASE_INSENSITIVE));
 	}
 
+	/**
+	 * Actually starts the resource search
+	 */
 	public boolean visit(IResource resource) throws CoreException {
-		if (resource instanceof IFile) {
-			ToK tok = ToK.getProjectToK(resource.getProject());
-			if (tok == null) return false;
-			
-			IFile file = (IFile) resource;
-			if (Source.isSource(file)) {
-				sourceSearch(file);
-			}
-			else if (Discussion.isDiscussion(file)) {
-				discussionSearch(file);
-			}
-			return false;
+		if (!(resource instanceof IFile))
+			return true;
+		ToK tok = ToK.getProjectToK(resource.getProject());
+		if (tok == null) return false;
+		
+		IFile file = (IFile) resource;
+		
+		if (Source.isSource(file)) {
+			sourceSearch(file);
 		}
-		return true;
+		
+		if (Discussion.isDiscussion(file)) {
+			discussionSearch(file);
+		}
+		
+		return false;
 	}
 
+	/**
+	 * Searches the given discussion file
+	 * @param file the discussion file
+	 */
 	private void discussionSearch(IFile file) {
 		Discussion d = ToK.getProjectToK(file.getProject()).getDiscussion(file);
 		
@@ -123,12 +143,15 @@ public class ToKSearchVisitor implements IResourceVisitor {
 		
 	}
 
+	/**
+	 * Searches the given source file
+	 * @param file the source file
+	 */
 	private void sourceSearch(IFile file) {
 		if (!(searchOptions.contains(SearchOption.SRC_AUTHOR) ||
 			  searchOptions.contains(SearchOption.SRC_TITLE) ||
 			  searchOptions.contains(SearchOption.SRC_CONTENT)))
 			return;
-		
 		SourceDocument sd = new SourceDocument();
 		sd.set(file);
 		

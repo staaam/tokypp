@@ -22,8 +22,6 @@ import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.DoubleClickEvent;
-import org.eclipse.jface.viewers.IBaseLabelProvider;
-import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
@@ -237,68 +235,17 @@ public class ExcerptionView extends ViewPart {
 	private TreeViewer viewer;
 
 	/**
-	 * The constructor.
-	 */
-	public ExcerptionView() {
-
-	}
-
-	private void refresh() {
-		((ViewContentProvider) viewer.getContentProvider())
-				.treeBuildAndRefresh();
-	}
-
-	/**
 	 * This is a callback that will allow us to create the viewer and initialize
 	 * it.
 	 */
+	@Override
 	public void createPartControl(Composite parent) {
 		viewer = new TreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
-		//drillDownAdapter = new DrillDownAdapter(viewer);
 		viewer.setContentProvider(new ViewContentProvider());
 		viewer.setLabelProvider(new ViewLabelProvider());
-		// viewer.setSorter(new NameSorter());
 		viewer.setInput(getViewSite());
 		hookDoubleClickAction();
 		hookContextMenu();
-//		contributeToActionBars();
-	}
-
-//	private void fillContextMenu(IMenuManager manager) {
-//		manager.add(linkDiscussionAction);
-//		manager.add(deleteAction);
-//	}
-
-//	private void contributeToActionBars() {
-//		IActionBars bars = getViewSite().getActionBars();
-//		fillLocalPullDown(bars.getMenuManager());
-//	}
-
-//	private void fillLocalPullDown(IMenuManager manager) {
-//		manager.add(linkDiscussionAction);
-//	}
-
-	public IContentProvider getContentProvider() {
-		return viewer.getContentProvider();
-	}
-	
-	/**
-	 * Returns the excerptions from the given file name
-	 */
-	public List<Excerption> getExcerptions(String filename) {
-		return getOTs().get(filename).getExcerptions();
-	}
-
-	private OTSet getOTs() {
-		return projectOTs.get(currentProject);
-	}
-
-	public Object getInput() {
-		return viewer.getInput();
-	}
-
-	public IBaseLabelProvider getLabelProvider() {
-		return viewer.getLabelProvider();
 	}
 
 	private void hookContextMenu() {
@@ -348,8 +295,33 @@ public class ExcerptionView extends ViewPart {
 	/**
 	 * Passing the focus request to the viewer's control.
 	 */
+	@Override
 	public void setFocus() {
 		viewer.getControl().setFocus();
+	}
+
+	/**
+	 * Returns the ExcerptionView object. If the view not shown in current
+	 * perspective, function shows it
+	 * 
+	 * @return ExceptionView object
+	 */
+	public static ExcerptionView getView() {
+		IWorkbenchPage activePage = PlatformUI.getWorkbench()
+				.getActiveWorkbenchWindow().getActivePage();
+
+		if (activePage == null)
+			return null;
+
+		IViewPart view = activePage.findView(ExcerptionView.ID);
+
+		if (view == null)
+			try {
+				view = activePage.showView(ExcerptionView.ID);
+			} catch (PartInitException e) {
+			}
+
+		return (ExcerptionView) view;
 	}
 
 	/**
@@ -378,7 +350,7 @@ public class ExcerptionView extends ViewPart {
 	 */
 	public void removeMonitoredEditor(OperationTable ot) {
 		if (!projectOTs.containsKey(ot.getProject())
-				|| !projectOTs.get(ot.getProject()).contains(ot))
+			|| !projectOTs.get(ot.getProject()).contains(ot))
 			return;
 
 		projectOTs.get(ot.getProject()).remove(ot);
@@ -398,29 +370,10 @@ public class ExcerptionView extends ViewPart {
 	}
 
 	/**
-	 * Returns the ExcerptionView object. If the view not shown in current
-	 * perspective, function shows it
-	 * 
-	 * @return ExceptionView object
+	 * Returns the excerptions from the given file name
 	 */
-	public static ExcerptionView getView() {
-		IWorkbenchPage activePage = PlatformUI.getWorkbench()
-				.getActiveWorkbenchWindow().getActivePage();
-
-		if (activePage == null) {
-			return null;
-		}
-
-		IViewPart view = activePage.findView(ExcerptionView.ID);
-
-		try {
-			if (view == null) {
-				view = activePage.showView(ExcerptionView.ID);
-			}
-		} catch (PartInitException e) {
-		}
-
-		return (ExcerptionView) view;
+	public List<Excerption> getExcerptions(String filename) {
+		return getOTs().get(filename).getExcerptions();
 	}
 
 	/**
@@ -431,10 +384,22 @@ public class ExcerptionView extends ViewPart {
 	public IProject getProject() {
 		return currentProject;
 	}
+	
+	private OTSet getOTs() {
+		return projectOTs.get(currentProject);
+	}
+
+	private void refresh() {
+		((ViewContentProvider) viewer.getContentProvider())
+				.treeBuildAndRefresh();
+	}
+
+	//////////////////////////////////////
+	// Actions begin here
+	//////////////////////////////////////
 
 	/**
 	 * Shows Link Discussion wizard Shows error message if no roots availible
-	 * 
 	 */
 	public void linkDiscussion() {
 		if (!hasRoots()) {
