@@ -10,23 +10,31 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.search.internal.ui.text.FileSearchQuery;
+import org.eclipse.search.internal.ui.text.FileSearchResult;
 import org.eclipse.search.internal.ui.text.SearchResultUpdater;
-import org.eclipse.search.ui.ISearchQuery;
 import org.eclipse.search.ui.text.FileTextSearchScope;
 
-public class ToKSearchQuery extends FileSearchQuery implements ISearchQuery {
+/**
+ * Class that manages ToK Search Query, extends FileSearchQuery
+ * 
+ * @author Michael Gelfand
+ * 
+ */
+public class ToKSearchQuery extends FileSearchQuery {
 
-	private ToKSearchResult fResult;
-	
+	private FileSearchResult fResult;
 	private String searchPattern;
 	private EnumSet<SearchOption> searchOptions;
 	private List<IResource> scope;
 
 	public ToKSearchQuery(String searchPattern,
-			EnumSet<SearchOption> searchOptions,
-			List<IResource> scope) {
-		super(searchPattern, false, searchOptions.contains(SearchOption.CASE_SENSITIVE),
-				FileTextSearchScope.newSearchScope(scope.toArray(new IResource[scope.size()]), new String[0], true));
+			EnumSet<SearchOption> searchOptions, List<IResource> scope) {
+		super(searchPattern, false, 
+				searchOptions.contains(SearchOption.CASE_SENSITIVE),
+				FileTextSearchScope.newSearchScope(
+						scope.toArray(new IResource[scope.size()]),
+						new String[0], true));
+		
 		this.searchPattern = searchPattern;
 		this.searchOptions = searchOptions;
 		this.scope = scope;
@@ -36,13 +44,11 @@ public class ToKSearchQuery extends FileSearchQuery implements ISearchQuery {
 		return "ToK search of: '" + searchPattern + "'";
 	}
 
-
 	public IStatus run(IProgressMonitor monitor) {
 		getSearchResult().removeAll();
-		
-		IResourceVisitor visitor = new ToKSearchVisitor(
-				searchPattern, searchOptions, getSearchResult()
-				);
+
+		IResourceVisitor visitor = new ToKSearchVisitor(searchPattern,
+				searchOptions, getSearchResult());
 		monitor.beginTask("Searching...", IProgressMonitor.UNKNOWN);
 		for (IResource r : scope) {
 			if (monitor.isCanceled())
@@ -58,9 +64,9 @@ public class ToKSearchQuery extends FileSearchQuery implements ISearchQuery {
 		return Status.OK_STATUS;
 	}
 
-	public ToKSearchResult getSearchResult() {
+	public FileSearchResult getSearchResult() {
 		if (fResult == null) {
-			fResult= new ToKSearchResult(this);
+			fResult = new FileSearchResult(this);
 			new SearchResultUpdater(fResult);
 		}
 		return fResult;

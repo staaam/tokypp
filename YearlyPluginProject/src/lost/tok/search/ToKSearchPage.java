@@ -16,7 +16,6 @@ import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.DialogPage;
 import org.eclipse.jface.dialogs.IDialogSettings;
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.search.internal.ui.SearchPlugin;
@@ -41,6 +40,12 @@ import org.eclipse.ui.IWorkingSet;
 import org.eclipse.ui.IWorkingSetManager;
 import org.eclipse.ui.PlatformUI;
 
+/**
+ * Class that creates and manages ToK Search dialog page
+ * 
+ * @author Michael Gelfand
+ * 
+ */
 public class ToKSearchPage extends DialogPage implements ISearchPage {
 
 	// For dialog settings
@@ -52,20 +57,30 @@ public class ToKSearchPage extends DialogPage implements ISearchPage {
 	private boolean fFirstTime = true;
 
 	// By default - all options are on, case sensivity is off
-	protected EnumSet<SearchOption> searchOptions = EnumSet.complementOf(EnumSet.of(SearchOption.CASE_SENSITIVE));
-	private EnumMap<SearchOption, Button> checkboxes = new EnumMap<SearchOption, Button>(SearchOption.class);
+	protected EnumSet<SearchOption> searchOptions = EnumSet
+			.complementOf(EnumSet.of(SearchOption.CASE_SENSITIVE));
+	private EnumMap<SearchOption, Button> checkboxes = new EnumMap<SearchOption, Button>(
+			SearchOption.class);
 
+	/**
+	 * Class for storing/restoring search history data
+	 * 
+	 * @author Michael Gelfand
+	 * 
+	 */
 	private static class SearchPatternData {
 		private static final String STORE_WORKING_SETS = "WORKING_SETS";
 		private static final String STORE_TEXT_PATTERN = "TEXT_PATTERN";
 		private static final String STORE_SCOPE = "SCOPE";
-		
+
 		public final String textPattern;
 		public final EnumSet<SearchOption> searchOptions;
 		public final int scope;
 		public final IWorkingSet[] workingSets;
-		
-		public SearchPatternData(String textPattern, EnumSet<SearchOption> searchOptions, int scope, IWorkingSet[] workingSets) {
+
+		public SearchPatternData(String textPattern,
+				EnumSet<SearchOption> searchOptions, int scope,
+				IWorkingSet[] workingSets) {
 			this.textPattern = textPattern;
 			this.searchOptions = searchOptions;
 			this.scope = scope;
@@ -76,9 +91,9 @@ public class ToKSearchPage extends DialogPage implements ISearchPage {
 			settings.put(STORE_TEXT_PATTERN, textPattern); //$NON-NLS-1$
 			settings.put(STORE_SCOPE, scope); //$NON-NLS-1$
 			if (workingSets != null) {
-				String[] wsIds= new String[workingSets.length];
-				for (int i= 0; i < workingSets.length; i++) {
-					wsIds[i]= workingSets[i].getLabel();
+				String[] wsIds = new String[workingSets.length];
+				for (int i = 0; i < workingSets.length; i++) {
+					wsIds[i] = workingSets[i].getLabel();
 				}
 				settings.put(STORE_WORKING_SETS, wsIds); //$NON-NLS-1$
 			} else {
@@ -88,24 +103,26 @@ public class ToKSearchPage extends DialogPage implements ISearchPage {
 			for (SearchOption so : SearchOption.values())
 				settings.put(so.toString(), searchOptions.contains(so));
 		}
-		
-		public static SearchPatternData create(IDialogSettings settings) {
-			String textPattern= settings.get(STORE_TEXT_PATTERN); //$NON-NLS-1$
 
-			String[] wsIds= settings.getArray(STORE_WORKING_SETS); //$NON-NLS-1$
-			IWorkingSet[] workingSets= null;
+		public static SearchPatternData create(IDialogSettings settings) {
+			String textPattern = settings.get(STORE_TEXT_PATTERN); //$NON-NLS-1$
+
+			String[] wsIds = settings.getArray(STORE_WORKING_SETS); //$NON-NLS-1$
+			IWorkingSet[] workingSets = null;
 			if (wsIds != null && wsIds.length > 0) {
-				IWorkingSetManager workingSetManager= PlatformUI.getWorkbench().getWorkingSetManager();
-				workingSets= new IWorkingSet[wsIds.length];
-				for (int i= 0; workingSets != null && i < wsIds.length; i++) {
-					workingSets[i]= workingSetManager.getWorkingSet(wsIds[i]);
+				IWorkingSetManager workingSetManager = PlatformUI
+						.getWorkbench().getWorkingSetManager();
+				workingSets = new IWorkingSet[wsIds.length];
+				for (int i = 0; workingSets != null && i < wsIds.length; i++) {
+					workingSets[i] = workingSetManager.getWorkingSet(wsIds[i]);
 					if (workingSets[i] == null) {
-						workingSets= null;
+						workingSets = null;
 					}
 				}
 			}
-			
-			EnumSet<SearchOption> searchOptions = EnumSet.noneOf(SearchOption.class);
+
+			EnumSet<SearchOption> searchOptions = EnumSet
+					.noneOf(SearchOption.class);
 			for (SearchOption so : SearchOption.values()) {
 				if (settings.getBoolean(so.toString()))
 					searchOptions.add(so);
@@ -114,28 +131,18 @@ public class ToKSearchPage extends DialogPage implements ISearchPage {
 			}
 
 			try {
-				int scope= settings.getInt(STORE_SCOPE); //$NON-NLS-1$
+				int scope = settings.getInt(STORE_SCOPE); //$NON-NLS-1$
 
-				return new SearchPatternData(textPattern, searchOptions, scope, workingSets);
+				return new SearchPatternData(textPattern, searchOptions, scope,
+						workingSets);
 			} catch (NumberFormatException e) {
 				return null;
 			}
 		}
 	}
-	
+
 	private Combo fPattern;
 	private ISearchPageContainer container;
-
-	public ToKSearchPage() {
-	}
-
-	public ToKSearchPage(String title) {
-		super(title);
-	}
-
-	public ToKSearchPage(String title, ImageDescriptor image) {
-		super(title, image);
-	}
 
 	public void createControl(Composite parent) {
 		initializeDialogUnits(parent);
@@ -169,6 +176,13 @@ public class ToKSearchPage extends DialogPage implements ISearchPage {
 		Dialog.applyDialogFont(composite);
 	}
 
+	/**
+	 * Creates checkboxes for source search options
+	 * 
+	 * @param parent
+	 *            the parent composite
+	 * @return created composite
+	 */
 	private Control createSourceSrch(Composite parent) {
 		Group result = new Group(parent, SWT.NONE);
 		result.setText("Sources");
@@ -183,15 +197,22 @@ public class ToKSearchPage extends DialogPage implements ISearchPage {
 		return result;
 	}
 
+	/**
+	 * Creates checkboxes for discussion search options
+	 * 
+	 * @param parent
+	 *            the parent composite
+	 * @return created composite
+	 */
 	private Control createDiscussionSrch(Composite parent) {
 		Group result = new Group(parent, SWT.NONE);
 		result.setText("Discussions");
-		//result.setLayout(new GridLayout());
+		// result.setLayout(new GridLayout());
 		result.setLayout(new GridLayout(2, true));
 
 		newButton(result, "Name", SearchOption.DSC_NAME);
 
-		//newButton(result, "Link Subject", SearchOption.DSC_LINK_SUBJ);
+		// newButton(result, "Link Subject", SearchOption.DSC_LINK_SUBJ);
 
 		newButton(result, "Quote Text", SearchOption.DSC_QUOTES);
 
@@ -204,20 +225,33 @@ public class ToKSearchPage extends DialogPage implements ISearchPage {
 		return result;
 	}
 
-	SelectionListener selectionListener = new SelectionAdapter() {
+	/**
+	 * Listener used to handle changes in search options
+	 */
+	private SelectionListener selectionListener = new SelectionAdapter() {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			if (e.widget.getData() instanceof SearchOption) {
 				SearchOption so = (SearchOption) e.widget.getData();
-				if (((Button) e.widget).getSelection()) {
+				if (((Button) e.widget).getSelection())
 					searchOptions.add(so);
-				} else {
+				else
 					searchOptions.remove(so);
-				}
 			}
 		}
 	};
 
+	/**
+	 * Creates new checkbox assotiated with with given Search Option
+	 * 
+	 * @param parent
+	 *            the parent composite
+	 * @param title
+	 *            the checkbox title
+	 * @param opt
+	 *            search option to assotiate with
+	 * @return newly created button widget
+	 */
 	private Button newButton(Composite parent, String title, SearchOption opt) {
 		Button b = new Button(parent, SWT.CHECK);
 
@@ -231,7 +265,14 @@ public class ToKSearchPage extends DialogPage implements ISearchPage {
 		return b;
 	}
 
-	private Control createExpression(Composite parent) {
+	/**
+	 * Creates combobox for search pattern input
+	 * 
+	 * @param parent
+	 *            the parent composite
+	 * @return newly created composite
+	 */
+	private Composite createExpression(Composite parent) {
 		Composite result = new Composite(parent, SWT.NONE);
 		GridLayout layout = new GridLayout(2, false);
 		layout.marginWidth = 0;
@@ -264,39 +305,43 @@ public class ToKSearchPage extends DialogPage implements ISearchPage {
 		return result;
 	}
 
+	/**
+	 * Loads saved search options for previously used search
+	 */
 	private void handleWidgetSelected() {
-		int selectionIndex= fPattern.getSelectionIndex();
+		int selectionIndex = fPattern.getSelectionIndex();
 		if (selectionIndex < 0 || selectionIndex >= history.size())
 			return;
-		
-		SearchPatternData patternData= history.get(selectionIndex);
+
+		SearchPatternData patternData = history.get(selectionIndex);
 		if (!fPattern.getText().equals(patternData.textPattern))
 			return;
-		
+
 		searchOptions = EnumSet.copyOf(patternData.searchOptions);
 		fPattern.setText(patternData.textPattern);
-		getContainer().setSelectedScope(patternData.scope);
+		container.setSelectedScope(patternData.scope);
 		if (patternData.workingSets != null)
-			getContainer().setSelectedWorkingSets(patternData.workingSets);
+			container.setSelectedWorkingSets(patternData.workingSets);
 
 		for (SearchOption so : SearchOption.values())
-			checkboxes.get(so).setSelection(patternData.searchOptions.contains(so));
+			checkboxes.get(so).setSelection(
+					patternData.searchOptions.contains(so));
 	}
 
 	private String[] getPreviousSearchPatterns() {
-		int size= history.size();
-		String [] patterns= new String[size];
-		for (int i= 0; i < size; i++)
-			patterns[i]= history.get(i).textPattern;
-		
+		int size = history.size();
+		String[] patterns = new String[size];
+		for (int i = 0; i < size; i++)
+			patterns[i] = history.get(i).textPattern;
+
 		return patterns;
 	}
-		
+
 	@Override
 	public void setVisible(boolean visible) {
 		if (visible && fPattern != null) {
 			if (fFirstTime) {
-				fFirstTime= false;
+				fFirstTime = false;
 				fPattern.setItems(getPreviousSearchPatterns());
 				fPattern.select(0);
 				handleWidgetSelected();
@@ -306,10 +351,9 @@ public class ToKSearchPage extends DialogPage implements ISearchPage {
 		super.setVisible(visible);
 	}
 
-	
 	public boolean performAction() {
 		updateHistoryData();
-		
+
 		SearchPlugin.getDefault().getPreferenceStore().setValue(
 				SearchPreferencePage.REUSE_EDITOR, false);
 		NewSearchUI.runQueryInBackground(getSearchQuery());
@@ -319,31 +363,33 @@ public class ToKSearchPage extends DialogPage implements ISearchPage {
 	private void updateHistoryData() {
 		for (int i = 0; i < history.size(); i++) {
 			SearchPatternData d = history.get(i);
-			if (!d.textPattern.equals(fPattern.getText())) continue;
+			if (!d.textPattern.equals(fPattern.getText()))
+				continue;
 			history.remove(i);
-		} 
-		
-		history.addFirst(new SearchPatternData(
-				fPattern.getText(),
-				searchOptions,
-				getContainer().getSelectedScope(),
-				getContainer().getSelectedWorkingSets()
-		));
+		}
+
+		history.addFirst(new SearchPatternData(fPattern.getText(),
+				searchOptions, container.getSelectedScope(), container
+						.getSelectedWorkingSets()));
 	}
 
+	/**
+	 * Returns search query for newly created search
+	 * 
+	 * @return SearchQuery for newly created search
+	 */
 	private ISearchQuery getSearchQuery() {
 		// Setup search scope
 		// SearchScope scope = null;
 		IWorkspaceRoot wsRoot = ResourcesPlugin.getWorkspace().getRoot();
 		List<IResource> scope = new LinkedList<IResource>();
-		switch (getContainer().getSelectedScope()) {
+		switch (container.getSelectedScope()) {
 		case ISearchPageContainer.WORKSPACE_SCOPE:
-			for (IProject p : wsRoot.getProjects()) {
+			for (IProject p : wsRoot.getProjects())
 				getProjectElements(scope, p);
-			}
 			break;
 		case ISearchPageContainer.SELECTION_SCOPE:
-			ISelection s = getContainer().getSelection();
+			ISelection s = container.getSelection();
 			if (s == null || !(s instanceof IStructuredSelection))
 				return null;
 
@@ -355,16 +401,15 @@ public class ToKSearchPage extends DialogPage implements ISearchPage {
 
 			break;
 		case ISearchPageContainer.SELECTED_PROJECTS_SCOPE:
-			for (String pn : getContainer().getSelectedProjectNames()) {
+			for (String pn : container.getSelectedProjectNames())
 				getProjectElements(scope, wsRoot.getProject(pn));
-			}
 			break;
 		case ISearchPageContainer.WORKING_SET_SCOPE:
-			IWorkingSet[] workingSets = getContainer().getSelectedWorkingSets();
+			IWorkingSet[] workingSets = container.getSelectedWorkingSets();
 			for (IAdaptable a : workingSets[0].getElements()) {
-				if (a instanceof IProject) {
+				if (a instanceof IProject)
 					getProjectElements(scope, (IProject) a);
-				} else if (a instanceof IResource) {
+				else if (a instanceof IResource) {
 					IResource r = (IResource) a;
 					scope.add(r);
 				}
@@ -376,6 +421,14 @@ public class ToKSearchPage extends DialogPage implements ISearchPage {
 		return new ToKSearchQuery(fPattern.getText(), searchOptions, scope);
 	}
 
+	/**
+	 * Given a project adds its sources, roots and discussions to search scope
+	 * 
+	 * @param scope
+	 *            scope to add items to
+	 * @param p
+	 *            project to scan
+	 */
 	private void getProjectElements(List<IResource> scope, IProject p) {
 		ToK tok = ToK.getProjectToK(p);
 		if (tok == null)
@@ -387,20 +440,13 @@ public class ToKSearchPage extends DialogPage implements ISearchPage {
 		scope.add(tok.getSourcesFolder());
 		scope.add(tok.getRootsFolder());
 	}
-	
-	private ISearchPageContainer getContainer() {
-		return container;
-	}
 
 	public void setContainer(ISearchPageContainer container) {
 		this.container = container;
 	}
 
-	//--------------- Configuration handling --------------
+	// --------------- Configuration handling --------------
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.dialogs.DialogPage#dispose()
-	 */
 	public void dispose() {
 		writeConfiguration();
 		super.dispose();
@@ -421,7 +467,8 @@ public class ToKSearchPage extends DialogPage implements ISearchPage {
 	private void readConfiguration() {
 		IDialogSettings s = getDialogSettings();
 		for (SearchOption so : SearchOption.values()) {
-			if (s.get(so.toString()) == null) continue;
+			if (s.get(so.toString()) == null)
+				continue;
 			if (s.getBoolean(so.toString()))
 				searchOptions.add(so);
 			else
