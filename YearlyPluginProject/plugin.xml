@@ -8,14 +8,14 @@
             contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
             default="true"
             extensions="src"
-            icon="icons/sample.gif"
+            icon="icons/opTable.bmp"
             id="lost.tok.opTable.OperationTable"
             name="%source.editor.name"/>
       <editor
             class="lost.tok.sourceParser.SourceParser"
             default="true"
             extensions="upsrc"
-            icon="icons/Mark.bmp"
+            icon="icons/edit.jpg"
             id="lost.tok.sourceParser.SourceParser"
             name="%editor.source.parser.name"/>
        <editor
@@ -23,7 +23,7 @@
             contributorClass="lost.tok.disEditor.PrintActionContributor"
             default="true"
             extensions="dis"
-            icon="icons/opinion.gif"
+            icon="icons/discussion.gif"
             id="lost.tok.disEditor.DiscussionEditor"
             name="%editor.discussion"/>
        <editor
@@ -44,7 +44,7 @@
              category="lost.tok.Categoy"
              class="lost.tok.wizards.NewProject"
              finalPerspective="lost.tok.perspective"
-             icon="icons/sample.gif"
+             icon="icons/tree.jpg"
              id="lost.tok.newTokWizard"
              name="%wizards.wizard.tok"
              project="true"/>
@@ -52,21 +52,21 @@
        <wizard
              category="lost.tok.Categoy"
              class="lost.tok.wizards.NewDiscussion"
-             icon="icons/sample.gif"
+             icon="icons/discussion.gif"
              id="lost.tok.newDiscussionWizard.NewDiscussionWizard"
              name="%wizard.discussion.create"
              project="false"/>
        <wizard
              category="lost.tok.Categoy"
              class="lost.tok.wizards.NewRelation"
-             icon="icons/sample.gif"
+             icon="icons/relation.gif"
              id="lost.tok.newRelationWizard.NewRelationWizard"
              name="%lost.tok.createRelation"
              project="false"/>
        <wizard
              category="lost.tok.Categoy"
              class="lost.tok.sourceParser.wizards.UnparsedDocWizard"
-             icon="icons/sample.gif"
+             icon="icons/edit.jpg"
              id="lost.tok.unparsedDocWizard"
              name="%wizard.source.parser.create"
              project="false"/>
@@ -140,7 +140,7 @@
             targetID="lost.tok.opTable.OperationTable">
          <action
                class="lost.tok.opTable.actions.SwitchOpTableViewAction"
-               icon="icons/sample.gif"
+               icon="icons/link.jpg"
                id="lost.tok.opTable.switchView"
                label="%action.label.discussions.show"
                menubarPath="edit/additions"
