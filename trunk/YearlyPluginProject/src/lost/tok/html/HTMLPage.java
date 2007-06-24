@@ -29,6 +29,8 @@ abstract public class HTMLPage
 	protected String exportPath;	
 	/** The path to the css file used by this page */
 	protected String cssPath;
+	/** The side menu of the page */
+	protected Menu menu;
 	
 	/** True if the page should be left to right */
 	protected boolean ltr;
@@ -57,7 +59,16 @@ abstract public class HTMLPage
 	 * Returns the main content of the html page
 	 * Should return a &lt;div&gt; element with all its content as a string
 	 */
-	protected abstract String getBody(); 
+	protected abstract String getBody();
+	
+	/**
+	 * Sets the menu for this page
+	 * @param menu the menu that will be used
+	 */
+	public void setMenu(Menu menu)
+	{
+		this.menu = menu;		
+	}
 	
 	/**
 	 * Returns the full html page
@@ -78,14 +89,20 @@ abstract public class HTMLPage
 		htmlPage.append("\t<link rel=\"stylesheet\" type=\"text/css\" href=\"" + cssPath + "\" />\n");  //$NON-NLS-1$ //$NON-NLS-2$
 		htmlPage.append("\t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n");  //$NON-NLS-1$
 		htmlPage.append("\t<meta name=\"author\" content=\"Tree of Knowledge Site Exporter\" />\n"); //$NON-NLS-1$
+		
+		if (menu != null)
+			htmlPage.append("\t" + menu.getScriptLine() + "\n"); // adds the dTree js   //$NON-NLS-1$ //$NON-NLS-2$
+		
 		htmlPage.append("\n"); //$NON-NLS-1$
 		htmlPage.append("</head>\n"); //$NON-NLS-1$
 		htmlPage.append("<body>\n"); //$NON-NLS-1$
 		
 		// TODO(Shay, medium-low): add menu
-		htmlPage.append("<div id=\"menu\"><p>this will be the menu</p></div>\n"); //$NON-NLS-1$
-		
-		
+		htmlPage.append("<div id=\"menu\">"); //$NON-NLS-1$
+		if (menu != null)
+			htmlPage.append(GeneralFunctions.elementToString(menu.getMenuDiv()));
+		htmlPage.append("</div>\n");  //$NON-NLS-1$
+
 		htmlPage.append("\t" + body.replaceAll("\n", "\n\t")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		htmlPage.append("</body>\n"); //$NON-NLS-1$
 		htmlPage.append("</html>\n"); //$NON-NLS-1$
@@ -128,7 +145,7 @@ abstract public class HTMLPage
 		IFile f = tok.getProject().getFile(exportPath);
 		
 		// Note(Shay): we delete the old html dir before creating it anew
-		assert(f.exists() == false);
+		//assert(f.exists() == false);
 		
 		// 2. Create an input stream from the page's text
 		String pageString = getPage();
@@ -166,17 +183,14 @@ abstract public class HTMLPage
 	}
 	
 	/**
-	 * Returns a path from this page to another page
-	 * @param otherPage the page we want to get to
+	 * Returns a path from this page to another url in the site
+	 * @param otherPath the path of the other item, relative to the project
 	 * @return a path (with / as slashes) from this page to the other page
 	 */
-	public String getPathTo(HTMLPage otherPage)
+	public String getPathTo(String otherPath)
 	{
-		// not handling this case
-		assert(this != otherPage);
-		
 		String[] srcExportPath = this.exportPath.split("/"); //$NON-NLS-1$
-		String[] dstExportPath = otherPage.exportPath.split("/"); //$NON-NLS-1$
+		String[] dstExportPath = otherPath.split("/"); //$NON-NLS-1$
 		
 		String path = ""; //$NON-NLS-1$
 		int srcPathIdx = 0;
@@ -212,7 +226,19 @@ abstract public class HTMLPage
 		// now we need to escape spaces in the path
 		path = path.replace(" ", "%20"); //$NON-NLS-1$ //$NON-NLS-2$
 		
-		return path;	
+		return path;
+	}
+	
+	/**
+	 * Returns a path from this page to another page
+	 * @param otherPage the page we want to get to
+	 * @return a path (with / as slashes) from this page to the other page
+	 */
+	public String getPathTo(HTMLPage otherPage)
+	{
+		// not handling this case
+		assert(this != otherPage);
+		return getPathTo(otherPage.exportPath);
 	}
 	
 	/**

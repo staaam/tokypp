@@ -37,13 +37,15 @@ public class SourcePage extends HTMLPage {
 	private HashMap<String, LinkedParagraph> xPathToParagraph;
 	/** The css manager of this class */
 	private CSSManager cssMan;
+	/** The indexPage which created this source */
+	private IndexPage indexPage;
 
 	/**
 	 * Create a source page for the given source
 	 * Links to discussions can be added later
 	 * @param src the source for which this page is built
 	 */
-	public SourcePage(Source src, CSSManager cssMan)
+	public SourcePage(Source src, CSSManager cssMan, IndexPage indexPage)
 	{
 		super(src.getTok(),
 				src.getFile().getFullPath().lastSegment(),
@@ -55,8 +57,21 @@ public class SourcePage extends HTMLPage {
 		
 		isRoot = src.isRoot();
 		this.cssMan = cssMan;
+		this.indexPage = indexPage;
 		
 		buildElements();
+	}
+	
+	/** Returns true if the source related to this page is a root */
+	public boolean isSrcRoot()
+	{
+		return isRoot;
+	}
+	
+	/** Returns the underlying Source Document of this page */
+	public SourceDocument getSourcDoc()
+	{
+		return srcDoc;
 	}
 	
 	public CSSManager getCSSMan()
@@ -103,6 +118,26 @@ public class SourcePage extends HTMLPage {
 		xPathToParagraph.get(e.getXPath()).addLink(e, l, disc);
 	}
 	
+	/** Returns a list of the sub-pages created by this page */
+	public LinkedList<HTMLPage> getUngenerated()
+	{
+		LinkedList<HTMLPage> ungenerated = new LinkedList<HTMLPage>();
+		
+		// find all the ungenerated pages
+		for (SrcElem e : elements)
+		{
+			if (! (e instanceof LinkedParagraph) )
+				continue;
+			
+			LinkedParagraph p = (LinkedParagraph)e;
+			
+			for ( HTMLPage page : p.getUngeneratedPages() )
+				ungenerated.add(page);
+		}
+		
+		return ungenerated;
+	}
+	
 	/**
 	 * Generate the source page and all the discussion conflict pages connected to it
 	 */
@@ -112,17 +147,11 @@ public class SourcePage extends HTMLPage {
 		super.generatePage();
 		
 		// generate all the discConflictPages
-		for (SrcElem e : elements)
+		for (HTMLPage page : getUngenerated())
 		{
-			if (! (e instanceof LinkedParagraph) )
-				continue;
-			
-			LinkedParagraph p = (LinkedParagraph)e;
-			
-			for ( HTMLPage page : p.getUngeneratedPages() )
-				page.generatePage();
+			indexPage.addMenuToPage(page);
+			page.generatePage();
 		}
-		
 	}
 	
 	/**

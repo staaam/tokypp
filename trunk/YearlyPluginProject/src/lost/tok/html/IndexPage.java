@@ -56,7 +56,7 @@ public class IndexPage extends HTMLPage {
 		srcPathToPage = new HashMap<String, SourcePage>();
 		for (Source source : sources)
 		{
-			SourcePage sPage = new SourcePage(source, cssManager);
+			SourcePage sPage = new SourcePage(source, cssManager, this);
 			String srcPath = source.getFile().getProjectRelativePath().toString();
 			srcPathToPage.put( srcPath, sPage );
 		}
@@ -86,8 +86,9 @@ public class IndexPage extends HTMLPage {
 				for (Excerption e : sublink.getExcerption())
 					sPage.addLink( e, disc.getLink(), dPage);
 			}
-
 		}
+		
+		setMenuPages();
 	}
 
 	@Override
@@ -183,6 +184,27 @@ public class IndexPage extends HTMLPage {
 		}
 		
 		return main;
+	}
+	
+	/** Sets menu pages to all the sub pages */
+	private void setMenuPages()
+	{
+		// First, set a menu for me
+		addMenuToPage(this);
+		
+		// Then for my close friends
+		for (DiscussionPage dPage : discNameToPage.values())
+			addMenuToPage(dPage);
+		
+		// Then for more friends 
+		for (SourcePage sPage : srcPathToPage.values())
+			addMenuToPage(sPage);
+	}
+	
+	/** Adds a menu page to the parameter */
+	public void addMenuToPage(HTMLPage targetPage)
+	{
+		targetPage.setMenu( new Menu(tok, targetPage, srcPathToPage, discNameToPage) );	
 	}
 	
 	

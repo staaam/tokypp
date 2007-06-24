@@ -65,12 +65,16 @@ public class ExportAction implements IObjectActionDelegate{
 	/**
 	 * Deletes the html folder of the given project
 	 * @param tokProj the project to delete the html folder from
-	 * @throws CoreException when the deletion fails
 	 */
-	public void deleteHTMLDir(IProject tokProj) throws CoreException
+	public void deleteHTMLDir(IProject tokProj)
 	{
 		IFolder htmlFolder = tokProj.getFolder(ToK.HTML_FOLDER);
-		htmlFolder.delete(true, null);		
+		try {
+			htmlFolder.delete(true, null);
+		} catch (CoreException e)	{
+			System.err.println("Error deleting html directory before generating a new one\n");
+			e.printStackTrace();
+		}
 	}
 
 }
