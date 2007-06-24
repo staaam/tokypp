@@ -51,6 +51,12 @@ public class DiscussionPage extends HTMLPage {
 				
 	}
 	
+	/** Returns the underlying discussion */
+	public Discussion getDiscussion()
+	{
+		return disc;
+	}
+	
 	/**
 	 * Returns the relative path of the .html file in the project for the discussion
 	 * @param disc the discussion file for which we want to find the html path

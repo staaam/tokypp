@@ -27,7 +27,26 @@ import org.osgi.framework.Bundle;
 public class CSSManager 
 {
 	/** Pictures, Icons and scripts which should always be generated */
-	private static final String[] extraFilesToGen = { ToK.HTML_FOLDER + "/other/bg/orang117.gif" }; //$NON-NLS-1$
+	private static final String[] extraFilesToGen = { 
+		ToK.HTML_FOLDER + "/other/bg/orang117.gif",  //$NON-NLS-1$
+		ToK.HTML_FOLDER + "/other/menu/dtree.js",  //$NON-NLS-1$
+		ToK.HTML_FOLDER + "/other/menu/img/base.gif",  //$NON-NLS-1$
+		ToK.HTML_FOLDER + "/other/menu/img/empty.gif",  //$NON-NLS-1$
+		ToK.HTML_FOLDER + "/other/menu/img/folder.gif",  //$NON-NLS-1$
+		ToK.HTML_FOLDER + "/other/menu/img/folderopen.gif",  //$NON-NLS-1$
+		ToK.HTML_FOLDER + "/other/menu/img/join.gif",  //$NON-NLS-1$
+		ToK.HTML_FOLDER + "/other/menu/img/joinbottom.gif",  //$NON-NLS-1$
+		ToK.HTML_FOLDER + "/other/menu/img/line.gif",  //$NON-NLS-1$
+		ToK.HTML_FOLDER + "/other/menu/img/minus.gif",  //$NON-NLS-1$
+		ToK.HTML_FOLDER + "/other/menu/img/minusbottom.gif",  //$NON-NLS-1$
+		ToK.HTML_FOLDER + "/other/menu/img/nolines_minus.gif",  //$NON-NLS-1$
+		ToK.HTML_FOLDER + "/other/menu/img/nolines_plus.gif",  //$NON-NLS-1$
+		ToK.HTML_FOLDER + "/other/menu/img/page.gif",  //$NON-NLS-1$
+		ToK.HTML_FOLDER + "/other/menu/img/plus.gif",  //$NON-NLS-1$
+		ToK.HTML_FOLDER + "/other/menu/img/plusbottom.gif",  //$NON-NLS-1$
+		ToK.HTML_FOLDER + "/other/menu/img/tree1.gif",  //$NON-NLS-1$
+		ToK.HTML_FOLDER + "/other/menu/img/tree2.jpg",  //$NON-NLS-1$		
+	 }; 
 	
 	/** The CSS file used by most of the html project */
 	public static String DEFAULT_CSS = "other/nice.css"; //$NON-NLS-1$
