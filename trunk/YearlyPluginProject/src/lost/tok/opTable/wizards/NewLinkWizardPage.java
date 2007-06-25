@@ -52,7 +52,7 @@ public class NewLinkWizardPage extends WizardPage implements SelectionListener,
 		super("wizardPage"); //$NON-NLS-1$
 		setTitle(Messages.getString("NewLinkWizardPage.0")); //$NON-NLS-1$
 		setDescription(Messages.getString("NewLinkWizardPage.12")); //$NON-NLS-1$
-		tok = ToK.getProjectToK(ExcerptionView.getView().getProject());
+		tok = ToK.getProjectToK(ExcerptionView.getView(false).getProject());
 	}
 
 	/**
@@ -103,7 +103,7 @@ public class NewLinkWizardPage extends WizardPage implements SelectionListener,
 		excerptions = new Tree(container, SWT.BORDER | SWT.MULTI);
 		excerptions.setSize(600, 300);
 
-		for (String root : ExcerptionView.getView().getRoots()) {
+		for (String root : ExcerptionView.getView(false).getRoots()) {
 			TreeItem file = new TreeItem(excerptions, 0);
 			file.setText(root);
 		}
@@ -152,7 +152,7 @@ public class NewLinkWizardPage extends WizardPage implements SelectionListener,
 	}
 
 	public Excerption[] getExcerptions(String fileName) {
-		List<Excerption> excerptions = ExcerptionView.getView().getExcerptions(
+		List<Excerption> excerptions = ExcerptionView.getView(false).getExcerptions(
 				fileName);
 		Excerption[] exs = new Excerption[excerptions.size()];
 		excerptions.toArray(exs);

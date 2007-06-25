@@ -89,11 +89,11 @@ public class ToKSearchVisitor implements IResourceVisitor {
 		IFile file = (IFile) resource;
 		
 		if (Source.isSource(file)) {
-			sourceSearch(file);
+			sourceSearch(new Source(file));
 		}
 		
 		if (Discussion.isDiscussion(file)) {
-			discussionSearch(file);
+			discussionSearch(ToK.getProjectToK(file.getProject()).getDiscussion(file));
 		}
 		
 		return false;
@@ -101,19 +101,17 @@ public class ToKSearchVisitor implements IResourceVisitor {
 
 	/**
 	 * Searches the given discussion file
-	 * @param file the discussion file
+	 * @param d the discussion to search
 	 */
-	private void discussionSearch(IFile file) {
-		Discussion d = ToK.getProjectToK(file.getProject()).getDiscussion(file);
-		
+	private void discussionSearch(Discussion d) {
 		if (d == null) return;
 		
 		if (searchOptions.contains(SearchOption.DSC_CREATOR)) {
-			search(file, d.getCreatorName(), 1);
+			search(d.getFile(), d.getCreatorName(), 1);
 		}
 		
 		if (searchOptions.contains(SearchOption.DSC_NAME)) {
-			search(file, d.getDiscName(), 1);
+			search(d.getFile(), d.getDiscName(), 1);
 		}
 
 //		if (searchOptions.contains(SearchOption.DSC_LINK_SUBJ) && d.getLink() != null) {
@@ -127,16 +125,16 @@ public class ToKSearchVisitor implements IResourceVisitor {
 		
 		for (Opinion opinion : d.getOpinions()) {
 			if (searchOptions.contains(SearchOption.DSC_OPINIONS))
-				search(file, opinion.getName(), (opinion.getId() << 20));
+				search(d.getFile(), opinion.getName(), (opinion.getId() << 20));
 			
 			if (searchOptions.contains(SearchOption.DSC_QUOTES) || 
 				searchOptions.contains(SearchOption.DSC_QUOTE_COMMENTS))
 				for (Quote quote : d.getQuotes(opinion.getName())) {
 					if (searchOptions.contains(SearchOption.DSC_QUOTES))
-						search(file, quote.getText(), ((quote.getID() << 1) + 0) << 19);
+						search(d.getFile(), quote.getText(), ((quote.getID() << 1) + 0) << 19);
 					
 					if (searchOptions.contains(SearchOption.DSC_QUOTE_COMMENTS))
-						search(file, quote.getComment(), ((quote.getID() << 1) + 1) << 19);
+						search(d.getFile(), quote.getComment(), ((quote.getID() << 1) + 1) << 19);
 				}
 		}
 		
@@ -145,21 +143,21 @@ public class ToKSearchVisitor implements IResourceVisitor {
 
 	/**
 	 * Searches the given source file
-	 * @param file the source file
+	 * @param src the source to search
 	 */
-	private void sourceSearch(IFile file) {
+	private void sourceSearch(Source src) {
 		if (!(searchOptions.contains(SearchOption.SRC_AUTHOR) ||
 			  searchOptions.contains(SearchOption.SRC_TITLE) ||
 			  searchOptions.contains(SearchOption.SRC_CONTENT)))
 			return;
 		SourceDocument sd = new SourceDocument();
-		sd.set(file);
+		sd.set(src);
 		
 		if (searchOptions.contains(SearchOption.SRC_TITLE))
-			keywordSearch(file, sd, KEYWORD.TITLE);
+			keywordSearch(src.getFile(), sd, KEYWORD.TITLE);
 		
 		if (searchOptions.contains(SearchOption.SRC_AUTHOR))
-			keywordSearch(file, sd, KEYWORD.AUTHOR);
+			keywordSearch(src.getFile(), sd, KEYWORD.AUTHOR);
 			
 		if (!searchOptions.contains(SearchOption.SRC_CONTENT))
 			return;
@@ -168,7 +166,7 @@ public class ToKSearchVisitor implements IResourceVisitor {
 			if (!(c instanceof ChapterText)) continue;
 			
 			ChapterText ct = (ChapterText) c;
-			search(file, ct.getText(), ct.getOffset());
+			search(src.getFile(), ct.getText(), ct.getOffset());
 		}
 	}
 
