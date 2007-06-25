@@ -323,6 +323,13 @@
             icon="icons/sample.gif"
             id="lost.tok.excerptionsView.ExcerptionView"
             name="%lost.tok.excerptionsView"/>
+      <view
+            allowMultiple="false"
+            category="lost.tok.Categoy"
+            class="lost.tok.linkDisView.LinkDisView"
+            icon="icons/sample.gif"
+            id="lost.tok.linkDisView.LinkDisView"
+            name="Linked Discussions"/>
    </extension>
 	<extension
          point="org.eclipse.ui.exportWizards">

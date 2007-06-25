@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import lost.tok.Excerption;
+import lost.tok.GeneralFunctions;
 import lost.tok.Messages;
 import lost.tok.Source;
 import lost.tok.ToK;
@@ -38,9 +39,6 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.IViewPart;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.part.ViewPart;
@@ -306,22 +304,8 @@ public class ExcerptionView extends ViewPart {
 	 * 
 	 * @return ExceptionView object
 	 */
-	public static ExcerptionView getView() {
-		IWorkbenchPage activePage = PlatformUI.getWorkbench()
-				.getActiveWorkbenchWindow().getActivePage();
-
-		if (activePage == null)
-			return null;
-
-		IViewPart view = activePage.findView(ExcerptionView.ID);
-
-		if (view == null)
-			try {
-				view = activePage.showView(ExcerptionView.ID);
-			} catch (PartInitException e) {
-			}
-
-		return (ExcerptionView) view;
+	public static ExcerptionView getView(boolean bringToTop) {
+		return (ExcerptionView) GeneralFunctions.getView(ExcerptionView.ID, bringToTop);
 	}
 
 	/**
@@ -502,5 +486,5 @@ public class ExcerptionView extends ViewPart {
 			ot.refreshDisplay();
 		}
 	}
-	
+
 }

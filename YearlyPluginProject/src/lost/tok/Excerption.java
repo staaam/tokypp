@@ -120,6 +120,20 @@ public class Excerption extends Properties {
 		ChapterText c = srcDoc.getChapterTextFromXPath(pathInSourceFile);
 		text = c.getText().substring(startPos, endPos);
 	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof Excerption))
+			return false;
+		
+		Excerption e = (Excerption) o;
+		if (e.getText().equals(getText())&&
+			e.getStartPos() == getStartPos() &&
+			e.getEndPos() == getEndPos())
+			return true;
+		
+		return false;
+	}
 
 	public String toString() {
 		return pathInSourceFile + "[" + startPos + ":" + endPos + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$

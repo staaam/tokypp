@@ -24,6 +24,10 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 
 public class GeneralFunctions {
 
@@ -156,4 +160,33 @@ public class GeneralFunctions {
 		return retVal;
 	}
 
+	/**
+	 * Shows the view identified by the given view id in this page and gives it
+	 * focus. If there is a view identified by the given view id (and with no
+	 * secondary id) already open in this page, it is given focus.
+	 * 
+	 * @param viewId the id of the view extension to use
+	 * @param bringToTop 
+	 * @return the shown view
+	 */
+	public static IViewPart getView(String viewId, boolean bringToTop) {
+		IWorkbenchPage activePage = PlatformUI.getWorkbench()
+				.getActiveWorkbenchWindow().getActivePage();
+
+		if (activePage == null)
+			return null;
+
+		IViewPart view = activePage.findView(viewId);
+
+		if (view == null)
+			try {
+				view = activePage.showView(viewId);
+				activePage.getActiveEditor().setFocus();
+			} catch (PartInitException e) {
+			}
+		else if (bringToTop)
+			activePage.bringToTop(view);
+		
+		return view;
+	}
 }

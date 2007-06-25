@@ -1,12 +1,15 @@
 package lost.tok.opTable;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import lost.tok.Discussion;
 import lost.tok.Excerption;
 import lost.tok.excerptionsView.ExcerptionView;
+import lost.tok.linkDisView.LinkDisView;
 import lost.tok.sourceDocument.Chapter;
 import lost.tok.sourceDocument.ChapterText;
 import lost.tok.sourceDocument.SourceDocument;
@@ -18,6 +21,7 @@ import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.text.source.SourceViewerConfiguration;
 import org.eclipse.swt.custom.StyleRange;
+import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.editors.text.TextEditor;
@@ -34,13 +38,15 @@ import org.eclipse.ui.part.FileEditorInput;
 public class OperationTable extends TextEditor {
 	@Override
 	public void setFocus() {
+		updateViews();
 		super.setFocus();
-		updateExcerptionView();
 	}
 
 	@Override
 	public void dispose() {
-		ExcerptionView.getView().removeMonitoredEditor(this);
+		rootDiscussionsView = false;
+		LinkDisView.getView(false).update(this);
+		ExcerptionView.getView(false).removeMonitoredEditor(this);
 		super.dispose();
 	}
 
@@ -167,76 +173,60 @@ public class OperationTable extends TextEditor {
 	/**
 	 * Update excerption view.
 	 */
-	private void updateExcerptionView() {
-		ExcerptionView view = ExcerptionView.getView();
-		if (view == null)
-			return;
-		view.updateMonitoredEditor(this);
+	private void updateViews() {
+		LinkDisView lv = LinkDisView.getView(false);
+		if (lv != null) lv.update(this);
+
+		ExcerptionView ev = ExcerptionView.getView(false);
+		if (ev != null) ev.updateMonitoredEditor(this);
+		
+		if (isRootDiscussionsView())
+			LinkDisView.getView(true);
+		else 
+			ExcerptionView.getView(true);
 	}
 
 	/**
 	 * Updates the colored lines and the general display of the editor.
 	 */
 	public void refreshDisplay() {
-		ISourceViewer srcview = getSourceViewer();
-		if (srcview == null) return;
+		if (getSourceViewer() == null) return;
 
-		if (rootDiscussionsView) {
-			rootDiscussions.refreshDisplay();
-		}
-		updateExcerptionView();
+		updateViews();
 
-		StyleRange markedTextStyle = StyleManager.getMarkedStyle();
-		StyleRange chapterTextStyle = StyleManager.getChapterStyle();
+		StyledText textWidget = getSourceViewer().getTextWidget();
+		textWidget.setStyleRange(null);
+		
+		// Color Chapters
+		StyleRange range = StyleManager.getChapterStyle();
+		for (Chapter chapter : getDocument().getAllChapters()) {
+			if (chapter instanceof ChapterText)
+				continue;
 
-		/*
-		 * CursorLinePainter a = new CursorLinePainter(srcview);
-		 * a.deactivate(true);
-		 * srcview.getTextWidget().addLineBackgroundListener(a);
-		 */
-
-		SourceDocument document = getDocument();
-		Integer docLen = document.getLength();
-
-		LinkedList<Chapter> allChapters = new LinkedList<Chapter>();
-		for (Chapter chapter : document.getAllChapters()) {
-			if (!(chapter instanceof ChapterText)) {
-				allChapters.add(chapter);
-			}
-		}
-
-		int nStyles = marked.size();
-		// nStyles += allChapters.size();
-
-		int[] styleOffsetSize = new int[nStyles * 2];
-		StyleRange[] styles = new StyleRange[nStyles];
-
-		int i = 0;
-		for (Integer offset : marked.keySet()) {
-			styleOffsetSize[2 * i] = offset;
-			styleOffsetSize[2 * i + 1] = marked.get(offset).getLength();
-			
-			styles[i] = marked.get(offset).style;
-			if (styles[i] == null)
-				styles[i] = markedTextStyle;
-			
-			i++;
-		}
-
-		// Note: This call removes all the existing styles, and draws only the
-		// new one
-		srcview.getTextWidget().setStyleRanges(0, docLen - 1, styleOffsetSize,
-				styles);
-
-		for (Chapter chapter : allChapters) {
-			StyleRange range = chapterTextStyle;
 			range.start = chapter.getOffset();
 			range.length = chapter.getInnerLength();
 
-			srcview.getTextWidget().setStyleRange(range);
+			textWidget.setStyleRange(range);
+		}
+		
+		if (rootDiscussionsView) {
+			for (StyleRange r : rootDiscussions.getStyles()) {
+				textWidget.setStyleRange(r);				
+			}
+		} else {
+			
+			StyleRange markedTextStyle = StyleManager.getMarkedStyle();
+			
+			for (Integer offset : marked.keySet()) {
+				markedTextStyle.start = offset;
+				markedTextStyle.length = marked.get(offset).getLength();
+				
+				textWidget.setStyleRange(markedTextStyle);
+			}
+
 		}
 
-		srcview.getTextWidget().redraw();
+		textWidget.redraw();
 	}
 
 	/**
@@ -455,6 +445,7 @@ public class OperationTable extends TextEditor {
 		getSourceViewer().setTextHover(rootDiscussions,
 				IDocument.DEFAULT_CONTENT_TYPE);
 
+		rootDiscussions.refreshDisplay();
 		clearMarked();
 	}
 
@@ -525,10 +516,30 @@ public class OperationTable extends TextEditor {
 	 */
 	public void scrollToExcerption(int id) {
 		// id = offset
-		resetHighlightRange();
-		setHighlightRange(id, marked.get(id).getLength(), true);
+		MarkedData m = marked.get(id); 
+		scrollToExcerption(id, (m == null) ? 0 : m.getLength());
 	}
 
+	/**
+	 * Scrolls the source to the position of excerption, specified by <code><b>id</b></code>
+	 *  
+	 * @param id - id of the excerption
+	 */
+	public void scrollToExcerption(int offset, int length) {
+		//resetHighlightRange();
+		selectAndReveal(offset, length);
+	}
+
+	/**
+	 * Scrolls the source to the position of excerption, specified by <code><b>id</b></code>
+	 *  
+	 * @param id - id of the excerption
+	 */
+	public void scrollToExcerption(Excerption e) {
+		scrollToExcerption(RootDiscussionsPart.getExcerptionId(e),
+				e.getEndPos() - e.getStartPos());
+	}
+	
 	/*
 	 * @see AbstractTextEditor#doSetInput(IEditorInput)
 	 */
@@ -544,6 +555,10 @@ public class OperationTable extends TextEditor {
 	@Override
 	protected boolean isPrefQuickDiffAlwaysOn() {
 		return false;
+	}
+
+	public HashMap<Discussion, List<Excerption>> getLinksMap() {
+		return rootDiscussions.getLinksMap();
 	}
 
 }
