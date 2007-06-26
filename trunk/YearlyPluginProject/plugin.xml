@@ -423,6 +423,28 @@
                style="push"
                toolbarPath="ToKGroup"/>
       </viewContribution>
+      <viewContribution
+            id="lost.tok.linkDisView.Contribution"
+            targetID="lost.tok.linkDisView.LinkDisView">
+         <action
+               class="lost.tok.linkDisView.NextPrevAction"
+               enablesFor="*"
+               icon="icons/view_next.gif"
+               id="lost.tok.linkDisView.next"
+               label="Next"
+               state="true"
+               style="push"
+               toolbarPath="ToKGroup"/>
+         <action
+               class="lost.tok.linkDisView.NextPrevAction"
+               enablesFor="*"
+               icon="icons/view_prev.gif"
+               id="lost.tok.linkDisView.prev"
+               label="Previous"
+               state="true"
+               style="push"
+               toolbarPath="ToKGroup"/>
+      </viewContribution>
    </extension>
    <extension
          point="org.eclipse.ui.editors.documentProviders">
