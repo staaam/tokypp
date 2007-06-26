@@ -27,6 +27,8 @@ import org.eclipse.ui.part.ViewPart;
 
 public class RelationView extends ViewPart {
 	
+	public final static String ID = "lost.tok.RelationView.RelationView"; //$NON-NLS-1$
+	
 	public class Relation {
 		public String getFirstName(){
 			return "Arie";
