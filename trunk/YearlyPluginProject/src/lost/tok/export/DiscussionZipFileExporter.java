@@ -7,6 +7,8 @@ import java.util.zip.CRC32;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import lost.tok.activator.Activator;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.ui.internal.wizards.datatransfer.IFileExporter;
@@ -133,7 +135,11 @@ public class DiscussionZipFileExporter implements IFileExporter {
 		ZipEntry newEntry = new ZipEntry(destinationPath);
 		String fileName = resource.getName();
 		String[] name = fileName.split("\\."); //$NON-NLS-1$
-		newEntry.setComment(name[0]);
+		if (fileName.compareTo(DiscussionExportOperation.TEMP_LINKS_XML) == 0) {
+			newEntry.setComment(Activator.PLUGIN_ID);
+		} else {
+			newEntry.setComment(name[0]);
+		}
 		write(newEntry, resource);
 	}
 }
