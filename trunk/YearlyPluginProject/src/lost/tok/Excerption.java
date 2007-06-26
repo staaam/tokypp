@@ -48,7 +48,7 @@ public class Excerption extends Properties {
 	 * Builds an excerption from relevant arguments
 	 * 
 	 * @param path
-	 *            The unique xPath of the chapter in the xml document
+	 *            The excerption path of the chapter in the xml document
 	 * @param text
 	 *            The text of the excerption
 	 * @param start
@@ -86,7 +86,7 @@ public class Excerption extends Properties {
 	}
 
 	/** Returns the path of the excerption's source */
-	public String getXPath() {
+	public String getEPath() {
 		return pathInSourceFile;
 	}
 
@@ -125,7 +125,7 @@ public class Excerption extends Properties {
 	/** Sets the excerption's text field according to the given source document */
 	public void loadText(SourceDocument srcDoc)
 	{
-		ChapterText c = srcDoc.getChapterTextFromXPath(pathInSourceFile);
+		ChapterText c = srcDoc.getChapterTextFromEPath(pathInSourceFile);
 		text = c.getText().substring(startPos, endPos);
 	}
 	

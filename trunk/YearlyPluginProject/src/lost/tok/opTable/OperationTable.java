@@ -344,7 +344,7 @@ public class OperationTable extends TextEditor {
 		if (mergedBegin == mergedEnd)
 			return;
 
-		Excerption e = new Excerption(c.getXPath(), excerptionText,
+		Excerption e = new Excerption(c.getExcerptionPath(), excerptionText,
 				startInText, endInText);
 
 		marked.put(mergedBegin, new MarkedData(e, style));

@@ -78,7 +78,7 @@ public class LinkedParagraph implements SrcElem
 				links.get(start).add(disc, e.getText(), l);
 				// add the rest of the link
 				int newStart = links.get(start).getEnd() + 1;
-				Excerption eNew = new Excerption(e.getXPath(), e.getText(), newStart, end);
+				Excerption eNew = new Excerption(e.getEPath(), e.getText(), newStart, end);
 				addLink(eNew, l, disc);
 				return;
 			}

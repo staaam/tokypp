@@ -200,8 +200,7 @@ public class DiscussionEditor extends TextEditor {
 					int qBegining = 0, qLength = 0;
 					for (Excerption ex : quote.getExcerptions()) {
 						// getting the chapter in which the text appears
-						ChapterText ct = srcDoc.getChapterTextFromXPath(ex
-								.getXPath());
+						ChapterText ct = srcDoc.getChapterTextFromEPath(ex.getEPath());
 						// adding the offset of the chpater (in the whole doc)
 						// to the offset of the excerption
 						int exBegin = ct.getOffset() + ex.getStartPos();

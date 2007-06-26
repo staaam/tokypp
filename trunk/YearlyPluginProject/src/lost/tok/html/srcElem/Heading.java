@@ -7,21 +7,16 @@ public class Heading implements SrcElem
 	private String title;
 	/** The depth of the heading (i.e. h1,h2,h3...) */
 	private int depth;
-	/** The path in the xml source document of this heading */
-	@SuppressWarnings("unused") //$NON-NLS-1$
-	private String xPath;
 	
 	/**
 	 * Creates a new heading
 	 * @param title The Heading's text
 	 * @param depth The depth of the heading (i.e. h1,h2,h3...)
-	 * @param xPath The path in the xml source document of this heading
 	 */
-	public Heading(String title, int depth, String xPath)
+	public Heading(String title, int depth)
 	{
 		this.title = title;
 		this.depth = depth;
-		this.xPath = xPath;
 	}
 	
 	public String getHTMLText()

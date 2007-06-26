@@ -33,8 +33,8 @@ public class SourcePage extends HTMLPage {
 	private List<SrcElem> elements;
 	/** True iff the source is a root file */
 	private boolean isRoot;
-	/** A mapping from xPath in the source to paragraph elements */
-	private HashMap<String, LinkedParagraph> xPathToParagraph;
+	/** A mapping from Excerption Path in the source to paragraph elements */
+	private HashMap<String, LinkedParagraph> ePathToParagraph;
 	/** The css manager of this class */
 	private CSSManager cssMan;
 	/** The indexPage which created this source */
@@ -85,7 +85,7 @@ public class SourcePage extends HTMLPage {
 	private void buildElements()
 	{
 		elements = new LinkedList<SrcElem>();	
-		xPathToParagraph = new HashMap<String, LinkedParagraph>();
+		ePathToParagraph = new HashMap<String, LinkedParagraph>();
 		for (Chapter c : srcDoc.getAllChapters())
 		{
 			if (c.getDepth() == 0)
@@ -95,13 +95,13 @@ public class SourcePage extends HTMLPage {
 			{
 				ChapterText cText = (ChapterText) c;
 				LinkedParagraph paragraph = new LinkedParagraph(this, cText.getText());
-				xPathToParagraph.put( c.getXPath(), paragraph );
+				ePathToParagraph.put( cText.getExcerptionPath(), paragraph );
 				elements.add( paragraph );
 			}
 			else
 			{
 				// just a normal chapter
-				Heading h = new Heading(c.getName(), c.getDepth(), c.getXPath());
+				Heading h = new Heading(c.getName(), c.getDepth());
 				elements.add(h);
 			}
 		}
@@ -115,7 +115,7 @@ public class SourcePage extends HTMLPage {
 	 */
 	public void addLink(Excerption e, Link l, DiscussionPage disc)
 	{
-		xPathToParagraph.get(e.getXPath()).addLink(e, l, disc);
+		ePathToParagraph.get(e.getEPath()).addLink(e, l, disc);
 	}
 	
 	/** Returns a list of the sub-pages created by this page */
