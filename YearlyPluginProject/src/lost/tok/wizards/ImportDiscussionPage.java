@@ -19,11 +19,15 @@ import lost.tok.GeneralFunctions;
 import lost.tok.Messages;
 import lost.tok.Source;
 import lost.tok.ToK;
+import lost.tok.activator.Activator;
 import lost.tok.export.DiscussionExportOperation;
 
 import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.Node;
+import org.dom4j.XPath;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -96,6 +100,8 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 
 	/** The tok. */
 	private ToK tok;
+
+	private boolean lostExport = false;
 
 	/** The zip current provider. */
 	ZipLeveledStructureProvider zipCurrentProvider;
@@ -192,7 +198,7 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 			sources = tok.getSources();
 		} catch (Exception e) {
 			// no sources or roots
-			if(getMessage() == null)
+			if (getMessage() == null)
 				setErrorMessage("Can't import discussions into a project with no root or source");
 			return false;
 		}
@@ -204,23 +210,25 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 				File dest = unzipToTempLocation(zipFile, element);
 				Document discussionDoc = GeneralFunctions.readFromXML(dest
 						.getAbsolutePath());
-				List result = discussionDoc
-						.selectNodes("//quote/sourceFile");
+				List result = discussionDoc.selectNodes("//quote/sourceFile");
 
 				for (Object sourceNode : result) {
 					boolean exists = false;
-					String[] sourceName = ((Element) sourceNode).getText().split("/");
+					String[] sourceName = ((Element) sourceNode).getText()
+							.split("/");
 					for (Source tokSource : sources) {
 						if (tokSource.getFile().getFullPath().lastSegment()
-								.compareTo(sourceName[sourceName.length-1]) == 0) {// the
+								.compareTo(sourceName[sourceName.length - 1]) == 0) {// the
 							// source
 							// exists
 							exists = true;
 							break;
 						}
 					}
-					if ((!exists) && (!missingFiles.contains(sourceName[sourceName.length-1]))) {
-						missingFiles.add(sourceName[sourceName.length-1]);
+					if ((!exists)
+							&& (!missingFiles
+									.contains(sourceName[sourceName.length - 1]))) {
+						missingFiles.add(sourceName[sourceName.length - 1]);
 					}
 				}
 				dest.delete();
@@ -235,8 +243,9 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 					error += file + "\n";
 				}
 			}
-			if(getMessage() == null)
-				setErrorMessage(Messages.getString("ImportDiscussionPage.6") + error);
+			if (getMessage() == null)
+				setErrorMessage(Messages.getString("ImportDiscussionPage.6")
+						+ error);
 			return false;
 		}
 		return true;
@@ -330,7 +339,10 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 		File destFile = null;
 		destFile = unzipToTempLocation(zipFile, linksEntry);
 		tempLinksFile = destFile.getAbsolutePath();
+		transformLinksFile();
 	}
+
+	
 
 	/**
 	 * @param zipFile
@@ -429,7 +441,7 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 		if (!ensureSourceIsValid()) {
 			return false;
 		}
-		
+
 		saveWidgetValues();
 
 		Iterator resourcesEnum = getSelectedResources().iterator();
@@ -749,24 +761,72 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 
 		if (ensureZipSourceIsValid()) {
 			ZipFile zipFile = getSpecifiedZipSourceFile();
-
+			
 			ZipLeveledStructureProvider structureProvider = ArchiveFileManipulations
 					.getZipStructureProvider(zipFile, getContainer().getShell());
 			ImportOperation operation = new ImportOperation(
 					getContainerFullPath(), structureProvider.getRoot(),
 					structureProvider, this, fileSystemObjects);
 
+			
+			
 			operation.setContext(getShell());
 			result = executeImportOperation(operation);
 
-			// Merge link files
-			createTempLinksFile(zipFile);
-			mergeLinkfiles();
-			deleteTempLinksFile();
-
+			if (result) {
+				lostExport = zipFile.getEntry(
+						DiscussionExportOperation.TEMP_LINKS_XML).getComment()
+						.compareTo(Activator.PLUGIN_ID) == 0 ? true : false;
+				if(!lostExport)
+					transformDiscussionFiles(zipFile);
+				// Merge link files
+				createTempLinksFile(zipFile);
+				mergeLinkfiles();
+				deleteTempLinksFile();
+			}
 			closeZipFile(zipFile);
 		}
 		return result;
+	}
+
+	private void transformDiscussionFiles(ZipFile zipFile) {
+		Enumeration entries = zipFile.entries();
+		while(entries.hasMoreElements()){
+			ZipEntry entry = (ZipEntry) entries.nextElement();
+			if (entry.isDirectory() || entry.getName().compareTo(DiscussionExportOperation.TEMP_LINKS_XML)==0){
+				//if the entry is directory or if it's the links.xml file
+				continue;
+			}
+				
+			String discussionFileName = entry.getName();
+			IFolder discussionFolder = tok.getDiscussionFolder();
+			IFile discussionFile = discussionFolder.getFile(discussionFileName);
+			Document discussionDocument = GeneralFunctions.readFromXML(discussionFile);
+			
+			
+			XPath sourcesXPath = DocumentHelper.createXPath("//sourceFile"); //$NON-NLS-1$
+			List sourceNodes = sourcesXPath.selectNodes(discussionDocument);
+			for (Object object : sourceNodes) {
+				Element sourceFile = (Element)object;
+				sourceFile.setText(ToK.ROOTS_FOLDER + "/" + sourceFile.getText());
+			}
+			GeneralFunctions.writeToXml(discussionFile, discussionDocument);
+		}
+	}
+	
+	
+	private void transformLinksFile() {
+		Document linksDocument = GeneralFunctions.readFromXML(tempLinksFile);
+		
+		
+		XPath linkXPath = DocumentHelper.createXPath("//sourceFile"); //$NON-NLS-1$
+		List linkNodes = linkXPath.selectNodes(linksDocument);
+		for (Object object : linkNodes) {
+			Element link = (Element)object;
+			link.setText(ToK.ROOTS_FOLDER + "/" + link.getText());
+		}
+		GeneralFunctions.writeToXml(tempLinksFile, linksDocument);
+		
 	}
 
 	/**
@@ -782,10 +842,12 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 	@SuppressWarnings("unchecked")//$NON-NLS-1$
 	private boolean checkExistingDiscussions(ZipFile zipFile,
 			List fileSystemObjects, ZipLeveledStructureProvider provider) {
-		for (Object object : fileSystemObjects) {
-			IPath sourcePath = new Path(provider.getFullPath(object));
-			String discussionName = sourcePath.removeFileExtension()
-					.lastSegment();
+		Enumeration entries = zipFile.entries();
+		while(entries.hasMoreElements()){
+			ZipEntry entry = (ZipEntry) entries.nextElement();
+			if (entry.isDirectory())
+				continue;
+			String discussionName = entry.getComment();
 			Discussion disc = null;
 			try {
 				disc = tok.getDiscussion(discussionName);
@@ -793,8 +855,9 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 				// no such discussion exists
 			}
 			if (disc != null) {
-				if(getMessage() == null){
-					setMessage(Messages.getString("ImportDiscussionPage.12"), ERROR);
+				if (getMessage() == null) {
+					setMessage(Messages.getString("ImportDiscussionPage.12"),
+							ERROR);
 				}
 				setPageComplete(false);
 				return false;
@@ -981,7 +1044,7 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 			fileSystemObjects.add(((FileSystemElement) resourcesEnum.next())
 					.getFileSystemObject());
 		}
-		if (ensureZipSourceIsValid()) {
+		if (ensureZipSourceIsValid() && fileSystemObjects.size() > 0) {
 			ZipFile zipFile = getSpecifiedZipSourceFile();
 
 			// check not overwriting existing discussions
@@ -1001,11 +1064,11 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 			fileSystemObjects.add(((FileSystemElement) resourcesEnum.next())
 					.getFileSystemObject());
 		}
-		if (ensureZipSourceIsValid()) {
+		if (ensureZipSourceIsValid() && fileSystemObjects.size() > 0) {
 			ZipFile zipFile = getSpecifiedZipSourceFile();
 			createTempLinksFile(zipFile);
-			result = checkSourcesExist(ArchiveFileManipulations.getZipStructureProvider(
-					zipFile, getContainer().getShell()));
+			result = checkSourcesExist(ArchiveFileManipulations
+					.getZipStructureProvider(zipFile, getContainer().getShell()));
 			deleteTempLinksFile();
 
 		}
@@ -1036,5 +1099,5 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 		this.selectionGroup.addCheckStateListener(listener);
 
 	}
-	
+
 }

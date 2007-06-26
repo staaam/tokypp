@@ -241,15 +241,6 @@ public class DiscussionExportOperation implements IRunnableWithProgress {
 			System.out.println("delete error");
 			return false;
 		}
-
-		// File tempFile = new File(tempLinkFile.getLocation().toOSString());
-		// tempFile.deleteOnExit();
-		// try {
-		// tok.getProject().refreshLocal(IResource.DEPTH_INFINITE, null);
-		// } catch (CoreException e) {
-		// // Auto-generated catch block
-		// e.printStackTrace();
-		// }
 		return true;
 	}
 
