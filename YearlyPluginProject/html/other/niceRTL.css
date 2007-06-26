@@ -1,7 +1,9 @@
 @charset "UTF-8";
 @import "nice.css";
 
+
 div.main_content
 { 
-	padding-right : 8em;
+	padding-right : 16em;
+    padding-left: 4em;
 }
