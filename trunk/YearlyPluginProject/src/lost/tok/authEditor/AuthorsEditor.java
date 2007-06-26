@@ -33,8 +33,8 @@ public class AuthorsEditor extends TextEditor {
 	
 	//******* M E M B E R S *******************************
 	
-	// Note(Shay): I've moved this from the discussion, since we cannot trust the def opinion id
-	public static final int DEFAULT_OPINION_ID = 1;
+	// Note(Shay): I've moved this from the authors groups, since we cannot trust the def rank id
+	public static final int DEFAULT_RANK_ID = 1;
 	
 	public static final String EDITOR_ID = "lost.tok.authEditor.AuthorsEditor";
 	private static final String AUTHORS_GROUPS = "Authors Groups";
@@ -51,8 +51,7 @@ public class AuthorsEditor extends TextEditor {
 	}
 
 	
-	//******* CREATOR OF THE TREE EDITOR *****************************
-	
+	//******* CREATOR OF THE TREE EDITOR *****************************	
 	public void createPartControl(Composite parent) {
 		final Composite par = parent;
 		final Tree authTree = new Tree(parent, SWT.MULTI | SWT.WRAP | SWT.BORDER);
@@ -263,6 +262,7 @@ public class AuthorsEditor extends TextEditor {
 					ctrlCurrentWidth = par.getSize().x;
 					rootItem.removeAll();
 
+					//add all other ranks
 					for (Rank rank : authHandler.getRanks()) {
 						TreeItem rankItem = addTreeRank(rootItem, rank);
 
@@ -278,7 +278,7 @@ public class AuthorsEditor extends TextEditor {
 		});
 
 
-		// expends the root and it's opinions, but not the authors
+		// expends the root and it's ranks, but not the authors
 		expendToDepth(rootItem, 3);
 	}
 
@@ -305,7 +305,7 @@ public class AuthorsEditor extends TextEditor {
 			expendToDepth(child, depthLeft - 1);
 	}
 	
-//	add opinion to tree
+//	add rank to tree
 	private TreeItem addTreeRank(TreeItem treeItem, Rank rank) {
 		TreeItem rankItem = new TreeItem(treeItem, SWT.MULTI | SWT.WRAP);
 
@@ -321,7 +321,7 @@ public class AuthorsEditor extends TextEditor {
 		return authorItem;
 	}
 
-//	return opinion from tree item
+//	return rank from tree item
 	private Rank getRank(TreeItem rankToRemove) {
 		Rank rank = (Rank) rankToRemove.getData(RANK);
 		return rank;
@@ -333,12 +333,12 @@ public class AuthorsEditor extends TextEditor {
 	}
 
 
-//	set opinion properties
+//	set rank properties
 	private void setTreeRank(Rank rank, TreeItem rankItem) {
 		rankItem.setText(rank.getName());
 		rankItem.setData(RANK, rank);
 		rankItem.setData(RANK);
-		// opinionItem.setImage(imageOpin);
+		// rankItem.setImage(imageOpin);
 	}
 
 //	set author properties
@@ -351,21 +351,21 @@ public class AuthorsEditor extends TextEditor {
 	}
 
 	/**
-	 * Synchronizes the opinions with a modified discussion file
+	 * Synchronizes the ranks with a modified authors groups file
 	 * 
-	 * Assumption: The discussion member is pointing to the new discussion and
+	 * Assumption: The authors groups member is pointing to the new authors groups and
 	 * doesn't change
 	 */
 	private void synchronizeRanks() {
 		TreeMap<Integer, Rank> existingRanks = new TreeMap<Integer, Rank>();
 
-		// find all the opinions existing in the discussion (not the tree)
+		// find all the ranks existing in the authors groups (not the tree)
 		for (Rank rank : authHandler.getRanks()) {
 			int id = rank.getId();
 			existingRanks.put(id, rank);
 		}
 
-		// for each opinion in the tree, find its status (belongs, doesn't
+		// for each rank in the tree, find its status (belongs, doesn't
 		// belong)
 		for (TreeItem rankItem : rootItem.getItems()) {
 			int id = getRank(rankItem).getId();
@@ -378,8 +378,8 @@ public class AuthorsEditor extends TextEditor {
 			}
 		}
 
-		// add the opinions which weren't found in the tree
-		// new opinions are expended by default
+		// add the ranks which weren't found in the tree
+		// new ranks are expended by default
 		for (Integer rankId : existingRanks.keySet()) {
 			TreeItem rankItem = addTreeRank(rootItem, existingRanks.get(rankId));
 			rankItem.setExpanded(true);
@@ -388,10 +388,10 @@ public class AuthorsEditor extends TextEditor {
 
 
 	/**
-	 * Synchronizes the opinions with a modified discussion file
+	 * Synchronizes the ranks with a modified authors groups file
 	 * 
-	 * Assumption: The discussion member is pointing to the new discussion and
-	 * doesn't change. The opinions are already synchronized
+	 * Assumption: The authors groups member is pointing to the new authors groups and
+	 * doesn't change. The ranks are already synchronized
 	 * 
 	 */	
 /*	private void synchronizeAuthorss() {
@@ -409,7 +409,7 @@ public class AuthorsEditor extends TextEditor {
 
 			TreeMap<Integer, Author> existingAuthors = new TreeMap<Integer, Author>();
 
-			// find all the quotes existing in the opinion (not the tree)
+			// find all the authors existing in the rank (not the tree)
 			for (Author author : authHandler.getAuthors(ran.getName())) {
 				int id = author.getID();
 				existingAuthors.put(id, author);
@@ -417,21 +417,21 @@ public class AuthorsEditor extends TextEditor {
 
 			TreeItem ranItem = treeRanks.get(rankId);
 
-			// for each quote in the tree, find its status (belongs, doesn't
+			// for each author in the tree, find its status (belongs, doesn't
 			// belong)
 			for (TreeItem authorItem : ranItem.getItems()) {
 				int id = getAuthor(authorItem).getID();
 				if (!existingAuthors.containsKey(id)) {
-					// remove the opinion from the view
+					// remove the rank from the view
 					authorItem.dispose();
 				} else {
-					// mark that the opinion is already in the view
+					// mark that the rank is already in the view
 					existingAuthors.remove(id);
 				}
 			}
 
-			// add the quotes which weren't found in the tree
-			// and expend them and their opinions
+			// add the authors which weren't found in the tree
+			// and expend them and their ranks
 			for (Integer authorId : existingAuthors.keySet()) {
 				TreeItem aItem = addTreeAuthor(ranItem, existingAuthors.get(authorId));
 				ranItem.setExpanded(true);
@@ -472,7 +472,7 @@ public class AuthorsEditor extends TextEditor {
 	}
 
 	/**
-	 * Returns all the displayed opinions
+	 * Returns all the displayed ranks
 	 */
 	public Rank[] getDisplayedRanks() {
 		Rank[] retVal = new Rank[rootItem.getItemCount()];
@@ -489,8 +489,8 @@ public class AuthorsEditor extends TextEditor {
 	 * Returns the authors displayed in the tree Written for testing
 	 * 
 	 * @param rankId
-	 *            the rank whose quotes are to be returned
-	 * @return the quotes which are displayed under the given opinion id
+	 *            the rank whose authors are to be returned
+	 * @return the authors which are displayed under the given rank id
 	 */
 	public Author[] getDisplayedRanks(Integer rankId) {
 		TreeItem[] ranItems = rootItem.getItems();
@@ -503,7 +503,7 @@ public class AuthorsEditor extends TextEditor {
 		}
 
 		if (i == ranItems.length)
-			return null; // dude, your opinion id doesn't even exist!
+			return null; // dude, your rank id doesn't even exist!
 		// else
 
 		TreeItem[] aItems = rootItem.getItem(i).getItems();
@@ -516,20 +516,20 @@ public class AuthorsEditor extends TextEditor {
 		return authors;
 	}
 
-//	move diven quote to default
+//	move diven author to default
 	public void moveAuthorToDefault(TreeItem itemToMove) {
 		Author author = getAuthor(itemToMove);
-		authHandler.relocateAuthor(author.getName(), AuthorsEditor.DEFAULT_OPINION_ID);
+		authHandler.relocateAuthor(author.getName(), AuthorsEditor.DEFAULT_RANK_ID);
 	}
 
-//	move given quote to opinion
+//	move given author to rank
 	public void moveAuthorToRank(TreeItem authorToAdd) {
 		Rank rank = (Rank) authorToAdd.getParentItem().getData(RANK);
 		Author author = getAuthor(authorToAdd);
 		authHandler.relocateAuthor(author.getName(), rank.getId());
 	}
 
-//	add new opinion to tree
+//	add new rank to tree
 	public void addRank(String rankName) {
 //		authHandler.addRank(rankName);
 		addTreeRank(rootItem, new Rank(rankName, authHandler
@@ -537,14 +537,14 @@ public class AuthorsEditor extends TextEditor {
 	}
 
 /*	
-//	remove opinion from file
+//	remove rank from file
 	public void removeRankFromFile(TreeItem rankToRemove) {
 		Rank rank = getRank(rankToRemove);
 		authHandler.removeRank(rank.getId());
 	}
 */
 
-//	remove given quote from file
+//	remove given author from file
 	public void removeAuthorFromFile(TreeItem authorToRemove) {
 		Author author = getAuthor(authorToRemove);
 		authHandler.removeAuthor(author.getName());
@@ -563,11 +563,11 @@ public class AuthorsEditor extends TextEditor {
 	@Override
 	protected void handleEditorInputChanged() {
 
-		authHandler = null; // lose the previous discussion
+		authHandler = null; // lose the previous authors groups
 		authHandler = getAuthorsHandler();// update all the data
 
 		synchronizeRanks();
-		// now the opinions should be synchronized with the file
+		// now the ranks should be synchronized with the file
 //		synchronizeAuthors();
 	}
 }
