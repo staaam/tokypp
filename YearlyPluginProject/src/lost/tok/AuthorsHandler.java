@@ -16,11 +16,10 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.part.FileEditorInput;
 
 public class AuthorsHandler {
-	
+
 	/**********************************************************************
 	 * M E M B E R S
 	 **********************************************************************/
-	
 	private ToK myToK;
 	private Integer id = 1;
 	public String name;
@@ -87,8 +86,7 @@ public class AuthorsHandler {
 		}
 		begin++;
 		
-		//TODO: change dis suffix to xml
-		int end = authorsFile.lastIndexOf(".xml"); //$NON-NLS-1$
+		int end = authorsFile.lastIndexOf(".xml");
 
 		if (end == -1)
 			return null;
@@ -136,7 +134,7 @@ public class AuthorsHandler {
 	}
 
 	public IFile getFile() {
-		return myToK.getAuthorFile();// getDiscussionFolder().getFile(discName + ".dis");
+		return myToK.getAuthorFile();
 	}
 
 	/** Returns the file associated with this as an IEditorInput */
@@ -203,8 +201,8 @@ public class AuthorsHandler {
 	/**
 	 * getting the authors from a rank
 	 * 
-	 * @param opinion
-	 * @return quotes
+	 * @param rank
+	 * @return authors
 	 */
 	public Author[] getAuthors(String authorsGroup) {
 
@@ -234,7 +232,7 @@ public class AuthorsHandler {
 
 		// If the author and the target rank can be found,
 		// the author will move to the target rank
-		XPath xpathSelector1 = DocumentHelper.createXPath("//author[getText()='" + authName + "']");
+		XPath xpathSelector1 = DocumentHelper.createXPath("//author[.='" + authName + "']");
 		List result = xpathSelector1.selectNodes(doc);
 		if (result.size() == 1) {
 			Element element = (Element) result.get(0);
@@ -253,9 +251,9 @@ public class AuthorsHandler {
 
 
 	/**
-	 * remove the given quote from the discussion
+	 * remove the given author from the authors groups
 	 * 
-	 * @param quoteId
+	 * @param authorName
 	 */
 	public void removeAuthor(String authName) {
 
@@ -295,6 +293,11 @@ public class AuthorsHandler {
 	}
 	
 	private Integer getRank(String authorsGroup){
+		
+		//default rank
+		if(authorsGroup.equals(DEFAULT_RANK))
+			return 0;
+		
 		return Integer.valueOf(authorsGroup.substring(authorsGroup.length()-1));
 	}
 
