@@ -155,7 +155,7 @@ public class DiscussionPage extends HTMLPage {
 		opTitle.addText( o.getName() );
 		opTitle.addAttribute("id", "discItem" + o.getId()); //$NON-NLS-1$ //$NON-NLS-2$
 		
-		Quote[] quotes = disc.getQuotes(o.getName());
+		Quote[] quotes = disc.getSortedQuotes(o.getName());
 		
 		// add quotes only if there are any
 		if (quotes.length > 0)
