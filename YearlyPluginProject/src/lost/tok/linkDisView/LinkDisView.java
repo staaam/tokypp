@@ -11,11 +11,15 @@ import lost.tok.Link;
 import lost.tok.opTable.OperationTable;
 
 import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITreeSelection;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TreeNode;
 import org.eclipse.jface.viewers.TreeNodeContentProvider;
+import org.eclipse.jface.viewers.TreePath;
+import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
@@ -77,32 +81,6 @@ public class LinkDisView extends ViewPart {
 		viewer.setLabelProvider(new ViewLabelProvider());
 		viewer.setInput(getViewSite());
 		hookDoubleClickAction();
-		
-//		getViewSite().getPage().addPartListener(new IPartListener() {
-//			public void partActivated(IWorkbenchPart part) {
-//				if (shownPart != part)
-//					update(part);
-//			}
-//
-//			public void partBroughtToTop(IWorkbenchPart part) {
-//				if (shownPart != part)
-//					update(part);
-//			}
-//
-//			public void partClosed(IWorkbenchPart part) {
-//				if (shownPart == part)
-//					clear();
-//			}
-//
-//			public void partDeactivated(IWorkbenchPart part) {
-//			}
-//
-//			public void partOpened(IWorkbenchPart part) {
-//				if (shownPart != part)
-//					update(part);
-//			}
-//			
-//		});
 	}
 
 	/**
@@ -115,23 +93,7 @@ public class LinkDisView extends ViewPart {
 	private void hookDoubleClickAction() {
 		viewer.addDoubleClickListener(new IDoubleClickListener() {
 			public void doubleClick(DoubleClickEvent event) {
-				ITreeSelection selection = (ITreeSelection) viewer.getSelection();
-				TreeNode n = (TreeNode) selection.getFirstElement();
-				
-				if (n.getValue() instanceof Discussion)
-					n = n.getChildren()[0];
-				
-				if (n.getValue() instanceof Excerption) {
-					Excerption e = (Excerption) n.getValue();
-					//ExcerptionView.getView().get
-					
-					IEditorPart editor = getViewSite().getPage().getActiveEditor();
-					if (editor instanceof OperationTable) {
-						OperationTable ot = (OperationTable) editor;
-						ot.scrollToExcerption(e);
-						ot.activate();
-					}
-				}
+				highlightSelection(viewer.getSelection());
 			}
 		});
 	}
@@ -186,15 +148,123 @@ public class LinkDisView extends ViewPart {
 		viewer.setInput(discs.toArray(new TreeNode[discs.size()]));
 		viewer.expandAll();
 	}
+	
+	int lastExcerptionIndex = 0;
+	Object lastExcerption = null;
+
+	int lastDiscussionIndex = 0;
+	Object lastDiscussion = null;
+	
+	public void next() {
+		Object input = viewer.getInput();
+
+		IContentProvider contentProvider = viewer.getContentProvider();
+		if (!(contentProvider instanceof TreeNodeContentProvider))
+			return;
+		
+		TreeNodeContentProvider tcp = (TreeNodeContentProvider) contentProvider;
+		
+		Object[] d = tcp.getElements(input);
+		if (d == null || d.length == 0) return;
+		
+		if (lastDiscussion == null || 
+				lastDiscussionIndex >= d.length || 
+				d[lastDiscussionIndex] != lastDiscussion) {
+			lastDiscussionIndex = 0;
+			lastDiscussion = d[lastDiscussionIndex];
+		}
+	
+		Object[] e = tcp.getChildren(lastDiscussion);
+		if (lastExcerption == null || 
+				lastExcerptionIndex >= e.length ||
+				e[lastExcerptionIndex] != lastExcerption)
+			lastExcerptionIndex = -1;
+		
+		lastExcerptionIndex++;
+		if (lastExcerptionIndex >= e.length) {
+			lastDiscussionIndex = (lastDiscussionIndex + 1) % d.length;
+			lastDiscussion = d[lastDiscussionIndex];
+			e = tcp.getChildren(lastDiscussion);
+
+			lastExcerptionIndex = 0;
+		}
+		lastExcerption = e[lastExcerptionIndex];
+		setCurrentExcerption();
+	}
+
+	public void prev() {
+		Object input = viewer.getInput();
+
+		IContentProvider contentProvider = viewer.getContentProvider();
+		if (!(contentProvider instanceof TreeNodeContentProvider))
+			return;
+		
+		TreeNodeContentProvider tcp = (TreeNodeContentProvider) contentProvider;
+		
+		Object[] d = tcp.getElements(input);
+		if (d == null || d.length == 0) return;
+		
+		if (lastDiscussion == null || 
+				lastDiscussionIndex >= d.length || 
+				d[lastDiscussionIndex] != lastDiscussion) {
+			lastDiscussionIndex = d.length - 1;
+			lastDiscussion = d[lastDiscussionIndex];
+		}
+	
+		Object[] e = tcp.getChildren(lastDiscussion);
+		if (lastExcerption == null || 
+				lastExcerptionIndex >= e.length ||
+				e[lastExcerptionIndex] != lastExcerption)
+			lastExcerptionIndex = e.length;
+		
+		lastExcerptionIndex--;
+		if (lastExcerptionIndex < 0) {
+			lastDiscussionIndex = (lastDiscussionIndex - 1) % d.length;
+			lastDiscussion = d[lastDiscussionIndex];
+			e = tcp.getChildren(lastDiscussion);
+
+			lastExcerptionIndex = e.length - 1;
+		}
+		lastExcerption = e[lastExcerptionIndex];
+		setCurrentExcerption();
+	}
+
+	private void setCurrentExcerption() {
+		Object[] path = new Object[3];
+		path[0] = viewer.getInput();
+		path[1] = lastDiscussion;
+		path[2] = lastExcerption;
+		TreeSelection ts = new TreeSelection(new TreePath(path));
+		viewer.setSelection(ts, true);
+		highlightSelection(ts);
+	}
+
+	private void highlightSelection(ISelection ts) {
+		ITreeSelection selection = (ITreeSelection) ts;
+		TreeNode n = (TreeNode) selection.getFirstElement();
+		
+		if (n.getValue() instanceof Discussion)
+			n = n.getChildren()[0];
+		
+		if (n.getValue() instanceof Excerption) {
+			
+			
+			Excerption e = (Excerption) n.getValue();
+			
+			IEditorPart editor = getViewSite().getPage().getActiveEditor();
+			if (editor instanceof OperationTable) {
+				OperationTable ot = (OperationTable) editor;
+				ot.scrollToExcerption(e);
+				ot.activate();
+			}
+		}
+	}
+	
+//	static private int arraySearch(Object[] a, Object e) {
+//		for (int i = 0; i < a.length; i++) {
+//			if (e == a) return i;
+//		}
+//		return -1;
+//	}
+//	
 }
-
-
-
-
-
-
-
-
-
-
-
