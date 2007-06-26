@@ -114,6 +114,14 @@ public class Excerption extends Properties {
 		this.text = text;
 	}
 	
+	/** Sets the excerption's text field according to the given source */
+	public void loadText(Source src)
+	{
+		SourceDocument sd = new SourceDocument();
+		sd.set(src);
+		loadText(sd);
+	}
+
 	/** Sets the excerption's text field according to the given source document */
 	public void loadText(SourceDocument srcDoc)
 	{

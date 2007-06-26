@@ -180,10 +180,10 @@ public class OperationTable extends TextEditor {
 		ExcerptionView ev = ExcerptionView.getView(false);
 		if (ev != null) ev.updateMonitoredEditor(this);
 		
-		if (isRootDiscussionsView())
-			LinkDisView.getView(true);
-		else 
-			ExcerptionView.getView(true);
+//		if (isRootDiscussionsView())
+//			LinkDisView.getView(true);
+//		else 
+//			ExcerptionView.getView(true);
 	}
 
 	/**
@@ -401,8 +401,8 @@ public class OperationTable extends TextEditor {
 	 * 
 	 * @return the marked
 	 */
-	public List<Excerption> getExcerptions() {
-		List<Excerption> l = new LinkedList<Excerption>();
+	public LinkedList<Excerption> getExcerptions() {
+		LinkedList<Excerption> l = new LinkedList<Excerption>();
 		for (MarkedData d : getExcerptionsMap().values())
 			l.add(d.getExcerption());
 		return l;

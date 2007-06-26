@@ -1,15 +1,17 @@
 package lost.tok.disEditor;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.TreeMap;
 
 import lost.tok.Discussion;
 import lost.tok.Excerption;
+import lost.tok.Link;
 import lost.tok.Opinion;
 import lost.tok.Quote;
+import lost.tok.SubLink;
 import lost.tok.ToK;
+import lost.tok.imageManager.ImageManager;
+import lost.tok.imageManager.ImageType;
 import lost.tok.opTable.OperationTable;
 import lost.tok.sourceDocument.ChapterText;
 import lost.tok.sourceDocument.SourceDocument;
@@ -33,7 +35,6 @@ import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
@@ -71,33 +72,10 @@ public class DiscussionEditor extends TextEditor {
 
 	private long localModificationStamp;
 	
-	//images for the tree
-	private Image discImage; 
-	private Image opinImage; 
-	private Image quoteImage;
-	
 	//******* C ' T O R *************************************
 	
 	public DiscussionEditor() {
 		super();
-		
-		//initializing images
-		InputStream discImgPath = null;
-		InputStream opinImgPath = null;
-		InputStream quoteImgPath = null;
-		
-		try {
-			discImgPath = ToK.getInputStream(ToK.ICONS_FOLDER + "/discussion.gif");
-			opinImgPath = ToK.getInputStream(ToK.ICONS_FOLDER + "/chat.ico");
-			quoteImgPath = ToK.getInputStream(ToK.ICONS_FOLDER + "/AddQuote.bmp");
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
-		discImage = new Image(null,discImgPath);
-		opinImage = new Image(null,opinImgPath);
-		quoteImage = new Image(null,quoteImgPath);
 	}
 
 	
@@ -416,16 +394,20 @@ public class DiscussionEditor extends TextEditor {
 		// **********************************************************************
 		rootItem = new TreeItem(disTree, SWT.MULTI | SWT.WRAP);
 		
-		rootItem.setImage(discImage);
+		rootItem.setImage(ImageManager.getImage(ImageType.DISCUSSION));
 		
 		rootItem.setText(discussion.getDiscName() + " (" + "Creator: " + discussion.getCreatorName() + ")");
 		rootItem.setData(DISCUSSION);
+//		ICommandImageService o = (ICommandImageService) getSite().getWorkbenchWindow().getWorkbench().getAdapter(ICommandImageService.class);
+//		ImageDescriptor i = o.getImageDescriptor("lost.tok.images.discusion");;
 
 		parent.getChildren()[0].addControlListener(new ControlAdapter() {
 			public void controlResized(ControlEvent e) {
 				if (ctrlCurrentWidth != par.getSize().x) {
 					ctrlCurrentWidth = par.getSize().x;
 					rootItem.removeAll();
+
+					addLinks(rootItem);
 
 					for (Opinion opinion : discussion.getOpinions()) {
 						TreeItem opinionItem = addTreeOpinion(rootItem, opinion);
@@ -471,25 +453,37 @@ public class DiscussionEditor extends TextEditor {
 			expendToDepth(child, depthLeft - 1);
 	}
 	
-//	add opinion to tree
-	private TreeItem addTreeOpinion(TreeItem treeItem, Opinion opinion) {
-		TreeItem opinionItem = new TreeItem(treeItem, SWT.MULTI | SWT.WRAP);
-		// Image imageOpin = new Image(null, new
-		// FileInputStream("C:/opinion.gif"));
+	private void addLinks(TreeItem parent) {
+		Link l = discussion.getLink();
 
+		TreeItem linkItem = new TreeItem(parent, SWT.MULTI | SWT.WRAP);
+		linkItem.setImage(ImageManager.getImage(ImageType.LINK));
+		linkItem.setText("Link type: " + l.getDisplayLinkType()
+				+ ", Link subject: '" + l.getSubject() + "'");
+		
+		for (SubLink s : l.getSubLinkList()) {
+			TreeItem sublinkItem = new TreeItem(linkItem, SWT.MULTI | SWT.WRAP);
+			sublinkItem.setImage(ImageManager.getImage(ImageType.ROOT));
+			
+			String text = s.getText();
+			sublinkItem.setText("(Root: '" + s.getLinkedSource().getTitle()
+					+ ") " + text.substring(0, Math.min(40, text.length())) + "...");
+			
+			addSplitted(sublinkItem, text, getLineSize());
+		}
+	}
+
+//	add opinion to tree
+	private TreeItem addTreeOpinion(TreeItem parent, Opinion opinion) {
+		TreeItem opinionItem = new TreeItem(parent, SWT.MULTI | SWT.WRAP);
 		setTreeOpinion(opinion, opinionItem);
-		opinionItem.setImage(opinImage);
 		return opinionItem;
 	}
 
 //	add quote to opinion
-	private TreeItem addTreeQuote(TreeItem treeItem, Quote quote) {
-		TreeItem quoteItem = new TreeItem(treeItem, SWT.MULTI | SWT.WRAP);
-		// Image imageQuote = new Image(null, new
-		// FileInputStream("C:/quote.gif"));
-
+	private TreeItem addTreeQuote(TreeItem parent, Quote quote) {
+		TreeItem quoteItem = new TreeItem(parent, SWT.MULTI | SWT.WRAP);
 		setTreeQuote(quote, quoteItem);
-		quoteItem.setImage(quoteImage);
 		return quoteItem;
 	}
 
@@ -506,16 +500,18 @@ public class DiscussionEditor extends TextEditor {
 
 //	set opinion properties
 	private void setTreeOpinion(Opinion opinion, TreeItem opinionItem) {
+		opinionItem.setImage(ImageManager.getImage(ImageType.OPINION));
 		opinionItem.setText(opinion.getName());
 		opinionItem.setData(OPINION, opinion);
 		opinionItem.setData(OPINION);
 		// opinionItem.setImage(imageOpin);
 	}
-
+	
 //	set quote properties
 	private void setTreeQuote(Quote quote, TreeItem quoteItem) {
 
 		String quoteText = quote.getText();
+		quoteItem.setImage(ImageManager.getImage(ImageType.QUOTE));
 		quoteItem.setText(quoteText.substring(0, java.lang.Math.min(40,
 				quoteText.length())) + "..."); //$NON-NLS-1$
 
@@ -525,35 +521,41 @@ public class DiscussionEditor extends TextEditor {
 
 		ctrlCurrentWidth = editor.getSize().x;
 
+		int lineSize = getLineSize();
+
+		int wrappedLines = addSplitted(quoteItem, quoteText, lineSize);
+		
+		if (quote.getComment().trim().length() != 0) {
+			// make son saparator
+			TreeItem treeItem = new TreeItem(quoteItem, SWT.WRAP);
+			treeItem.setText("----- " + "Comment" + " -----");
+			treeItem.setImage(ImageManager.getImage(ImageType.QUOTE));
+			
+			wrappedLines++;
+			quoteItem.setData(COMMENT_LINE, wrappedLines);
+			addSplitted(quoteItem, quote.getComment(), lineSize);
+		}
+	}
+
+
+	private int getLineSize() {
 		int editorWidth = editor.getSize().x;
 		int lineSize = editorWidth / 10;
 
 		if (lineSize == 0) {
 			lineSize = 100;
 		}
-
-		int wrappedLines = addSplitted(quoteItem, quoteText, lineSize);
-		
-		if (quote.getComment().trim().length() != 0) {
-			// make son saparator
-			String saparator = ""; //$NON-NLS-1$
-			for (int i = 0; i < lineSize; i++)
-				saparator += "-"; //$NON-NLS-1$
-
-			new TreeItem(quoteItem, SWT.WRAP).setText(saparator);
-			wrappedLines++;
-			quoteItem.setData(COMMENT_LINE, wrappedLines);
-			addSplitted(quoteItem, quote.getComment(), lineSize);
-
-			new TreeItem(quoteItem, SWT.WRAP).setText(saparator);
-		}
+		return lineSize;
 	}
 
 
 	private int addSplitted(TreeItem quoteItem, String quoteText, int lineSize) {
 		LinkedList<String> splitWrap = splitWrap(quoteText, lineSize);
-		for (String s : splitWrap)
-			new TreeItem(quoteItem, SWT.WRAP).setText(s);
+		for (String s : splitWrap) {
+			TreeItem treeItem = new TreeItem(quoteItem, SWT.WRAP);
+			treeItem.setText(s);
+			treeItem.setImage(ImageManager.getImage(ImageType.EXCERPTION));
+		}
 		
 		return splitWrap.size();
 	}
@@ -592,6 +594,10 @@ public class DiscussionEditor extends TextEditor {
 		// for each opinion in the tree, find its status (belongs, doesn't
 		// belong)
 		for (TreeItem opinionItem : rootItem.getItems()) {
+			if (getOpinion(opinionItem) == null) {
+				// updateLinks
+				continue;
+			}
 			int id = getOpinion(opinionItem).getId();
 			if (!existingOpinions.containsKey(id)) {
 				// remove the opinion from the view
@@ -625,6 +631,9 @@ public class DiscussionEditor extends TextEditor {
 
 		// map the opinions in the tree: id->treeItem
 		for (TreeItem opinionItem : rootItem.getItems()) {
+			if (getOpinion(opinionItem) == null)
+				continue;
+
 			int id = getOpinion(opinionItem).getId();
 			treeOpinions.put(id, opinionItem);
 		}
@@ -767,6 +776,7 @@ public class DiscussionEditor extends TextEditor {
 		}
 		
 		for (TreeItem item : rootItem.getItems()) {
+			if (getOpinion(item) == null) continue; 
 			if (getOpinion(item).getId() == id) {
 				activateItem(item);
 				break;

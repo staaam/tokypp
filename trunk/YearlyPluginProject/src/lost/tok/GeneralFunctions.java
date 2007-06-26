@@ -12,6 +12,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.HashMap;
 
+import lost.tok.activator.Activator;
+
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
@@ -21,13 +23,17 @@ import org.dom4j.io.XMLWriter;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
+import org.osgi.framework.Bundle;
 
 public class GeneralFunctions {
 
@@ -188,5 +194,18 @@ public class GeneralFunctions {
 			activePage.bringToTop(view);
 		
 		return view;
+	}
+	
+	/**
+	 * Returns an input stream of an internal test file
+	 * @param filePath the path to the file in the project's files
+	 * @return input stream of the file
+	 * @throws IOException if opening fails
+	 */
+	static public InputStream getInputStream(String relativePath) throws IOException{
+		Path path = new Path(relativePath);
+        Bundle bundle = Platform.getBundle(Activator.PLUGIN_ID);
+
+        return FileLocator.openStream(bundle, path, false);
 	}
 }

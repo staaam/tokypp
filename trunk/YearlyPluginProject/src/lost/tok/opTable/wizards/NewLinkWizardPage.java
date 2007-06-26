@@ -1,6 +1,6 @@
 package lost.tok.opTable.wizards;
 
-import java.util.List;
+import java.util.LinkedList;
 
 import lost.tok.Excerption;
 import lost.tok.Link;
@@ -151,12 +151,8 @@ public class NewLinkWizardPage extends WizardPage implements SelectionListener,
 		return discussionCombo.getText();
 	}
 
-	public Excerption[] getExcerptions(String fileName) {
-		List<Excerption> excerptions = ExcerptionView.getView(false).getExcerptions(
-				fileName);
-		Excerption[] exs = new Excerption[excerptions.size()];
-		excerptions.toArray(exs);
-		return exs;
+	public LinkedList<Excerption> getExcerptions(String fileName) {
+		return ExcerptionView.getView(false).getExcerptions(fileName);
 	}
 
 	/**

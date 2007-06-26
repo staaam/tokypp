@@ -326,6 +326,8 @@ public class ToKSearchPage extends DialogPage implements ISearchPage {
 		for (SearchOption so : SearchOption.values())
 			checkboxes.get(so).setSelection(
 					patternData.searchOptions.contains(so));
+		
+		container.setPerformActionEnabled(true);
 	}
 
 	private String[] getPreviousSearchPatterns() {

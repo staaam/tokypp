@@ -424,4 +424,11 @@
             extensions="src"
             id="lost.tok.opTable.SourceDocumentProvider"/>
    </extension>
+   <extension
+         point="org.eclipse.ui.ide.projectNatureImages">
+      <image
+            icon="icons/tree.jpg"
+            id="lost.tok.projectImage"
+            natureId="lost.tok.ToKNature"/>
+   </extension>
 </plugin>

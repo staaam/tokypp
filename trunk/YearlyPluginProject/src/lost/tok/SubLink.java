@@ -10,17 +10,18 @@ import org.dom4j.Element;
 public class SubLink {
 
 	private Source linkedSource;
-	private Excerption[] exp;
+	private LinkedList<Excerption>  exList;
+	private String text;
 	
-	public SubLink(Source linkedSource, Excerption[]exp){
+	public SubLink(Source linkedSource, LinkedList<Excerption>  exList){
 		this.linkedSource = linkedSource;
-		this.exp = exp;
+		this.exList = exList;
 	}
 	
 	/** Creates a sublink from an XML sublink element */
 	public SubLink(ToK tok, Element sublinkElm)
 	{
-		LinkedList<Excerption> exList = new LinkedList<Excerption>(); 
+		exList = new LinkedList<Excerption>(); 
 		
 		String srcName = DocumentHelper.createXPath("sourceFile").selectSingleNode(sublinkElm).getText();
 		this.linkedSource = new Source(tok, srcName);
@@ -35,7 +36,6 @@ public class SubLink {
 			excerption.loadText(srcDoc);
 			exList.add ( excerption );
 		}
-		this.exp = exList.toArray( new Excerption [ exList.size() ] );
 	}
 	
 	public Source getLinkedSource() {
@@ -46,11 +46,26 @@ public class SubLink {
 		this.linkedSource = s;
 	}
 	
-	public Excerption[] getExcerption() {
-		return exp;
+//	public Excerption[] getExcerption() {
+//		return exp;
+//	}
+//
+	public LinkedList<Excerption> getExcerption() {
+		return exList;
 	}
 	
-	public void setExcerption(Excerption[] e){
-		this.exp = e;
+	public String getText() {
+		if (text == null) {
+			text = Excerption.concat(exList);
+		}
+		return text;
+	}
+	
+//	public void setExcerption(Excerption[] e){
+//		this.exp = e;
+//	}
+	
+	public void setExcerption(LinkedList<Excerption> e){
+		this.exList = e;
 	}
 }
