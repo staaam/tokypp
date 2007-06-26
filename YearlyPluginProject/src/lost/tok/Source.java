@@ -133,6 +133,12 @@ public class Source {
 		return author;
 	}
 	
+	public int getAuthorRank()
+	{
+		// FIXME(Evgeni): Shay said: Evgeni, implement this stub!
+		return 3;
+	}
+	
 	/** Returns the internal name of the source (i.e. its title) */
 	public String getTitle()
 	{
