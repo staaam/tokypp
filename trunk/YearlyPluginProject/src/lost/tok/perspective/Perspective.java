@@ -3,7 +3,9 @@
  */
 package lost.tok.perspective;
 
+import lost.tok.RelationView.RelationView;
 import lost.tok.excerptionsView.ExcerptionView;
+import lost.tok.linkDisView.LinkDisView;
 
 import org.eclipse.ui.IFolderLayout;
 import org.eclipse.ui.IPageLayout;
@@ -61,6 +63,8 @@ public class Perspective implements IPerspectiveFactory {
 		IFolderLayout bottom = layout.createFolder(
 				"bottom", IPageLayout.BOTTOM, (float) 0.75, editorArea); //$NON-NLS-1$
 		bottom.addView(ExcerptionView.ID);
+		bottom.addView(LinkDisView.ID);
+		bottom.addView(RelationView.ID);
 	}
 
 	/**
