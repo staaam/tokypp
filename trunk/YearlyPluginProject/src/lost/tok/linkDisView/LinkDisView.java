@@ -24,7 +24,6 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
@@ -247,16 +246,10 @@ public class LinkDisView extends ViewPart {
 			n = n.getChildren()[0];
 		
 		if (n.getValue() instanceof Excerption) {
-			
-			
 			Excerption e = (Excerption) n.getValue();
-			
-			IEditorPart editor = getViewSite().getPage().getActiveEditor();
-			if (editor instanceof OperationTable) {
-				OperationTable ot = (OperationTable) editor;
-				ot.scrollToExcerption(e);
-				ot.activate();
-			}
+
+			lastOT.scrollToExcerption(e);
+			lastOT.activate();
 		}
 	}
 	
