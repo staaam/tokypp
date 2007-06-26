@@ -12,7 +12,6 @@ import lost.tok.html.DiscConflictPage;
 import lost.tok.html.DiscussionPage;
 import lost.tok.html.HTMLPage;
 import lost.tok.html.SourcePage;
-import lost.tok.html.srcElem.LinkInfo;
 
 public class LinkedParagraph implements SrcElem
 {

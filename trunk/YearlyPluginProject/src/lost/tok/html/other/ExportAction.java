@@ -72,7 +72,7 @@ public class ExportAction implements IObjectActionDelegate{
 		try {
 			htmlFolder.delete(true, null);
 		} catch (CoreException e)	{
-			System.err.println("Error deleting html directory before generating a new one\n");
+			System.err.println("Error deleting html directory before generating a new one\n"); //$NON-NLS-1$
 			e.printStackTrace();
 		}
 	}

@@ -45,7 +45,10 @@ public class CSSManager
 		ToK.HTML_FOLDER + "/other/menu/img/plus.gif",  //$NON-NLS-1$
 		ToK.HTML_FOLDER + "/other/menu/img/plusbottom.gif",  //$NON-NLS-1$
 		ToK.HTML_FOLDER + "/other/menu/img/tree1.gif",  //$NON-NLS-1$
-		ToK.HTML_FOLDER + "/other/menu/img/tree2.jpg",  //$NON-NLS-1$		
+		ToK.HTML_FOLDER + "/other/menu/img/tree2.jpg",  //$NON-NLS-1$
+		ToK.HTML_FOLDER + "/other/menu/img/disc.png",  //$NON-NLS-1$
+		ToK.HTML_FOLDER + "/other/menu/img/source.png",  //$NON-NLS-1$
+		ToK.HTML_FOLDER + "/other/menu/img/root.png",  //$NON-NLS-1$
 	 }; 
 	
 	/** The CSS file used by most of the html project */
@@ -79,13 +82,13 @@ public class CSSManager
 			
 		if (GeneralFunctions.isLTR())
 		{
-			pathsToGen.add(ToK.HTML_FOLDER + "/" + DEFAULT_CSS);
+			pathsToGen.add(ToK.HTML_FOLDER + "/" + DEFAULT_CSS); //$NON-NLS-1$
 			return HTMLPage.getHTMLRelPath(proj, path) + DEFAULT_CSS;
 		}
 		else
 		{
-			pathsToGen.add(ToK.HTML_FOLDER + "/" + DEFAULT_CSS);
-			pathsToGen.add(ToK.HTML_FOLDER + "/" + DEFAULT_RTL_CSS);
+			pathsToGen.add(ToK.HTML_FOLDER + "/" + DEFAULT_CSS); //$NON-NLS-1$
+			pathsToGen.add(ToK.HTML_FOLDER + "/" + DEFAULT_RTL_CSS); //$NON-NLS-1$
 			return HTMLPage.getHTMLRelPath(proj, path) + DEFAULT_RTL_CSS;
 		}
 	}
@@ -102,13 +105,13 @@ public class CSSManager
 		
 		if (GeneralFunctions.isLTR())
 		{
-			pathsToGen.add(ToK.HTML_FOLDER + "/" + DEFAULT_CSS);
+			pathsToGen.add(ToK.HTML_FOLDER + "/" + DEFAULT_CSS); //$NON-NLS-1$
 			return HTMLPage.getHTMLRelPath(proj, path) + DEFAULT_CSS;
 		}
 		else
 		{
-			pathsToGen.add(ToK.HTML_FOLDER + "/" + DEFAULT_CSS);
-			pathsToGen.add(ToK.HTML_FOLDER + "/" + DEFAULT_RTL_CSS);
+			pathsToGen.add(ToK.HTML_FOLDER + "/" + DEFAULT_CSS); //$NON-NLS-1$
+			pathsToGen.add(ToK.HTML_FOLDER + "/" + DEFAULT_RTL_CSS); //$NON-NLS-1$
 			return HTMLPage.getHTMLRelPath(proj, path) + DEFAULT_RTL_CSS;
 		}	
 	}
@@ -122,14 +125,14 @@ public class CSSManager
 	{
 		if (GeneralFunctions.isLTR())
 		{
-			pathsToGen.add(ToK.HTML_FOLDER + "/" + DEFAULT_CSS);
-			return "../" + DEFAULT_CSS;
+			pathsToGen.add(ToK.HTML_FOLDER + "/" + DEFAULT_CSS); //$NON-NLS-1$
+			return "../" + DEFAULT_CSS; //$NON-NLS-1$
 		}
 		else
 		{
-			pathsToGen.add(ToK.HTML_FOLDER + "/" + DEFAULT_CSS);
-			pathsToGen.add(ToK.HTML_FOLDER + "/" + DEFAULT_RTL_CSS);
-			return "../" + DEFAULT_RTL_CSS;
+			pathsToGen.add(ToK.HTML_FOLDER + "/" + DEFAULT_CSS); //$NON-NLS-1$
+			pathsToGen.add(ToK.HTML_FOLDER + "/" + DEFAULT_RTL_CSS); //$NON-NLS-1$
+			return "../" + DEFAULT_RTL_CSS; //$NON-NLS-1$
 		}		
 	}
 	
@@ -138,13 +141,13 @@ public class CSSManager
 	{
 		if (GeneralFunctions.isLTR())
 		{
-			pathsToGen.add(ToK.HTML_FOLDER + "/" + DEFAULT_CSS);
+			pathsToGen.add(ToK.HTML_FOLDER + "/" + DEFAULT_CSS); //$NON-NLS-1$
 			return DEFAULT_CSS;
 		}
 		else
 		{
-			pathsToGen.add(ToK.HTML_FOLDER + "/" + DEFAULT_CSS);
-			pathsToGen.add(ToK.HTML_FOLDER + "/" + DEFAULT_RTL_CSS);
+			pathsToGen.add(ToK.HTML_FOLDER + "/" + DEFAULT_CSS); //$NON-NLS-1$
+			pathsToGen.add(ToK.HTML_FOLDER + "/" + DEFAULT_RTL_CSS); //$NON-NLS-1$
 			return DEFAULT_RTL_CSS;
 		}	
 	}

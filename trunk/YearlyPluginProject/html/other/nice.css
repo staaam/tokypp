@@ -30,6 +30,7 @@ body
 div.main_content
 { 
 	padding-left : 16em;
+    padding-right: 4em;
 }
 
 blockquote 
