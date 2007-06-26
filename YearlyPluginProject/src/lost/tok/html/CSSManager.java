@@ -180,10 +180,7 @@ public class CSSManager
 	 */
 	static private void generateFile(ToK tok, String filepath) throws CoreException, IOException
 	{	
-		// get the file from the bundle
-		Path path = new Path(filepath);
-        Bundle bundle = Platform.getBundle(Activator.PLUGIN_ID);
-		InputStream s = FileLocator.openStream(bundle, path, false);
+		InputStream s = GeneralFunctions.getInputStream(filepath);
 		
 		// create the path inside the project
 		IProject proj = tok.getProject();

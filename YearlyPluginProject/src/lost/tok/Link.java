@@ -92,7 +92,7 @@ public class Link {
 	/**
 	 * Links an existing discussion to a segment in the root of the ToK project
 	 */
-	public void linkDiscussionRoot(Source linkedSource, Excerption[]exp) {
+	public void linkDiscussionRoot(Source linkedSource, LinkedList<Excerption> exp) {
 		
 		SubLink sl = new SubLink(linkedSource,exp);
 		subLinkList.add(sl);

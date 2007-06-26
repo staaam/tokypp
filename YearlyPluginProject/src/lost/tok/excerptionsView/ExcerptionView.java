@@ -356,7 +356,7 @@ public class ExcerptionView extends ViewPart {
 	/**
 	 * Returns the excerptions from the given file name
 	 */
-	public List<Excerption> getExcerptions(String filename) {
+	public LinkedList<Excerption> getExcerptions(String filename) {
 		return getOTs().get(filename).getExcerptions();
 	}
 
