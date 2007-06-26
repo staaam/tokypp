@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.dom4j.Document;
@@ -149,6 +150,32 @@ public class Discussion implements Comparable<Discussion> {
 		}
 		
 		loadLinkFromFile();
+	}
+	
+	public LinkedList<Relation> getRelations() {
+		LinkedList<Relation> r = new LinkedList<Relation>();
+
+		Document doc = null;
+		try {
+			doc = GeneralFunctions.readFromXML(discussionFile);
+		} catch (Exception e) {
+		}
+		
+		if (doc == null)
+			try {
+				doc = GeneralFunctions.readFromXML(actualFile);
+			} catch (Exception e) {
+			}
+			
+		if (doc == null) return r;
+		
+		List relations = DocumentHelper
+		.createXPath("//relation") //$NON-NLS-1$
+		.selectNodes(doc);
+		for (Object o : relations) {
+			r.add(new Relation((Element) o));
+		}
+		return r;
 	}
 	
 	/** Loads the discussion's link (if exists) from the links.xml file */
@@ -334,12 +361,7 @@ public class Discussion implements Comparable<Discussion> {
 
 		// add the relation
 		Element link1 = doc.getRootElement().addElement("relation"); //$NON-NLS-1$
-		link1.addElement("id1").addText( //$NON-NLS-1$
-				java.lang.Integer.toString(element1));
-		link1.addElement("id2").addText( //$NON-NLS-1$
-				java.lang.Integer.toString(element2));
-		link1.addElement("comment").addText(comment); //$NON-NLS-1$
-		link1.addElement("type").addText(type); //$NON-NLS-1$
+		new Relation(element1, element2, comment, type).fillElement(link1);
 
 		writeToXml(doc);
 
