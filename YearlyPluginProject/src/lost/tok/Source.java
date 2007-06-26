@@ -135,8 +135,9 @@ public class Source {
 	
 	public int getAuthorRank()
 	{
-		// FIXME(Evgeni): Shay said: Evgeni, implement this stub!
-		return 3;
+		AuthorsHandler authHandler = new AuthorsHandler(tok);
+		
+		return authHandler.getAuthorRank(getAuthor());
 	}
 	
 	/** Returns the internal name of the source (i.e. its title) */
