@@ -595,7 +595,7 @@ public class ToK {
 			Element inAuthElm = authElm.addElement("authorsGroup"); //$NON-NLS-1$
 			inAuthElm.addElement("id").addText(String.valueOf(i)); //$NON-NLS-1$
 			inAuthElm.addElement("name").addText( //$NON-NLS-1$
-					"Rank " + String.valueOf(i)); //$NON-NLS-1$
+					AuthorsHandler.RANK + String.valueOf(i)); //$NON-NLS-1$
 			inAuthElm.addElement("nextGroupId").addText( //$NON-NLS-1$
 					String.valueOf(nextOf(i)));
 			inAuthElm.addElement("prevGroupId").addText( //$NON-NLS-1$
