@@ -2,6 +2,8 @@ package lost.tok;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -460,6 +462,34 @@ public class Discussion implements Comparable<Discussion> {
 			Element elem = (Element) object;
 			quotes[j++] = new Quote(elem, myToK);
 		}
+		return quotes;
+	}
+	
+	public Quote[] getSortedQuotes(String opinionDisp) {
+		Quote[] quotes = getQuotes(opinionDisp);
+		
+		// Note(Shay): this comparator imposes orderings that are inconsistent with equals.
+		// The ordering is only done according to the author's rank
+		Comparator<Quote> comparator = new Comparator<Quote>() 
+		{
+			/** 
+			 * Compares its two arguments for order. 
+			 * Returns a negative integer, zero, or a positive integer
+			 *  as the first argument is less than, equal to, or greater than the second. 
+			 * */
+			public int compare(Quote q1, Quote q2) 
+			{
+				// 1 is the highest rank
+				// 5 is the lowest
+				int r1 = q1.getSource().getAuthorRank();
+				int r2 = q2.getSource().getAuthorRank();
+				
+				return r2 - r1;
+			}
+		};
+		
+		Arrays.sort(quotes, comparator);
+		
 		return quotes;
 	}
 

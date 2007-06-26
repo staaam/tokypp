@@ -1,5 +1,6 @@
 package lost.tok.disEditor;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.TreeMap;
 
@@ -623,7 +624,7 @@ public class DiscussionEditor extends TextEditor {
 	 * doesn't change. The opinions are already synchronized
 	 * 
 	 */
-	private void synchronizeQuotes() {
+	private void synchronizeAllQuotes() {
 		//TODO: order quotes display by authors ranking, don't change discussion XML
 		
 		TreeMap<Integer, TreeItem> treeOpinions = new TreeMap<Integer, TreeItem>();
@@ -640,39 +641,80 @@ public class DiscussionEditor extends TextEditor {
 		// for each opinion, update its quotes
 		for (Opinion opin : discussion.getOpinions()) {
 			int opinionId = opin.getId();
-
-			TreeMap<Integer, Quote> existingQuotes = new TreeMap<Integer, Quote>();
-
-			// find all the quotes existing in the opinion (not the tree)
-			for (Quote quote : discussion.getQuotes(opin.getName())) {
-				int id = quote.getID();
-				existingQuotes.put(id, quote);
-			}
-
 			TreeItem opItem = treeOpinions.get(opinionId);
 
-			// for each quote in the tree, find its status (belongs, doesn't
-			// belong)
-			for (TreeItem quoteItem : opItem.getItems()) {
-				int id = getQuote(quoteItem).getID();
-				if (!existingQuotes.containsKey(id)) {
-					// remove the opinion from the view
-					quoteItem.dispose();
-				} else {
-					// mark that the opinion is already in the view
-					existingQuotes.remove(id);
-				}
-			}
+			synchronizeOpQuotes(opin, opItem);
+		}
+	}
 
-			// add the quotes which weren't found in the tree
-			// and expend them and their opinions
-			for (Integer quoteId : existingQuotes.keySet()) {
-				TreeItem qItem = addTreeQuote(opItem, existingQuotes
-						.get(quoteId));
-				opItem.setExpanded(true);
-				qItem.setExpanded(true);
+	/**
+	 * Synchronizes the quotes of a specific opinions
+	 * Makes sure the quotes are in the same order as the ranks file
+	 * Expends new quotes that were added to the opinion
+	 * @param fileOp the Opinion object, like the one in the discussion file
+	 * @param displayOp the opinion displayed in the discussion editor
+	 */
+	private void synchronizeOpQuotes(Opinion fileOp, TreeItem displayOp) {
+		
+		HashSet<Integer> newQuotesIds = new HashSet<Integer>();
+
+		// find all the quotes existing in the opinion (not the tree)
+		for (Quote quote : discussion.getQuotes(fileOp.getName())) {
+			int id = quote.getID();
+			newQuotesIds.add(id);
+		}
+		// now new quotes has all the quotes in the file
+
+		// for each quote in the tree, find its status (belongs, doesn't belong)
+		for (TreeItem quoteItem : displayOp.getItems()) {
+			int id = getQuote(quoteItem).getID();
+			if (!newQuotesIds.contains(id)) {
+				// remove the opinion from the view
+				quoteItem.dispose();
+			} else {
+				// mark that the opinion is already in the view
+				newQuotesIds.remove(id);
 			}
 		}
+		// now new quotes contains only the new quotes id's
+		
+		// Find whether there's a differnce between the order of the file and our order
+		// if there is, clean all the opinion and add the quotes according to their order
+		TreeItem[] quoteItems = displayOp.getItems();
+		Quote[] fileQuotes = discussion.getSortedQuotes( fileOp.getName() );
+		
+		boolean difference = (quoteItems.length != fileQuotes.length);
+		int i = 0;
+		
+		while (!difference && i < quoteItems.length)
+		{
+			int dispId = getQuote(quoteItems[i]).getID();
+			int fileId = fileQuotes[i].getID();
+			
+			difference = difference || (dispId != fileId);
+			i ++;
+		}
+		
+		if (!difference)
+			return; // all ok :)
+		
+		// else, build this opinion branch anew
+		for (TreeItem ti : quoteItems)
+			ti.dispose();
+		
+		// add all the quotes back to the tree, according to their order
+		// expend the quotes that are new
+		for (Quote q : fileQuotes) {
+			TreeItem qItem = addTreeQuote(displayOp, q);
+			if ( newQuotesIds.contains( q.getID() ) )
+				qItem.setExpanded(true);
+		}
+		
+		// expend the opinion if it contains new quotes
+		if (newQuotesIds.size() > 0)
+			displayOp.setExpanded(true);
+		
+		return;
 	}
 	
 	
@@ -841,7 +883,7 @@ public class DiscussionEditor extends TextEditor {
 			localModificationStamp = t;
 			synchronizeOpinions();
 			// now the opinions should be synchronized with the file
-			synchronizeQuotes();
+			synchronizeAllQuotes();
 		}
 	}
 	
