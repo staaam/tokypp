@@ -330,6 +330,13 @@
             icon="icons/sample.gif"
             id="lost.tok.linkDisView.LinkDisView"
             name="Linked Discussions"/>
+      <view
+            allowMultiple="false"
+            category="lost.tok.Categoy"
+            class="lost.tok.RelationView.RelationView"
+            icon="icons/relation.gif"
+            id="lost.tok.RelationView.RelationView"
+            name="Relations View"/>
    </extension>
 	<extension
          point="org.eclipse.ui.exportWizards">
