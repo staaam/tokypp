@@ -25,6 +25,7 @@ public class AuthorsHandler {
 	public String name;
 	public int rank;
 	public static final String DEFAULT_RANK = Messages.getString("AuthorsHandler.DefRank");
+	public static final String RANK = Messages.getString("AuthorsHandler.Rank");
 
 
 	/**********************************************************************
