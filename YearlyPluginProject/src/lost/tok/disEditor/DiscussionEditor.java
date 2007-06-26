@@ -455,6 +455,7 @@ public class DiscussionEditor extends TextEditor {
 	
 	private void addLinks(TreeItem parent) {
 		Link l = discussion.getLink();
+		if (l == null) return;
 
 		TreeItem linkItem = new TreeItem(parent, SWT.MULTI | SWT.WRAP);
 		linkItem.setImage(ImageManager.getImage(ImageType.LINK));
