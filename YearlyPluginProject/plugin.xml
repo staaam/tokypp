@@ -355,6 +355,22 @@
             name="%wizards.catagory"/>
    </extension>
    <extension
+         point="org.eclipse.ui.exportWizards">
+      <wizard
+            category="lost.tok.ExportCategory"
+            class="lost.tok.wizards.ExportSource"
+            icon="icons/sample.gif"
+            id="lost.tok.exportSource.ExportSource"
+            name="Export Sources">
+         <description>
+            Exports sources from a Tok Project
+         </description>
+      </wizard>
+      <category
+            id="lost.tok.ExportCategory"
+            name="%wizards.catagory"/>
+   </extension>
+   <extension
          id="TOKPerspective"
          name="TOK perspective"
          point="org.eclipse.ui.perspectives">
@@ -378,6 +394,22 @@
             name="%wizard.discussion.import">
          <description>
             Imports discussions into the Tok Project
+         </description>
+      </wizard>
+   </extension>
+   <extension
+         point="org.eclipse.ui.importWizards">
+      <category
+            id="lost.tok.ImportCategory"
+            name="%wizards.catagory"/>
+      <wizard
+            category="lost.tok.ImportCategory"
+            class="lost.tok.wizards.ImportSource"
+            icon="icons/sample.gif"
+            id="lost.tok.wizards.ImportSource"
+            name="Import Sources">
+         <description>
+            Imports sources into the Tok Project
          </description>
       </wizard>
    </extension>
