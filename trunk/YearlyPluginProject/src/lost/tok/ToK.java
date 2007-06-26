@@ -39,6 +39,9 @@ public class ToK {
 	public final static QualifiedName creatorQName = new QualifiedName(
 			"lost.tok", "Creator"); //$NON-NLS-1$ //$NON-NLS-2$
 
+	/** The default ranking of authors */
+	public static final int DEFAULT_AUTHOR_GROUP_RANK = 0;
+	
 	/** The minimal ranking of authors */
 	public static final int MIN_AUTHOR_GROUP = 1;
 
@@ -579,6 +582,15 @@ public class ToK {
 		// Create the Skeleton of the authors file
 		Element authElm = authDoc.addElement("authors"); //$NON-NLS-1$
 
+		//default rank first
+		Element defaultRankElem = authElm.addElement("authorsGroup"); //$NON-NLS-1$
+		defaultRankElem.addElement("id").addText(Integer.toString(DEFAULT_AUTHOR_GROUP_RANK)); //$NON-NLS-1$
+		defaultRankElem.addElement("name").addText(AuthorsHandler.DEFAULT_RANK); //$NON-NLS-1$
+		defaultRankElem.addElement("nextGroupId").addText( //$NON-NLS-1$
+				String.valueOf(nextOf(DEFAULT_AUTHOR_GROUP_RANK)));
+		defaultRankElem.addElement("prevGroupId").addText( //$NON-NLS-1$
+				String.valueOf(prevOf(DEFAULT_AUTHOR_GROUP_RANK)));
+		
 		for (int i = MIN_AUTHOR_GROUP; i <= MAX_AUTHOR_GROUP; i++) {
 			Element inAuthElm = authElm.addElement("authorsGroup"); //$NON-NLS-1$
 			inAuthElm.addElement("id").addText(String.valueOf(i)); //$NON-NLS-1$
