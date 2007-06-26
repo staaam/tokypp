@@ -90,6 +90,7 @@ NewDiscussionWizard.0=אשף דיון חדש
 NewDiscussionPage.ErrDiscAlreadyExist=הדיון כבר קיים
 DiscCombo.new=חדש...
 AuthorsHandler.DefRank=דירוג ברירת המחדל
+AuthorsHandler.Rank=דירוג
 Discussion.1=מחלוקת
 Discussion.2=ביאור
 Discussion.DefOpinion=דעת ברירת המחדל
