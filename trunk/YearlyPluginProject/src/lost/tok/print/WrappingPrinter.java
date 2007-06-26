@@ -1,7 +1,5 @@
 package lost.tok.print;
 
-import java.awt.Image;
-
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
