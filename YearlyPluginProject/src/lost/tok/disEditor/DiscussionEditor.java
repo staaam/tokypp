@@ -1,5 +1,7 @@
 package lost.tok.disEditor;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.TreeMap;
 
@@ -31,6 +33,7 @@ import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
@@ -68,11 +71,33 @@ public class DiscussionEditor extends TextEditor {
 
 	private long localModificationStamp;
 	
+	//images for the tree
+	private Image discImage; 
+	private Image opinImage; 
+	private Image quoteImage;
 	
 	//******* C ' T O R *************************************
 	
 	public DiscussionEditor() {
 		super();
+		
+		//initializing images
+		InputStream discImgPath = null;
+		InputStream opinImgPath = null;
+		InputStream quoteImgPath = null;
+		
+		try {
+			discImgPath = ToK.getInputStream(ToK.ICONS_FOLDER + "/discussion.gif");
+			opinImgPath = ToK.getInputStream(ToK.ICONS_FOLDER + "/chat.ico");
+			quoteImgPath = ToK.getInputStream(ToK.ICONS_FOLDER + "/AddQuote.bmp");
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		discImage = new Image(null,discImgPath);
+		opinImage = new Image(null,opinImgPath);
+		quoteImage = new Image(null,quoteImgPath);
 	}
 
 	
@@ -390,7 +415,9 @@ public class DiscussionEditor extends TextEditor {
 		// *************************** ASSIGN TREE EDITOR  *********************
 		// **********************************************************************
 		rootItem = new TreeItem(disTree, SWT.MULTI | SWT.WRAP);
-
+		
+		rootItem.setImage(discImage);
+		
 		rootItem.setText(discussion.getDiscName() + " (" + "Creator: " + discussion.getCreatorName() + ")");
 		rootItem.setData(DISCUSSION);
 
@@ -402,10 +429,11 @@ public class DiscussionEditor extends TextEditor {
 
 					for (Opinion opinion : discussion.getOpinions()) {
 						TreeItem opinionItem = addTreeOpinion(rootItem, opinion);
-
+						//opinionItem.setImage(opinImage);
 						for (Quote quote : discussion.getQuotes(opinion
 								.getName())) {
-							addTreeQuote(opinionItem, quote);
+							TreeItem quoteItem = addTreeQuote(opinionItem, quote);
+							//quoteItem.setImage(quoteImage);
 						}
 					}
 
@@ -450,6 +478,7 @@ public class DiscussionEditor extends TextEditor {
 		// FileInputStream("C:/opinion.gif"));
 
 		setTreeOpinion(opinion, opinionItem);
+		opinionItem.setImage(opinImage);
 		return opinionItem;
 	}
 
@@ -460,6 +489,7 @@ public class DiscussionEditor extends TextEditor {
 		// FileInputStream("C:/quote.gif"));
 
 		setTreeQuote(quote, quoteItem);
+		quoteItem.setImage(quoteImage);
 		return quoteItem;
 	}
 
