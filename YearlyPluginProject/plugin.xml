@@ -124,7 +124,7 @@
          <action
                class="lost.tok.html.other.ExportAction"
                enablesFor="1"
-               icon="icons/sample.gif"
+               icon="icons/web_doc.bmp"
                id="lost.tok.ExportToHTMLAction"
                label="Create HTML"
                tooltip="Exports the entire ToK to an HTML site"/>
@@ -140,7 +140,7 @@
             targetID="lost.tok.opTable.OperationTable">
          <action
                class="lost.tok.opTable.actions.SwitchOpTableViewAction"
-               icon="icons/link.jpg"
+               icon="icons/link_ico.gif"
                id="lost.tok.opTable.switchView"
                label="%action.label.discussions.show"
                menubarPath="edit/additions"
@@ -217,7 +217,7 @@
          <action
                class="lost.tok.disEditor.AddOpinionAction"
                definitionId="lost.tok.disEditor.command.addOpinion"
-               icon="icons/link_ico.gif"
+               icon="icons/chat.ico"
                id="lost.tok.disEditor.addOpinion"
                label="%action.name.addOpinion"
                menubarPath="edit/OpTableGroup"
