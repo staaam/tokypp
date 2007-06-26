@@ -14,7 +14,6 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.wizard.WizardDialog;
-import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.part.FileEditorInput;
 
@@ -28,18 +27,29 @@ public class AddQuoteAction extends AbstractEditorAction {
 	public void run(IAction action) {
 		AddQuoteAction.action = action;
 
-		List<Excerption> excerptions = ((OperationTable) activeEditor)
-				.getExcerptions();
+		OperationTable operationTable = (OperationTable) activeEditor;
+		
+		if (operationTable.isRootDiscussionsView()) {
+			messageBox(
+					Messages.getString("AddQuoteAction.Error"), //$NON-NLS-1$
+					"Disabled when Linked Discussions are shown");
+			return;
+		}
+			
+		
+		List<Excerption> excerptions = operationTable.getExcerptions();
 
 		if (excerptions.isEmpty()) {
 			messageBox(
-					Messages.getString("AddQuoteAction.Error"), Messages.getString("AddQuoteAction.NoMarkedText")); //$NON-NLS-1$ //$NON-NLS-2$
+					Messages.getString("AddQuoteAction.Error"), //$NON-NLS-1$
+					Messages.getString("AddQuoteAction.NoMarkedText")); //$NON-NLS-1$
 			return;
 		}
 
 		if (!(activeEditor.getEditorInput() instanceof FileEditorInput)) {
 			messageBox(
-					Messages.getString("AddQuoteAction.Error"), Messages.getString("AddQuoteAction.SourceNotLinkedToProject")); //$NON-NLS-1$ //$NON-NLS-2$
+					Messages.getString("AddQuoteAction.Error"), //$NON-NLS-1$
+					Messages.getString("AddQuoteAction.SourceNotLinkedToProject")); //$NON-NLS-1$
 			return;
 		}
 
@@ -66,13 +76,6 @@ public class AddQuoteAction extends AbstractEditorAction {
 		if (w.finished()) {
 			((OperationTable) activeEditor).clearMarked();
 		}
-	}
-
-	void messageBox(String title, String message) {
-		MessageBox mb = new MessageBox(activeEditor.getSite().getShell());
-		mb.setText(title);
-		mb.setMessage(message);
-		mb.open();
 	}
 
 	static public IAction getQuoteAction() {

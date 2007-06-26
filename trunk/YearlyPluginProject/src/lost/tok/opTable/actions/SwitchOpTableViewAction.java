@@ -2,11 +2,9 @@ package lost.tok.opTable.actions;
 
 import lost.tok.Messages;
 import lost.tok.Source;
-import lost.tok.ToK;
 import lost.tok.opTable.OperationTable;
 
 import org.eclipse.jface.action.IAction;
-import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.part.FileEditorInput;
 
@@ -41,11 +39,10 @@ public class SwitchOpTableViewAction extends AbstractEditorAction {
 	private void actualRun(IAction action)
 	{
 		// return an error messege if called from a source that is not a root
-		if (((FileEditorInput) activeEditor.getEditorInput()).getFile()
-				.getProjectRelativePath().toPortableString().startsWith(
-						ToK.SOURCES_FOLDER)) {
+		if (!new Source(((FileEditorInput) activeEditor.getEditorInput()).getFile()).isRoot()) {
 			messageBox(
-					Messages.getString("AddQuoteAction.Error"), Messages.getString("SwitchOpTableViewAction.0")); //$NON-NLS-1$ //$NON-NLS-2$
+					Messages.getString("AddQuoteAction.Error"),
+					Messages.getString("SwitchOpTableViewAction.0")); //$NON-NLS-1$ //$NON-NLS-2$
 			return;
 		}
 
@@ -78,12 +75,4 @@ public class SwitchOpTableViewAction extends AbstractEditorAction {
 			e.printStackTrace();
 		}
 	}
-
-	void messageBox(String title, String message) {
-		MessageBox mb = new MessageBox(activeEditor.getSite().getShell());
-		mb.setText(title);
-		mb.setMessage(message);
-		mb.open();
-	}
-
 }

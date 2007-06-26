@@ -3,6 +3,7 @@ package lost.tok.opTable.actions;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.editors.text.TextEditor;
@@ -31,6 +32,13 @@ public abstract class AbstractEditorAction implements IEditorActionDelegate {
 	public void selectionChanged(IAction action, ISelection selection) {
 		assert (selection instanceof TextSelection);
 		currentSelection = (TextSelection) selection;
+	}
+
+	void messageBox(String title, String message) {
+		MessageBox mb = new MessageBox(activeEditor.getSite().getShell());
+		mb.setText(title);
+		mb.setMessage(message);
+		mb.open();
 	}
 
 }
