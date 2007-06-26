@@ -29,6 +29,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
@@ -184,12 +185,14 @@ public class GeneralFunctions {
 
 		IViewPart view = activePage.findView(viewId);
 
-		if (view == null)
+		if (view == null) {
 			try {
 				view = activePage.showView(viewId);
-				activePage.getActiveEditor().setFocus();
 			} catch (PartInitException e) {
 			}
+			IEditorPart activeEditor = activePage.getActiveEditor();
+			if (activeEditor != null) activeEditor.setFocus();
+		}
 		else if (bringToTop)
 			activePage.bringToTop(view);
 		
