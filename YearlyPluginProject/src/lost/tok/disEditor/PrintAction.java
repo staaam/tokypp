@@ -4,8 +4,6 @@ import lost.tok.print.PrintDiscussion;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IFileEditorInput;
-import org.eclipse.ui.editors.text.TextEditor;
 
 public class PrintAction extends Action {
 	

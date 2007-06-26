@@ -8,17 +8,12 @@ import lost.tok.Discussion;
 import lost.tok.GeneralFunctions;
 import lost.tok.Source;
 import lost.tok.ToK;
-import lost.tok.activator.Activator;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.Platform;
-import org.osgi.framework.Bundle;
 
 /**
  * Creates, Generates and Picks CSS files for the html exporter
