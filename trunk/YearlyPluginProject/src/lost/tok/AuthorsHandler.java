@@ -26,6 +26,7 @@ public class AuthorsHandler {
 	public int rank;
 	public static final String DEFAULT_RANK = Messages.getString("AuthorsHandler.DefRank");
 	public static final String RANK = Messages.getString("AuthorsHandler.Rank");
+	public static final String AUTHORS_RANK_TREE = Messages.getString("AuthorsHandler.RankTree");
 
 
 	/**********************************************************************
@@ -274,6 +275,29 @@ public class AuthorsHandler {
 		writeToXml(doc);
 	}
 
+	public int getAuthorRank(String authName){
+		
+		int resultRank = 0;
+		
+		try{
+			Document doc = readFromXML();
+	
+			XPath xpathSelector1 = DocumentHelper.createXPath("//authorsGroup/author[.='" + authName + "']/../id");
+			List result = xpathSelector1.selectNodes(doc);
+			
+			if (result.size() == 1) {
+				Element element = (Element) result.get(0);
+	
+				resultRank = Integer.valueOf(element.getText());
+			}
+		}
+		catch(Exception e){
+			//do nothing
+		}
+		
+		return resultRank;
+	}
+	
 	private String getFullFileName() {
 		return getFile().getLocation().toOSString();
 	}
