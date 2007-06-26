@@ -4,6 +4,7 @@ import java.util.TreeMap;
 
 import lost.tok.Author;
 import lost.tok.AuthorsHandler;
+import lost.tok.Messages;
 import lost.tok.Rank;
 import lost.tok.ToK;
 
@@ -20,11 +21,14 @@ import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
+import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.part.FileEditorInput;
 
@@ -36,6 +40,7 @@ public class AuthorsEditor extends TextEditor {
 	public static final int DEFAULT_RANK_ID = 1;
 	
 	public static final String EDITOR_ID = "lost.tok.authEditor.AuthorsEditor";
+	public static final String  AUTHORS_RANK_TREE = AuthorsHandler.AUTHORS_RANK_TREE;
 	private static final String AUTHORS_GROUPS = "Authors Groups";
 	private static final String AUTHOR = "Author";
 	private static final String RANK = "Rank";
@@ -54,8 +59,20 @@ public class AuthorsEditor extends TextEditor {
 	public void createPartControl(Composite parent) {
 		final Composite par = parent;
 		final Tree authTree = new Tree(parent, SWT.MULTI | SWT.WRAP | SWT.BORDER);
+		
+		
+		//******* DEBUG *************************************************	
+		
+		//org.eclipse.core.runtime
+		
+		//set handler to "copy new source to source folder" action
+		//IActionBars actionBars = this.getProject(). getViewSite().getActionBars();
+		   //actionBars.setGlobalActionHandler(ActionFactory.COPY.getId(),copyAction);
 
-
+		//******* DEBUG *************************************************
+		   
+		   
+		   
 		// *************************************************
 		// ***************** DRAG AND DROP *****************
 		// *************************************************
@@ -252,7 +269,7 @@ public class AuthorsEditor extends TextEditor {
 
 		rootItem = new TreeItem(authTree, SWT.MULTI | SWT.WRAP);
 
-		rootItem.setText("Authors rank groups");
+		rootItem.setText(AUTHORS_RANK_TREE);
 		rootItem.setData(AUTHORS_GROUPS);
 
 		parent.getChildren()[0].addControlListener(new ControlAdapter() {
@@ -275,8 +292,7 @@ public class AuthorsEditor extends TextEditor {
 			}
 
 		});
-
-
+		
 		// expends the root and it's ranks, but not the authors
 		expendToDepth(rootItem, 3);
 	}
