@@ -53,6 +53,8 @@ public class Perspective implements IPerspectiveFactory {
 		IFolderLayout left = layout.createFolder(
 				"left", IPageLayout.LEFT, (float) 0.26, editorArea); //$NON-NLS-1$
 		left.addView("org.eclipse.jdt.ui.PackageExplorer"); //$NON-NLS-1$
+		left.addView("org.eclipse.ui.views.ResourceNavigator");
+
 
 		// Place the Excerption view underneath
 		// editor area.
