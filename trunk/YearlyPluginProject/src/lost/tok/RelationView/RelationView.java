@@ -1,26 +1,21 @@
 package lost.tok.RelationView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import lost.tok.Discussion;
+import lost.tok.GeneralFunctions;
+import lost.tok.Relation;
 
-import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.jface.viewers.CheckboxCellEditor;
-import org.eclipse.jface.viewers.ComboBoxCellEditor;
-import org.eclipse.jface.viewers.ICellModifier;
-import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
+import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.TextCellEditor;
-import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
@@ -29,22 +24,28 @@ public class RelationView extends ViewPart {
 	
 	public final static String ID = "lost.tok.RelationView.RelationView"; //$NON-NLS-1$
 	
-	public class Relation {
-		public String getFirstName(){
-			return "Arie";
-		}
-		
-		public String getSecondName(){
-			return "Also Arie";
-		}
-		
-		public String getrelationType(){
-			return Discussion.relDisplayNames[0];
+	public class RelationContentProvider implements IStructuredContentProvider {
+
+		@SuppressWarnings("unchecked")
+		public Object[] getElements(Object inputElement) {
+			if (inputElement instanceof List) {
+				List elements = (List) inputElement;
+				return elements.toArray(new Object[elements.size()]);
+			}
+			return new Object[0];
 		}
 
+		public void dispose() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+			// TODO Auto-generated method stub
+			
+		}
+		
 	}
-
-
 
 	public class RelationLabelProvider implements ITableLabelProvider {
 
@@ -57,16 +58,17 @@ public class RelationView extends ViewPart {
 			String result = "";
 	        Relation rel = (Relation) element;
 	        switch (columnIndex) {
-	            case 0:  // COMPLETED_COLUMN
-	                break;
-	            case 1 :
+	            case 0:
 	                result = rel.getFirstName();
 	                break;
-	            case 2 :
+	            case 1:
 	                result = rel.getSecondName();
 	                break;
-	            case 3 :
-	                result = rel.getrelationType();
+	            case 2:
+	                result = rel.getRelationType();
+	                break;
+	            case 3:
+	                result = rel.getComment();
 	                break;
 	        }
 	        return result;
@@ -94,53 +96,40 @@ public class RelationView extends ViewPart {
 
 	}
 
-
-
-	public class RelationContentProvider implements IContentProvider {
-
-		public void dispose() {
-			// TODO Auto-generated method stub
-
-		}
-
-		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-			// TODO Auto-generated method stub
-
-		}
-
-	}
-
-
-
-	private static final String[] ColumnNames = {"Discussion Entity","Discussion Entity","Relation Type"};
-	private TableViewer table;
-	private List<Relation> relationList = new ArrayList<Relation>();
-
+	private static final String[] ColumnNames = 
+		{"Discussion Entity",
+		 "Discussion Entity",
+		 "Relation Type",
+		 "Comment"};
+	private TableViewer tableViewer;
 	
 	@Override
 	public void createPartControl(Composite parent) {
-		relationList.add(new Relation());
-		createTableViewer(parent);
+		tableViewer = new TableViewer(parent);
+		tableViewer.setContentProvider(new RelationContentProvider());
+		tableViewer.setLabelProvider(new RelationLabelProvider());
+		Table table = tableViewer.getTable();
+		for (String columnName : ColumnNames) {
+			TableColumn tableColumn = new TableColumn(table, SWT.NONE);
+			tableColumn.setText(columnName);
+			tableColumn.setWidth(150);
+		}
+		table.setHeaderVisible(true);
+		//tableViewer.setColumnProperties(ColumnNames);
+		tableViewer.refresh();
 	}
-
-	
-
-	private void createTableViewer(Composite parent) {
-		// TODO Auto-generated method stub
-		table = new TableViewer(parent);
-		table.setContentProvider(new RelationContentProvider());
-		table.setLabelProvider(new RelationLabelProvider());
-		table.setInput(relationList);
-		table.setColumnProperties(ColumnNames);
-		table.refresh();
-	}
-
-
 
 	@Override
 	public void setFocus() {
-		// TODO Auto-generated method stub
-		
+		tableViewer.getControl().setFocus();
+	}
+
+	public void update(Discussion d) {
+		tableViewer.setInput(d.getRelations());
+	}
+
+	public static RelationView getView(boolean bringToTop) {
+		return (RelationView) GeneralFunctions.getView(RelationView.ID, bringToTop);
 	}
 
 }

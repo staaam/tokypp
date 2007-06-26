@@ -11,6 +11,7 @@ import lost.tok.Opinion;
 import lost.tok.Quote;
 import lost.tok.SubLink;
 import lost.tok.ToK;
+import lost.tok.RelationView.RelationView;
 import lost.tok.imageManager.ImageManager;
 import lost.tok.imageManager.ImageType;
 import lost.tok.opTable.OperationTable;
@@ -878,6 +879,7 @@ public class DiscussionEditor extends TextEditor {
 	 */
 	@Override
 	public void setFocus() {
+		updateViews();
 		super.setFocus();
 		long t = discussion.getModificationStamp();
 		if (t != localModificationStamp) {
@@ -888,6 +890,13 @@ public class DiscussionEditor extends TextEditor {
 		}
 	}
 	
+	private void updateViews() {
+		RelationView view = RelationView.getView(true);
+		if (view != null)
+			view.update(discussion);
+		
+	}
+
 	@Override
 	protected void doSetInput(IEditorInput input) throws CoreException {
 		setDocumentProvider(new StorageDocumentProvider());
