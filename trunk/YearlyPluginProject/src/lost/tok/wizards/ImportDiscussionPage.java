@@ -429,7 +429,7 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 		if (!ensureSourceIsValid()) {
 			return false;
 		}
-
+		
 		saveWidgetValues();
 
 		Iterator resourcesEnum = getSelectedResources().iterator();
@@ -760,7 +760,7 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 			result = executeImportOperation(operation);
 
 			// Merge link files
-
+			createTempLinksFile(zipFile);
 			mergeLinkfiles();
 			deleteTempLinksFile();
 
@@ -1036,4 +1036,5 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 		this.selectionGroup.addCheckStateListener(listener);
 
 	}
+	
 }
