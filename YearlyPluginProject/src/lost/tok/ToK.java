@@ -3,6 +3,8 @@ package lost.tok;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -21,10 +23,13 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.QualifiedName;
+import org.osgi.framework.Bundle;
 
 /**
  * @author Team LOST
@@ -65,6 +70,7 @@ public class ToK {
 			.getString("ToK.UnparsedFolder"); //$NON-NLS-1$
 	
 	static public final String HTML_FOLDER = "html";
+	static public final String ICONS_FOLDER = "icons";
 
 	public static boolean checkFileName(String projectName) {
 		if (projectName.replace('\\', '/').indexOf('/', 1) > 0)
@@ -804,5 +810,18 @@ public class ToK {
 		} catch (CoreException e) {
 			return null;
 		}
+	}
+	
+	/**
+	 * Returns an input stream of an internal test file
+	 * @param filePath the path to the file in the project's files
+	 * @return input stream of the file
+	 * @throws IOException if opening fails
+	 */
+	static public InputStream getInputStream(String filePath) throws IOException{
+		Path path = new Path(filePath);
+        Bundle bundle = Platform.getBundle("lost.tok");
+
+        return FileLocator.openStream(bundle, path, false);
 	}
 }
