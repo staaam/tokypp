@@ -1,13 +1,18 @@
 package lost.tok.wizards;
 
 import lost.tok.Messages;
+import lost.tok.RelationView.RelationView;
+import lost.tok.disEditor.DiscussionEditor;
 
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWizard;
+import org.eclipse.ui.PlatformUI;
 
 /**
  * New relation creation wizard
@@ -66,7 +71,18 @@ public class NewRelation extends Wizard implements INewWizard {
 		Integer[] ids = page.getSelectedQuotes();
 		page.getDiscussion().createRelation(ids[0], ids[1], page.getComment(),
 				page.getRelationType());
-
+		
+		updateRelationView();
 		return true;
+	}
+
+	private void updateRelationView() {
+		IWorkbenchWindow ww = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		IEditorPart activeEditor = ww.getActivePage().getActiveEditor();
+		if (activeEditor instanceof DiscussionEditor) {
+			DiscussionEditor de = (DiscussionEditor) activeEditor;
+			if (de.getDiscussion() == page.getDiscussion())
+				RelationView.getView(true).update(page.getDiscussion());
+		}
 	}
 }
