@@ -184,4 +184,5 @@ PrintDiscussion.PrintLinkType=סוג הקישור:
 PrintDiscussion.PrintComment=הערה: 
 PrintDiscussion.PrintRelatedTo=מקושר ל: \n
 PrintDiscussion.PrintBibliography=ביבליוגרפיה:\n
+PrintDiscussion.PrintDescription=תיאור:
 PrintDiscussion.PrintSignature=~~~\t     עץ הדעת - LOST     \t ~~~\n
