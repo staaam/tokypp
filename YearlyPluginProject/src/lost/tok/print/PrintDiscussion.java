@@ -11,6 +11,7 @@ import java.util.List;
 
 import lost.tok.Discussion;
 import lost.tok.Link;
+import lost.tok.Messages;
 import lost.tok.Opinion;
 import lost.tok.Quote;
 import lost.tok.Source;
@@ -49,18 +50,18 @@ public class PrintDiscussion {
 		if (d==null)
 			return null;
 		
-		File discFile = new File(d.getDiscName() + ".txt");
+		File discFile = new File(d.getDiscName() + ".txt"); //$NON-NLS-1$
 		
 		FileWriter fw = new FileWriter(discFile);
 		//fw.write("testing 123");
 		
 		
-		fw.write("=========================================\n");
-		fw.write("=========== DISCUSSION PRINT ============\n");
-		fw.write("=========================================\n");
+//		fw.write("=========================================\n");
+//		fw.write("=========== DISCUSSION PRINT ============\n");
+//		fw.write("=========================================\n");
 		
-		fw.write("Discussion Name: " + d.getDiscName() + "\n");
-		fw.write("Author: " + d.getCreatorName() + "\n");
+		fw.write(Messages.getString("PrintDiscussion.PrintDiscussionName") + d.getDiscName() + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
+		fw.write(Messages.getString("PrintDiscussion.PrintAuthorName") + d.getCreatorName() + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
 		//MICHAL - to un-comment when getDescription() will be created
 		//fw.write("Description: " + d.getDescription());
 		
@@ -70,18 +71,18 @@ public class PrintDiscussion {
 		if (link!=null){
 			
 			//the text of the link:
-			fw.write("\nLink Description:" + link.getSubject() + "\n");
+			fw.write(Messages.getString("PrintDiscussion.PrintLinkDescription") + link.getSubject() + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
 			//the link type
-			fw.write("Link Type: " + link.getDisplayLinkType() + "\n");
+			fw.write(Messages.getString("PrintDiscussion.PrintLinkType") + link.getDisplayLinkType() + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
 			
 			//links to sources:
-			fw.write("Related to: \n");
+			fw.write(Messages.getString("PrintDiscussion.PrintRelatedTo")); //$NON-NLS-1$
 			for (SubLink sl: link.getSubLinkList()){
-				fw.write("\t"+sl.getLinkedSource().toString() + "\n");
+				fw.write("\t"+sl.getLinkedSource().toString() + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 		}
 	
-		fw.write("\n");
+		fw.write("\n"); //$NON-NLS-1$
 		
 		int opinionCounter = 1;
 		int pos=1;
@@ -90,7 +91,7 @@ public class PrintDiscussion {
 		// opinions:		
 		Opinion[] opinions = discussion.getOpinions();
 		for (Opinion o : opinions ){
-			fw.write(opinionCounter+") " + o.getName() + "\n");
+			fw.write(opinionCounter+") " + o.getName() + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
 			
 			int quoteCounter = 1;
 			
@@ -122,13 +123,13 @@ public class PrintDiscussion {
 					pos=sourceList.size();
 				}
 				
-				if (q.getComment()==""){ //no comment on quote
-					fw.write("\t"+opinionCounter + "." + quoteCounter+") "
-							+ q.getText() + " [" + pos + "]\n");
+				if (q.getComment()==""){ //no comment on quote //$NON-NLS-1$
+					fw.write("\t"+opinionCounter + "." + quoteCounter+") " //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+							+ q.getText() + " [" + pos + "]\n"); //$NON-NLS-1$ //$NON-NLS-2$
 				}
 				else{ //with comment
-					fw.write("\t"+opinionCounter + "." + quoteCounter+") "
-							+ q.getText() + ", <comment: " + q.getComment()+"> [" + pos + "]\n");
+					fw.write("\t"+opinionCounter + "." + quoteCounter+") " //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+							+ q.getText() + ", <" + Messages.getString("PrintDiscussion.PrintComment") + q.getComment()+"> [" + pos + "]\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 					
 				}
 			
@@ -139,21 +140,21 @@ public class PrintDiscussion {
 		
 		
 		//bibliography:
-		fw.write("\n");
-		fw.write("Bibliography:\n");
+		fw.write("\n"); //$NON-NLS-1$
+		fw.write(Messages.getString("PrintDiscussion.PrintBibliography")); //$NON-NLS-1$
 				
 		for (int i=0; i<sourceList.size();i++){
 			SourceDocument sd = new SourceDocument();
 			sd.set(sourceList.get(i));
 			String author = sd.getAuthor();
-			fw.write("["+ (i+1) +"]" + sourceList.get(i).getFile().getName() + ", " + author + "\n");
+			fw.write("["+ (i+1) +"]" + sourceList.get(i).getFile().getName() + ", " + author + "\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		}
 		
 		//signature
-		fw.write("\n");
-		fw.write("=========================================\n");
-		fw.write("======= LOST - Tree of Knowladge ========\n");
-		fw.write("=========================================\n");
+		fw.write("\n"); //$NON-NLS-1$
+		fw.write("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"); //$NON-NLS-1$
+		fw.write(Messages.getString("PrintDiscussion.PrintSignature")); //$NON-NLS-1$
+		fw.write("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"); //$NON-NLS-1$
 		
 		fw.flush();
 		fw.close();
@@ -193,7 +194,7 @@ public class PrintDiscussion {
 			  reader = new BufferedReader(new FileReader(file));
 			  while (reader.ready()) {
 				  contents.append(reader.readLine());
-				  contents.append("\n"); // Throw away LF chars, and just replace CR
+				  contents.append("\n"); // Throw away LF chars, and just replace CR //$NON-NLS-1$
 			  }
 		  } 
 		  finally {
