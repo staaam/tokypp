@@ -3,6 +3,12 @@ package lost.tok;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
+/**
+ * Contains all data related to an author of
+ * a source in tree of knowledge
+ * @author evgeni
+ *
+ */
 public class Author {
 
 	private Integer ID;
