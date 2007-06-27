@@ -40,11 +40,7 @@ import org.eclipse.ui.part.FileEditorInput;
 
 public class AuthorsEditor extends TextEditor {
 	
-	//******* M E M B E R S *******************************
-	
-	// Note(Shay): I've moved this from the authors groups, since we cannot trust the def rank id
 	public static final int DEFAULT_RANK_ID = 0;
-	
 	public static final String EDITOR_ID = "lost.tok.authEditor.AuthorsEditor";
 	public static final String  AUTHORS_RANK_TREE = AuthorsHandler.AUTHORS_RANK_TREE;
 	private static final String AUTHORS_GROUPS = "Authors Groups";
@@ -54,49 +50,26 @@ public class AuthorsEditor extends TextEditor {
 	private TreeItem rootItem = null;
 	private int ctrlCurrentWidth = 0;
 	
-	//******* C ' T O R *************************************
+	
+	/**
+	 * Authors editor constructor
+	 *
+	 */
 	public AuthorsEditor() 
 	{
 		super();
 	}
 
 	
-	//******* CREATOR OF THE TREE EDITOR *****************************	
+	/**
+	 * Creates the editor, initializes the tree.
+	 * Defines listeners; drag, drop, resize, gain focus
+	 */
 	public void createPartControl(Composite parent) {
 		final Composite par = parent;
 		final Tree authTree = new Tree(parent, SWT.MULTI | SWT.WRAP | SWT.BORDER);
-		
-		
-		//******* DEBUG *************************************************	
-		
+   
 
-//		IAction print = getAction(IWorkbenchActionConstants.COPY);		 
-// 
-//		public void setActiveEditor(this) {
-//			
-//			IActionBars bars= getActionBars();
-//			if (bars == null)
-//				return;
-//			print.setEditor(part);
-//			bars.setGlobalActionHandler(IWorkbenchActionConstants.PRINT, print);
-//			bars.updateActionBars();
-//		}
-		
-		//set handler to "copy new source to source folder" action
-//		IActionBars actionBars = this.getEditorSite().getActionBars();
-//		
-//		actionBars.setGlobalActionHandler(ActionFactory.COPY.getId(),copyAction);
-//		actionBars.updateActionBars();
-
-		//org.eclipse.ui.IWorkbenchActionConstants.COPY
-		
-		//******* DEBUG *************************************************
-		   
-		   
-		   
-		// *************************************************
-		// ***************** DRAG AND DROP *****************
-		// *************************************************
 		Transfer[] types = new Transfer[] { TextTransfer.getInstance() };
 		int operations = DND.DROP_MOVE | DND.DROP_COPY | DND.DROP_LINK;
 
@@ -105,39 +78,24 @@ public class AuthorsEditor extends TextEditor {
 
 		final TreeItem[] dragSourceItem = new TreeItem[1];
 
+		//add drag listener		
 		source.addDragListener(new DragSourceListener() {
+			
+			//drag finished listener
 			public void dragFinished(DragSourceEvent event) {
-				
-				/**** DEBUG *************************************/
-//				MessageBox d = new MessageBox(par.getShell());
-//				d.setMessage("Drag Finished");
-//				d.open();
-				/************************************************/
-				
 				if (event.detail == DND.DROP_MOVE) {
 					dragSourceItem[0].dispose();
 				}
 				dragSourceItem[0] = null;
 			};
 
+			//drag set data listener
 			public void dragSetData(DragSourceEvent event) {
-				
-				/**** DEBUG *************************************/
-//				MessageBox d = new MessageBox(par.getShell());
-//				d.setMessage("Drag Set Data");
-//				d.open();
-				/************************************************/
-				
 				event.data = dragSourceItem[0].getText();
 			}
 
+			//drag start listener
 			public void dragStart(DragSourceEvent event) {
-				
-				/**** DEBUG *************************************/
-//				MessageBox d = new MessageBox(par.getShell());
-//				d.setMessage("Drag Start");
-//				d.open();
-				/************************************************/
 				
 				//enable drag only if one author is selected
 				TreeItem[] selection = authTree.getSelection();
@@ -151,17 +109,13 @@ public class AuthorsEditor extends TextEditor {
 			}
 		});
 
+		//add drop listener
 		DropTarget target = new DropTarget(authTree, operations);
 		target.setTransfer(types);
 		target.addDropListener(new DropTargetAdapter() {
+			
+			//drag over listener
 			public void dragOver(DropTargetEvent event) {
-				
-				/**** DEBUG *************************************/
-//				MessageBox d = new MessageBox(par.getShell());
-//				d.setMessage("Drag Over");
-//				d.open();
-				/************************************************/
-				
 				event.feedback = DND.FEEDBACK_EXPAND | DND.FEEDBACK_SCROLL;
 				if (event.item != null) {
 					TreeItem item = (TreeItem) event.item;
@@ -177,6 +131,7 @@ public class AuthorsEditor extends TextEditor {
 				}
 			}
 
+			//drop listener
 			public void drop(DropTargetEvent event) {
 				if (((TreeItem) event.item).getData().equals(AUTHOR)
 						|| ((TreeItem) event.item).getData().equals(AUTHORS_GROUPS)) {
@@ -189,11 +144,13 @@ public class AuthorsEditor extends TextEditor {
 					return;
 				}
 
+				//calc the exact places where we can drop the item
 				Author author = (Author) dragSourceItem[0].getData(AUTHOR);
 				if (event.item == null) {
 					TreeItem item = new TreeItem(authTree, SWT.NONE);
 					item.setText("error");
-				} else {
+				} 
+				else {
 					TreeItem item = (TreeItem) event.item;
 					Point pt = par.getDisplay().map(null, authTree, event.x,
 							event.y);
@@ -283,17 +240,16 @@ public class AuthorsEditor extends TextEditor {
 		});
 
 
-		// ***********************************************************************
-		// *************************** ASSIGN TREE EDITOR  *********************
-		// **********************************************************************
+		//build trees root
 		authHandler = getAuthorsHandler();
-
 		rootItem = new TreeItem(authTree, SWT.MULTI | SWT.WRAP);
-
 		rootItem.setText(AUTHORS_RANK_TREE);
 		rootItem.setData(AUTHORS_GROUPS);
 
+		//add editors listeners
 		parent.getChildren()[0].addControlListener(new ControlAdapter() {
+			
+			//control resized listener
 			public void controlResized(ControlEvent e) {
 				if (ctrlCurrentWidth != par.getSize().x) {
 					ctrlCurrentWidth = par.getSize().x;
@@ -312,31 +268,26 @@ public class AuthorsEditor extends TextEditor {
 
 					rootItem.setExpanded(true);
 				}
-			}			
+			}	
 		});
 		
-		authTree.addFocusListener(new FocusListener(){
+		//add focus listener
+		parent.getChildren()[0].addFocusListener(new FocusListener(){
 
+			//focus gained listener
 			public void focusGained(FocusEvent e) {			
 				authHandler.updateFile();
 				par.setSize(ctrlCurrentWidth-1,par.getSize().y);
 			}
 
-			public void focusLost(FocusEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
+			//focus lost listener
+			public void focusLost(FocusEvent e) {}			
 		});
 		
 		// expends the root and it's ranks, but not the authors
 		expendToDepth(rootItem, 3);
 	}
 
-	
-	
-//	****** P R I V A T E  F U N C T I O N S *****************************************
-	
 	/**
 	 * Expends the tree till it dies
 	 * 
@@ -356,7 +307,13 @@ public class AuthorsEditor extends TextEditor {
 			expendToDepth(child, depthLeft - 1);
 	}
 	
-//	add rank to tree
+
+	/**
+	 * Add authors group (rank) to tree
+	 * @param treeItem
+	 * @param rank
+	 * @return
+	 */
 	private TreeItem addTreeRank(TreeItem treeItem, Rank rank) {
 		TreeItem rankItem = new TreeItem(treeItem, SWT.MULTI | SWT.WRAP);
 
@@ -364,7 +321,12 @@ public class AuthorsEditor extends TextEditor {
 		return rankItem;
 	}
 
-//	add author to rank
+	/**
+	 * Add author to the tree
+	 * @param treeItem
+	 * @param author
+	 * @return
+	 */
 	private TreeItem addTreeAuthor(TreeItem treeItem, Author author) {
 		TreeItem authorItem = new TreeItem(treeItem, SWT.MULTI | SWT.WRAP);
 
@@ -372,19 +334,31 @@ public class AuthorsEditor extends TextEditor {
 		return authorItem;
 	}
 
-//	return rank from tree item
+	/**
+	 * Return rank from tree item
+	 * @param rankToRemove
+	 * @return rank
+	 */
 	private Rank getRank(TreeItem rankToRemove) {
 		Rank rank = (Rank) rankToRemove.getData(RANK);
 		return rank;
 	}
 
+	/**
+	 * Get author from tree item
+	 * @param itemToMove
+	 * @return author object
+	 */
 	private Author getAuthor(TreeItem itemToMove) {
 		Author author = (Author) itemToMove.getData(AUTHOR);
 		return author;
 	}
 
-
-//	set rank properties
+	/**
+	 * Set rank properties
+	 * @param rank
+	 * @param rankItem
+	 */
 	private void setTreeRank(Rank rank, TreeItem rankItem) {
 		rankItem.setText(rank.getName());
 		rankItem.setData(RANK, rank);
@@ -392,7 +366,11 @@ public class AuthorsEditor extends TextEditor {
 		// rankItem.setImage(imageOpin);
 	}
 
-//	set author properties
+	/**
+	 * Set author properties
+	 * @param author
+	 * @param authorItem
+	 */
 	private void setTreeAuthor(Author author, TreeItem authorItem) {
 
 		authorItem.setText(author.getName());
@@ -416,8 +394,8 @@ public class AuthorsEditor extends TextEditor {
 			existingRanks.put(id, rank);
 		}
 
-		// for each rank in the tree, find its status (belongs, doesn't
-		// belong)
+		// for each rank in the tree, find its status 
+		// (belongs, doesn't belong)
 		for (TreeItem rankItem : rootItem.getItems()) {
 			int id = getRank(rankItem).getId();
 			if (!existingRanks.containsKey(id)) {
@@ -436,72 +414,17 @@ public class AuthorsEditor extends TextEditor {
 			rankItem.setExpanded(true);
 		}
 	}
-
-
+	
 	/**
-	 * Synchronizes the ranks with a modified authors groups file
-	 * 
-	 * Assumption: The authors groups member is pointing to the new authors groups and
-	 * doesn't change. The ranks are already synchronized
-	 * 
-	 */	
-/*	private void synchronizeAuthorss() {
-		TreeMap<Integer, TreeItem> treeRanks = new TreeMap<Integer, TreeItem>();
-
-		// map the ranks in the tree: id->treeItem
-		for (TreeItem rankItem : rootItem.getItems()) {
-			int id = getRank(rankItem).getId();
-			treeRanks.put(id, rankItem);
-		}
-
-		// for each rank, update its authors
-		for (Rank ran : authHandler.getRanks()) {
-			int rankId = ran.getId();
-
-			TreeMap<Integer, Author> existingAuthors = new TreeMap<Integer, Author>();
-
-			// find all the authors existing in the rank (not the tree)
-			for (Author author : authHandler.getAuthors(ran.getName())) {
-				int id = author.getID();
-				existingAuthors.put(id, author);
-			}
-
-			TreeItem ranItem = treeRanks.get(rankId);
-
-			// for each author in the tree, find its status (belongs, doesn't
-			// belong)
-			for (TreeItem authorItem : ranItem.getItems()) {
-				int id = getAuthor(authorItem).getID();
-				if (!existingAuthors.containsKey(id)) {
-					// remove the rank from the view
-					authorItem.dispose();
-				} else {
-					// mark that the rank is already in the view
-					existingAuthors.remove(id);
-				}
-			}
-
-			// add the authors which weren't found in the tree
-			// and expend them and their ranks
-			for (Integer authorId : existingAuthors.keySet()) {
-				TreeItem aItem = addTreeAuthor(ranItem, existingAuthors.get(authorId));
-				ranItem.setExpanded(true);
-				aItem.setExpanded(true);
-			}
-		}
-	}
-*/	
-	
-//	****** P U B L I C  F U N C T I O N S *****************************************
-	
-//	return the AuthorsHandler
+	 * Return the handler of the authors file
+	 * @return
+	 */
 	public AuthorsHandler getAuthorsHandler() {
 		if (authHandler != null) {
 			return authHandler;
 		}
 
 		if (!(super.getEditorInput() instanceof FileEditorInput)) {
-			// todo - print error message
 			return null;
 		}
 
@@ -554,8 +477,7 @@ public class AuthorsEditor extends TextEditor {
 		}
 
 		if (i == ranItems.length)
-			return null; // dude, your rank id doesn't even exist!
-		// else
+			return null; //rank id doesn't exist
 
 		TreeItem[] aItems = rootItem.getItem(i).getItems();
 		Author[] authors = new Author[aItems.length];
@@ -567,43 +489,42 @@ public class AuthorsEditor extends TextEditor {
 		return authors;
 	}
 
-//	move diven author to default
+	/**
+	 * Move authors tree item to default rank
+	 * @param itemToMove
+	 */
 	public void moveAuthorToDefault(TreeItem itemToMove) {
 		Author author = getAuthor(itemToMove);
 		authHandler.relocateAuthor(author.getName(), AuthorsEditor.DEFAULT_RANK_ID);
 	}
 
-//	move given author to rank
+	/**
+	 * Move authors tree item to rank
+	 * @param authorToAdd
+	 */
 	public void moveAuthorToRank(TreeItem authorToAdd) {
 		Rank rank = (Rank) authorToAdd.getParentItem().getData(RANK);
 		Author author = getAuthor(authorToAdd);
 		authHandler.relocateAuthor(author.getName(), rank.getId());
 	}
 
-//	add new rank to tree
+	/**
+	 * Add new rank to tree
+	 * @param rankName
+	 */
 	public void addRank(String rankName) {
-//		authHandler.addRank(rankName);
 		addTreeRank(rootItem, new Rank(rankName, authHandler
 				.getRanksId(rankName)));
 	}
 
-/*	
-//	remove rank from file
-	public void removeRankFromFile(TreeItem rankToRemove) {
-		Rank rank = getRank(rankToRemove);
-		authHandler.removeRank(rank.getId());
-	}
-*/
-
-//	remove given author from file
+	/**
+	 * Remove author tree item from file
+	 * @param authorToRemove
+	 */
 	public void removeAuthorFromFile(TreeItem authorToRemove) {
 		Author author = getAuthor(authorToRemove);
 		authHandler.removeAuthor(author.getName());
 	}
-	
-	
-	
-//	****** P R O T E C T E D  F U N C T I O N S *****************************************
 	
 	/**
 	 * This method allows us to update the displayed information, when the files
