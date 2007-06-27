@@ -435,7 +435,7 @@ public class AuthorsEditor extends TextEditor {
 
 			ToK tok = ToK.getProjectToK(file.getProject());
 
-			AuthorsHandler d = new AuthorsHandler(tok,tok.getAuthorFile().toString());
+			AuthorsHandler d = new AuthorsHandler(tok,tok.getAuthorFile().getLocation().toOSString());
 			
 			return d;
 		} 
