@@ -6,9 +6,11 @@ import lost.tok.Author;
 import lost.tok.AuthorsHandler;
 import lost.tok.Messages;
 import lost.tok.Rank;
+import lost.tok.Source;
 import lost.tok.ToK;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DragSource;
@@ -22,12 +24,16 @@ import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.ControlListener;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.part.FileEditorInput;
@@ -63,12 +69,27 @@ public class AuthorsEditor extends TextEditor {
 		
 		//******* DEBUG *************************************************	
 		
-		//org.eclipse.core.runtime
+
+//		IAction print = getAction(IWorkbenchActionConstants.COPY);		 
+// 
+//		public void setActiveEditor(this) {
+//			
+//			IActionBars bars= getActionBars();
+//			if (bars == null)
+//				return;
+//			print.setEditor(part);
+//			bars.setGlobalActionHandler(IWorkbenchActionConstants.PRINT, print);
+//			bars.updateActionBars();
+//		}
 		
 		//set handler to "copy new source to source folder" action
-		//IActionBars actionBars = this.getProject(). getViewSite().getActionBars();
-		   //actionBars.setGlobalActionHandler(ActionFactory.COPY.getId(),copyAction);
+//		IActionBars actionBars = this.getEditorSite().getActionBars();
+//		
+//		actionBars.setGlobalActionHandler(ActionFactory.COPY.getId(),copyAction);
+//		actionBars.updateActionBars();
 
+		//org.eclipse.ui.IWorkbenchActionConstants.COPY
+		
 		//******* DEBUG *************************************************
 		   
 		   
@@ -278,6 +299,8 @@ public class AuthorsEditor extends TextEditor {
 					ctrlCurrentWidth = par.getSize().x;
 					rootItem.removeAll();
 
+					authHandler.updateFile();
+					
 					//add all other ranks
 					for (Rank rank : authHandler.getRanks()) {
 						TreeItem rankItem = addTreeRank(rootItem, rank);
@@ -289,8 +312,20 @@ public class AuthorsEditor extends TextEditor {
 
 					rootItem.setExpanded(true);
 				}
+			}			
+		});
+		
+		authTree.addFocusListener(new FocusListener(){
+
+			public void focusGained(FocusEvent e) {			
+				authHandler.updateFile();
 			}
 
+			public void focusLost(FocusEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
 		});
 		
 		// expends the root and it's ranks, but not the authors
