@@ -140,6 +140,10 @@ public class AuthorsHandler {
 	public void updateFile(){	
 		Source[] sources = myToK.getSources();
 		
+		/******** DEBUG ***********************************/
+		System.out.println("Got sources: sum="+sources.length);
+		/**************************************************/
+		
 		for(Source src : sources){
 			
 			String authName = src.getAuthor();
@@ -152,6 +156,10 @@ public class AuthorsHandler {
 			//author is NOT in file
 			if (result.size() == 0) {
 				try {
+					/******** DEBUG ***********************************/
+					System.out.println("Adding author:"+authName);
+					/**************************************************/
+					
 					this.addAuthor(new Author(defRank,authName), defRank);
 				} catch (CoreException e) {
 					// TODO Auto-generated catch block
