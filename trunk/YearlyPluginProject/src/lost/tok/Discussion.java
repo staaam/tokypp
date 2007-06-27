@@ -108,6 +108,30 @@ public class Discussion implements Comparable<Discussion> {
 	public Discussion(IFile file) {
 		loadDiscussionFromFile(file);
 	}
+	
+	/**
+	 * Removes all the links related to a discussion from the links.xml file
+	 * @param res the discussino resource to remove
+	 */
+	public static void removeAllLinks(IResource res)
+	{
+		assert(res.getFileExtension().equals("dis"));
+		
+		ToK tok = ToK.getProjectToK(res.getProject());
+		Document d = GeneralFunctions.readFromXML(tok.getLinkFile());
+		
+		XPath xPathLinks = DocumentHelper.createXPath("links/link[discussionFile='" + res.getName() + "']");
+		
+		Node linkNodeToRemove = xPathLinks.selectSingleNode(d);
+		
+		if (linkNodeToRemove == null)
+			return; // no links were found
+		// else, remove the link
+		
+		System.out.println("Shay said: removing the evil link for discussion " + res.getName());
+		linkNodeToRemove.getParent().remove(linkNodeToRemove);
+		GeneralFunctions.writeToXml(tok.getLinkFile(), d);
+	}
 
 	/**
 	 * Updates the Discussion with information from the disk

@@ -1,5 +1,10 @@
 package lost.tok.activator;
 
+import lost.tok.ToKChangeListener;
+
+import org.eclipse.core.resources.IResourceChangeEvent;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -16,6 +21,8 @@ public class Activator extends AbstractUIPlugin {
 
 	/** The path of source.xsd file */
 	public static final String sourceXsdPath = "C:\\temp\\TestFiles\\"; //$NON-NLS-1$
+	
+	private ToKChangeListener listener;
 
 	/**
 	 * The constructor
@@ -31,6 +38,10 @@ public class Activator extends AbstractUIPlugin {
 	 */
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
+		
+		IWorkspace ws = ResourcesPlugin.getWorkspace(); 
+		listener = new ToKChangeListener();
+		ws.addResourceChangeListener(listener, IResourceChangeEvent.POST_CHANGE);
 	}
 
 	/*
@@ -39,6 +50,9 @@ public class Activator extends AbstractUIPlugin {
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
 	 */
 	public void stop(BundleContext context) throws Exception {
+		if (listener != null)
+			ResourcesPlugin.getWorkspace().removeResourceChangeListener(listener);
+		
 		plugin = null;
 		super.stop(context);
 	}
