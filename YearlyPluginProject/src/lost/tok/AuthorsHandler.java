@@ -19,9 +19,6 @@ import org.eclipse.ui.part.FileEditorInput;
 
 public class AuthorsHandler {
 
-	/**********************************************************************
-	 * M E M B E R S
-	 **********************************************************************/
 	private ToK myToK;
 	private Integer id = 1;
 	public String name;
@@ -29,11 +26,6 @@ public class AuthorsHandler {
 	public static final String DEFAULT_RANK = Messages.getString("AuthorsHandler.DefRank");
 	public static final String RANK = Messages.getString("AuthorsHandler.Rank");
 	public static final String AUTHORS_RANK_TREE = Messages.getString("AuthorsHandler.RankTree");
-
-
-	/**********************************************************************
-	 * C ' T O R 
-	 **********************************************************************/
 
 	/**
 	 * Constructor for Authors Handler from an XML file
@@ -55,14 +47,12 @@ public class AuthorsHandler {
 				max = Integer.valueOf(element.getText());
 			}
 		}
-		
+	
 		id = max;
-		
-		//writeToXml(myToK.authorsSkeleton());
 	}
 
 	/**
-	 * Constructor for AuthorsHandler
+	 * Constructor for AuthorsHandler from ToK
 	 * 
 	 * @param myToK
 	 * @param discName
@@ -73,11 +63,6 @@ public class AuthorsHandler {
 		myToK = toK;
 	}
 
-	
-	/**********************************************************************
-	 * P U B L I C   M E T H O D S 
-	 **********************************************************************/
-	
 	/**
 	 * Retrieves file name without path and suffix
 	 * @param authorsFile - path string
@@ -137,12 +122,12 @@ public class AuthorsHandler {
 		}
 	}
 
+	/**
+	 * Update authors file with new authors that 
+	 * may have been added (in new sources)
+	 */
 	public void updateFile(){	
 		Source[] sources = myToK.getSources();
-		
-		/******** DEBUG ***********************************/
-		System.out.println("Got sources: sum="+sources.length);
-		/**************************************************/
 		
 		for(Source src : sources){
 			
@@ -156,32 +141,43 @@ public class AuthorsHandler {
 			//author is NOT in file
 			if (result.size() == 0) {
 				try {
-					/******** DEBUG ***********************************/
-					System.out.println("Adding author:"+authName);
-					/**************************************************/
-					
 					this.addAuthor(new Author(defRank,authName), defRank);
-				} catch (CoreException e) {
-					// TODO Auto-generated catch block
+				} 
+				catch (CoreException e) {				
 					e.printStackTrace();
 				}
 			}
 		}
 	}
 	
+	/**
+	 * Get authors file
+	 * @return IFile of authors file
+	 */
 	public IFile getFile() {
 		return myToK.getAuthorFile();
 	}
 
-	/** Returns the file associated with this as an IEditorInput */
+	/**
+	 * Returns the file associated with this as an IEditorInput
+	 * @return IEditorInput
+	 */ 
 	public IEditorInput getIEditorInput() {
 		return new FileEditorInput(getFile());
 	}
 
+	/**
+	 * Returns the ToK
+	 * @return ToK
+	 */
 	public ToK getMyToK() {
 		return myToK;
 	}
 
+	/**
+	 * Get ranks
+	 * @return array of integers (ranks ids)
+	 */
 	public Integer[] getRanksIDs() {
 		Rank[] ranks = getRanks();
 
@@ -194,6 +190,10 @@ public class AuthorsHandler {
 		return ss;
 	}
 
+	/**
+	 * Get ranks
+	 * @return array of ranks objects
+	 */
 	public Rank[] getRanks() {
 		Document doc = readFromXML();
 
@@ -210,6 +210,10 @@ public class AuthorsHandler {
 		return ss;
 	}
 	
+	/**
+	 * Get ranks names
+	 * @return array of strings, ranks names
+	 */
 	public String[] getRanksNames() {
 		Rank[] ranks = getRanks();
 
@@ -222,8 +226,11 @@ public class AuthorsHandler {
 		return ss;
 	}
 
-
-
+	/**
+	 * Get rank's ID
+	 * @param rankName
+	 * @return rank's ID
+	 */
 	public Integer getRanksId(String rankName) {
 		for (Rank rank : getRanks()) {
 			if (rankName.equals(rank.getName())) {
@@ -235,7 +242,7 @@ public class AuthorsHandler {
 	}
 
 	/**
-	 * getting the authors from a rank
+	 * Getting the authors from a rank
 	 * 
 	 * @param rank
 	 * @return authors
@@ -257,7 +264,7 @@ public class AuthorsHandler {
 	}
 
 	/**
-	 * take the author and put him in the target rank
+	 * Relocate author to target rank
 	 * 
 	 * @param srcRank
 	 * @param trgtRank
@@ -287,7 +294,7 @@ public class AuthorsHandler {
 
 
 	/**
-	 * remove the given author from the authors groups
+	 * Remove author from the authors groups
 	 * 
 	 * @param authorName
 	 */
@@ -297,8 +304,7 @@ public class AuthorsHandler {
 
 		// Remove all the authors (should be only one) with the given name
 		// if there are several authors with the given name, fix it by removing all
-		// of them 
-		// if there are no authors with the given name, do nothing
+		// of them if there are no authors with the given name, do nothing
 		XPath xpathSelector1 = DocumentHelper.createXPath("//author[getText()='" + authName + "']");
 		List result = xpathSelector1.selectNodes(doc);
 		for (Iterator i = result.iterator(); i.hasNext();) {
@@ -309,6 +315,11 @@ public class AuthorsHandler {
 		writeToXml(doc);
 	}
 
+	/**
+	 * Get author's rank
+	 * @param authName
+	 * @return the rank of given author
+	 */
 	public int getAuthorRank(String authName){
 		
 		int resultRank = 0;
@@ -326,31 +337,51 @@ public class AuthorsHandler {
 			}
 		}
 		catch(Exception e){
-			//do nothing
 		}
 		
 		return resultRank;
 	}
 	
+	/**
+	 * Fet full file name
+	 * @return full file name
+	 */
 	private String getFullFileName() {
 		return getFile().getLocation().toOSString();
 	}
 
+	/**
+	 * Read from XML
+	 * @return document associated with authors fiel
+	 */
 	private Document readFromXML() {
 		return GeneralFunctions.readFromXML(getFullFileName());
 	}
 
+	/**
+	 * Throw core exception 
+	 * @param message
+	 * @throws CoreException
+	 */
 	private void throwCoreException(String message) throws CoreException {
 		IStatus status = new Status(IStatus.ERROR, "lost.tok",
 				IStatus.OK, message, null);
 		throw new CoreException(status);
 	}
 
-	// write the document to the XML file
+	/**
+	 * Write the document to the XML file
+	 * @param doc
+	 */
 	private void writeToXml(Document doc) {
 		GeneralFunctions.writeToXml(getFullFileName(), doc);
 	}
 	
+	/**
+	 * Get rank
+	 * @param authorsGroup
+	 * @return rank ID of given rank
+	 */
 	private Integer getRank(String authorsGroup){
 		
 		//default rank
@@ -359,7 +390,6 @@ public class AuthorsHandler {
 		
 		return Integer.valueOf(authorsGroup.substring(authorsGroup.length()-1));
 	}
-
 }
 
 
