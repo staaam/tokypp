@@ -173,7 +173,7 @@ public class Discussion implements Comparable<Discussion> {
 		.createXPath("//relation") //$NON-NLS-1$
 		.selectNodes(doc);
 		for (Object o : relations) {
-			r.add(new Relation((Element) o));
+			r.add(new Relation(this, (Element) o));
 		}
 		return r;
 	}
@@ -361,7 +361,7 @@ public class Discussion implements Comparable<Discussion> {
 
 		// add the relation
 		Element link1 = doc.getRootElement().addElement("relation"); //$NON-NLS-1$
-		new Relation(element1, element2, comment, type).fillElement(link1);
+		new Relation(this, element1, element2, comment, type).fillElement(link1);
 
 		writeToXml(doc);
 
@@ -766,6 +766,21 @@ public class Discussion implements Comparable<Discussion> {
 	 **/ 
 	public long getModificationStamp() {
 		return localModificationStamp;
+	}
+
+	public Opinion getOpinion(int id) throws Exception {
+		for (Opinion o : getOpinions())
+			if (o.getId() == id)
+				return o;
+		throw new Exception("Opinion not exist");
+	}
+
+	public Quote getQuote(int id) throws Exception {
+		for (Opinion o : getOpinions())
+			for (Quote q : getQuotes(o.getName()))
+				if (q.getID() == id)
+					return q;
+		throw new Exception("Quote not exist");
 	}
 }
 	

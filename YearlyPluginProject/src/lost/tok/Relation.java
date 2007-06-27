@@ -9,15 +9,19 @@ public class Relation {
 	String comment;
 	String type;
 	
-	public Relation(Element e) {
-		this(Integer.parseInt(e.element("id1").getText()),
+	Discussion d;
+	
+	public Relation(Discussion d, Element e) {
+		this(d,
+				Integer.parseInt(e.element("id1").getText()),
 				Integer.parseInt(e.element("id2").getText()),
 				e.element("comment").getText(),
 				e.element("type").getText());
 	}
 
-	public Relation(Integer id1, Integer id2, String comment, String type) {
+	public Relation(Discussion d, Integer id1, Integer id2, String comment, String type) {
 		super();
+		this.d = d;
 		this.id1 = id1;
 		this.id2 = id2;
 		this.comment = comment;
@@ -32,13 +36,25 @@ public class Relation {
 	}
 
 	public String getFirstName() {
-		return Integer.toString(id1);
+		return getString(id1);
 	}
 
 	public String getSecondName() {
-		return Integer.toString(id2);
+		return getString(id2);
 	}
 
+	private String getString(int id) {
+		try {
+			return d.getOpinion(id).getName();
+		} catch (Exception e) {
+		}
+		try {
+			return d.getQuote(id).getText();
+		} catch (Exception e) {
+		}
+		return "Unknown id: '" + Integer.toString(id) + "'";
+	}
+	
 	public String getRelationType() {
 		return type;
 	}
