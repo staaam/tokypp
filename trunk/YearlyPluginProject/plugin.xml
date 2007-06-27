@@ -30,10 +30,10 @@
              class="lost.tok.authEditor.AuthorsEditor"
              contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
              default="true"
-             extensions="xml"
+             filenames="authors.xml,מחברים.xml"
              icon="icons/author.gif"
              id="lost.tok.authEditor.AuthorsEditor"
-             name="%editor.author"/>
+             name="%editor.authors"/>
    </extension>
    <extension
          point="org.eclipse.ui.newWizards">
