@@ -13,6 +13,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui.workbench.texteditor,
  lost.tok,
  dom4j,
- org.eclipse.jface.text
+ org.eclipse.jface.text,
+ org.eclipse.search
 Eclipse-LazyStart: true
 Bundle-Vendor: Team Lost
