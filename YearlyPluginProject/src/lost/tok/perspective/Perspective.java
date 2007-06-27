@@ -6,6 +6,7 @@ package lost.tok.perspective;
 import lost.tok.RelationView.RelationView;
 import lost.tok.excerptionsView.ExcerptionView;
 import lost.tok.linkDisView.LinkDisView;
+import lost.tok.navigator.InformationNavigator;
 
 import org.eclipse.ui.IFolderLayout;
 import org.eclipse.ui.IPageLayout;
@@ -55,7 +56,8 @@ public class Perspective implements IPerspectiveFactory {
 		IFolderLayout left = layout.createFolder(
 				"left", IPageLayout.LEFT, (float) 0.26, editorArea); //$NON-NLS-1$
 		left.addView("org.eclipse.jdt.ui.PackageExplorer"); //$NON-NLS-1$
-		left.addView("org.eclipse.ui.views.ResourceNavigator");
+		left.addView(InformationNavigator.ID);
+//		left.addView("org.eclipse.ui.views.ResourceNavigator");
 
 
 		// Place the Excerption view underneath
