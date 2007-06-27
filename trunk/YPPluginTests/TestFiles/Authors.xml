@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<authors>
+  <authorsGroup>
+    <id>0</id>
+    <name>Default Rank</name>
+    <nextGroupId>1</nextGroupId>
+    <prevGroupId>5</prevGroupId>
+<author>Evgeni</author>  </authorsGroup>
+  <authorsGroup>
+    <id>1</id>
+    <name>Rank1</name>
+    <nextGroupId>2</nextGroupId>
+    <prevGroupId>5</prevGroupId>
+  </authorsGroup>
+  <authorsGroup>
+    <id>2</id>
+    <name>Rank2</name>
+    <nextGroupId>3</nextGroupId>
+    <prevGroupId>1</prevGroupId>
+  </authorsGroup>
+  <authorsGroup>
+    <id>3</id>
+    <name>Rank3</name>
+    <nextGroupId>4</nextGroupId>
+    <prevGroupId>2</prevGroupId>
+  </authorsGroup>
+  <authorsGroup>
+    <id>4</id>
+    <name>Rank4</name>
+    <nextGroupId>5</nextGroupId>
+    <prevGroupId>3</prevGroupId>
+  </authorsGroup>
+  <authorsGroup>
+    <id>5</id>
+    <name>Rank5</name>
+    <nextGroupId>1</nextGroupId>
+    <prevGroupId>4</prevGroupId>
+  </authorsGroup>
+</authors>
