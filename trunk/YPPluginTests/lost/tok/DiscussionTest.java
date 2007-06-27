@@ -32,9 +32,28 @@ public class DiscussionTest extends TestCase {
 		Discussion disc;
 		tok.addDiscussion("test");
 		disc = tok.getDiscussion("test");
-		assertTrue(disc.getDiscName() == "test");
+		assertTrue(disc.getDiscName().equals("test"));
+		assertTrue(disc.getDescription().equals(""));
 	}
 
+	// test that the add discussion work
+	public void testDescription() throws CoreException, IOException {
+		ToK tok = creation("testDescription");
+		Discussion disc;
+		tok.addDiscussion("test", "description testDescription");
+		disc = tok.getDiscussion("test");
+		assertTrue(disc.getDescription().equals("description testDescription"));
+	}
+	
+	// test that the add discussion work
+	public void testNoDescription() throws CoreException, IOException {
+		ToK tok = creation("testNoDescription");
+		Discussion disc;
+		tok.addDiscussion("test", "");
+		disc = tok.getDiscussion("test");
+		assertTrue(disc.getDescription() == "");
+	}
+	
 	// test addOpinion
 	public void testAddOpinion1() throws CoreException, IOException {
 		ToK tok = creation("testAO1");
@@ -134,7 +153,7 @@ public class DiscussionTest extends TestCase {
 		List result = xpathSelector.selectNodes(doc);
 		assertTrue(result.size() == 2);
 	}
-
+	
 	// test relocateQuote
 	public void testRelocateQuote1() throws CoreException, IOException {
 		ToK tok = creation("testRQ1");
