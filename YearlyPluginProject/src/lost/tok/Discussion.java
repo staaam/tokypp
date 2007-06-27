@@ -783,6 +783,10 @@ public class Discussion implements Comparable<Discussion> {
 		return localModificationStamp;
 	}
 
+	public void increaseModificationStamp() {
+		localModificationStamp++;
+	}
+	
 	public Opinion getOpinion(int id) throws Exception {
 		for (Opinion o : getOpinions())
 			if (o.getId() == id)
