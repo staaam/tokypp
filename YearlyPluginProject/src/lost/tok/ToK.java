@@ -157,9 +157,13 @@ public class ToK {
 	 */
 	public void addDiscussion(String discName, String description) throws FileNotFoundException {
 		new Discussion(this, discName, getProjectCreator(), description);
+		refresh();
 		loadDiscussions();
 		setLatestDiscussionOpinion(discName, null);
-		refresh();
+	}
+
+	public void addDiscussion(String discName) throws FileNotFoundException {
+		addDiscussion(discName, "");
 	}
 
 	/**
@@ -474,7 +478,6 @@ public class ToK {
 			}
 
 		try {
-			getDiscussionFolder().refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
 			IResource[] files = getDiscussionFolder().members();
 			for (IResource resource : files) {
 				if (resource instanceof IFile) {
