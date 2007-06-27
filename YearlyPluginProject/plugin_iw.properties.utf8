@@ -42,3 +42,10 @@ command.name.end.chapter = סגור פרק כאן
 perspective.tok =עץ דעת
 wizard.discussion.export = ייצוא דיונים
 wizard.discussion.import = ייבוא דיונים
+
+command.name.mark.quote = סמן ציטוט
+command.name.add.quote = הוסף ציטוט
+command.name.unmark.quote = בטל סימון ציטוט
+command.name.add.opinion = הוסף דיעה
+command.name.show.linked.discussion = הצג דיונים מקושרים
+
