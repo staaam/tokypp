@@ -62,8 +62,7 @@ public class PrintDiscussion {
 		
 		fw.write(Messages.getString("PrintDiscussion.PrintDiscussionName") + d.getDiscName() + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
 		fw.write(Messages.getString("PrintDiscussion.PrintAuthorName") + d.getCreatorName() + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
-		//MICHAL - to un-comment when getDescription() will be created
-		//fw.write("Description: " + d.getDescription());
+		fw.write(Messages.getString("PrintDiscussion.PrintDescription") + d.getDescription()); //$NON-NLS-1$
 		
 		//if the discussion was linked, the source it was linked to:
 		Link link = d.getLink();
