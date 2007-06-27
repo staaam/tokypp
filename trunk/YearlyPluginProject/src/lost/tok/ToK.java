@@ -219,6 +219,9 @@ public class ToK {
 
 		String filePathVarified = new String(filePathGivenByUser);
 		int beginIndex = filePathVarified.lastIndexOf("\\"); //$NON-NLS-1$
+		if (beginIndex == -1) {
+			beginIndex = filePathVarified.lastIndexOf("/"); //$NON-NLS-1$
+		}
 		String fileNameVarified = filePathVarified.substring(beginIndex);
 
 		// check if file with that name exists in Sources folder

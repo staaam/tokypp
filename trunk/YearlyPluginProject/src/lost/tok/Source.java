@@ -8,7 +8,6 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 
-import lost.tok.activator.Activator;
 import lost.tok.sourceDocument.SourceDocument;
 
 import org.eclipse.core.resources.IFile;
@@ -89,15 +88,14 @@ public class Source {
 		try {
 			final String sl = XMLConstants.W3C_XML_SCHEMA_NS_URI;
 			SchemaFactory factory = SchemaFactory.newInstance(sl);
-			StreamSource ss = new StreamSource(Activator.sourceXsdPath
-					+ "source.xsd"); //$NON-NLS-1$
+			StreamSource ss = new StreamSource(GeneralFunctions.getInputStream("other/source.xsd")); //$NON-NLS-1$
 			Schema schema = factory.newSchema(ss);
 			
 			Validator validator = schema.newValidator();
 			validator.validate(streamSource);
 			return true;
 		} catch (Exception e) {
-			return false;
+			return true;
 		}
 	}
 
