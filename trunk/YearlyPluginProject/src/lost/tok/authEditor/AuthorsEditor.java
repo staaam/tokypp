@@ -43,7 +43,7 @@ public class AuthorsEditor extends TextEditor {
 	//******* M E M B E R S *******************************
 	
 	// Note(Shay): I've moved this from the authors groups, since we cannot trust the def rank id
-	public static final int DEFAULT_RANK_ID = 1;
+	public static final int DEFAULT_RANK_ID = 0;
 	
 	public static final String EDITOR_ID = "lost.tok.authEditor.AuthorsEditor";
 	public static final String  AUTHORS_RANK_TREE = AuthorsHandler.AUTHORS_RANK_TREE;
@@ -319,6 +319,7 @@ public class AuthorsEditor extends TextEditor {
 
 			public void focusGained(FocusEvent e) {			
 				authHandler.updateFile();
+				par.setSize(ctrlCurrentWidth-1,par.getSize().y);
 			}
 
 			public void focusLost(FocusEvent e) {
