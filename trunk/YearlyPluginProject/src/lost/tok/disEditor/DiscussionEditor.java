@@ -589,8 +589,8 @@ public class DiscussionEditor extends TextEditor {
 			quoteText = quoteText.substring(upto + 1);
 		}
 		return ss;
-	}
-
+	}	
+	
 	/**
 	 * Synchronizes the opinions with a modified discussion file
 	 * 
