@@ -193,8 +193,8 @@ public class DiscussionExportOperation implements IRunnableWithProgress {
 		int count = 0;
 		if (checkResource.isAccessible()) {
 			IResource[] children = ((IContainer) checkResource).members();
-			for (int i = 0; i < children.length; i++) {
-				count += countChildrenOf(children[i]);
+			for (IResource element : children) {
+				count += countChildrenOf(element);
 			}
 		}
 
@@ -540,8 +540,8 @@ public class DiscussionExportOperation implements IRunnableWithProgress {
 					exportResource.getFullPath()), e);
 		}
 
-		for (int i = 0; i < children.length; i++) {
-			exportResource(children[i], leadupDepth + 1);
+		for (IResource element : children) {
+			exportResource(element, leadupDepth + 1);
 		}
 	}
 }
