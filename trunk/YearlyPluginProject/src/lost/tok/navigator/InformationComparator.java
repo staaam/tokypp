@@ -10,8 +10,8 @@ import org.eclipse.ui.views.navigator.ResourceSorter;
 
 public class InformationComparator extends ResourceSorter{
 	
-	public InformationComparator(int criteria) {
-		super(criteria);
+	public InformationComparator() {
+		super(1);
 	}
 	
 
