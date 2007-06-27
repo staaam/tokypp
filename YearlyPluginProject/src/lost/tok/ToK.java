@@ -96,6 +96,7 @@ public class ToK {
 			return new ToK(project);
 		} catch (CoreException e) {
 			System.out.println("getProjectToK failed\n" + e);
+			e.printStackTrace();
 		}
 		return null;
 	}
@@ -160,6 +161,30 @@ public class ToK {
 		refresh();
 		loadDiscussions();
 		setLatestDiscussionOpinion(discName, null);
+	}
+	
+	public void removeDiscussion(IResource discRes)
+	{
+		SortedSet<Discussion> discs = getDiscussions();
+		
+		Discussion discToRemove = null;
+		for (Discussion disc : discs)
+		{
+			if (disc.getDiscFileName().equals(discRes.getName()))
+				discToRemove = disc;
+		}
+		
+		if (discToRemove == null)
+		{
+			System.err.println("The discussion " + discRes.getName() + " was deleted, but was not removed from the ToK");
+		}
+		else
+		{
+			discs.remove(discToRemove);
+			setLatestDiscussionOpinion(null, null);
+		}
+		
+		Discussion.removeAllLinks(discRes);
 	}
 
 	public void addDiscussion(String discName) throws FileNotFoundException {
