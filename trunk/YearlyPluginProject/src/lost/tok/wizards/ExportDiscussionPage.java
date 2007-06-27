@@ -519,8 +519,8 @@ public class ExportDiscussionPage extends WizardFileSystemResourceExportPage1 {
 
 			// destination
 			setDestinationValue(directoryNames[0]);
-			for (int i = 0; i < directoryNames.length; i++) {
-				addDestinationItem(directoryNames[i]);
+			for (String element : directoryNames) {
+				addDestinationItem(element);
 			}
 
 			boolean setStructure = settings

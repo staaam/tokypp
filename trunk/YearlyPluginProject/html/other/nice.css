@@ -3,24 +3,25 @@
 body
 {
 	line-height : 1.3em;
-	background-color : #DA9A38;
+	background-color : #e8eef7;
     /*background-image: url(bg/orang052.jpg);*/
 }
 
 /****    THE MENU       ****/
 #menu
 {
-    background-image: url(bg/orang117.gif);
+    /*background-image: url(bg/orang117.gif);*/
 
-	padding : 0.5em;
-	margin: 0;
+	padding : 10px;
+	margin: 0px;
 
-	background-color : #ffbf3f;
+	background-color : #a2bae7;
 	font: normal normal 0.75em/1 sans-serif;
 
 	width: 16em;
-	height: 95%;
+	height: 115%;
     
+    float: left;
     position: fixed;
     overflow: auto;
 }
@@ -81,7 +82,7 @@ h4
 /*--------------------------------------------------|
 | dTree 2.05 | www.destroydrop.com/javascript/tree/ |
 |---------------------------------------------------|
-| Copyright (c) 2002-2003 Geir Landrö               |
+| Copyright (c) 2002-2003 Geir Landrï¿½               |
 |--------------------------------------------------*/
 
 .dtree {

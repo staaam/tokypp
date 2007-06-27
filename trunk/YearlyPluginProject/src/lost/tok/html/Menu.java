@@ -109,6 +109,7 @@ public class Menu {
 		
 		sb.append("document.write(d);\n"); //$NON-NLS-1$
 		sb.append("d.openTo(" + ownerId + ",true);\n"); //$NON-NLS-1$ //$NON-NLS-2$
+		sb.append("d.openAll();\n");
 		
 		return sb.toString();
 	}
