@@ -78,6 +78,7 @@ public class GeneralFunctions {
 	public static Document readFromXML(InputStream inputStream) {
 		Document doc = DocumentHelper.createDocument();
 		SAXReader reader = new SAXReader();
+		reader.setValidation(false);
 		try {
 			BufferedReader rdr = new BufferedReader(new InputStreamReader(
 					inputStream, "UTF-8")); //$NON-NLS-1$
