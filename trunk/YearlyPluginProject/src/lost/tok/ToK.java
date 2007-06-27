@@ -151,10 +151,12 @@ public class ToK {
 	 * 
 	 * @param discName
 	 *            the name of the discussion to be created
+	 * @param description 
+	 * 			  discussion description
 	 * @throws FileNotFoundException 
 	 */
-	public void addDiscussion(String discName) throws FileNotFoundException {
-		new Discussion(this, discName, getProjectCreator());
+	public void addDiscussion(String discName, String description) throws FileNotFoundException {
+		new Discussion(this, discName, getProjectCreator(), description);
 		loadDiscussions();
 		setLatestDiscussionOpinion(discName, null);
 		refresh();

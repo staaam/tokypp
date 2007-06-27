@@ -408,6 +408,7 @@ public class DiscussionEditor extends TextEditor {
 					ctrlCurrentWidth = par.getSize().x;
 					rootItem.removeAll();
 
+					addDescription(rootItem);
 					addLinks(rootItem);
 
 					for (Opinion opinion : discussion.getOpinions()) {
@@ -415,7 +416,8 @@ public class DiscussionEditor extends TextEditor {
 						//opinionItem.setImage(opinImage);
 						for (Quote quote : discussion.getQuotes(opinion
 								.getName())) {
-							TreeItem quoteItem = addTreeQuote(opinionItem, quote);
+							//TreeItem quoteItem =
+							addTreeQuote(opinionItem, quote);
 							//quoteItem.setImage(quoteImage);
 						}
 					}
@@ -423,7 +425,6 @@ public class DiscussionEditor extends TextEditor {
 					rootItem.setExpanded(true);
 				}
 			}
-
 		});
 
 
@@ -452,6 +453,18 @@ public class DiscussionEditor extends TextEditor {
 		treeItem.setExpanded(true);
 		for (TreeItem child : treeItem.getItems())
 			expendToDepth(child, depthLeft - 1);
+	}
+	
+
+	private void addDescription(TreeItem parent) {
+		String description = discussion.getDescription();
+		if (description == null || description.length() == 0) return;
+		
+		TreeItem descItem = new TreeItem(parent, SWT.MULTI | SWT.WRAP);
+		descItem.setImage(ImageManager.getImage(ImageType.DESCRIPTION));
+		descItem.setText("Description");
+		
+		addSplitted(descItem, description, getLineSize());
 	}
 	
 	private void addLinks(TreeItem parent) {

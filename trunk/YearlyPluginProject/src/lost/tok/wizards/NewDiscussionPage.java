@@ -18,9 +18,10 @@ import org.eclipse.swt.widgets.Text;
 public class NewDiscussionPage extends WizardPage implements ModifyListener {
 	/** The full name of the source */
 	private Text name;
-
 	private String discussionName;
 
+	private Text description;
+	private String discussionDescription;
 	/**
 	 * Constructor for UnparsedDocWizardPage.
 	 */
@@ -37,7 +38,7 @@ public class NewDiscussionPage extends WizardPage implements ModifyListener {
 		Composite container = new Composite(parent, SWT.NULL);
 		GridLayout layout = new GridLayout();
 		container.setLayout(layout);
-		layout.numColumns = 3;
+		layout.numColumns = 2;
 		layout.verticalSpacing = 9;
 
 		// Title selection
@@ -48,6 +49,16 @@ public class NewDiscussionPage extends WizardPage implements ModifyListener {
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		name.setLayoutData(gd);
 		name.addModifyListener(this);
+
+		label = new Label(container, SWT.NULL);
+		label.setText("Description" + ":");
+		label.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
+
+		description = new Text(container, SWT.BORDER | SWT.MULTI| SWT.WRAP | SWT.V_SCROLL);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.heightHint = 100;
+		description.setLayoutData(gd);
+		description.addModifyListener(this);
 
 		// Last:
 		dialogChanged();
@@ -60,6 +71,7 @@ public class NewDiscussionPage extends WizardPage implements ModifyListener {
 
 	private void dialogChanged() {
 		discussionName = name.getText();
+		discussionDescription = description.getText();
 
 		if (discussionName.length() == 0) {
 			updateStatus(Messages.getString("NewDiscussionPage.ErrNoDiscName")); //$NON-NLS-1$
@@ -102,4 +114,7 @@ public class NewDiscussionPage extends WizardPage implements ModifyListener {
 		return discussionName;
 	}
 
+	public String getDiscussionDescription() {
+		return discussionDescription;
+	}
 }

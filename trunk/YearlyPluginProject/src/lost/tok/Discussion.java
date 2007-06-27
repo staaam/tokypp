@@ -91,7 +91,9 @@ public class Discussion implements Comparable<Discussion> {
 	/** The name of the discussion file */
 	private IFile discussionFile = null;
 
-	private String actualFile; 
+	private String actualFile;
+
+	private String description; 
 
 	/**
 	 * constructor for discussion from an XML file
@@ -134,6 +136,8 @@ public class Discussion implements Comparable<Discussion> {
 		setDiscName(DocumentHelper.createXPath("/discussion/name") //$NON-NLS-1$
 				.selectSingleNode(d).getText());
 		setCreatorName(DocumentHelper.createXPath("/discussion/user") //$NON-NLS-1$
+				.selectSingleNode(d).getText());
+		setDescription(DocumentHelper.createXPath("/discussion/desc") //$NON-NLS-1$
 				.selectSingleNode(d).getText());
 		
 		XPath defOpSelector = DocumentHelper.createXPath("/discussion/opinion[name='" + DEFAULT_OPINION_XML + "']/id");  //$NON-NLS-1$ //$NON-NLS-2$
@@ -204,20 +208,22 @@ public class Discussion implements Comparable<Discussion> {
 	 * @param myToK
 	 * @param discName
 	 * @param creatorName
+	 * @param description 
 	 * @throws FileNotFoundException 
 	 */
-	public Discussion(ToK myToK, String discName, String creatorName) throws FileNotFoundException {
+	public Discussion(ToK myToK, String discName, String creatorName, String description) throws FileNotFoundException {
 		this.myToK = myToK;
 		this.discName = discName;
 		this.creatorName = creatorName;
 		this.defaultOpinionID = 1;
+		this.description = description;
 		this.id = 1;
 
 		if (new File(getFullFileName()).exists()) {
 			throw new FileNotFoundException();
 		}
 
-		writeToXml(discussionSkeleton(discName, creatorName));
+		writeToXml(discussionSkeleton(discName, creatorName, description));
 	}
 
 	/**
@@ -377,6 +383,10 @@ public class Discussion implements Comparable<Discussion> {
 
 	public String getDiscName() {
 		return discName;
+	}
+
+	public String getDescription() {
+		return description;
 	}
 
 	public IFile getFile() {
@@ -650,19 +660,24 @@ public class Discussion implements Comparable<Discussion> {
 		writeToXml(doc);
 	}
 
-	public void setCreatorName(String creatorName) {
+	private void setCreatorName(String creatorName) {
 		this.creatorName = creatorName;
 	}
 
-	public void setDiscName(String discName) {
+	private void setDiscName(String discName) {
 		this.discName = discName;
 	}
 
-	private Document discussionSkeleton(String discName, String creatorName) {
+	private void setDescription(String description) {
+		this.description = description;
+	}
+
+	private Document discussionSkeleton(String discName, String creatorName, String description) {
 		Document doc = DocumentHelper.createDocument();
 		Element disc = doc.addElement("discussion"); //$NON-NLS-1$
 		disc.addElement("name").addText(discName); //$NON-NLS-1$
 		disc.addElement("user").addText(creatorName); //$NON-NLS-1$
+		disc.addElement("desc").addText(description); //$NON-NLS-1$
 		Element defOpin = disc.addElement("opinion"); //$NON-NLS-1$
 		defOpin.addElement("id").addText("" + defaultOpinionID); //$NON-NLS-1$ //$NON-NLS-2$
 		defOpin.addElement("name").addText(DEFAULT_OPINION_XML); //$NON-NLS-1$
