@@ -17,6 +17,12 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.part.FileEditorInput;
 
+/**
+ * Handles all functionality related to authors file 
+ * in tree of knowledge project
+ * @author evgeni
+ *
+ */
 public class AuthorsHandler {
 
 	private ToK myToK;
