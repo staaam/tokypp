@@ -3,6 +3,8 @@ package lost.tok;
 import java.util.Iterator;
 import java.util.List;
 
+import lost.tok.authEditor.AuthorsEditor;
+
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
@@ -135,6 +137,30 @@ public class AuthorsHandler {
 		}
 	}
 
+	public void updateFile(){	
+		Source[] sources = myToK.getSources();
+		
+		for(Source src : sources){
+			
+			String authName = src.getAuthor();
+			Document doc = readFromXML();
+			Integer defRank = AuthorsEditor.DEFAULT_RANK_ID;
+
+			XPath xpathSelector = DocumentHelper.createXPath("//author[.='" + authName + "']");
+			List result = xpathSelector.selectNodes(doc);
+			
+			//author is NOT in file
+			if (result.size() == 0) {
+				try {
+					this.addAuthor(new Author(defRank,authName), defRank);
+				} catch (CoreException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
 	public IFile getFile() {
 		return myToK.getAuthorFile();
 	}
