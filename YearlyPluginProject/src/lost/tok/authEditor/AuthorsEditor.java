@@ -31,6 +31,13 @@ import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.part.FileEditorInput;
 
+/**
+ * Authors rank groups tree editor. Displays authors 
+ * rank group in tree vieww. Enables user to drag and drop
+ * author from group to group, by that changing their rank
+ * @author evgeni
+ *
+ */
 public class AuthorsEditor extends TextEditor {
 	
 	public static final int DEFAULT_RANK_ID = 0;
