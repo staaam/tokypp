@@ -140,6 +140,7 @@
             targetID="lost.tok.opTable.OperationTable">
          <action
                class="lost.tok.opTable.actions.SwitchOpTableViewAction"
+               definitionId="lost.tok.disEditor.command.showLinkedDiscussions"
                icon="icons/link_ico.gif"
                id="lost.tok.opTable.switchView"
                label="%action.label.discussions.show"
@@ -280,6 +281,16 @@
             contextId="org.eclipse.ui.contexts.window"
             keyConfigurationId="org.eclipse.ui.defaultAcceleratorConfiguration"
             keySequence="ALT+O"
+            scope="org.eclipse.ui.contexts.window"/>
+      <command
+            category="Operation Table"
+            id="lost.tok.disEditor.command.showLinkedDiscussions"
+            name="%command.name.show.linked.discussion"/>
+      <keyBinding
+            commandId="lost.tok.disEditor.command.showLinkedDiscussions"
+            contextId="org.eclipse.ui.contexts.window"
+            keyConfigurationId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            keySequence="ALT+S"
             scope="org.eclipse.ui.contexts.window"/>
    </extension>
    <extension
