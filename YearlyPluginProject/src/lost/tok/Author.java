@@ -5,61 +5,74 @@ import org.dom4j.Element;
 
 public class Author {
 
-	/**********************************************************************
-	 * M E M B E R S
-	 **********************************************************************/
-	
 	private Integer ID;
-
 	public String name;
 	public Integer rank;
 
-	
-	/**********************************************************************
-	 * C ' T O R
-	 **********************************************************************/
-
+	/**
+	 * Author class constructor
+	 * @param authRank
+	 * @param authName
+	 */
 	public Author(Integer authRank, String authName) {
 		name = authName;
 		rank = authRank;
 		ID = Math.abs(hashCode());
 	}
 
+	/**
+	 * Author class default constructor
+	 */
 	public Author() {}
 	
-	/**********************************************************************
-	 * P R O P E R T I E S
-	 **********************************************************************/
-	
+	/**
+	 * Set authors ID
+	 * @param authID
+	 */
 	public void setID(Integer authID) {
 		ID = authID;
 	}
 
+	/**
+	 * Get authors ID
+	 * @return
+	 */
 	public Integer getID() {
 		return ID;
 	}
 
+	/**
+	 * Set authors rank
+	 * @param authRank
+	 */
 	public void setRank(Integer authRank) {
 		rank = authRank;
 	}
 
+	/**
+	 * Get authors rank
+	 * @return
+	 */
 	public Integer getRank() {
 		return rank;
 	}
 	
+	/**
+	 * Set authors name
+	 * @param authName
+	 */
 	public void setName(String authName) {
 		name = authName;
 	}
 	
+	/**
+	 * Get authors name
+	 * @return
+	 */
 	public String getName() {
 		return name;
 	}
 
-	
-	/**********************************************************************
-	 * P U B L I C   M E T H O D S
-	 **********************************************************************/
-	
 	/**
 	 * Creating an author XML element
 	 * 
@@ -72,6 +85,9 @@ public class Author {
 		return e;
 	}
 	
+	/**
+	 * Create authors hash code
+	 */
 	public int hashCode() {
 		return 57 * name.hashCode();
 	}
