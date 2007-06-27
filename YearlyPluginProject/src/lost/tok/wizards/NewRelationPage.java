@@ -50,6 +50,8 @@ public class NewRelationPage extends WizardPage implements ModifyListener,
 
 	private DiscCombo discCombo;
 
+	private boolean firstTime = true;
+
 	/**
 	 * Constructor for NewRelationWizardPage.
 	 * 
@@ -231,7 +233,8 @@ public class NewRelationPage extends WizardPage implements ModifyListener,
 	}
 
 	public void widgetSelected(SelectionEvent arg0) {
-		if ((discussion == null && discCombo.getText() != null && discCombo
+		if ((discussion != null && firstTime ) ||
+				(discussion == null && discCombo.getText() != null && discCombo
 				.getText().length() > 0)
 				|| discussion.getDiscName().compareTo(discCombo.getText()) != 0) {
 			try {
@@ -241,6 +244,7 @@ public class NewRelationPage extends WizardPage implements ModifyListener,
 			}
 
 			discussionChanged();
+			firstTime = false;
 		}
 
 		dialogChanged();

@@ -4,7 +4,11 @@ import java.util.List;
 
 import lost.tok.Discussion;
 import lost.tok.GeneralFunctions;
+import lost.tok.Opinion;
+import lost.tok.Quote;
 import lost.tok.Relation;
+import lost.tok.imageManager.ImageManager;
+import lost.tok.imageManager.ImageType;
 
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -50,6 +54,19 @@ public class RelationView extends ViewPart {
 	public class RelationLabelProvider implements ITableLabelProvider {
 
 		public Image getColumnImage(Object element, int columnIndex) {
+	        Relation rel = (Relation) element;
+		
+	        switch (columnIndex) {
+			case 0:
+				return getElementImage(rel.getFirst());
+			case 1:
+				return getElementImage(rel.getSecond());
+			case 2:
+				return PlatformUI.getWorkbench().getSharedImages().getImage(
+						ISharedImages.IMG_OBJ_ELEMENT);
+			case 3:
+				return ImageManager.getImage(ImageType.COMMENT);
+			}
 			return PlatformUI.getWorkbench().getSharedImages().getImage(
 					ISharedImages.IMG_OBJ_ELEMENT);
 		}
@@ -59,16 +76,18 @@ public class RelationView extends ViewPart {
 	        Relation rel = (Relation) element;
 	        switch (columnIndex) {
 	            case 0:
-	                result = rel.getFirstName();
+	            	result += getElementPrefix(rel.getFirst());
+	                result += rel.getFirstName();
 	                break;
 	            case 1:
-	                result = rel.getSecondName();
+	            	result += getElementPrefix(rel.getSecond());
+	                result += rel.getSecondName();
 	                break;
 	            case 2:
 	                result = rel.getRelationType();
 	                break;
 	            case 3:
-	                result = rel.getComment();
+	                result = rel.getComment()+"\n"+rel.getComment();
 	                break;
 	        }
 	        return result;
@@ -109,13 +128,12 @@ public class RelationView extends ViewPart {
 		tableViewer.setContentProvider(new RelationContentProvider());
 		tableViewer.setLabelProvider(new RelationLabelProvider());
 		Table table = tableViewer.getTable();
-		for (String columnName : ColumnNames) {
+		for (int i = 0; i < ColumnNames.length; i++) {
 			TableColumn tableColumn = new TableColumn(table, SWT.NONE);
-			tableColumn.setText(columnName);
+			tableColumn.setText(ColumnNames[i]);
 			tableColumn.setWidth(150);
 		}
 		table.setHeaderVisible(true);
-		//tableViewer.setColumnProperties(ColumnNames);
 		tableViewer.refresh();
 	}
 
@@ -131,5 +149,26 @@ public class RelationView extends ViewPart {
 	public static RelationView getView(boolean bringToTop) {
 		return (RelationView) GeneralFunctions.getView(RelationView.ID, bringToTop);
 	}
+
+	private static Image getElementImage(Object o) {
+		if (o instanceof Opinion) {
+			return ImageManager.getImage(ImageType.OPINION); 
+		}
+		if (o instanceof Quote) {
+			return ImageManager.getImage(ImageType.QUOTE);
+		}
+		return null;
+	}
+
+	private static String getElementPrefix(Object o) {
+		if (o instanceof Opinion) {
+			return "O: "; 
+		}
+		if (o instanceof Quote) {
+			return "Q: "; 
+		}
+		return "";
+	}
+
 
 }
