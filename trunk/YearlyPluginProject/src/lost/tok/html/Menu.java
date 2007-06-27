@@ -2,6 +2,7 @@ package lost.tok.html;
 
 import java.util.HashMap;
 
+import lost.tok.GeneralFunctions;
 import lost.tok.Link;
 import lost.tok.Messages;
 import lost.tok.ToK;
@@ -34,6 +35,8 @@ public class Menu {
 	private HashMap<String, SourcePage> srcPathToPage;
 	/** A map from the name of a discussion file to its HTMLPage */
 	private HashMap<String, DiscussionPage> discNameToPage;
+	/** The path to the icons directory for the dTree */
+	private String imgBase;
 	
 	/**
 	 * Creates a new side menu item
@@ -50,6 +53,7 @@ public class Menu {
 		this.ownerId = 0;
 		this.srcPathToPage = srcPathToPage;
 		this.discNameToPage = discNameToPage;
+		this.imgBase = GeneralFunctions.isLTR() ? ToK.HTML_FOLDER + "/other/menu/img/" : ToK.HTML_FOLDER + "/other/menu/imgRTL/";
 	}
 	
 	/** Returns the line importing the menu javascript (should be in the html title) */
@@ -80,20 +84,20 @@ public class Menu {
 		sb.append("d.config.folderLinks = true;\n"); //$NON-NLS-1$
 		sb.append("d.config.inOrder = true;\n"); //$NON-NLS-1$
 		
-		sb.append("d.icon.root = '" + menuOwner.getPathTo(ToK.HTML_FOLDER + "/other/menu/img/tree1.gif") + "';\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		sb.append("d.icon.folder = '" + menuOwner.getPathTo(ToK.HTML_FOLDER + "/other/menu/img/folder.gif") + "';\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		sb.append("d.icon.folderOpen = '" + menuOwner.getPathTo(ToK.HTML_FOLDER + "/other/menu/img/folderopen.gif") + "';\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		sb.append("d.icon.node = '" + menuOwner.getPathTo(ToK.HTML_FOLDER + "/other/menu/img/page.gif") + "';\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		sb.append("d.icon.empty = '" + menuOwner.getPathTo(ToK.HTML_FOLDER + "/other/menu/img/empty.gif") + "';\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		sb.append("d.icon.line = '" + menuOwner.getPathTo(ToK.HTML_FOLDER + "/other/menu/img/line.gif") + "';\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		sb.append("d.icon.join = '" + menuOwner.getPathTo(ToK.HTML_FOLDER + "/other/menu/img/join.gif") + "';\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		sb.append("d.icon.joinBottom = '" + menuOwner.getPathTo(ToK.HTML_FOLDER + "/other/menu/img/joinbottom.gif") + "';\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		sb.append("d.icon.plus = '" + menuOwner.getPathTo(ToK.HTML_FOLDER + "/other/menu/img/plus.gif") + "';\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		sb.append("d.icon.plusBottom = '" + menuOwner.getPathTo(ToK.HTML_FOLDER + "/other/menu/img/plusbottom.gif") + "';\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		sb.append("d.icon.minus = '" + menuOwner.getPathTo(ToK.HTML_FOLDER + "/other/menu/img/minus.gif") + "';\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		sb.append("d.icon.minusBottom = '" + menuOwner.getPathTo(ToK.HTML_FOLDER + "/other/menu/img/minusbottom.gif") + "';\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		sb.append("d.icon.nlPlus = '" + menuOwner.getPathTo(ToK.HTML_FOLDER + "/other/menu/img/nolines_plus.gif") + "';\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		sb.append("d.icon.nlMinus = '" + menuOwner.getPathTo(ToK.HTML_FOLDER + "/other/menu/img/nolines_minus.gif") + "';\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		sb.append("d.icon.root = '" + menuOwner.getPathTo( imgBase + "tree1.gif") + "';\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		sb.append("d.icon.folder = '" + menuOwner.getPathTo(imgBase + "folder.gif") + "';\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		sb.append("d.icon.folderOpen = '" + menuOwner.getPathTo(imgBase + "folderopen.gif") + "';\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		sb.append("d.icon.node = '" + menuOwner.getPathTo(imgBase + "page.gif") + "';\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		sb.append("d.icon.empty = '" + menuOwner.getPathTo(imgBase + "empty.gif") + "';\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		sb.append("d.icon.line = '" + menuOwner.getPathTo(imgBase + "line.gif") + "';\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		sb.append("d.icon.join = '" + menuOwner.getPathTo(imgBase + "join.gif") + "';\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		sb.append("d.icon.joinBottom = '" + menuOwner.getPathTo(imgBase + "joinbottom.gif") + "';\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		sb.append("d.icon.plus = '" + menuOwner.getPathTo(imgBase + "plus.gif") + "';\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		sb.append("d.icon.plusBottom = '" + menuOwner.getPathTo(imgBase + "plusbottom.gif") + "';\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		sb.append("d.icon.minus = '" + menuOwner.getPathTo(imgBase + "minus.gif") + "';\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		sb.append("d.icon.minusBottom = '" + menuOwner.getPathTo(imgBase + "minusbottom.gif") + "';\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		sb.append("d.icon.nlPlus = '" + menuOwner.getPathTo(imgBase + "nolines_plus.gif") + "';\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		sb.append("d.icon.nlMinus = '" + menuOwner.getPathTo(imgBase + "nolines_minus.gif") + "';\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		
 		sb.append(getAddCode(0, -1, Messages.getString("Menu.ToK"), menuOwner.getPathTo(ToK.HTML_FOLDER + "/index.html"), Messages.getString("Menu.BackToMain")));  //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
 		freeId = 1;
@@ -121,8 +125,8 @@ public class Menu {
 		int myId = freeId;
 		freeId++;
 		
-		String iconPath = menuOwner.getPathTo(ToK.HTML_FOLDER + "/other/menu/img/folder.gif"); //$NON-NLS-1$
-		String iconOpenPath = menuOwner.getPathTo(ToK.HTML_FOLDER + "/other/menu/img/folderopen.gif");  //$NON-NLS-1$
+		String iconPath = menuOwner.getPathTo(imgBase + "folder.gif"); //$NON-NLS-1$
+		String iconOpenPath = menuOwner.getPathTo(imgBase + "folderopen.gif");  //$NON-NLS-1$
 		
 		sb.append( getAddCode(myId, parentID, srcFolder.getName(), null, null, null, iconPath, iconOpenPath, null) );
 		
@@ -169,8 +173,7 @@ public class Menu {
 		String link = menuOwner.getPathTo(sPage);
 		String tooltip = title + Messages.getString("Menu.by") + sPage.getSourcDoc().getAuthor(); //$NON-NLS-1$
 		
-		String iconPath = menuOwner.getPathTo(ToK.HTML_FOLDER + "/other/menu/img"); //$NON-NLS-1$
-		iconPath += sPage.isSrcRoot() ? "/root.png" : "/source.png"; //$NON-NLS-1$ //$NON-NLS-2$
+		String iconPath = menuOwner.getPathTo(imgBase + ( sPage.isSrcRoot() ? "root.png" : "source.png" )); //$NON-NLS-1$ //$NON-NLS-2$
 		
 		return getAddCode(myId, parentID, title, link, tooltip, null, iconPath, null, null);	
 	}
@@ -187,8 +190,8 @@ public class Menu {
 		int myId = freeId;
 		freeId++;
 		
-		String iconPath = menuOwner.getPathTo(ToK.HTML_FOLDER + "/other/menu/img/folder.gif"); //$NON-NLS-1$
-		String iconOpenPath = menuOwner.getPathTo(ToK.HTML_FOLDER + "/other/menu/img/folderopen.gif");  //$NON-NLS-1$
+		String iconPath = menuOwner.getPathTo(imgBase + "folder.gif"); //$NON-NLS-1$
+		String iconOpenPath = menuOwner.getPathTo(imgBase + "folderopen.gif");  //$NON-NLS-1$
 		
 		sb.append( getAddCode(myId, parentId, ToK.DISCUSSION_FOLDER, null, null, null, iconPath, iconOpenPath, null) );
 		
@@ -226,7 +229,7 @@ public class Menu {
 		else
 			tooltip += Messages.getString("Menu.unlinked"); //$NON-NLS-1$
 		
-		String iconPath = menuOwner.getPathTo(ToK.HTML_FOLDER + "/other/menu/img/disc.png"); //$NON-NLS-1$
+		String iconPath = menuOwner.getPathTo(imgBase + "disc.png"); //$NON-NLS-1$
 		
 		return getAddCode(myId, parentId, discussionName, urlLink, tooltip, null, iconPath, null, null);
 	}

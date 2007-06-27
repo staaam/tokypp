@@ -44,6 +44,25 @@ public class CSSManager
 		ToK.HTML_FOLDER + "/other/menu/img/disc.png",  //$NON-NLS-1$
 		ToK.HTML_FOLDER + "/other/menu/img/source.png",  //$NON-NLS-1$
 		ToK.HTML_FOLDER + "/other/menu/img/root.png",  //$NON-NLS-1$
+		ToK.HTML_FOLDER + "/other/menu/imgRTL/base.gif",  //$NON-NLS-1$
+		ToK.HTML_FOLDER + "/other/menu/imgRTL/empty.gif",  //$NON-NLS-1$
+		ToK.HTML_FOLDER + "/other/menu/imgRTL/folder.gif",  //$NON-NLS-1$
+		ToK.HTML_FOLDER + "/other/menu/imgRTL/folderopen.gif",  //$NON-NLS-1$
+		ToK.HTML_FOLDER + "/other/menu/imgRTL/join.gif",  //$NON-NLS-1$
+		ToK.HTML_FOLDER + "/other/menu/imgRTL/joinbottom.gif",  //$NON-NLS-1$
+		ToK.HTML_FOLDER + "/other/menu/imgRTL/line.gif",  //$NON-NLS-1$
+		ToK.HTML_FOLDER + "/other/menu/imgRTL/minus.gif",  //$NON-NLS-1$
+		ToK.HTML_FOLDER + "/other/menu/imgRTL/minusbottom.gif",  //$NON-NLS-1$
+		ToK.HTML_FOLDER + "/other/menu/imgRTL/nolines_minus.gif",  //$NON-NLS-1$
+		ToK.HTML_FOLDER + "/other/menu/imgRTL/nolines_plus.gif",  //$NON-NLS-1$
+		ToK.HTML_FOLDER + "/other/menu/imgRTL/page.gif",  //$NON-NLS-1$
+		ToK.HTML_FOLDER + "/other/menu/imgRTL/plus.gif",  //$NON-NLS-1$
+		ToK.HTML_FOLDER + "/other/menu/imgRTL/plusbottom.gif",  //$NON-NLS-1$
+		ToK.HTML_FOLDER + "/other/menu/imgRTL/tree1.gif",  //$NON-NLS-1$
+		ToK.HTML_FOLDER + "/other/menu/imgRTL/tree2.jpg",  //$NON-NLS-1$
+		ToK.HTML_FOLDER + "/other/menu/imgRTL/disc.png",  //$NON-NLS-1$
+		ToK.HTML_FOLDER + "/other/menu/imgRTL/source.png",  //$NON-NLS-1$
+		ToK.HTML_FOLDER + "/other/menu/imgRTL/root.png",  //$NON-NLS-1$
 	 }; 
 	
 	/** The CSS file used by most of the html project */
