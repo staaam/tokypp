@@ -23,6 +23,7 @@
 		<xsd:sequence>
 			<xsd:element name="name" type="xsd:string"/>
 			<xsd:element name="user" type="xsd:string"/>
+			<xsd:element name="desc" type="xsd:string"/>
 			<xsd:element name="opinion" type="Opinion" minOccurs="0" maxOccurs="unbounded"/>
 			<xsd:element name="relation" type="Relation" minOccurs="0" maxOccurs="unbounded"/>
 		</xsd:sequence>
