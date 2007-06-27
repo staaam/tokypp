@@ -85,6 +85,7 @@ public class DiscussionPage extends HTMLPage {
 		
 		body.addText(Messages.getString("DiscussionPage.CreatedBy")); //$NON-NLS-1$
 		body.addElement("em").addText(disc.getCreatorName()); //$NON-NLS-1$
+		body.addElement("p").addText(disc.getDescription()); //$NON-NLS-1$
 		
 		if (disc.getLink() != null)
 			body.add(getLinkInfoElement());
