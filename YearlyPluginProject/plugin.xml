@@ -337,6 +337,13 @@
             icon="icons/relation.gif"
             id="lost.tok.RelationView.RelationView"
             name="Relations View"/>
+      <view
+            allowMultiple="false"
+            category="lost.tok.Categoy"
+            class="lost.tok.navigator.InformationNavigator"
+            icon="icons/sample.gif"
+            id="lost.tok.navigator.Navigator"
+            name="ToKNavigator"/>
    </extension>
 	<extension
          point="org.eclipse.ui.exportWizards">
