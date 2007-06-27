@@ -19,6 +19,8 @@ public class ImageManager {
 		putImage(ImageType.QUOTE, ICONS_FOLDER + "AddQuote.bmp");
 		putImage(ImageType.EXCERPTION, ICONS_FOLDER + "exp.bmp");
 		putImage(ImageType.COMMENT, ICONS_FOLDER + "comment.bmp");
+		putImage(ImageType.DESCRIPTION, ICONS_FOLDER + "edit.jpg");
+		
 	}
 
 	private static void putImage(ImageType i, String filename) {

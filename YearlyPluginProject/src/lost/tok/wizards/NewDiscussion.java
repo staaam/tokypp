@@ -46,7 +46,7 @@ public class NewDiscussion extends Wizard implements INewWizard {
 	 */
 	public boolean performFinish() {
 		try {
-			ToK.getProjectToK(project).addDiscussion(page.getDiscussionName());
+			ToK.getProjectToK(project).addDiscussion(page.getDiscussionName(), page.getDiscussionDescription());
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -77,5 +77,9 @@ public class NewDiscussion extends Wizard implements INewWizard {
 
 	public String getDiscussionName() {
 		return page.getDiscussionName();
+	}
+	
+	public String getDiscussionDescription() {
+		return page.getDiscussionDescription();
 	}
 }
