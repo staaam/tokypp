@@ -20,6 +20,7 @@ public class ImageManager {
 		putImage(ImageType.EXCERPTION, ICONS_FOLDER + "exp.bmp");
 		putImage(ImageType.COMMENT, ICONS_FOLDER + "comment.bmp");
 		putImage(ImageType.DESCRIPTION, ICONS_FOLDER + "edit.jpg");
+		putImage(ImageType.TREE_BIG, ICONS_FOLDER + "treeBig.jpg");
 		
 	}
 

@@ -1,6 +1,10 @@
 package lost.tok.print;
 
+import lost.tok.imageManager.ImageManager;
+import lost.tok.imageManager.ImageType;
+
 import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.printing.Printer;
@@ -54,6 +58,11 @@ public class WrappingPrinter {
       
       // Print the text
       printer.startPage();
+      
+      Image image = ImageManager.getImage(ImageType.TREE_BIG);
+      gc.drawImage(image, xPos, yPos);
+      yPos += image.getBounds().height;
+      
       buf = new StringBuffer();
       char c;
       for (int i = 0, n = contents.length(); i < n; i++) {
@@ -77,7 +86,7 @@ public class WrappingPrinter {
           }
         }
       }
-
+      
       printer.endPage();
       printer.endJob();
       gc.dispose();

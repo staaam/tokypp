@@ -62,7 +62,7 @@ public class PrintDiscussion {
 		
 		fw.write(Messages.getString("PrintDiscussion.PrintDiscussionName") + d.getDiscName() + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
 		fw.write(Messages.getString("PrintDiscussion.PrintAuthorName") + d.getCreatorName() + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
-		fw.write(Messages.getString("PrintDiscussion.PrintDescription") + d.getDescription()); //$NON-NLS-1$
+		fw.write(Messages.getString("PrintDiscussion.PrintDescription") + d.getDescription() + "\n"); //$NON-NLS-1$
 		
 		//if the discussion was linked, the source it was linked to:
 		Link link = d.getLink();
@@ -90,6 +90,7 @@ public class PrintDiscussion {
 		// opinions:		
 		Opinion[] opinions = discussion.getOpinions();
 		for (Opinion o : opinions ){
+			fw.write("\n");
 			fw.write(opinionCounter+") " + o.getName() + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
 			
 			int quoteCounter = 1;
