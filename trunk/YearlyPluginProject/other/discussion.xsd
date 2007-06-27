@@ -1,26 +1,39 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 	<xsd:include schemaLocation="common.xsd"/>
 	<!--elementFormDefault="qualified"
     xmlns="http://tempuri.org/XMLSchema.xsd"
     xmlns:mstns="http://tempuri.org/XMLSchema.xsd"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"			    -->
-	<xsd:element name="discussion">
-		<xsd:complexType>
-			<xsd:sequence>
-				<xsd:element name="name" type="xsd:string"/>
-				<xsd:element name="user" type="xsd:string"/>
-				<!-- Do we need to add a list of pointers to Links? -->
-				<xsd:element maxOccurs="unbounded" name="opinion" type="Opinion"/>
-			</xsd:sequence>
-		</xsd:complexType>
+	<xsd:element name="discussion" type="DiscussionType">
+		<xsd:key name="key">
+			<xsd:selector xpath=".//opinion | .//quote"/>
+			<xsd:field xpath="id"/>
+		</xsd:key>
+		<xsd:keyref name="keyRef" refer="key">
+			<xsd:selector xpath=".//relation"/>
+			<xsd:field xpath="id1"/>
+		</xsd:keyref>
+		<xsd:keyref name="keyRef2" refer="key">
+			<xsd:selector xpath=".//relation"/>
+			<xsd:field xpath="id2"/>
+		</xsd:keyref>
 	</xsd:element>
+	<xsd:complexType name="DiscussionType">
+		<xsd:sequence>
+			<xsd:element name="name" type="xsd:string"/>
+			<xsd:element name="user" type="xsd:string"/>
+			<xsd:element name="desc" type="xsd:string"/>
+			<xsd:element name="opinion" type="Opinion" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="relation" type="Relation" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
 	<xsd:complexType name="Opinion">
 		<xsd:sequence>
 			<xsd:element name="id" type="xsd:positiveInteger"/>
 			<xsd:element name="name" type="xsd:string"/>
-			<xsd:element maxOccurs="unbounded" minOccurs="0" name="quote" type="Quote"/>
-			<xsd:element maxOccurs="unbounded" minOccurs="0" name="relation" type="Relation"/>
+			<xsd:element name="quote" type="Quote" minOccurs="0" maxOccurs="unbounded"/>
+			<!--xsd:element name="opinionRel" type="OpinionRelation" minOccurs="0" maxOccurs="unbounded"/-->
 		</xsd:sequence>
 	</xsd:complexType>
 	<xsd:complexType name="Quote">
@@ -28,21 +41,21 @@
 			<xsd:element name="id" type="xsd:positiveInteger"/>
 			<xsd:element name="sourceFile" type="xsd:string"/>
 			<xsd:element name="comment" type="xsd:string"/>
-			<xsd:element maxOccurs="unbounded" minOccurs="0" name="relation" type="Relation"/>
-			<xsd:element maxOccurs="unbounded" name="excerption" type="Excerption"/>
+			<xsd:element name="excerption" type="Excerption" maxOccurs="unbounded"/>
 		</xsd:sequence>
 	</xsd:complexType>
 	<xsd:complexType name="Relation">
 		<xsd:sequence>
-			<xsd:element name="targetId" type="xsd:nonNegativeInteger"/>
+			<xsd:element name="id1" type="xsd:nonNegativeInteger"/>
+			<xsd:element name="id2" type="xsd:nonNegativeInteger"/>
 			<xsd:element name="comment" type="xsd:string"/>
 			<xsd:element name="type" type="OpinionRelationType"/>
 		</xsd:sequence>
 	</xsd:complexType>
 	<xsd:simpleType name="OpinionRelationType">
 		<xsd:restriction base="xsd:string">
-			<xsd:enumeration value="opposition"/>
-			<xsd:enumeration value="interpretation"/>
+			<xsd:enumeration value="explain"/>
+			<xsd:enumeration value="disagree"/>
 		</xsd:restriction>
 	</xsd:simpleType>
 </xsd:schema>
