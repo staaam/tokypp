@@ -4,10 +4,12 @@ import java.util.TreeMap;
 
 import lost.tok.Author;
 import lost.tok.AuthorsHandler;
+import lost.tok.Discussion;
 import lost.tok.Messages;
 import lost.tok.Rank;
 import lost.tok.Source;
 import lost.tok.ToK;
+import lost.tok.disEditor.DiscussionEditor;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.action.IAction;
@@ -278,6 +280,10 @@ public class AuthorsEditor extends TextEditor {
 			public void focusGained(FocusEvent e) {			
 				authHandler.updateFile();
 				par.setSize(ctrlCurrentWidth-1,par.getSize().y);
+				
+				for(Discussion discussion : authHandler.getMyToK().getDiscussions()){
+					discussion.increaseModificationStamp();
+				}
 			}
 
 			//focus lost listener
