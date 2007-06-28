@@ -38,6 +38,7 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
 
 /**
@@ -230,11 +231,11 @@ public class RootDiscussionsPart extends AbstractEditorAction implements
 		}	
 	}
 
-	private void openDiscussionLink(Link discussionLink) {
+	public static void openDiscussionLink(Link discussionLink) {
 		Discussion d = discussionLink.getLinkedDiscussion();
 
 		try {
-			IWorkbenchWindow ww = operationTable.getSite().getWorkbenchWindow();
+			IWorkbenchWindow ww = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 			// String editorId = ww.getWorkbench().getEditorRegistry()
 			// .getDefaultEditor(d.getFile().getName()).getId();
 			String editorId = DiscussionEditor.EDITOR_ID;
