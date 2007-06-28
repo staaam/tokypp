@@ -51,7 +51,7 @@ public class NewDiscussionPage extends WizardPage implements ModifyListener {
 		name.addModifyListener(this);
 
 		label = new Label(container, SWT.NULL);
-		label.setText("Description" + ":");
+		label.setText(Messages.getString("NewDiscussionPage.Description") + ":"); //$NON-NLS-1$ //$NON-NLS-2$
 		label.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
 
 		description = new Text(container, SWT.BORDER | SWT.MULTI| SWT.WRAP | SWT.V_SCROLL);

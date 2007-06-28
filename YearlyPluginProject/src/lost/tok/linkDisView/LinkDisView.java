@@ -8,6 +8,7 @@ import lost.tok.Discussion;
 import lost.tok.Excerption;
 import lost.tok.GeneralFunctions;
 import lost.tok.Link;
+import lost.tok.Messages;
 import lost.tok.opTable.OperationTable;
 
 import org.eclipse.jface.viewers.DoubleClickEvent;
@@ -54,7 +55,8 @@ public class LinkDisView extends ViewPart {
 			if (obj instanceof Discussion) {
 				Discussion d = (Discussion) obj;
 				Link l = d.getLink();
-				return d.getDiscName() + " (Link type: " + l.getDisplayLinkType() + ", Link subject: '" + l.getSubject() + "')";
+				return d.getDiscName() + " (" + Messages.getString("LinkDisView.LinkType") + ": " + l.getDisplayLinkType() //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+						+ ", " + Messages.getString("LinkDisView.LinkSubject") + ": '" + l.getSubject() + "')"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 			}
 			
 			if (obj instanceof Excerption) {

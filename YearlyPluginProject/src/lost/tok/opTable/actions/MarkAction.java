@@ -21,7 +21,7 @@ public class MarkAction extends AbstractEditorAction {
 		if (operationTable.isRootDiscussionsView()) {
 			messageBox(
 					Messages.getString("AddQuoteAction.Error"), //$NON-NLS-1$
-					"Disabled when Linked Discussions are shown");
+					Messages.getString("Action.Disabled")); //$NON-NLS-1$
 			return;
 		}
 			

@@ -41,7 +41,7 @@ public class SwitchOpTableViewAction extends AbstractEditorAction {
 		// return an error messege if called from a source that is not a root
 		if (!new Source(((FileEditorInput) activeEditor.getEditorInput()).getFile()).isRoot()) {
 			messageBox(
-					Messages.getString("AddQuoteAction.Error"),
+					Messages.getString("AddQuoteAction.Error"), //$NON-NLS-1$
 					Messages.getString("SwitchOpTableViewAction.0")); //$NON-NLS-1$ //$NON-NLS-2$
 			return;
 		}

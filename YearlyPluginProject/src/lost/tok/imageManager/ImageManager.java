@@ -9,18 +9,18 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 
 public class ImageManager {
-	static private final String ICONS_FOLDER = "icons/";
+	static private final String ICONS_FOLDER = "icons/"; //$NON-NLS-1$
 	static EnumMap<ImageType, Image> m = new EnumMap<ImageType, Image>(ImageType.class);
 	static {
-		putImage(ImageType.DISCUSSION, ICONS_FOLDER + "discussion.gif");
-		putImage(ImageType.LINK, ICONS_FOLDER + "link_ico.gif");
-		putImage(ImageType.OPINION, ICONS_FOLDER + "chat.ico");
-		putImage(ImageType.ROOT, ICONS_FOLDER + "opTable.bmp");
-		putImage(ImageType.QUOTE, ICONS_FOLDER + "AddQuote.bmp");
-		putImage(ImageType.EXCERPTION, ICONS_FOLDER + "exp.bmp");
-		putImage(ImageType.COMMENT, ICONS_FOLDER + "comment.bmp");
-		putImage(ImageType.DESCRIPTION, ICONS_FOLDER + "edit.jpg");
-		putImage(ImageType.TREE_BIG, ICONS_FOLDER + "treeBig.jpg");
+		putImage(ImageType.DISCUSSION, ICONS_FOLDER + "discussion.gif"); //$NON-NLS-1$
+		putImage(ImageType.LINK, ICONS_FOLDER + "link_ico.gif"); //$NON-NLS-1$
+		putImage(ImageType.OPINION, ICONS_FOLDER + "chat.ico"); //$NON-NLS-1$
+		putImage(ImageType.ROOT, ICONS_FOLDER + "opTable.bmp"); //$NON-NLS-1$
+		putImage(ImageType.QUOTE, ICONS_FOLDER + "AddQuote.bmp"); //$NON-NLS-1$
+		putImage(ImageType.EXCERPTION, ICONS_FOLDER + "exp.bmp"); //$NON-NLS-1$
+		putImage(ImageType.COMMENT, ICONS_FOLDER + "comment.bmp"); //$NON-NLS-1$
+		putImage(ImageType.DESCRIPTION, ICONS_FOLDER + "edit.jpg"); //$NON-NLS-1$
+		putImage(ImageType.TREE_BIG, ICONS_FOLDER + "treeBig.jpg"); //$NON-NLS-1$
 		
 	}
 
