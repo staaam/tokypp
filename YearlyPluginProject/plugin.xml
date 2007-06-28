@@ -331,14 +331,14 @@
             allowMultiple="false"
             category="lost.tok.Categoy"
             class="lost.tok.excerptionsView.ExcerptionView"
-            icon="icons/sample.gif"
+            icon="icons/edit.jpg"
             id="lost.tok.excerptionsView.ExcerptionView"
             name="%lost.tok.excerptionsView"/>
       <view
             allowMultiple="false"
             category="lost.tok.Categoy"
             class="lost.tok.linkDisView.LinkDisView"
-            icon="icons/sample.gif"
+            icon="icons/link_ico.gif"
             id="lost.tok.linkDisView.LinkDisView"
             name="%view.name.linkedDiscs"/>
       <view
