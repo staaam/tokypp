@@ -1,9 +1,6 @@
 package lost.tok.navigator;
 
-import java.util.Comparator;
-
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.ui.views.navigator.ResourceSorter;
 

@@ -126,8 +126,8 @@
                enablesFor="1"
                icon="icons/web_doc.bmp"
                id="lost.tok.ExportToHTMLAction"
-               label="Create HTML"
-               tooltip="Exports the entire ToK to an HTML site"/>
+               label="%action.name.createhtml"
+               tooltip="%action.tooltip.createhtml"/>
          <filter
                name="nature"
                value="lost.tok.ToKNature"/>
@@ -340,21 +340,21 @@
             class="lost.tok.linkDisView.LinkDisView"
             icon="icons/sample.gif"
             id="lost.tok.linkDisView.LinkDisView"
-            name="Linked Discussions"/>
+            name="%view.name.linkedDiscs"/>
       <view
             allowMultiple="false"
             category="lost.tok.Categoy"
             class="lost.tok.RelationView.RelationView"
             icon="icons/relation.gif"
             id="lost.tok.RelationView.RelationView"
-            name="Relations View"/>
+            name="%view.name.relationView"/>
       <view
             allowMultiple="false"
             category="lost.tok.Categoy"
             class="lost.tok.navigator.InformationNavigator"
             icon="icons/folder.ico"
             id="lost.tok.navigator.Navigator"
-            name="ToKNavigator"/>
+            name="%view.name.toknav"/>
    </extension>
 	<extension
          point="org.eclipse.ui.exportWizards">
@@ -365,7 +365,7 @@
             id="lost.tok.exportDiscussion.ExportDiscussion"
             name="%wizard.discussion.export">
          <description>
-            Exports discussions from a Tok Project
+            %wizard.description.discExport
          </description>
       </wizard>
       <category
@@ -379,9 +379,9 @@
             class="lost.tok.wizards.ExportSource"
             icon="icons/sample.gif"
             id="lost.tok.exportSource.ExportSource"
-            name="Export Sources">
+            name="%wizard.name.sourceExport">
          <description>
-            Exports sources from a Tok Project
+            %wizard.description.sourceExport
          </description>
       </wizard>
       <category
@@ -411,7 +411,7 @@
             id="lost.tok.wizards.ImportDiscussion"
             name="%wizard.discussion.import">
          <description>
-            Imports discussions into the Tok Project
+            %wizard.description.discImport
          </description>
       </wizard>
    </extension>
@@ -425,9 +425,9 @@
             class="lost.tok.wizards.ImportSource"
             icon="icons/sample.gif"
             id="lost.tok.wizards.ImportSource"
-            name="Import Sources">
+            name="%wizard.name.discImport">
          <description>
-            Imports sources into the Tok Project
+            %wizard.description.sourceImport
          </description>
       </wizard>
    </extension>
@@ -440,7 +440,7 @@
             extensions="dis:101,src:100,*:9"
             icon="icons/tree.jpg"
             id="lost.tok.search"
-            label="ToK Search"
+            label="%page.label.search"
             showScopeSection="true"/>
    </extension>
    <extension
@@ -452,7 +452,7 @@
                class="lost.tok.excerptionsView.actions.ClearAllAction"
                icon="icons/UnMarkAll.bmp"
                id="lost.tok.excerptionsView.ClearAll"
-               label="Clear All"
+               label="%action.label.clearall"
                style="push"
                toolbarPath="ToKGroup"/>
          <action
@@ -468,7 +468,7 @@
                class="lost.tok.excerptionsView.actions.DeleteAction"
                icon="icons/delete.gif"
                id="lost.tok.excerptionsView.DeleteAction"
-               label="Delete"
+               label="%action.label.delete"
                state="true"
                style="push"
                toolbarPath="ToKGroup"/>
@@ -481,7 +481,7 @@
                enablesFor="*"
                icon="icons/view_next.gif"
                id="lost.tok.linkDisView.next"
-               label="Next"
+               label="%action.label.next"
                state="true"
                style="push"
                toolbarPath="ToKGroup"/>
@@ -490,7 +490,7 @@
                enablesFor="*"
                icon="icons/view_prev.gif"
                id="lost.tok.linkDisView.prev"
-               label="Previous"
+               label="%action.label.prev"
                state="true"
                style="push"
                toolbarPath="ToKGroup"/>

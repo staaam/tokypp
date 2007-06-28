@@ -53,7 +53,7 @@ public class Menu {
 		this.ownerId = 0;
 		this.srcPathToPage = srcPathToPage;
 		this.discNameToPage = discNameToPage;
-		this.imgBase = GeneralFunctions.isLTR() ? ToK.HTML_FOLDER + "/other/menu/img/" : ToK.HTML_FOLDER + "/other/menu/imgRTL/";
+		this.imgBase = GeneralFunctions.isLTR() ? ToK.HTML_FOLDER + "/other/menu/img/" : ToK.HTML_FOLDER + "/other/menu/imgRTL/"; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
 	/** Returns the line importing the menu javascript (should be in the html title) */
@@ -109,7 +109,7 @@ public class Menu {
 		
 		sb.append("document.write(d);\n"); //$NON-NLS-1$
 		sb.append("d.openTo(" + ownerId + ",true);\n"); //$NON-NLS-1$ //$NON-NLS-2$
-		sb.append("d.openAll();\n");
+		sb.append("d.openAll();\n"); //$NON-NLS-1$
 		
 		return sb.toString();
 	}
