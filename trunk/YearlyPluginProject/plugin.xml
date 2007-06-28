@@ -58,6 +58,13 @@
              project="false"/>
        <wizard
              category="lost.tok.Categoy"
+             class="lost.tok.wizards.NewSourceFolder"
+             icon="icons/folder.ico"
+             id="lost.tok.newFolder.NewFolder"
+             name="Source Folder"
+             project="false"/>
+       <wizard
+             category="lost.tok.Categoy"
              class="lost.tok.wizards.NewRelation"
              icon="icons/relation.gif"
              id="lost.tok.newRelationWizard.NewRelationWizard"
