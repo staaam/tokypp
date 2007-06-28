@@ -10,6 +10,7 @@ import lost.tok.GeneralFunctions;
 import lost.tok.Link;
 import lost.tok.Messages;
 import lost.tok.opTable.OperationTable;
+import lost.tok.opTable.RootDiscussionsPart;
 
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IContentProvider;
@@ -244,8 +245,10 @@ public class LinkDisView extends ViewPart {
 		ITreeSelection selection = (ITreeSelection) ts;
 		TreeNode n = (TreeNode) selection.getFirstElement();
 		
-		if (n.getValue() instanceof Discussion)
-			n = n.getChildren()[0];
+		if (n.getValue() instanceof Discussion) {
+			Discussion d = (Discussion) n.getValue();
+			RootDiscussionsPart.openDiscussionLink(d.getLink());
+		}
 		
 		if (n.getValue() instanceof Excerption) {
 			Excerption e = (Excerption) n.getValue();
