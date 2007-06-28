@@ -73,8 +73,10 @@ public class ToKSearchVisitor implements IResourceVisitor {
 			}
 			last = m+1;
 		}
-		pattern = Pattern.compile(s, Pattern.UNICODE_CASE | Pattern.DOTALL |
-				(searchOptions.contains(SearchOption.CASE_SENSITIVE) ? 0 : Pattern.CASE_INSENSITIVE));
+		int options = Pattern.DOTALL;
+		if (!searchOptions.contains(SearchOption.CASE_SENSITIVE))
+				options |= Pattern.CASE_INSENSITIVE; 
+		pattern = Pattern.compile(s, options);
 	}
 
 	/**
