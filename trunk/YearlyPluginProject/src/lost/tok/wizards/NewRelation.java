@@ -82,7 +82,7 @@ public class NewRelation extends Wizard implements INewWizard {
 		if (activeEditor instanceof DiscussionEditor) {
 			DiscussionEditor de = (DiscussionEditor) activeEditor;
 			if (de.getDiscussion() == page.getDiscussion())
-				RelationView.getView(true).update(page.getDiscussion());
+				RelationView.getView(false).update(page.getDiscussion());
 		}
 	}
 }
