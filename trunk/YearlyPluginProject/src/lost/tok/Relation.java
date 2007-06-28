@@ -4,6 +4,10 @@ import org.dom4j.Element;
 
 public class Relation {
 
+	private static final String ELM_TYPE = "type"; //$NON-NLS-1$
+	private static final String ELM_COMMENT = "comment"; //$NON-NLS-1$
+	private static final String ELM_ID2 = "id2"; //$NON-NLS-1$
+	private static final String ELM_ID1 = "id1"; //$NON-NLS-1$
 	Object element1;
 	Object element2;
 	
@@ -14,10 +18,10 @@ public class Relation {
 	
 	public Relation(Discussion d, Element e) {
 		this(d,
-				Integer.parseInt(e.element("id1").getText()),
-				Integer.parseInt(e.element("id2").getText()),
-				e.element("comment").getText(),
-				e.element("type").getText());
+				Integer.parseInt(e.element(ELM_ID1).getText()),
+				Integer.parseInt(e.element(ELM_ID2).getText()),
+				e.element(ELM_COMMENT).getText(),
+				e.element(ELM_TYPE).getText());
 	}
 
 	public Relation(Discussion d, Integer id1, Integer id2, String comment, String type) {
@@ -30,10 +34,10 @@ public class Relation {
 	}
 
 	public void fillElement(Element e) {
-		e.addElement("id1").addText(Integer.toString(getId(element1)));
-		e.addElement("id2").addText(Integer.toString(getId(element2)));
-		e.addElement("comment").addText(comment);
-		e.addElement("type").addText(type);
+		e.addElement(ELM_ID1).addText(Integer.toString(getId(element1)));
+		e.addElement(ELM_ID2).addText(Integer.toString(getId(element2)));
+		e.addElement(ELM_COMMENT).addText(comment);
+		e.addElement(ELM_TYPE).addText(type);
 	}
 
 	private int getId(Object element) {
@@ -73,7 +77,7 @@ public class Relation {
 			Quote q = (Quote) element;
 			return q.getText();
 		}
-		return "";
+		return ""; //$NON-NLS-1$
 	}
 	
 	private Object getElement(int id) {

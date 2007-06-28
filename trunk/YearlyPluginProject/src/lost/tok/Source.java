@@ -14,7 +14,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 
 public class Source {
-	public static final Object SOURCE_EXTENSION = "src";
+	public static final Object SOURCE_EXTENSION = "src"; //$NON-NLS-1$
 	
 	/** The IFile of the source */
 	IFile file;
@@ -36,7 +36,7 @@ public class Source {
 	 */
 	public Source(ToK tok, String fileName) {
 		if (tok == null)
-			throw new IllegalArgumentException("ToK must not be null");
+			throw new IllegalArgumentException("ToK must not be null"); //$NON-NLS-1$
 		this.tok = tok;
 		this.file = tok.getProject().getFile(fileName);
 	}

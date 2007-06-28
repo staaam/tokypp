@@ -69,9 +69,9 @@ public class ToKSearchPage extends DialogPage implements ISearchPage {
 	 * 
 	 */
 	private static class SearchPatternData {
-		private static final String STORE_WORKING_SETS = "WORKING_SETS";
-		private static final String STORE_TEXT_PATTERN = "TEXT_PATTERN";
-		private static final String STORE_SCOPE = "SCOPE";
+		private static final String STORE_WORKING_SETS = "WORKING_SETS"; //$NON-NLS-1$
+		private static final String STORE_TEXT_PATTERN = "TEXT_PATTERN"; //$NON-NLS-1$
+		private static final String STORE_SCOPE = "SCOPE"; //$NON-NLS-1$
 
 		public final String textPattern;
 		public final EnumSet<SearchOption> searchOptions;
@@ -185,14 +185,14 @@ public class ToKSearchPage extends DialogPage implements ISearchPage {
 	 */
 	private Control createSourceSrch(Composite parent) {
 		Group result = new Group(parent, SWT.NONE);
-		result.setText("Sources");
+		result.setText(Messages.getString("ToKSearchPage.Sources")); //$NON-NLS-1$
 		result.setLayout(new GridLayout());
 
-		newButton(result, "Title", SearchOption.SRC_TITLE);
+		newButton(result, Messages.getString("ToKSearchPage.Title"), SearchOption.SRC_TITLE); //$NON-NLS-1$
 
-		newButton(result, "Author", SearchOption.SRC_AUTHOR);
+		newButton(result, Messages.getString("ToKSearchPage.Author"), SearchOption.SRC_AUTHOR); //$NON-NLS-1$
 
-		newButton(result, "Content", SearchOption.SRC_CONTENT);
+		newButton(result, Messages.getString("ToKSearchPage.Content"), SearchOption.SRC_CONTENT); //$NON-NLS-1$
 
 		return result;
 	}
@@ -206,21 +206,21 @@ public class ToKSearchPage extends DialogPage implements ISearchPage {
 	 */
 	private Control createDiscussionSrch(Composite parent) {
 		Group result = new Group(parent, SWT.NONE);
-		result.setText("Discussions");
+		result.setText(Messages.getString("ToKSearchPage.Discussions")); //$NON-NLS-1$
 		// result.setLayout(new GridLayout());
 		result.setLayout(new GridLayout(2, true));
 
-		newButton(result, "Name", SearchOption.DSC_NAME);
+		newButton(result, Messages.getString("ToKSearchPage.Name"), SearchOption.DSC_NAME); //$NON-NLS-1$
 
 		// newButton(result, "Link Subject", SearchOption.DSC_LINK_SUBJ);
 
-		newButton(result, "Quote Text", SearchOption.DSC_QUOTES);
+		newButton(result, Messages.getString("ToKSearchPage.QuoteText"), SearchOption.DSC_QUOTES); //$NON-NLS-1$
 
-		newButton(result, "Creator", SearchOption.DSC_CREATOR);
+		newButton(result, Messages.getString("ToKSearchPage.Creator"), SearchOption.DSC_CREATOR); //$NON-NLS-1$
 
-		newButton(result, "Quote Comment", SearchOption.DSC_QUOTE_COMMENTS);
+		newButton(result, Messages.getString("ToKSearchPage.QuoteComment"), SearchOption.DSC_QUOTE_COMMENTS); //$NON-NLS-1$
 
-		newButton(result, "Opinion Name", SearchOption.DSC_OPINIONS);
+		newButton(result, Messages.getString("ToKSearchPage.Opinion"), SearchOption.DSC_OPINIONS); //$NON-NLS-1$
 
 		return result;
 	}
@@ -280,7 +280,7 @@ public class ToKSearchPage extends DialogPage implements ISearchPage {
 		result.setLayout(layout);
 
 		Label label = new Label(result, SWT.LEFT);
-		label.setText("Search string (* = any string, ? = any character):"); //$NON-NLS-1$
+		label.setText(Messages.getString("ToKSearchPage.SearchHint")); //$NON-NLS-1$
 		label.setLayoutData(new GridData(GridData.FILL, GridData.FILL, false,
 				false, 2, 1));
 
@@ -297,7 +297,7 @@ public class ToKSearchPage extends DialogPage implements ISearchPage {
 		fPattern.setLayoutData(data);
 
 		// Ignore case checkbox
-		newButton(result, "Case sensitive", SearchOption.CASE_SENSITIVE)
+		newButton(result, Messages.getString("ToKSearchPage.CaseSensetive"), SearchOption.CASE_SENSITIVE) //$NON-NLS-1$
 				.setLayoutData(
 						new GridData(GridData.FILL, GridData.FILL, false,
 								false, 1, 1));
@@ -435,8 +435,6 @@ public class ToKSearchPage extends DialogPage implements ISearchPage {
 		ToK tok = ToK.getProjectToK(p);
 		if (tok == null)
 			return;
-
-		System.out.println("Add " + p.getName());
 
 		scope.add(tok.getDiscussionFolder());
 		scope.add(tok.getSourcesFolder());
