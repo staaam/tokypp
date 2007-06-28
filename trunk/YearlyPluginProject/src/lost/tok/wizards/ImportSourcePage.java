@@ -11,6 +11,7 @@ import java.util.zip.ZipFile;
 import lost.tok.Messages;
 import lost.tok.Source;
 import lost.tok.ToK;
+
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;

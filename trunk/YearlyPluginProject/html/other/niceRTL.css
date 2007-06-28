@@ -1,6 +1,10 @@
 @charset "UTF-8";
 @import "nice.css";
 
+#menu
+{
+    float: right;
+}
 
 div.main_content
 { 

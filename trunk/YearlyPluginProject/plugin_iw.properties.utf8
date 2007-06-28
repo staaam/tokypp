@@ -29,7 +29,7 @@ editor.source.parser.name = מכין המקורות
 editor.discussion.linker = קשר דיון לשורש
 editor.discussion.links.viewer = הצג דיונים מקושרים
 editor.discussion = עורך הדיונים
-editor.author = עורך מחברים
+editor.authors = עורך מחברים
 
 wizard.source.parser.create = מקור מטקסט
 wizard.quote.add = הוסף ציטוט
@@ -49,3 +49,23 @@ command.name.unmark.quote = בטל סימון ציטוט
 command.name.add.opinion = הוסף דיעה
 command.name.show.linked.discussion = הצג דיונים מקושרים
 
+action.name.createhtml = צור אתר אינטרנט
+action.tooltip.createhtml = יוצר אתר אינטרנט מעץ הדעת
+
+view.name.linkedDiscs = דיונים מקושרים
+view.name.relationView = תצוגת יחסים
+view.name.toknav = נווט הדעת
+
+wizard.description.discExport = מייצא דיונים של עץ הדעת
+wizard.name.sourceExport = מייצא המקורות 
+wizard.description.sourceExport = מייצא מקורות של עץ הדעת
+wizard.description.discImport = מייבא דיונים לתוך פרוייקט עץ הדעת
+wizard.name.discImport = מייבא הדיונים
+wizard.description.sourceImport = מייבא מקורות לתוך פרוייקט עץ הדעת
+
+page.label.search = חיפוש בעץ
+
+action.label.clearall = נקה הכל
+action.label.delete = מחק
+action.label.next = הבא
+action.label.prev = הקודם

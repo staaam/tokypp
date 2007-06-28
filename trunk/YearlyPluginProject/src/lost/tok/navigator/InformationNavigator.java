@@ -1,12 +1,8 @@
 package lost.tok.navigator;
 
-import java.util.Comparator;
-
-import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.jface.viewers.ViewerComparator;
-import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.views.navigator.*;
+import org.eclipse.ui.views.navigator.ResourceNavigator;
+import org.eclipse.ui.views.navigator.ResourceSorter;
 
 public class InformationNavigator extends ResourceNavigator{
 	
