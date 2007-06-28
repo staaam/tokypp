@@ -107,7 +107,7 @@ public class ToK {
 
 	private IFolder srcFolder, discFolder, unparsedSrcFolder, rootFolder;
 
-	private IFile authorFile, linkFile, orderFile;
+	private IFile authorFile, linkFile;
 
 	private SortedSet<Discussion> discussions = null;
 
@@ -315,6 +315,10 @@ public class ToK {
 		
 		createOrderFile();
 
+		createSourcesOrderFile();
+		
+		createRootsOrderFile();
+		
 		return true;
 
 	}
@@ -507,6 +511,24 @@ public class ToK {
 		temp = e.addElement("sub");
 		temp.addElement("name").addText(ROOTS_FOLDER);
 		temp.addElement("type").addText("dir");
+		return orderDoc;
+	}
+	
+	public Document orderSourcesSkeleton() {
+		Document orderDoc = DocumentHelper.createDocument();
+
+		// Create the Skeleton of the order file for sources folder
+		Element e = orderDoc.addElement("order"); //$NON-NLS-1$
+		e.addElement("dir").addText(SOURCES_FOLDER);
+		return orderDoc;
+	}
+	
+	public Document orderRootsSkeleton() {
+		Document orderDoc = DocumentHelper.createDocument();
+
+		// Create the Skeleton of the order file for the roots folder
+		Element e = orderDoc.addElement("order"); //$NON-NLS-1$
+		e.addElement("dir").addText(ROOTS_FOLDER);
 		return orderDoc;
 	}
 
@@ -713,9 +735,23 @@ public class ToK {
 	}
 	
 	private void createOrderFile() {
-		orderFile = tokProject.getFile("order.xml"); //$NON-NLS-1$
+		IFile orderFile = tokProject.getFile("order.xml"); //$NON-NLS-1$
 		if (!orderFile.exists()) {
 			GeneralFunctions.writeToXml(orderFile, orderSkeleton());
+		}
+	}
+	
+	private void createSourcesOrderFile() {
+		IFile orderFile = getSourcesFolder().getFile("order.xml"); //$NON-NLS-1$
+		if (!orderFile.exists()) {
+			GeneralFunctions.writeToXml(orderFile, orderSourcesSkeleton());
+		}
+	}
+	
+	private void createRootsOrderFile() {
+		IFile orderFile = getRootsFolder().getFile("order.xml"); //$NON-NLS-1$
+		if (!orderFile.exists()) {
+			GeneralFunctions.writeToXml(orderFile, orderRootsSkeleton());
 		}
 	}
 
