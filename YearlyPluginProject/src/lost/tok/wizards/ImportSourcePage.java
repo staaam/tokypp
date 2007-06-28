@@ -192,10 +192,7 @@ public class ImportSourcePage extends WizardFileSystemResourceImportPage1
 	 */
 	@Override
 	public boolean finish() {
-		if (!ensureSourceIsValid()) {
-			return false;
-		}
-
+		
 		saveWidgetValues();
 
 		Iterator resourcesEnum = getSelectedResources().iterator();
@@ -223,8 +220,9 @@ public class ImportSourcePage extends WizardFileSystemResourceImportPage1
 	 */
 	@Override
 	protected IPath getContainerFullPath() {
-		getTok();
-		return tok.getSourcesFolder().getParent().getFullPath();
+		return super.getContainerFullPath();
+//		getTok();
+//		return tok.getSourcesFolder().getParent().getFullPath();
 	}
 
 	/**
