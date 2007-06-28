@@ -151,6 +151,7 @@ ImportDiscussionPage.1=יבא דיונים מקובץ exd
 ImportDiscussionPage.4=\n
 ImportDiscussionPage.5=שגיאה!
 ImportDiscussionPage.6=השורשים הדרושים אינם קיימים בפרוייקט \n\n הקבצים הבאים חסרים: \n\n
+ImportDiscussionPage.2=לא ניתן לייבא דיון למערכת ללא שורשים או מקורות
 ImportDiscussionPage.11=שגיאה
 ImportDiscussionPage.12=בחרת לייבא דיון שכבר קיים בפרויקט!\n נא לבטל בחירה זו!\n\n פעולת הייבוא הופסקה
 IndexPage.ToK=, עץ דעת
