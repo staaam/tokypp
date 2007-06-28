@@ -18,6 +18,8 @@ import lost.tok.Source;
 import lost.tok.SubLink;
 import lost.tok.sourceDocument.SourceDocument;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.printing.PrintDialog;
 import org.eclipse.swt.printing.Printer;
@@ -50,7 +52,9 @@ public class PrintDiscussion {
 		if (d==null)
 			return null;
 		
-		File discFile = new File(d.getDiscName() + ".txt"); //$NON-NLS-1$
+		IProject tokProject = d.getFile().getProject();
+		IFile discIFile = tokProject.getFile(d.getDiscName() + ".txt"); //$NON-NLS-1$
+		File discFile = discIFile.getLocation().toFile();
 		
 		FileWriter fw = new FileWriter(discFile);
 		//fw.write("testing 123");
