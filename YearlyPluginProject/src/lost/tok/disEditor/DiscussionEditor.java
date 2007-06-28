@@ -905,7 +905,7 @@ public class DiscussionEditor extends TextEditor {
 	}
 	
 	private void updateViews() {
-		RelationView view = RelationView.getView(true);
+		RelationView view = RelationView.getView(false);
 		if (view != null)
 			view.update(discussion);
 		
