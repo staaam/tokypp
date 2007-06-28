@@ -28,7 +28,7 @@ public class Rank {
 	 * @param rankId
 	 */
 	public Rank(Element e) {
-		this(e.element("name").getText(), Integer.valueOf(e.element("id").getText()));
+		this(e.element("name").getText(), Integer.valueOf(e.element("id").getText())); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 

@@ -85,7 +85,7 @@ public class Author {
 	 * @return Element of Author
 	 */
 	public Element toXML() {
-		Element e = DocumentHelper.createElement("author");
+		Element e = DocumentHelper.createElement("author"); //$NON-NLS-1$
 		e.addText(getName());
 		
 		return e;

@@ -41,7 +41,7 @@ public class ToKSearchQuery extends FileSearchQuery {
 	}
 
 	public String getLabel() {
-		return "ToK search of: '" + searchPattern + "'";
+		return Messages.getString("ToKSearchQuery.SearchFor") + ": '" + searchPattern + "'"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 
 	public IStatus run(IProgressMonitor monitor) {
@@ -49,7 +49,7 @@ public class ToKSearchQuery extends FileSearchQuery {
 
 		IResourceVisitor visitor = new ToKSearchVisitor(searchPattern,
 				searchOptions, getSearchResult());
-		monitor.beginTask("Searching...", IProgressMonitor.UNKNOWN);
+		monitor.beginTask(Messages.getString("ToKSearchQuery.Searching") + "...", IProgressMonitor.UNKNOWN); //$NON-NLS-1$ //$NON-NLS-2$
 		for (IResource r : scope) {
 			if (monitor.isCanceled())
 				return Status.CANCEL_STATUS;

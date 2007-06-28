@@ -64,7 +64,7 @@ public class ToK {
 	static public final String UNPARSED_SOURCES_FOLDER = Messages
 			.getString("ToK.UnparsedFolder"); //$NON-NLS-1$
 	
-	static public final String HTML_FOLDER = "html";
+	static public final String HTML_FOLDER = Messages.getString("ToK.0"); //$NON-NLS-1$
 
 	public static boolean checkFileName(String projectName) {
 		if (projectName.replace('\\', '/').indexOf('/', 1) > 0)
@@ -95,7 +95,7 @@ public class ToK {
 			}
 			return new ToK(project);
 		} catch (CoreException e) {
-			System.out.println("getProjectToK failed\n" + e);
+			System.out.println("getProjectToK failed\n" + e); //$NON-NLS-1$
 			e.printStackTrace();
 		}
 		return null;
@@ -126,7 +126,7 @@ public class ToK {
 	public ToK(String projectName, String creator, String root) throws CoreException {
 		// checking if a project with the same name already exists
 		if (!checkFileName(projectName)) {
-			GeneralFunctions.throwCoreException("Wrong project name specified");
+			GeneralFunctions.throwCoreException(Messages.getString("ToK.2")); //$NON-NLS-1$
 		}
 		
 		IProject p = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
@@ -163,7 +163,7 @@ public class ToK {
 		setLatestDiscussionOpinion(discName, null);
 	}
 	
-	public void removeDiscussion(IResource discRes)
+	public void removeDiscussion(IFile discRes)
 	{
 		SortedSet<Discussion> discs = getDiscussions();
 		
@@ -176,7 +176,7 @@ public class ToK {
 		
 		if (discToRemove == null)
 		{
-			System.err.println("The discussion " + discRes.getName() + " was deleted, but was not removed from the ToK");
+			System.err.println("The discussion " + discRes.getName() + " was deleted, but was not removed from the ToK"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		else
 		{
@@ -188,7 +188,7 @@ public class ToK {
 	}
 
 	public void addDiscussion(String discName) throws FileNotFoundException {
-		addDiscussion(discName, "");
+		addDiscussion(discName, ""); //$NON-NLS-1$
 	}
 
 	/**
@@ -473,7 +473,7 @@ public class ToK {
 			else
 			{
 				// Note(Shay): as far as I know, we shouldn't get here
-				System.out.println("Unexpected File Type: " + res.toString());
+				System.out.println("Unexpected File Type: " + res.toString()); //$NON-NLS-1$
 			}
 		}
 		
@@ -699,7 +699,7 @@ public class ToK {
 		System.out.println("createToKFromProject"); //$NON-NLS-1$
 
 		if (project.getNature(ToKNature.NATURE_ID) == null)
-			GeneralFunctions.throwCoreException("Project is not ToK project");
+			GeneralFunctions.throwCoreException(Messages.getString("ToK.7")); //$NON-NLS-1$
 		
 		tokProject = project;
 

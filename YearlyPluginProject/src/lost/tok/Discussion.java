@@ -113,14 +113,16 @@ public class Discussion implements Comparable<Discussion> {
 	 * Removes all the links related to a discussion from the links.xml file
 	 * @param res the discussino resource to remove
 	 */
-	public static void removeAllLinks(IResource res)
+	public static void removeAllLinks(IFile res)
 	{
-		assert(res.getFileExtension().equals("dis"));
+		// Was:
+		// assert(res.getFileExtension().equals("dis")); //$NON-NLS-1$
+		assert(Discussion.isDiscussion(res));
 		
 		ToK tok = ToK.getProjectToK(res.getProject());
 		Document d = GeneralFunctions.readFromXML(tok.getLinkFile());
 		
-		XPath xPathLinks = DocumentHelper.createXPath("links/link[discussionFile='" + res.getName() + "']");
+		XPath xPathLinks = DocumentHelper.createXPath("links/link[discussionFile='" + res.getName() + "']"); //$NON-NLS-1$ //$NON-NLS-2$
 		
 		Node linkNodeToRemove = xPathLinks.selectSingleNode(d);
 		
@@ -815,7 +817,7 @@ public class Discussion implements Comparable<Discussion> {
 		for (Opinion o : getOpinions())
 			if (o.getId() == id)
 				return o;
-		throw new Exception("Opinion not exist");
+		throw new Exception("Opinion not exist"); //$NON-NLS-1$
 	}
 
 	public Quote getQuote(int id) throws Exception {
@@ -823,7 +825,7 @@ public class Discussion implements Comparable<Discussion> {
 			for (Quote q : getQuotes(o.getName()))
 				if (q.getID() == id)
 					return q;
-		throw new Exception("Quote not exist");
+		throw new Exception("Quote not exist"); //$NON-NLS-1$
 	}
 }
 	

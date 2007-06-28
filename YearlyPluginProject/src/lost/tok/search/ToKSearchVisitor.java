@@ -49,7 +49,7 @@ public class ToKSearchVisitor implements IResourceVisitor {
 	 *
 	 */
 	private void compilePattern() {
-		String s = "";
+		String s = ""; //$NON-NLS-1$
 		int last = 0;
 		while (true) {
 			int i = searchPattern.indexOf('*', last);
@@ -69,7 +69,7 @@ public class ToKSearchVisitor implements IResourceVisitor {
 					searchPattern.charAt(m-1));
 			} else {
 				s += Pattern.quote(searchPattern.substring(last, m)) +
-					((searchPattern.charAt(m) == '*') ? ".*" : ".");
+					((searchPattern.charAt(m) == '*') ? ".*" : "."); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 			last = m+1;
 		}
@@ -188,7 +188,7 @@ public class ToKSearchVisitor implements IResourceVisitor {
 		Matcher m = pattern.matcher(where);
 		LinkedList<TextSelection> l = new LinkedList<TextSelection>();
 		while (m.find()) {
-			System.out.println("at " + m.start() + "-" + m.end() + " match");
+			System.out.println("at " + m.start() + "-" + m.end() + " match"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			l.add(new TextSelection(m.start(), m.end() - m.start()));
 		}
 		return l;

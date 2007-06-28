@@ -68,11 +68,10 @@ public class AddOpinionWizardPage extends WizardPage implements ModifyListener {
 		if (opinionArea.getText().length() == 0) {
 			updateStatus(Messages
 					.getString("AddOpinionWizardPage.ErrOpinionMustNotBeEmpty")); //$NON-NLS-1$
-		} else if (opinions.contains(opinionArea.getText())) {
+		} else if (opinions.contains(opinionArea.getText())
+				|| opinionArea.getText().equals(Discussion.DEFAULT_OPINION_XML)) {
 			updateStatus(Messages
 					.getString("AddOpinionWizardPage.ErrOpinionExists")); //$NON-NLS-1$
-		} else if (opinionArea.getText().equals(Discussion.DEFAULT_OPINION_XML)) {
-			updateStatus("The name \"" + Discussion.DEFAULT_OPINION_XML + "\" is not a valid opinion name");
 		} else {
 			updateStatus(null);
 		}

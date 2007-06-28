@@ -72,7 +72,7 @@ public class RelationView extends ViewPart {
 		}
 
 		public String getColumnText(Object element, int columnIndex) {
-			String result = "";
+			String result = ""; //$NON-NLS-1$
 	        Relation rel = (Relation) element;
 	        switch (columnIndex) {
 	            case 0:
@@ -87,7 +87,7 @@ public class RelationView extends ViewPart {
 	                result = rel.getRelationType();
 	                break;
 	            case 3:
-	                result = rel.getComment()+"\n"+rel.getComment();
+	                result = rel.getComment();
 	                break;
 	        }
 	        return result;
@@ -116,10 +116,10 @@ public class RelationView extends ViewPart {
 	}
 
 	private static final String[] ColumnNames = 
-		{"Discussion Entity",
-		 "Discussion Entity",
-		 "Relation Type",
-		 "Comment"};
+		{Messages.getString("RelationView.2"), //$NON-NLS-1$
+		 Messages.getString("RelationView.3"), //$NON-NLS-1$
+		 Messages.getString("RelationView.4"), //$NON-NLS-1$
+		 Messages.getString("RelationView.5")}; //$NON-NLS-1$
 	private TableViewer tableViewer;
 	
 	@Override
@@ -162,12 +162,12 @@ public class RelationView extends ViewPart {
 
 	private static String getElementPrefix(Object o) {
 		if (o instanceof Opinion) {
-			return "O: "; 
+			return Messages.getString("RelationView.OpinionPrefix");  //$NON-NLS-1$
 		}
 		if (o instanceof Quote) {
-			return "Q: "; 
+			return Messages.getString("RelationView.QuotePrefix");  //$NON-NLS-1$
 		}
-		return "";
+		return ""; //$NON-NLS-1$
 	}
 
 

@@ -12,11 +12,9 @@ import org.eclipse.core.resources.IFile;
 //this class represents a link between the discussion and the source
 public class Link {
 
-	public static final String TYPE_INTERPRETATION = "interpretation";
-
-	public static final String TYPE_DIFFICULTY = "difficulty";
-
-	public static final String TYPE_GENERAL = "general";
+	public static final String TYPE_INTERPRETATION = "interpretation"; //$NON-NLS-1$
+	public static final String TYPE_DIFFICULTY = "difficulty"; //$NON-NLS-1$
+	public static final String TYPE_GENERAL = "general"; //$NON-NLS-1$
 	
 	/**
 	 * The types of the links, as strings displayable to the user. The order of
@@ -33,9 +31,9 @@ public class Link {
 	 * strings should be the same as in the linkDisplayNames array
 	 */
 	public static final String[] linkXMLTypes = {
-			TYPE_GENERAL, //$NON-NLS-1$
-			TYPE_DIFFICULTY, //$NON-NLS-1$
-			TYPE_INTERPRETATION, //$NON-NLS-1$
+			TYPE_GENERAL,
+			TYPE_DIFFICULTY,
+			TYPE_INTERPRETATION,
 	};
 
 	
@@ -78,7 +76,7 @@ public class Link {
 		this.linkTypeXML = typeNode.getText();
 		this.subject = subjNode.getText();
 		
-		List sublinkElms = DocumentHelper.createXPath("sublink").selectNodes(linkElm);
+		List sublinkElms = DocumentHelper.createXPath("sublink").selectNodes(linkElm); //$NON-NLS-1$
 		for (Object oSublinkElm : sublinkElms )
 		{
 			Element sublinkElm = (Element) oSublinkElm;

@@ -1,8 +1,7 @@
 package lost.tok;
 
-import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IResourceDelta;
@@ -52,24 +51,26 @@ public class ToKChangeListener implements IResourceChangeListener {
 		private void handleDeletedDiscussion(IResourceDelta delta) {
 			assert(delta.getKind() == IResourceDelta.REMOVED);
 			
-			IResource res = delta.getResource();
-			IProject proj = res.getProject();
-			IFolder discussionsFolder = proj.getFolder(ToK.DISCUSSION_FOLDER);
 			
-			if (res.getParent().equals(discussionsFolder)
-				&& res.getFileExtension().equals("dis"))
-			{
-				System.out.println("Shay said: Oh noes! Evil user is removing discussion! " + res.getName());
-				
-				Job job = new RemoveDiscussionJob(res);
-				job.schedule();
-			}
+			// Michael changed :)
 			
+			if (!(delta.getResource() instanceof IFile))
+				return;
+			
+			IFile res = (IFile) delta.getResource();
+			
+			if (!Discussion.isDiscussion(res))
+				return;
+
+			System.out.println("Shay said: Oh noes! Evil user is removing discussion! " + res.getName());
+			
+			Job job = new RemoveDiscussionJob(res);
+			job.schedule();
 		}
 		
 		private class RemoveDiscussionJob extends Job{
-			private IResource res;
-			public RemoveDiscussionJob(IResource res)
+			private IFile res;
+			public RemoveDiscussionJob(IFile res)
 			{
 				super("Delete " + res.getName());
 				this.res = res;
