@@ -103,4 +103,9 @@ public class Paths {
 		
 		return file; 
 	}
+
+	public static void addSourceToTok(ToK tok, String s)  throws CoreException, IOException {
+		tok.addSource(getIFile(s).getLocation().toOSString());
+	}
+
 }

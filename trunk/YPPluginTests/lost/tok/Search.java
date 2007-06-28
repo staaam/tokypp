@@ -32,7 +32,7 @@ public class Search extends TestCase {
 		Paths.OR_AHAIM_EN,
 		Paths.BABEL_EN,
 		Paths.RASHI_EN,
-};
+	};
 	
 	@Override
 	protected void setUp() throws Exception {
@@ -44,7 +44,7 @@ public class Search extends TestCase {
 			tok.addDiscussion(d);
 		
 		for (String s : sources)
-			tok.addSource(s);
+			Paths.addSourceToTok(tok, s);
 	}
 
 	// search for empty string in none resource - should be no results
@@ -286,7 +286,7 @@ public class Search extends TestCase {
 		resources.add(tok.getProject());
 		try {
 			query = new ToKSearchQuery(searchFor,
-				EnumSet.of(SearchOption.SRC_AUTHOR),
+				EnumSet.of(SearchOption.SRC_TITLE),
 				resources);
 		} catch (Throwable e) {
 			e.printStackTrace();
