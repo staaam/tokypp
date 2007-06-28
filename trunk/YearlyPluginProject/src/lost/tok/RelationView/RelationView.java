@@ -4,6 +4,7 @@ import java.util.List;
 
 import lost.tok.Discussion;
 import lost.tok.GeneralFunctions;
+import lost.tok.Messages;
 import lost.tok.Opinion;
 import lost.tok.Quote;
 import lost.tok.Relation;

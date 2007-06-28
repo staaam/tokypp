@@ -12,7 +12,7 @@ public class NextPrevAction implements IViewActionDelegate {
 	public void run(IAction action) {
 		assert (view != null);
 
-		if (action.getId().endsWith(".next"))
+		if (action.getId().endsWith(".next")) //$NON-NLS-1$
 			view.next();
 		else
 			view.prev();

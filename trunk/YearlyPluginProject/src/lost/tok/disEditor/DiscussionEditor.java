@@ -7,6 +7,7 @@ import java.util.TreeMap;
 import lost.tok.Discussion;
 import lost.tok.Excerption;
 import lost.tok.Link;
+import lost.tok.Messages;
 import lost.tok.Opinion;
 import lost.tok.Quote;
 import lost.tok.SubLink;
@@ -56,13 +57,13 @@ public class DiscussionEditor extends TextEditor {
 	
 	public static final String EDITOR_ID = "lost.tok.disEditor.DiscussionEditor"; //$NON-NLS-1$
 
-	private static final String DISCUSSION = "discussion";
+	private static final String DISCUSSION = "discussion"; //$NON-NLS-1$
 
-	private static final String QUOTE = "Quote";
+	private static final String QUOTE = "Quote"; //$NON-NLS-1$
 
-	private static final String OPINION = "Opinion";
+	private static final String OPINION = "Opinion"; //$NON-NLS-1$
 
-	private static final String COMMENT_LINE = "Comment line";
+	private static final String COMMENT_LINE = "Comment line"; //$NON-NLS-1$
 
 	private Discussion discussion = null;
 
@@ -120,7 +121,7 @@ public class DiscussionEditor extends TextEditor {
 
 						// if no default opinion create one
 						if (defOp == null) {
-							System.out.println("Shay: Shouldn't be here");
+							System.out.println("Shay: Shouldn't be here"); //$NON-NLS-1$
 							defOp = new TreeItem(disTree.getItem(0), SWT.NONE);
 							defOp.setText(Discussion.DEFAULT_OPINION_DISPLAY);
 							defOp.setData(OPINION);
@@ -397,7 +398,7 @@ public class DiscussionEditor extends TextEditor {
 		
 		rootItem.setImage(ImageManager.getImage(ImageType.DISCUSSION));
 		
-		rootItem.setText(discussion.getDiscName() + " (" + "Creator: " + discussion.getCreatorName() + ")");
+		rootItem.setText(discussion.getDiscName() + " (" + Messages.getString("DiscussionEditor.Creator") + ": " + discussion.getCreatorName() + ")"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		rootItem.setData(DISCUSSION);
 //		ICommandImageService o = (ICommandImageService) getSite().getWorkbenchWindow().getWorkbench().getAdapter(ICommandImageService.class);
 //		ImageDescriptor i = o.getImageDescriptor("lost.tok.images.discusion");;
@@ -462,7 +463,7 @@ public class DiscussionEditor extends TextEditor {
 		
 		TreeItem descItem = new TreeItem(parent, SWT.MULTI | SWT.WRAP);
 		descItem.setImage(ImageManager.getImage(ImageType.DESCRIPTION));
-		descItem.setText("Description");
+		descItem.setText(Messages.getString("DiscussionEditor.Description")); //$NON-NLS-1$
 		
 		addSplitted(descItem, description, getLineSize());
 	}
@@ -473,16 +474,16 @@ public class DiscussionEditor extends TextEditor {
 
 		TreeItem linkItem = new TreeItem(parent, SWT.MULTI | SWT.WRAP);
 		linkItem.setImage(ImageManager.getImage(ImageType.LINK));
-		linkItem.setText("Link type: " + l.getDisplayLinkType()
-				+ ", Link subject: '" + l.getSubject() + "'");
+		linkItem.setText(Messages.getString("DiscussionEditor.LinkType") + ": " + l.getDisplayLinkType() //$NON-NLS-1$ //$NON-NLS-2$
+				+ ", " + Messages.getString("DiscussionEditor.LinkSubject") + ": '" + l.getSubject() + "'"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		
 		for (SubLink s : l.getSubLinkList()) {
 			TreeItem sublinkItem = new TreeItem(linkItem, SWT.MULTI | SWT.WRAP);
 			sublinkItem.setImage(ImageManager.getImage(ImageType.ROOT));
 			
 			String text = s.getText();
-			sublinkItem.setText("(Root: '" + s.getLinkedSource().getTitle()
-					+ ") " + text.substring(0, Math.min(40, text.length())) + "...");
+			sublinkItem.setText("(" + Messages.getString("DiscussionEditor.Root") + ": '" + s.getLinkedSource().getTitle() //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+					+ ") " + text.substring(0, Math.min(40, text.length())) + "..."); //$NON-NLS-1$ //$NON-NLS-2$
 			
 			addSplitted(sublinkItem, text, getLineSize());
 		}
@@ -543,7 +544,7 @@ public class DiscussionEditor extends TextEditor {
 		if (quote.getComment().trim().length() != 0) {
 			// make son saparator
 			TreeItem treeItem = new TreeItem(quoteItem, SWT.WRAP);
-			treeItem.setText("----- " + "Comment" + " -----");
+			treeItem.setText("----- " + Messages.getString("DiscussionEditor.Comment") + " -----"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			treeItem.setImage(ImageManager.getImage(ImageType.QUOTE));
 			
 			wrappedLines++;

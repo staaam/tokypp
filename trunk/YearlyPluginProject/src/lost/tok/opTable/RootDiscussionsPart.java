@@ -161,11 +161,11 @@ public class RootDiscussionsPart extends AbstractEditorAction implements
 			Link discussionLink = null;
 			Discussion disc = null;
 			try {
-				String discFileName = ToK.DISCUSSION_FOLDER + "/" + linkElm.element("discussionFile").getText();
+				String discFileName = ToK.DISCUSSION_FOLDER + "/" + linkElm.element("discussionFile").getText(); //$NON-NLS-1$ //$NON-NLS-2$
 				String discRealName = Discussion.getNameFromFile(discFileName); // real name == discussion title
 				disc = tok.getDiscussion(discRealName);
-				String linkXMLType = linkElm.element("type").getText();
-				String linkSubject = linkElm.element("linkSubject").getText();
+				String linkXMLType = linkElm.element("type").getText(); //$NON-NLS-1$
+				String linkSubject = linkElm.element("linkSubject").getText(); //$NON-NLS-1$
 
 				discussionLink = new Link(disc, linkXMLType, tok.getLinkFile(), linkSubject);
 			} catch (CoreException e1) {

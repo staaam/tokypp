@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import lost.tok.Messages;
 import lost.tok.ToK;
 
 import org.eclipse.core.resources.IProject;

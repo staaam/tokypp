@@ -3,6 +3,8 @@ package lost.tok.search;
 import java.util.EnumSet;
 import java.util.List;
 
+import lost.tok.Messages;
+
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.runtime.CoreException;
