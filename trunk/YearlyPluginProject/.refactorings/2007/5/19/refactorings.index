@@ -1,0 +1,5 @@
+1178500420211	Rename compilation unit 'ExporDiscussiontPage.java'
+1179012522316	Extract method 'writeFolderToZip'
+1179012443343	Extract method 'writeFileToZip'
+1178924061653	Extract method 'checkDiscussionSelection'
+1178648570915	Extract local variable 'name'
