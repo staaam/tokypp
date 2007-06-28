@@ -166,7 +166,7 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 	 * 
 	 * @return true, if successful
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked") //$NON-NLS-1$
 	private boolean checkExistingDiscussions(ZipFile zipFile,
 			List fileSystemObjects, ZipLeveledStructureProvider provider) {
 		Enumeration entries = zipFile.entries();
@@ -184,7 +184,7 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 			}
 			if (disc != null) {
 				if (getMessage() == null) {
-					setMessage(Messages.getString("ImportDiscussionPage.12"),
+					setMessage(Messages.getString("ImportDiscussionPage.12"), //$NON-NLS-1$
 							ERROR);
 				}
 				setPageComplete(false);
@@ -221,7 +221,7 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 	 * 
 	 * @return true, if successful
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked") //$NON-NLS-1$
 	private boolean checkSourcesExist(IImportStructureProvider provider) {
 		Iterator resourcesEnum = getSelectedResources().iterator();
 		List<Object> fileSystemObjects = new ArrayList<Object>();
@@ -245,7 +245,7 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 		Document tempDoc = GeneralFunctions.readFromXML(tempLinksFile);
 		IFolder sourceFolder = tok.getRootsFolder();
 		for (String discussionName : selectedDiscussions) { 
-			XPath sourcesXPath = DocumentHelper.createXPath("//link[discussionFile='"
+			XPath sourcesXPath = DocumentHelper.createXPath("//link[discussionFile='" //$NON-NLS-1$
 					+ discussionName + "']/sublink/sourceFile"); //$NON-NLS-1$
 			List<Node> sourceNodes = sourcesXPath.selectNodes(tempDoc);
 //			List<Node> sourceNodes = tempDoc
@@ -282,7 +282,7 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 		} catch (Exception e) {
 			// no sources or roots
 			if (getMessage() == null) {
-				setErrorMessage("Can't import discussions into a project with no root or source");
+				setErrorMessage(Messages.getString("ImportDiscussionPage.2")); //$NON-NLS-1$
 			}
 			return false;
 		}
@@ -294,12 +294,12 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 				File dest = unzipToTempLocation(zipFile, element);
 				Document discussionDoc = GeneralFunctions.readFromXML(dest
 						.getAbsolutePath());
-				List result = discussionDoc.selectNodes("//quote/sourceFile");
+				List result = discussionDoc.selectNodes("//quote/sourceFile"); //$NON-NLS-1$
 
 				for (Object sourceNode : result) {
 					boolean exists = false;
 					String[] sourceName = ((Element) sourceNode).getText()
-							.split("/");
+							.split("/"); //$NON-NLS-1$
 					for (Source tokSource : sources) {
 						if (tokSource.getFile().getFullPath().lastSegment()
 								.compareTo(sourceName[sourceName.length - 1]) == 0) {// the
@@ -324,11 +324,11 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 			String error = new String();
 			for (String file : missingFiles) {
 				if (!error.contains(file)) {
-					error += file + "\n";
+					error += file + "\n"; //$NON-NLS-1$
 				}
 			}
 			if (getMessage() == null) {
-				setErrorMessage(Messages.getString("ImportDiscussionPage.6")
+				setErrorMessage(Messages.getString("ImportDiscussionPage.6") //$NON-NLS-1$
 						+ error);
 			}
 			return false;
@@ -801,7 +801,7 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 	 * 
 	 * @see org.eclipse.ui.internal.wizards.datatransfer.WizardFileSystemResourceImportPage1#handleTypesEditButtonPressed()
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked") //$NON-NLS-1$
 	@Override
 	protected void handleTypesEditButtonPressed() {
 		selectedTypes.clear();
@@ -884,7 +884,7 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 	/**
 	 * Merge linkfiles.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked") //$NON-NLS-1$
 	private void mergeLinkfiles() {
 		Document tempDoc = GeneralFunctions.readFromXML(tempLinksFile);
 		Document linksDoc = GeneralFunctions.readFromXML(tok.getLinkFile());
@@ -1004,7 +1004,7 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 			List sourceNodes = sourcesXPath.selectNodes(discussionDocument);
 			for (Object object : sourceNodes) {
 				Element sourceFile = (Element)object;
-				sourceFile.setText(ToK.ROOTS_FOLDER + "/" + sourceFile.getText());
+				sourceFile.setText(ToK.ROOTS_FOLDER + "/" + sourceFile.getText()); //$NON-NLS-1$
 			}
 			GeneralFunctions.writeToXml(discussionFile, discussionDocument);
 		}
@@ -1018,7 +1018,7 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 		List linkNodes = linkXPath.selectNodes(linksDocument);
 		for (Object object : linkNodes) {
 			Element link = (Element)object;
-			link.setText(ToK.ROOTS_FOLDER + "/" + link.getText());
+			link.setText(ToK.ROOTS_FOLDER + "/" + link.getText()); //$NON-NLS-1$
 		}
 		GeneralFunctions.writeToXml(tempLinksFile, linksDocument);
 		
