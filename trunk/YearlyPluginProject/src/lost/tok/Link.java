@@ -118,7 +118,7 @@ public class Link {
 
 		for (Excerption element : exp) {
 
-			subLink.addElement("sourceFile").addText(linkedSource.toString()); //$NON-NLS-1$
+			//subLink.addElement("sourceFile").addText(linkedSource.toString()); //$NON-NLS-1$
 			subLink.add(element.toXML());
 
 		}
