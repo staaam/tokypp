@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<work-item>
+    <field id="initialEstimate">1d</field>
+    <field id="resolution">fixed</field>
+    <field id="type">task</field>
+    <field id="author">ateter</field>
+    <field id="title">Discussion File sourceFilePath attribute format</field>
+    <field id="created">2007-06-19 22:57:49.738 +0300</field>
+    <field id="priority">25.0</field>
+    <field id="description">The&amp;nbsp;&lt;SPAN style="FONT-SIZE: 14pt; FONT-FAMILY: 'Times New Roman'; mso-fareast-font-family: 'Times New Roman'; mso-ansi-language: EN-US; mso-fareast-language: EN-US; mso-bidi-language: HE"&gt;sourceFilePath&lt;SPAN dir=rtl&gt;&lt;/SPAN&gt;&lt;SPAN dir=rtl&gt;&lt;SPAN dir=rtl&gt;&lt;/SPAN&gt; should not contain the name of the source. It should only consist of the names of the chapters. example: chap1/subchap2/&lt;/SPAN&gt;&lt;/SPAN&gt;</field>
+    <field id="remainingEstimate">1d</field>
+    <field id="status">closed</field>
+    <field id="severity">normal</field>
+    <field id="previousStatus">open</field>
+</work-item>
