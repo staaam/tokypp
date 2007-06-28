@@ -107,7 +107,7 @@ public class ToK {
 
 	private IFolder srcFolder, discFolder, unparsedSrcFolder, rootFolder;
 
-	private IFile authorFile, linkFile;
+	private IFile authorFile, linkFile, orderFile;
 
 	private SortedSet<Discussion> discussions = null;
 
@@ -312,6 +312,8 @@ public class ToK {
 		createAuthorsFile();
 
 		createLinksFile();
+		
+		createOrderFile();
 
 		return true;
 
@@ -491,6 +493,21 @@ public class ToK {
 		// Create the Skeleton of the Links file
 		linkDoc.addElement("links"); //$NON-NLS-1$
 		return linkDoc;
+	}
+	
+	public Document orderSkeleton() {
+		Document orderDoc = DocumentHelper.createDocument();
+
+		// Create the Skeleton of the order file
+		Element e = orderDoc.addElement("order"); //$NON-NLS-1$
+		e.addElement("dir");
+		Element temp = e.addElement("sub");
+		temp.addElement("name").addText(SOURCES_FOLDER);
+		temp.addElement("type").addText("dir");
+		temp = e.addElement("sub");
+		temp.addElement("name").addText(ROOTS_FOLDER);
+		temp.addElement("type").addText("dir");
+		return orderDoc;
 	}
 
 	/**
@@ -692,6 +709,13 @@ public class ToK {
 				.getString("ToK.linksFile")); //$NON-NLS-1$
 		if (!linkFile.exists()) {
 			GeneralFunctions.writeToXml(linkFile, linksSkeleton());
+		}
+	}
+	
+	private void createOrderFile() {
+		orderFile = tokProject.getFile("order.xml"); //$NON-NLS-1$
+		if (!orderFile.exists()) {
+			GeneralFunctions.writeToXml(orderFile, orderSkeleton());
 		}
 	}
 
