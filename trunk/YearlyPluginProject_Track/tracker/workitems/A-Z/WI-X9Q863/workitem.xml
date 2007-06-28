@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<work-item>
+    <field id="initialEstimate">1d</field>
+    <field id="resolution">fixed</field>
+    <field id="type">task</field>
+    <field id="author">ateter</field>
+    <field id="title">Discussion File sourceFile attribute format</field>
+    <field id="created">2007-06-19 22:54:53.495 +0300</field>
+    <field id="priority">25.0</field>
+    <field id="description">&lt;P align=left&gt;&lt;SPAN lang=HE dir=rtl style="FONT-SIZE: 14pt; FONT-FAMILY: 'Times New Roman'; mso-fareast-font-family: 'Times New Roman'; mso-ansi-language: EN-US; mso-fareast-language: EN-US; mso-bidi-language: HE"&gt;the sourceFile attribute shouls contain the path starting under the "Sources" folder (i.e not including the folder itself)&lt;/SPAN&gt;&lt;/P&gt;</field>
+    <field id="remainingEstimate">1d</field>
+    <field id="status">closed</field>
+    <field id="severity">normal</field>
+    <field id="previousStatus">open</field>
+</work-item>
