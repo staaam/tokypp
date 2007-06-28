@@ -1,0 +1,4 @@
+1179056665782	Extract constant 'TEMP_LINKS_XML'
+1179355026759	Rename resource 'lost.tok.perspective_package_scoped.ajsv'
+1179136763613	Extract method 'deletetempLinksFile'
+1179093345129	Extract method 'createTempLinksFile'
