@@ -1,26 +1,24 @@
 package lost.tok.navigator;
 
-import org.eclipse.jface.util.DelegatingDropAdapter;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
+
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
-import org.eclipse.swt.dnd.DropTargetEvent;
-import org.eclipse.swt.dnd.DropTargetListener;
+
 import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
+
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
-import org.eclipse.ui.IWorkingSetManager;
+
 import org.eclipse.ui.part.PluginTransfer;
 import org.eclipse.ui.part.ResourceTransfer;
 import org.eclipse.ui.views.navigator.LocalSelectionTransfer;
 import org.eclipse.ui.views.navigator.NavigatorDragAdapter;
-import org.eclipse.ui.views.navigator.NavigatorDropAdapter;
+import org.eclipse.ui.views.navigator.ResourcePatternFilter;
+
 import org.eclipse.ui.views.navigator.ResourceNavigator;
 import org.eclipse.ui.views.navigator.ResourceSorter;
 
@@ -68,5 +66,15 @@ public class InformationNavigator extends ResourceNavigator{
 	            }
 	        };
 	        viewer.getControl().addListener(SWT.DragDetect, dragDetectListener);
+    }
+	
+	protected void initFilters(TreeViewer viewer) {
+        super.initFilters(viewer);
+        ResourcePatternFilter f = new ResourcePatternFilter();
+        String st[] = {"order.xml", ".project"};
+
+        
+        f.setPatterns(st);
+        viewer.addFilter(f);
     }
 }
