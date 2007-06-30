@@ -3,11 +3,13 @@ package lost.tok.print;
 import lost.tok.imageManager.ImageManager;
 import lost.tok.imageManager.ImageType;
 
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.printing.Printer;
+
 
 /**
  * This class performs the printing, wrapping text as necessary
@@ -27,6 +29,7 @@ public class WrappingPrinter {
 	* @param printer the printer
 	* @param fileName the fileName
 	* @param contents the contents
+	 * @param shell 
 	*/
 	public WrappingPrinter(Printer printer, String fileName, String contents) {
 		this.printer = printer;
@@ -45,8 +48,10 @@ public class WrappingPrinter {
       xPos = bounds.x;
       yPos = bounds.y;
       
+     int style = Window.getDefaultOrientation();
+      
       // Create the GC
-      gc = new GC(printer);	     
+      gc = new GC(printer,style);	     
       //MICHAL
       //  gc.getFont().getFontData()[0].setHeight(14);
       
