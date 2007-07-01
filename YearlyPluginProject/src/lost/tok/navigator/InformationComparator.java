@@ -11,9 +11,7 @@ import org.dom4j.Node;
 import org.dom4j.XPath;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.ui.views.navigator.ResourceSorter;
 
