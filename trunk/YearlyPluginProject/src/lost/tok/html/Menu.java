@@ -136,7 +136,10 @@ public class Menu {
 		
 		for (IResource res : resourses)
 		{
-			if (res instanceof IFile)
+			if ((res instanceof IFile) && (((IFile)res).getName().equals("order.xml")))
+				continue;
+			
+			if ((res instanceof IFile) && (((IFile)res).getFileExtension().equals("src")))
 				sb.append(getAddSourceCode((IFile)res, myId));
 			
 			else if (res instanceof IFolder)
