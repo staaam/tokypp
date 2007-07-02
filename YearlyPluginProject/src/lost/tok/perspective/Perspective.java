@@ -78,14 +78,14 @@ public class Perspective implements IPerspectiveFactory {
 		// Add "new wizards".
 		// this Adds it to the File->new menu and the right click menu
 		layout.addNewWizardShortcut("lost.tok.newTokWizard"); //$NON-NLS-1$
-		layout
-				.addNewWizardShortcut("lost.tok.newDiscussionWizard.NewDiscussionWizard"); //$NON-NLS-1$
-		layout
-				.addNewWizardShortcut("lost.tok.newRelationWizard.NewRelationWizard"); //$NON-NLS-1$
+		layout.addNewWizardShortcut("lost.tok.newDiscussionWizard.NewDiscussionWizard"); //$NON-NLS-1$
+		layout.addNewWizardShortcut("lost.tok.newRelationWizard.NewRelationWizard"); //$NON-NLS-1$
 		layout.addNewWizardShortcut("lost.tok.newLinkWizard.NewLinkWizard"); //$NON-NLS-1$
 		layout.addNewWizardShortcut("lost.tok.unparsedDocWizard"); //$NON-NLS-1$
-		layout.addNewWizardShortcut("org.eclipse.ui.wizards.new.folder"); //$NON-NLS-1$
+		layout.addNewWizardShortcut("lost.tok.newFolder.NewFolder"); //$NON-NLS-1$
+		//layout.addNewWizardShortcut("org.eclipse.ui.wizards.new.folder"); //$NON-NLS-1$
 
+		
 		// Add "show views".
 		// (both thtough the menues and the shortcut on the bottom left corner)
 		layout.addShowViewShortcut(ExcerptionView.ID);
