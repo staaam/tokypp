@@ -61,7 +61,7 @@
              class="lost.tok.wizards.NewSourceFolder"
              icon="icons/folder.ico"
              id="lost.tok.newFolder.NewFolder"
-             name="Source Folder"
+             name="%wizard.source.folder"
              project="false"/>
        <wizard
              category="lost.tok.Categoy"

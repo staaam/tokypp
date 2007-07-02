@@ -88,6 +88,9 @@ public class ToK {
 	 *  is not ToK project
 	 */
 	public static ToK getProjectToK(IProject project) {
+		if (!project.isOpen())
+			return null;
+		
 		try {
 			Object o = project.getSessionProperty(tokQName);
 			if (o != null) {

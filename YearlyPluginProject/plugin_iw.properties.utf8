@@ -69,3 +69,6 @@ action.label.clearall = נקה הכל
 action.label.delete = מחק
 action.label.next = הבא
 action.label.prev = הקודם
+wizard.source.folder = תיקיית מקורות
+Bundle-Vendor.0 = Team Lost
+Bundle-Name.0 = Tree of Knowledge
