@@ -37,15 +37,20 @@ import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.ICheckStateListener;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.FileSystemElement;
 import org.eclipse.ui.internal.ide.DialogUtil;
@@ -105,6 +110,28 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 
 	/** The zip current provider. */
 	ZipLeveledStructureProvider zipCurrentProvider;
+	
+	class DiscussionImportListener extends SelectionAdapter implements ICheckStateListener{
+
+		public void checkStateChanged(CheckStateChangedEvent event) {
+				updateWidgetEnablements();
+				if (!checkDiscussions() || !checkSources()) {
+					setPageComplete(false);
+				}
+		}
+
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+            setAllSelections(true);
+            updateWidgetEnablements();
+			if (!checkDiscussions() || !checkSources()) {
+				setPageComplete(false);
+			}
+        }
+	}
+	
+	
+	
 
 	/**
 	 * Creates an instance of this class.
@@ -390,19 +417,10 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 				getFileProvider(), new WorkbenchLabelProvider(), SWT.NONE,
 				DialogUtil.inRegularFontMode(parent));
 
-		ICheckStateListener listener = new ICheckStateListener() {
-			public void checkStateChanged(CheckStateChangedEvent event) {
-				updateWidgetEnablements();
-				if (!checkDiscussions() || !checkSources()) {
-					setPageComplete(false);
-				}
-			}
-		};
-
 		WorkbenchViewerSorter sorter = new WorkbenchViewerSorter();
 		this.selectionGroup.setTreeSorter(sorter);
 		this.selectionGroup.setListSorter(sorter);
-		this.selectionGroup.addCheckStateListener(listener);
+		this.selectionGroup.addCheckStateListener(new DiscussionImportListener());
 
 	}
 
@@ -437,6 +455,7 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 		createButtonsGroup(parent);
 		selectTypesButton.setVisible(false);
 		selectAllButton.setVisible(true);
+		selectAllButton.addSelectionListener(new DiscussionImportListener());
 		deselectAllButton.setVisible(false);
 	}
 
@@ -1110,3 +1129,5 @@ public class ImportDiscussionPage extends WizardFileSystemResourceImportPage1
 	}
 
 }
+
+
