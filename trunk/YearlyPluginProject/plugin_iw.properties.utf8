@@ -42,6 +42,8 @@ command.name.end.chapter = סגור פרק כאן
 perspective.tok =עץ דעת
 wizard.discussion.export = ייצוא דיונים
 wizard.discussion.import = ייבוא דיונים
+wizard.source.export = ייצוא מקורות
+wizard.source.import = ייבוא מקורות
 
 command.name.mark.quote = סמן ציטוט
 command.name.add.quote = הוסף ציטוט
@@ -57,10 +59,8 @@ view.name.relationView = תצוגת יחסים
 view.name.toknav = נווט הדעת
 
 wizard.description.discExport = מייצא דיונים של עץ הדעת
-wizard.name.sourceExport = מייצא המקורות 
 wizard.description.sourceExport = מייצא מקורות של עץ הדעת
 wizard.description.discImport = מייבא דיונים לתוך פרוייקט עץ הדעת
-wizard.name.discImport = מייבא הדיונים
 wizard.description.sourceImport = מייבא מקורות לתוך פרוייקט עץ הדעת
 
 page.label.search = חיפוש בעץ
