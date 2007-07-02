@@ -32,6 +32,8 @@ public class AuthorsHandler {
 	public static final String DEFAULT_RANK = Messages.getString("AuthorsHandler.DefRank");
 	public static final String RANK = Messages.getString("AuthorsHandler.Rank");
 	public static final String AUTHORS_RANK_TREE = Messages.getString("AuthorsHandler.RankTree");
+	public static final String AUTHORS_HIGHEST_RANK = Messages.getString("AuthorsHandler.Highest");
+	public static final String AUTHORS_LOWEST_RANK = Messages.getString("AuthorsHandler.Lowest");
 
 	/**
 	 * Constructor for Authors Handler from an XML file
