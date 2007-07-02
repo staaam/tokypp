@@ -670,8 +670,14 @@ public class ToK {
 		for (int i = MIN_AUTHOR_GROUP; i <= MAX_AUTHOR_GROUP; i++) {
 			Element inAuthElm = authElm.addElement("authorsGroup"); //$NON-NLS-1$
 			inAuthElm.addElement("id").addText(String.valueOf(i)); //$NON-NLS-1$
-			inAuthElm.addElement("name").addText( //$NON-NLS-1$
-					AuthorsHandler.RANK + String.valueOf(i)); //$NON-NLS-1$
+			
+			if(i == MIN_AUTHOR_GROUP)	
+				inAuthElm.addElement("name").addText(AuthorsHandler.AUTHORS_LOWEST_RANK + AuthorsHandler.RANK + String.valueOf(i));
+			else if(i == MAX_AUTHOR_GROUP)
+				inAuthElm.addElement("name").addText(AuthorsHandler.AUTHORS_HIGHEST_RANK + AuthorsHandler.RANK + String.valueOf(i));
+			else
+				inAuthElm.addElement("name").addText(AuthorsHandler.RANK + String.valueOf(i));
+			
 			inAuthElm.addElement("nextGroupId").addText( //$NON-NLS-1$
 					String.valueOf(nextOf(i)));
 			inAuthElm.addElement("prevGroupId").addText( //$NON-NLS-1$
