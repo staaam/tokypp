@@ -1,5 +1,6 @@
 package lost.tok.navigator;
 
+import java.util.Comparator;
 import java.util.List;
 
 import lost.tok.GeneralFunctions;
@@ -16,7 +17,7 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.ui.views.navigator.ResourceSorter;
 
 
-public class InformationComparator extends ResourceSorter{
+public class InformationComparator extends ResourceSorter implements Comparator<IResource>{
 	
 	public InformationComparator() {
 		super(1);
@@ -44,8 +45,39 @@ public class InformationComparator extends ResourceSorter{
         	return super.compare(viewer, o1, o2);
         }
         
-        IFolder f = (IFolder) r1.getParent();
+        // if the order file does not exist, report an error and use the default compare
+		IFolder f = (IFolder) r1.getParent();
         IFile file = f.getFile("order.xml");
+        
+        if (!file.exists())
+        {
+        	System.err.println("Error: Missing order.xml when comparing " + r1.getProjectRelativePath().toString());
+        	return super.compare(viewer, o1, o2);
+        }
+        
+        // if both are sources and order.xml exists, use it to sort the files
+        return compare(r1, r2);
+	}
+
+	/** 
+	 * Compares according to the order.xml file which should be in the resource directory
+	 * Is not consistent with equals
+	 * Resources should be in the same path
+	 * 
+	 * @param r1 first res
+	 * @param r2 second res
+	 * @return a negative integer, zero, or a positive integer as this object is less than, equal to, or greater than the specified object.
+	 */
+	public int compare(IResource r1, IResource r2) {
+		IFolder f = (IFolder) r1.getParent();
+        IFile file = f.getFile("order.xml");
+        
+        if (!file.exists())
+        {
+        	System.err.println("Error: Missing order.xml when comparing " + r1.getProjectRelativePath().toString());
+        	return r1.getName().compareTo(r2.getName());
+        }
+        
         Document d = GeneralFunctions.readFromXML(file);
         
         String s1 = r1.getName();

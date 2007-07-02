@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Tree of Knowledge
+Bundle-Name: %Bundle-Name.0
 Bundle-SymbolicName: lost.tok;singleton:=true
 Bundle-Version: 0.3.0
 Bundle-Activator: lost.tok.activator.Activator
@@ -17,7 +17,7 @@ Require-Bundle: org.eclipse.ui,
  dom4j,
  org.eclipse.search
 Eclipse-LazyStart: true
-Bundle-Vendor: Team Lost
+Bundle-Vendor: %Bundle-Vendor.0
 Export-Package: lost.tok,
  lost.tok.activator,
  lost.tok.disEditor,

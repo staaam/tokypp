@@ -1,5 +1,10 @@
 package lost.tok.sorter;
 
+import java.util.Arrays;
+import java.util.Vector;
+
+import lost.tok.navigator.InformationComparator;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
@@ -25,7 +30,7 @@ public class Sorter {
 	}
 	
 	/**
-	 * Reads the sorter.xml file and returns the resources described in it, according to their order
+	 * Reads the order.xml file and returns the resources described in it, according to their order
 	 * 
 	 * Note(Shay): Currently is a stub
 	 */
@@ -38,14 +43,24 @@ public class Sorter {
 			e.printStackTrace();
 		}
 		
+		Vector<IResource> relevantRes = new Vector<IResource>(resArr.length);
+		
 		// prints error messages for non file/dir resources
 		for (IResource res : resArr)
 		{
 			if (!(res instanceof IFile) && !(res instanceof IFolder))
 				System.err.println("Error: Resource " + res.getFullPath() + " is not a file or folder");
+			if (res.getName().toLowerCase().equals("order.xml"))
+				continue;
+			relevantRes.add(res);
 		}
 		
-		return resArr;
+		IResource[] relArr = new IResource[relevantRes.size()];
+		
+		relevantRes.toArray(relArr);
+		Arrays.sort(relArr, new InformationComparator());
+		
+		return relArr;
 	}
 
 }
