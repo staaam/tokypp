@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<toc label="מדריך עץ הדעת" link_to="toc.xml#gettingstarted"> 
+	<topic label="כללי"  href="gettingstarted/General.html" /> 
+	<topic label="למתחילים" href="gettingstarted/GettingStarted.html" /> 
+	<topic label="מקורות" href="gettingstarted/Sources.html" /> 
+	<topic label="דיונים" href="gettingstarted/Discussion.html" /> 
+	<topic label="שולחן הניתוחים" href="gettingstarted/OperationTable.html" /> 
+	<topic label="מכין המקורות" href="gettingstarted/SourceParser.html" /> 
+	<topic label="ייצוא/ייבוא" href="gettingstarted/ImportExport.html" /> 
+	<topic label="מחברים" href="gettingstarted/Authors.html" />
+	<topic label="יצירת אתר" href="gettingstarted/Html.html" />
+	<topic label="חיפוש" href="gettingstarted/Search.html" />
+</toc>
