@@ -386,7 +386,7 @@
             class="lost.tok.wizards.ExportSource"
             icon="icons/sample.gif"
             id="lost.tok.exportSource.ExportSource"
-            name="%wizard.name.sourceExport">
+            name="%wizard.source.export">
          <description>
             %wizard.description.sourceExport
          </description>
@@ -432,7 +432,7 @@
             class="lost.tok.wizards.ImportSource"
             icon="icons/sample.gif"
             id="lost.tok.wizards.ImportSource"
-            name="%wizard.name.discImport">
+            name="%wizard.source.import">
          <description>
             %wizard.description.sourceImport
          </description>
