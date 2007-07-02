@@ -16,6 +16,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.layout.GridData;
@@ -62,7 +63,7 @@ public class ExportDiscussionPage extends WizardFileSystemResourceExportPage1 {
 	 *            the selection
 	 */
 	public ExportDiscussionPage(IStructuredSelection selection) {
-		this("zipFileExportPage1", selection); //$NON-NLS-1$
+		this("zipFileExportPage1", new StructuredSelection(((IResource)selection.getFirstElement()).getProject())); //$NON-NLS-1$
 		setTitle(Messages.getString("ExportDiscussionPage.0")); //$NON-NLS-1$
 		setDescription(Messages.getString("ExportDiscussionPage.1")); //$NON-NLS-1$
 	}
