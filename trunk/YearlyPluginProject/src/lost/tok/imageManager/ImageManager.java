@@ -16,6 +16,7 @@ public class ImageManager {
 		putImage(ImageType.LINK, ICONS_FOLDER + "link_ico.gif"); //$NON-NLS-1$
 		putImage(ImageType.OPINION, ICONS_FOLDER + "chat.ico"); //$NON-NLS-1$
 		putImage(ImageType.ROOT, ICONS_FOLDER + "opTable.bmp"); //$NON-NLS-1$
+		putImage(ImageType.SOURCE, ICONS_FOLDER + "opTable.bmp"); //$NON-NLS-1$
 		putImage(ImageType.QUOTE, ICONS_FOLDER + "AddQuote.bmp"); //$NON-NLS-1$
 		putImage(ImageType.EXCERPTION, ICONS_FOLDER + "exp.bmp"); //$NON-NLS-1$
 		putImage(ImageType.COMMENT, ICONS_FOLDER + "comment.bmp"); //$NON-NLS-1$

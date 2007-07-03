@@ -271,7 +271,7 @@ public class SourceDocument extends Document {
 			keywordsMap.put(k, "");
 	}
 	
-	static private String toTemplateKeyword(KEYWORD k) {
+	public static String toTemplateKeyword(KEYWORD k) {
 		return "__" + k + "__";
 	}
 
@@ -280,8 +280,8 @@ public class SourceDocument extends Document {
 		return substituteAllBut(header, KEYWORD.NULL);
 	}
 
-	private String substituteAllBut(String template, KEYWORD keyword) {
-		String substituted = header;
+	public String substituteAllBut(String template, KEYWORD keyword) {
+		String substituted = template;
 		for (KEYWORD k : keywordsMap.keySet()) {
 			if (k.compareTo(keyword) == 0) continue;
 			substituted = substituted.replaceAll(toTemplateKeyword(k), keywordsMap.get(k));

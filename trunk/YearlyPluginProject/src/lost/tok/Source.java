@@ -21,10 +21,7 @@ public class Source {
 	/** The tree of knowledge this source belongs to */
 	ToK tok;
 	
-	/** The internal name of the source (lazily initialized) */
-	String title = null;
-	/** The author of the source (lazily initialized) */
-	String author = null;
+	private SourceDocument srcDoc = null;
 
 	/**
 	 * Creates Source object
@@ -125,40 +122,34 @@ public class Source {
 	}
 	
 	/** Returns the name of the file's author */
-	public String getAuthor()
-	{
-		initTitleAuthor();
-		return author;
+	public String getAuthor() {
+		return getSourceDocument().getAuthor();
 	}
 	
-	public int getAuthorRank()
-	{
+	public int getAuthorRank() {
 		AuthorsHandler authHandler = new AuthorsHandler(tok);
 		
 		return authHandler.getAuthorRank(getAuthor());
 	}
 	
 	/** Returns the internal name of the source (i.e. its title) */
-	public String getTitle()
-	{
-		initTitleAuthor();
-		return title;
+	public String getTitle() {
+		return getSourceDocument().getTitle();
+	}
+	
+	/** Returns SourceDocument of the source */
+	public SourceDocument getSourceDocument() {
+		initSourceDocument();
+		return srcDoc;
 	}
 
 	/** Initializes the title and author field of the source, if needed */
-	private void initTitleAuthor() {
-		
-		if (title != null)
-		{
-			assert(author != null);
+	private void initSourceDocument() {
+		if (srcDoc != null)
 			return;
-		}
-		
-		SourceDocument srcDoc = new SourceDocument();
+
+		srcDoc = new SourceDocument();
 		srcDoc.set(this);
-		
-		title = srcDoc.getTitle();
-		author = srcDoc.getAuthor();
 	}
 
 }
