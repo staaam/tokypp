@@ -18,6 +18,7 @@ import lost.tok.imageManager.ImageType;
 import lost.tok.opTable.OperationTable;
 import lost.tok.sourceDocument.ChapterText;
 import lost.tok.sourceDocument.SourceDocument;
+import lost.tok.sourceDocument.SourceDocument.KEYWORD;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
@@ -64,6 +65,8 @@ public class DiscussionEditor extends TextEditor {
 	private static final String OPINION = "Opinion"; //$NON-NLS-1$
 
 	private static final String COMMENT_LINE = "Comment line"; //$NON-NLS-1$
+
+	private static final String QUOTE_LINE = "Quote line"; //$NON-NLS-1$
 
 	private Discussion discussion = null;
 
@@ -533,13 +536,19 @@ public class DiscussionEditor extends TextEditor {
 
 		quoteItem.setData(QUOTE, quote);
 		quoteItem.setData(QUOTE);
-		// quoteItem.setImage(imageQuote);
+
+		int linesCounter = 0;
+
+		// Source information item
+		addSourceInfo(quote, quoteItem);
+		linesCounter++;
 
 		ctrlCurrentWidth = editor.getSize().x;
 
 		int lineSize = getLineSize();
 
-		int wrappedLines = addSplitted(quoteItem, quoteText, lineSize);
+		quoteItem.setData(QUOTE_LINE, linesCounter);
+		linesCounter += addSplitted(quoteItem, quoteText, lineSize);
 		
 		if (quote.getComment().trim().length() != 0) {
 			// make son saparator
@@ -547,10 +556,26 @@ public class DiscussionEditor extends TextEditor {
 			treeItem.setText("----- " + Messages.getString("DiscussionEditor.Comment") + " -----"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			treeItem.setImage(ImageManager.getImage(ImageType.QUOTE));
 			
-			wrappedLines++;
-			quoteItem.setData(COMMENT_LINE, wrappedLines);
+			linesCounter++;
+			quoteItem.setData(COMMENT_LINE, linesCounter);
 			addSplitted(quoteItem, quote.getComment(), lineSize);
 		}
+	}
+
+
+	private void addSourceInfo(Quote quote, TreeItem quoteItem) {
+		final String srcInfoTmpl =
+			Messages.getString("DiscussionEditor.SourceAuthor") + //$NON-NLS-1$
+			SourceDocument.toTemplateKeyword(KEYWORD.AUTHOR) +
+			", " +  //$NON-NLS-1$
+			Messages.getString("DiscussionEditor.SourceTitle") + //$NON-NLS-1$
+		    SourceDocument.toTemplateKeyword(KEYWORD.TITLE) +
+		    "";  //$NON-NLS-1$
+		
+		TreeItem srcInfoItem = new TreeItem(quoteItem, SWT.WRAP);
+		srcInfoItem.setText(quote.getSource().getSourceDocument().
+				substituteAllBut(srcInfoTmpl, KEYWORD.NULL));
+		srcInfoItem.setImage(ImageManager.getImage(ImageType.SOURCE));
 	}
 
 
@@ -850,7 +875,7 @@ public class DiscussionEditor extends TextEditor {
 	private TreeItem[] findQuoteItem(TreeItem item, int offset, int length, boolean isComment) {
 		TreeItem[] def = new TreeItem[] { item };
 		
-		Integer i = isComment ? (Integer)item.getData(COMMENT_LINE) : 0;
+		Integer i = (Integer)item.getData(isComment ? COMMENT_LINE : QUOTE_LINE);
 		if (i == null) {
 			return def;
 		}
