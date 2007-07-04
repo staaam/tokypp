@@ -32,19 +32,6 @@ public class Discussion implements Comparable<Discussion> {
 	public static final String DEFAULT_OPINION_XML = "General"; //$NON-NLS-1$
 
 	/**
-	 * The types of the relations, as strings displayable to the user The order
-	 * of the strings should be the same as in the relXMLTypes array
-	 */
-	public static final String[] relDisplayNames = {
-			Messages.getString("Discussion.1"), Messages.getString("Discussion.2") }; //$NON-NLS-1$ //$NON-NLS-2$
-
-	/**
-	 * The types of the links, as the xml scheme defines The order of the
-	 * strings should be the same as in the relDisplayNames array
-	 */
-	public static final String[] relXMLTypes = { "disagree", "explain" }; //$NON-NLS-1$ //$NON-NLS-2$
-
-	/**
 	 * Qualified Name of ToK's project that specifies latest discussion used
 	 */
 	public static final QualifiedName LATEST_QNAME = 
