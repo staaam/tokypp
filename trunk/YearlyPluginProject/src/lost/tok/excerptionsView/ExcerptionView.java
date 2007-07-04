@@ -12,6 +12,8 @@ import lost.tok.GeneralFunctions;
 import lost.tok.Messages;
 import lost.tok.Source;
 import lost.tok.ToK;
+import lost.tok.imageManager.ImageManager;
+import lost.tok.imageManager.ImageType;
 import lost.tok.opTable.OperationTable;
 import lost.tok.opTable.wizards.NewLinkWizard;
 
@@ -38,8 +40,6 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TreeItem;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.part.ViewPart;
 
@@ -213,12 +213,11 @@ public class ExcerptionView extends ViewPart {
 	class ViewLabelProvider extends LabelProvider {
 
 		public Image getImage(Object obj) {
-			String imageKey = ISharedImages.IMG_OBJ_ELEMENT;
+			ImageType t = ImageType.EXCERPTION;
 			if (obj instanceof TreeParent) {
-				imageKey = ISharedImages.IMG_OBJ_FOLDER;
+				t = ImageType.SOURCE;
 			}
-			return PlatformUI.getWorkbench().getSharedImages().getImage(
-					imageKey);
+			return ImageManager.getImage(t);
 		}
 
 		public String getText(Object obj) {

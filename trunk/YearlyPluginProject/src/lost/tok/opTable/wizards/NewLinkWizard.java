@@ -5,6 +5,7 @@ import lost.tok.Link;
 import lost.tok.Messages;
 import lost.tok.Source;
 import lost.tok.ToK;
+import lost.tok.excerptionsView.ExcerptionView;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
@@ -67,25 +68,20 @@ public class NewLinkWizard extends Wizard implements INewWizard {
 		try {
 			d = tok.getDiscussion(page.getDiscussionName());
 		} catch (CoreException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
+			return true;
 		}
 		
 		Link link = new Link(d, page.getLinkType(),tok.getLinkFile(),page.getSubject());
 		
 		
 		for (String root : roots) {
-			
 			link.linkDiscussionRoot(new Source(tok, root),page.getExcerptions(root));
-						
-			//new Link class replaced this
-			//	tok.linkDiscussionRoot(tok.getDiscussion(page.getDiscussion()),
-			//	new Source(tok, root), page.getExcerptions(root), page
-			//			.getSubject(), page.getLinkType());
-
 		}
 		
 		d.setLink(link);
+		
+		ExcerptionView.getView(false).clearCurrentProject();
 		return true;
 	}
 
