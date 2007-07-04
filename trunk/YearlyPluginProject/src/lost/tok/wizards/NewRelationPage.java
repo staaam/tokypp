@@ -3,6 +3,7 @@ package lost.tok.wizards;
 import lost.tok.Discussion;
 import lost.tok.Messages;
 import lost.tok.Quote;
+import lost.tok.Relation;
 import lost.tok.ToK;
 
 import org.eclipse.core.resources.IResource;
@@ -92,7 +93,7 @@ public class NewRelationPage extends WizardPage implements ModifyListener,
 		label.setText(Messages.getString("NewRelationWizardPage.2")); //$NON-NLS-1$
 
 		relType = new Combo(container, SWT.READ_ONLY | SWT.DROP_DOWN);
-		for (String element : Discussion.relDisplayNames) {
+		for (String element : Relation.getRelTypes()) {
 			relType.add(element);
 		}
 
@@ -173,17 +174,8 @@ public class NewRelationPage extends WizardPage implements ModifyListener,
 		return discussion;
 	}
 
-	/**
-	 * Returns the type of the relation chosen
-	 * 
-	 * @return the String for relation type which should be written in the xml
-	 *         (and not the display string)
-	 */
 	public String getRelationType() {
-		int chosenIdx = relType.getSelectionIndex();
-		if (chosenIdx == -1)
-			return ""; //$NON-NLS-1$
-		return Discussion.relXMLTypes[chosenIdx];
+		return relType.getText();
 	}
 
 	public Integer[] getSelectedQuotes() {
