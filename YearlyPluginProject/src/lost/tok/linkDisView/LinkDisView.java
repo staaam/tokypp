@@ -9,6 +9,8 @@ import lost.tok.Excerption;
 import lost.tok.GeneralFunctions;
 import lost.tok.Link;
 import lost.tok.Messages;
+import lost.tok.imageManager.ImageManager;
+import lost.tok.imageManager.ImageType;
 import lost.tok.opTable.OperationTable;
 import lost.tok.opTable.RootDiscussionsPart;
 
@@ -26,8 +28,6 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
 
@@ -37,16 +37,15 @@ public class LinkDisView extends ViewPart {
 	class ViewLabelProvider extends LabelProvider {
 
 		public Image getImage(Object obj) {
-			String imageKey = ISharedImages.IMG_OBJ_ELEMENT;
+			ImageType t = ImageType.EXCERPTION; 
 
 			if (obj instanceof TreeNode)
 				obj = ((TreeNode) obj).getValue();
 			
-			if (obj instanceof Discussion) {
-				imageKey = ISharedImages.IMG_OBJ_FOLDER;
-			}
-			return PlatformUI.getWorkbench().getSharedImages().getImage(
-					imageKey);
+			if (obj instanceof Discussion)
+				t = ImageType.DISCUSSION;
+			
+			return ImageManager.getImage(t);
 		}
 
 		public String getText(Object obj) {
