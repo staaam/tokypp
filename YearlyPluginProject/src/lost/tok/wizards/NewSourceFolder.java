@@ -68,6 +68,16 @@ public class NewSourceFolder extends BasicNewResourceWizard{
 		if (!orderFile.exists()) {
 			GeneralFunctions.writeToXml(orderFile, orderSkeleton(folder));
 		}
+		
+		IFolder father = (IFolder) folder.getParent();
+		IFile order = father.getFile("order.xml");
+		Document d = GeneralFunctions.readFromXML(order);
+		
+		Element e = d.getRootElement().addElement("sub");
+		e.addElement("name").addText(mainPage.getName());
+		e.addElement("type").addText("dir");
+		
+		GeneralFunctions.writeToXml(order, d);
 
         selectAndReveal(folder);
         
