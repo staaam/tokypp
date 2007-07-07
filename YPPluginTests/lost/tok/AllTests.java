@@ -15,6 +15,7 @@ public class AllTests {
 		suite.addTestSuite(DiscussionTest.class);
 		suite.addTestSuite(DiscussionEditorTest.class);
 		suite.addTestSuite(Search.class);
+		suite.addTestSuite(AuthorsTest.class);
 		// suite.addTestSuite(OperationtTableTest.class);
 		// $JUnit-END$
 		return suite;
