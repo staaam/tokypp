@@ -445,16 +445,9 @@ public class DiscussionTest extends TestCase {
 		}
 
 		XPath xpathSelector1 = DocumentHelper
-				.createXPath("//relation[id1='11']|//relation[id2='11']");
+				.createXPath("//relation");
 		List result1 = xpathSelector1.selectNodes(doc);
-		XPath xpathSelector2 = DocumentHelper
-				.createXPath("//relation[id1='12'][id2='11']|//relation[id1='11'][id2='12']");
-		List result2 = xpathSelector2.selectNodes(doc);
-		XPath xpathSelector3 = DocumentHelper
-				.createXPath("//relation[id1='13'][id2='11']|//relation[id1='11'][id2='13']");
-		List result3 = xpathSelector3.selectNodes(doc);
-		assertTrue(result1.size() == 2 && result2.size() == 1
-				&& result3.size() == 1);
+		assertTrue(result1.size() == 2);
 	}
 
 	// test createQuoteLink, link already exist and link between quotes that
@@ -484,7 +477,7 @@ public class DiscussionTest extends TestCase {
 
 		XPath xpathSelector = DocumentHelper.createXPath("//relation");
 		List result = xpathSelector.selectNodes(doc);
-		assertTrue(result.size() == 1);
+		assertTrue(result.size() == 2);
 	}
 
 	// test removeQuoteLink
@@ -514,7 +507,7 @@ public class DiscussionTest extends TestCase {
 
 		XPath xpathSelector = DocumentHelper.createXPath("//relation");
 		List result = xpathSelector.selectNodes(doc);
-		assertTrue(result.size() == 1);
+		assertTrue(result.size() == 2);
 	}
 
 	// test removeQuoteLink, removing a link that doesnt exist
@@ -573,7 +566,7 @@ public class DiscussionTest extends TestCase {
 		XPath xpathSelector2 = DocumentHelper
 				.createXPath("//relation[id1='11']|//relation[id2='11']");
 		List result2 = xpathSelector2.selectNodes(doc);
-		assertTrue(result1.size() == 1 && result2.size() == 1);
+		assertTrue(result1.size() == 1 && result2.size() == 0);
 	}
 
 	// test createOpinionQuoteLink, link already exist and link between elementss that
@@ -603,7 +596,7 @@ public class DiscussionTest extends TestCase {
 
 		XPath xpathSelector1 = DocumentHelper.createXPath("//relation");
 		List result1 = xpathSelector1.selectNodes(doc);
-		assertTrue(result1.size() == 1);
+		assertTrue(result1.size() == 2);
 	}
 
 	// test removeOpinionQuoteLink
@@ -633,7 +626,7 @@ public class DiscussionTest extends TestCase {
 
 		XPath xpathSelector1 = DocumentHelper.createXPath("//relation");
 		List result1 = xpathSelector1.selectNodes(doc);
-		assertTrue(result1.size() == 1);
+		assertTrue(result1.size() == 2);
 	}
 
 	// test removeOpinionQuoteLink, removing a link that doesnt exist
@@ -720,7 +713,7 @@ public class DiscussionTest extends TestCase {
 
 		XPath xpathSelector1 = DocumentHelper.createXPath("//relation");
 		List result1 = xpathSelector1.selectNodes(doc);
-		assertTrue(result1.size() == 1);
+		assertTrue(result1.size() == 3);
 	}
 	
 	/**
