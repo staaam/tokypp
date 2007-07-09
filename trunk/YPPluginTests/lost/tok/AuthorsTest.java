@@ -55,20 +55,4 @@ public class AuthorsTest extends TestCase {
 		assertTrue(relocAuthNewRank == 2);
 	}
 
-	/**
-	 * Test remove author
-	 * @throws CoreException
-	 * @throws IOException
-	 */
-	public void testRemoveAuthor() throws CoreException, IOException {
-		ToK tok = creation("test3");
-
-		AuthorsHandler authHanlde = new AuthorsHandler(tok);
-		
-		authHanlde.addAuthor(new Author(new Integer(1),"Evgeni"),new Integer(1));
-		authHanlde.removeAuthor("Evgeni");
-
-		int relocAuthNewRank = authHanlde.getAuthorRank("Evgeni");
-		assertTrue(relocAuthNewRank == 0);
-	}	
 }
