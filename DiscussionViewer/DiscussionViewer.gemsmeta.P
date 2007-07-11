@@ -1,0 +1,2607 @@
+
+:-dynamic(abstractdicobject/1).
+:-dynamic(self_relates1/2).
+:-dynamic(opinion/1).
+:-dynamic(self_oneopinion/2).
+:-dynamic(self_ispartof1/2).
+:-dynamic(quote/1).
+:-dynamic(self_manyquotes/2).
+:-dynamic(self_ispartof2/2).
+:-dynamic(relation/1).
+:-dynamic(self_source/2).
+:-dynamic(self_target/2).
+:-dynamic(discussionviewer/1).
+:-dynamic(self_contains1/2).
+:-dynamic(self_consists2/2).
+:-dynamic(containment/1).
+:-dynamic(relation_connection/1).
+:-dynamic(containment_connection/1).
+
+     :-assert(self_DSMLID(13,'lost.tok.discussionViewer')).
+:-assert(self_FileExtensions(13,'dis')).
+:-assert(self_Category(13,'Information')).
+:-assert(self_Description(13,'Discussion Viewer')).
+:-assert(self_id(13,13)).
+:-assert(self_name(13,'DiscussionViewer')).
+:-assert(self_Annotation(13,'')).
+:-assert(self_Tags(13,[])).
+:-assert(self_Aspect(13,[])).
+:-assert(self_ModelObject(13,[106,107,241,321,558,613])).
+:-assert(self_IsAbstract(106,'true')).
+:-assert(self_IsRoot(106,'false')).
+:-assert(self_DrawName(106,'true')).
+:-assert(self_DrawType(106,'true')).
+:-assert(self_LabelForeground(106,'(0,0,0)')).
+:-assert(self_LabelFontSize(106,8)).
+:-assert(self_LabelBackground(106,'(255,255,255)')).
+:-assert(self_LabelFontName(106,'System')).
+:-assert(self_IsOpaque(106,'true')).
+:-assert(self_BackgroundContentColor(106,'(255,255,255)')).
+:-assert(self_LabelFontStyle(106,'0')).
+:-assert(self_Description(106,'Abstract Object for inheritance')).
+:-assert(self_id(106,106)).
+:-assert(self_name(106,'AbstractDicObject')).
+:-assert(self_Annotation(106,'')).
+:-assert(self_Tags(106,['org.gems.designer.model.BasicTag@14f91d7','org.gems.designer.model.BasicTag@efe0e1'])).
+:-assert(self_Metamodel(106,13)).
+:-assert(self_abstract(106,'false')).
+:-assert(self_issubtype(106,'false')).
+:-assert(self_size(106,'Dimension(209, 109)')).
+:-assert(self_visibility_id(106,'true')).
+:-assert(self_Owner(106,'null')).
+:-assert(self_expanded(106,'null')).
+:-assert(self_VisibleEntities(106,'null')).
+:-assert(self_Attributes(106,[])).
+:-assert(self_DerivedFrom(106,[])).
+:-assert(self_ConnectionTarget(106,[321])).
+:-assert(self_ConnectionTarget(321,[106])).
+:-assert(self_ConnectionSource(321,[106])).
+:-assert(self_ContainedEntities(106,[])).
+:-assert(self_Derived(106,[175,242])).
+:-assert(self_Base(175,[106])).
+:-assert(self_Base(242,[106])).
+:-assert(self_ConnectionSource(106,[321])).
+:-assert(self_ContainerEntities(106,[])).
+:-assert(self_type(106,entity)).
+:-assert(self_IsAbstract(107,'false')).
+:-assert(self_IsRoot(107,'false')).
+:-assert(self_DrawName(107,'true')).
+:-assert(self_DrawType(107,'true')).
+:-assert(self_LabelForeground(107,'(0,0,0)')).
+:-assert(self_LabelFontSize(107,8)).
+:-assert(self_LabelBackground(107,'(255,255,255)')).
+:-assert(self_LabelFontName(107,'System')).
+:-assert(self_IsOpaque(107,'true')).
+:-assert(self_BackgroundContentColor(107,'(255,255,255)')).
+:-assert(self_LabelFontStyle(107,'0')).
+:-assert(self_Description(107,'')).
+:-assert(self_id(107,107)).
+:-assert(self_name(107,'Opinion')).
+:-assert(self_Annotation(107,'')).
+:-assert(self_Tags(107,[])).
+:-assert(self_Metamodel(107,13)).
+:-assert(self_abstract(107,'false')).
+:-assert(self_issubtype(107,'false')).
+:-assert(self_location(107,'Point(766, 262)')).
+:-assert(self_size(107,'Dimension(107, 109)')).
+:-assert(self_visibility_id(107,'true')).
+:-assert(self_Owner(107,'null')).
+:-assert(self_expanded(107,'null')).
+:-assert(self_VisibleEntities(107,'null')).
+:-assert(self_Attributes(107,[])).
+:-assert(self_DerivedFrom(107,[175])).
+:-assert(self_ConnectionTarget(107,[613])).
+:-assert(self_ContainerEntities(558,[107,241])).
+:-assert(self_ConnectionSource(613,[107])).
+:-assert(self_ContainedEntities(107,[558])).
+:-assert(self_Derived(107,[])).
+:-assert(self_ConnectionSource(107,[])).
+:-assert(self_ContainerEntities(107,[])).
+:-assert(self_Derived(175,[107])).
+:-assert(self_type(107,entity)).
+:-assert(self_IsAbstract(241,'false')).
+:-assert(self_IsRoot(241,'false')).
+:-assert(self_DrawName(241,'true')).
+:-assert(self_DrawType(241,'true')).
+:-assert(self_LabelForeground(241,'(0,0,0)')).
+:-assert(self_LabelFontSize(241,8)).
+:-assert(self_LabelBackground(241,'(255,255,255)')).
+:-assert(self_LabelFontName(241,'System')).
+:-assert(self_IsOpaque(241,'true')).
+:-assert(self_BackgroundContentColor(241,'(255,255,255)')).
+:-assert(self_LabelFontStyle(241,'0')).
+:-assert(self_Description(241,'')).
+:-assert(self_id(241,241)).
+:-assert(self_name(241,'Quote')).
+:-assert(self_Annotation(241,'')).
+:-assert(self_Tags(241,[])).
+:-assert(self_Metamodel(241,13)).
+:-assert(self_abstract(241,'false')).
+:-assert(self_issubtype(241,'false')).
+:-assert(self_location(241,'Point(90, 256)')).
+:-assert(self_size(241,'Dimension(100, 109)')).
+:-assert(self_visibility_id(241,'true')).
+:-assert(self_Owner(241,'null')).
+:-assert(self_expanded(241,'null')).
+:-assert(self_VisibleEntities(241,'null')).
+:-assert(self_Attributes(241,[])).
+:-assert(self_DerivedFrom(241,[242])).
+:-assert(self_Derived(242,[241])).
+:-assert(self_ConnectionTarget(241,[])).
+:-assert(self_ContainedEntities(241,[558])).
+:-assert(self_Derived(241,[])).
+:-assert(self_ConnectionSource(241,[613])).
+:-assert(self_ContainerEntities(241,[])).
+:-assert(self_ConnectionTarget(613,[241])).
+:-assert(self_type(241,entity)).
+:-assert(self_SourceDecoration(321,'1')).
+:-assert(self_TargetDecoration(321,'1')).
+:-assert(self_LineStyle(321,'1')).
+:-assert(self_LineColor(321,'(0,200,0)')).
+:-assert(self_LineWidth(321,3)).
+:-assert(self_Description(321,'')).
+:-assert(self_id(321,321)).
+:-assert(self_name(321,'Relation')).
+:-assert(self_Annotation(321,'')).
+:-assert(self_Tags(321,['org.gems.designer.model.BasicTag@94ff57'])).
+:-assert(self_Metamodel(321,13)).
+:-assert(self_abstract(321,'false')).
+:-assert(self_issubtype(321,'false')).
+:-assert(self_size(321,'Dimension(120, 53)')).
+:-assert(self_visibility_id(321,'true')).
+:-assert(self_Owner(321,'null')).
+:-assert(self_expanded(321,'null')).
+:-assert(self_VisibleEntities(321,'null')).
+:-assert(self_Attributes(321,[])).
+:-assert(self_LineAttributes(321,[])).
+:-assert(self_type(321,connection)).
+:-assert(self_IsAbstract(558,'true')).
+:-assert(self_IsRoot(558,'true')).
+:-assert(self_DrawName(558,'true')).
+:-assert(self_DrawType(558,'true')).
+:-assert(self_LabelForeground(558,'(0,0,0)')).
+:-assert(self_LabelFontSize(558,8)).
+:-assert(self_LabelBackground(558,'(255,255,255)')).
+:-assert(self_LabelFontName(558,'System')).
+:-assert(self_IsOpaque(558,'true')).
+:-assert(self_BackgroundContentColor(558,'(255,255,255)')).
+:-assert(self_LabelFontStyle(558,'0')).
+:-assert(self_Description(558,'')).
+:-assert(self_id(558,558)).
+:-assert(self_name(558,'DiscussionViewer')).
+:-assert(self_Annotation(558,'')).
+:-assert(self_Tags(558,[])).
+:-assert(self_Metamodel(558,13)).
+:-assert(self_abstract(558,'false')).
+:-assert(self_issubtype(558,'false')).
+:-assert(self_location(558,'Point(360, 409)')).
+:-assert(self_size(558,'Dimension(197, 109)')).
+:-assert(self_visibility_id(558,'true')).
+:-assert(self_Owner(558,'null')).
+:-assert(self_expanded(558,'null')).
+:-assert(self_VisibleEntities(558,'null')).
+:-assert(self_Attributes(558,[])).
+:-assert(self_DerivedFrom(558,[])).
+:-assert(self_ConnectionTarget(558,[])).
+:-assert(self_ContainedEntities(558,[])).
+:-assert(self_Derived(558,[])).
+:-assert(self_ConnectionSource(558,[])).
+:-assert(self_type(558,entity)).
+:-assert(self_SourceDecoration(613,'2')).
+:-assert(self_TargetDecoration(613,'0')).
+:-assert(self_LineStyle(613,'0')).
+:-assert(self_LineColor(613,'(0,0,0)')).
+:-assert(self_LineWidth(613,1)).
+:-assert(self_Description(613,'')).
+:-assert(self_id(613,613)).
+:-assert(self_name(613,'Containment')).
+:-assert(self_Annotation(613,'')).
+:-assert(self_Tags(613,[])).
+:-assert(self_Metamodel(613,13)).
+:-assert(self_abstract(613,'false')).
+:-assert(self_issubtype(613,'false')).
+:-assert(self_location(613,'Point(387, 286)')).
+:-assert(self_size(613,'Dimension(157, 53)')).
+:-assert(self_visibility_id(613,'true')).
+:-assert(self_Owner(613,'null')).
+:-assert(self_expanded(613,'null')).
+:-assert(self_VisibleEntities(613,'null')).
+:-assert(self_Attributes(613,[])).
+:-assert(self_LineAttributes(613,[])).
+:-assert(self_type(613,connection)).
+:-assert(self_Attribute(13,[])).
+:-assert(self_Constraints(13,[])).
+:-assert(self_Inheritance(13,[175,242])).
+:-assert(self_id(175,175)).
+:-assert(self_name(175,'isOpinion')).
+:-assert(self_Annotation(175,'')).
+:-assert(self_Tags(175,[])).
+:-assert(self_Metamodel(175,13)).
+:-assert(self_abstract(175,'false')).
+:-assert(self_issubtype(175,'false')).
+:-assert(self_location(175,'Point(750, 33)')).
+:-assert(self_size(175,'Dimension(133, 42)')).
+:-assert(self_visibility_id(175,'true')).
+:-assert(self_Owner(175,'null')).
+:-assert(self_expanded(175,'null')).
+:-assert(self_type(175,inheritance)).
+:-assert(self_id(242,242)).
+:-assert(self_name(242,'isQuote')).
+:-assert(self_Annotation(242,'')).
+:-assert(self_Tags(242,[])).
+:-assert(self_Metamodel(242,13)).
+:-assert(self_abstract(242,'false')).
+:-assert(self_issubtype(242,'false')).
+:-assert(self_location(242,'Point(81, 39)')).
+:-assert(self_size(242,'Dimension(127, 42)')).
+:-assert(self_visibility_id(242,'true')).
+:-assert(self_Owner(242,'null')).
+:-assert(self_expanded(242,'null')).
+:-assert(self_type(242,inheritance)).
+:-assert(self_abstract(13,'false')).
+:-assert(self_issubtype(13,'false')).
+:-assert(self_location(13,'Point(0, 0)')).
+:-assert(self_size(13,'Dimension(100, 100)')).
+:-assert(self_visibility_id(13,'true')).
+:-assert(self_Owner(13,'null')).
+:-assert(self_expanded(13,'null')).
+:-assert(self_type(13,metamodel)).
+:-assert(self_Role(ffffffff84458bab_28,'Relates2')).
+:-assert(self_Cardinality(ffffffff84458bab_28,'0..*')).
+:-assert(self_source(ffffffff84458bab_28,321)).
+:-assert(self_target(ffffffff84458bab_28,106)).
+:-assert(self_type(ffffffff84458bab_28,connectiontarget)).
+:-assert(self_Role(ffffffff84458bab_26,'Relates1')).
+:-assert(self_Cardinality(ffffffff84458bab_26,'0..*')).
+:-assert(self_source(ffffffff84458bab_26,106)).
+:-assert(self_target(ffffffff84458bab_26,321)).
+:-assert(self_type(ffffffff84458bab_26,connectionsource)).
+:-assert(self_Role(ffffffff84458bab_29,'manyQuotes')).
+:-assert(self_Cardinality(ffffffff84458bab_29,'0..*')).
+:-assert(self_source(ffffffff84458bab_29,613)).
+:-assert(self_target(ffffffff84458bab_29,241)).
+:-assert(self_type(ffffffff84458bab_29,connectiontarget)).
+:-assert(self_Role(ffffffff84458bab_27,'oneOpinion')).
+:-assert(self_Cardinality(ffffffff84458bab_27,'0..*')).
+:-assert(self_source(ffffffff84458bab_27,107)).
+:-assert(self_target(ffffffff84458bab_27,613)).
+:-assert(self_type(ffffffff84458bab_27,connectionsource)).
+:-assert(self_source(ffffffff84458bab_24,242)).
+:-assert(self_target(ffffffff84458bab_24,106)).
+:-assert(self_type(ffffffff84458bab_24,inheritancebase)).
+:-assert(self_source(ffffffff84458bab_25,241)).
+:-assert(self_target(ffffffff84458bab_25,242)).
+:-assert(self_type(ffffffff84458bab_25,inheritance)).
+:-assert(self_ParentRole(ffffffff84458bab_31,'Consists2')).
+:-assert(self_ChildRole(ffffffff84458bab_31,'isPartof2')).
+:-assert(self_Cardinality(ffffffff84458bab_31,'0..*')).
+:-assert(self_source(ffffffff84458bab_31,241)).
+:-assert(self_target(ffffffff84458bab_31,558)).
+:-assert(self_type(ffffffff84458bab_31,containment)).
+:-assert(self_ParentRole(ffffffff84458bab_30,'Contains1')).
+:-assert(self_ChildRole(ffffffff84458bab_30,'isPartof1')).
+:-assert(self_Cardinality(ffffffff84458bab_30,'0..*')).
+:-assert(self_source(ffffffff84458bab_30,107)).
+:-assert(self_target(ffffffff84458bab_30,558)).
+:-assert(self_type(ffffffff84458bab_30,containment)).
+:-assert(self_source(ffffffff84458bab_22,107)).
+:-assert(self_target(ffffffff84458bab_22,175)).
+:-assert(self_type(ffffffff84458bab_22,inheritance)).
+:-assert(self_source(ffffffff84458bab_21,175)).
+:-assert(self_target(ffffffff84458bab_21,106)).
+:-assert(self_type(ffffffff84458bab_21,inheritancebase)).
+:-assert(self_location(106,'Point(372, 2)')).
+:-assert(self_location(321,'Point(596, 171)')).
+:- assert(file_search_path(library,'C:/Program Files/eclipse/plugins/org.gems.designer.dsml.kb.jplprolog_1.0.0/lib/pl/library')).
+
+
+new_id(ID) :-
+  findall(I,self_type(I,_),Ids),
+  new_id(Ids,ID).
+
+new_id(Ids,ID) :-
+   max_element(1,Ids,Max),
+   ID is Max + 1.
+
+max_element(Curr,[],Curr).
+
+max_element(Curr,[H|T],Max) :-
+   Max2 is max(Curr,H),
+   max_element(Max2,T,Max).
+
+connect_all(List,Type, Result) :-
+   new_id(ID),
+   connect_all(List,Type,ID,Result).
+
+connect_all([],_,_,[]).
+
+connect_all([Src,Trg|Rest],Type, Id, Result) :-
+   Id2 is Id +1,
+   connect_all(Rest,Type,Id2,Result2),
+   make_conn(Src,Trg,Type,Id,Result2,Result).
+
+make_conn(Src,Trg,Type,Id,Curr, [[add,self_type,Id,Type],[add,self_source,Id,Src],[add,self_target,Id,Trg] | Curr]).
+
+relate_all([],_,[]).
+
+relate_all([Src,Trg|Rest],Relation, [[add,Relation,Src,Trg]|Result2]) :-
+   relate_all(Rest,Relation,Result2).
+
+isboolean(true).
+isboolean(false).
+
+
+%Inheritance information from the metamodel
+is_a(Type,Type).
+is_a(entity,modelelement).
+is_a(entity,model).
+is_a(inheritance,model).
+is_a(connection,modelelement).
+is_a(connection,model).
+is_a(attribute,model).
+is_a(modelelement,model).
+is_a(aspect,model).
+is_a(constraint,model).
+is_a(metamodel,model).
+is_a(ID,entity) :-
+   self_type(ID,Type),
+   is_a(Type,entity).
+is_a(ID,inheritance) :-
+   self_type(ID,Type),
+   is_a(Type,inheritance).
+is_a(ID,connection) :-
+   self_type(ID,Type),
+   is_a(Type,connection).
+is_a(ID,attribute) :-
+   self_type(ID,Type),
+   is_a(Type,attribute).
+is_a(ID,modelelement) :-
+   self_type(ID,Type),
+   is_a(Type,modelelement).
+is_a(ID,aspect) :-
+   self_type(ID,Type),
+   is_a(Type,aspect).
+is_a(ID,constraint) :-
+   self_type(ID,Type),
+   is_a(Type,constraint).
+is_a(ID,metamodel) :-
+   self_type(ID,Type),
+   is_a(Type,metamodel).
+
+
+
+
+
+all_aspectvisibilitys(All) :-
+     bagof(Val,aspectvisibility(Val),All).
+all_attributecontainments(All) :-
+     bagof(Val,attributecontainment(Val),All).
+all_inheritances(All) :-
+     bagof(Val,inheritance(Val),All).
+all_connectionsources(All) :-
+     bagof(Val,connectionsource(Val),All).
+all_containments(All) :-
+     bagof(Val,containment(Val),All).
+all_inheritancebases(All) :-
+     bagof(Val,inheritancebase(Val),All).
+all_connectiontargets(All) :-
+     bagof(Val,connectiontarget(Val),All).
+all_attributeonconnections(All) :-
+     bagof(Val,attributeonconnection(Val),All).
+
+
+is_a_valid_aspectvisibility_viewmode(Owner,Value) :- 
+     true.
+     
+all_valid_aspectvisibility_viewmode(Owner,Valid) :-
+	 bagof(Value,is_a_valid_aspectvisibility_viewmode(Owner,Value),Valid).
+
+assign_all_aspectvisibility_viewmode([],[]).
+assign_all_aspectvisibility_viewmode([Owner|T],[Value|Valid]) :-
+     self_viewmode(Owner,Val),
+     member(Value,Val),
+     assign_all_aspectvisibility_viewmode(T,Valid).
+assign_all_aspectvisibility_viewmode([Owner|T],[Value|Valid]) :-
+     is_a_valid_aspectvisibility_viewmode(Owner,Value),
+     assign_all_aspectvisibility_viewmode(T,Valid).
+     
+collect_valid_aspectvisibility_viewmode([],[]).
+collect_valid_aspectvisibility_viewmode([Owner|Rest],Valid) :-
+     all_valid_aspectvisibility_viewmode(Owner,ValidS),
+     collect_valid_aspectvisibility_viewmode(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_aspectvisibility_source(Owner,Value) :- 
+     true.
+     
+all_valid_aspectvisibility_source(Owner,Valid) :-
+	 bagof(Value,is_a_valid_aspectvisibility_source(Owner,Value),Valid).
+
+assign_all_aspectvisibility_source([],[]).
+assign_all_aspectvisibility_source([Owner|T],[Value|Valid]) :-
+     self_source(Owner,Val),
+     member(Value,Val),
+     assign_all_aspectvisibility_source(T,Valid).
+assign_all_aspectvisibility_source([Owner|T],[Value|Valid]) :-
+     is_a_valid_aspectvisibility_source(Owner,Value),
+     assign_all_aspectvisibility_source(T,Valid).
+     
+collect_valid_aspectvisibility_source([],[]).
+collect_valid_aspectvisibility_source([Owner|Rest],Valid) :-
+     all_valid_aspectvisibility_source(Owner,ValidS),
+     collect_valid_aspectvisibility_source(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_aspectvisibility_target(Owner,Value) :- 
+     true.
+     
+all_valid_aspectvisibility_target(Owner,Valid) :-
+	 bagof(Value,is_a_valid_aspectvisibility_target(Owner,Value),Valid).
+
+assign_all_aspectvisibility_target([],[]).
+assign_all_aspectvisibility_target([Owner|T],[Value|Valid]) :-
+     self_target(Owner,Val),
+     member(Value,Val),
+     assign_all_aspectvisibility_target(T,Valid).
+assign_all_aspectvisibility_target([Owner|T],[Value|Valid]) :-
+     is_a_valid_aspectvisibility_target(Owner,Value),
+     assign_all_aspectvisibility_target(T,Valid).
+     
+collect_valid_aspectvisibility_target([],[]).
+collect_valid_aspectvisibility_target([Owner|Rest],Valid) :-
+     all_valid_aspectvisibility_target(Owner,ValidS),
+     collect_valid_aspectvisibility_target(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_attributecontainment_source(Owner,Value) :- 
+     true.
+     
+all_valid_attributecontainment_source(Owner,Valid) :-
+	 bagof(Value,is_a_valid_attributecontainment_source(Owner,Value),Valid).
+
+assign_all_attributecontainment_source([],[]).
+assign_all_attributecontainment_source([Owner|T],[Value|Valid]) :-
+     self_source(Owner,Val),
+     member(Value,Val),
+     assign_all_attributecontainment_source(T,Valid).
+assign_all_attributecontainment_source([Owner|T],[Value|Valid]) :-
+     is_a_valid_attributecontainment_source(Owner,Value),
+     assign_all_attributecontainment_source(T,Valid).
+     
+collect_valid_attributecontainment_source([],[]).
+collect_valid_attributecontainment_source([Owner|Rest],Valid) :-
+     all_valid_attributecontainment_source(Owner,ValidS),
+     collect_valid_attributecontainment_source(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_attributecontainment_target(Owner,Value) :- 
+     true.
+     
+all_valid_attributecontainment_target(Owner,Valid) :-
+	 bagof(Value,is_a_valid_attributecontainment_target(Owner,Value),Valid).
+
+assign_all_attributecontainment_target([],[]).
+assign_all_attributecontainment_target([Owner|T],[Value|Valid]) :-
+     self_target(Owner,Val),
+     member(Value,Val),
+     assign_all_attributecontainment_target(T,Valid).
+assign_all_attributecontainment_target([Owner|T],[Value|Valid]) :-
+     is_a_valid_attributecontainment_target(Owner,Value),
+     assign_all_attributecontainment_target(T,Valid).
+     
+collect_valid_attributecontainment_target([],[]).
+collect_valid_attributecontainment_target([Owner|Rest],Valid) :-
+     all_valid_attributecontainment_target(Owner,ValidS),
+     collect_valid_attributecontainment_target(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_inheritance_source(Owner,Value) :- 
+     true.
+     
+all_valid_inheritance_source(Owner,Valid) :-
+	 bagof(Value,is_a_valid_inheritance_source(Owner,Value),Valid).
+
+assign_all_inheritance_source([],[]).
+assign_all_inheritance_source([Owner|T],[Value|Valid]) :-
+     self_source(Owner,Val),
+     member(Value,Val),
+     assign_all_inheritance_source(T,Valid).
+assign_all_inheritance_source([Owner|T],[Value|Valid]) :-
+     is_a_valid_inheritance_source(Owner,Value),
+     assign_all_inheritance_source(T,Valid).
+     
+collect_valid_inheritance_source([],[]).
+collect_valid_inheritance_source([Owner|Rest],Valid) :-
+     all_valid_inheritance_source(Owner,ValidS),
+     collect_valid_inheritance_source(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_inheritance_target(Owner,Value) :- 
+     true.
+     
+all_valid_inheritance_target(Owner,Valid) :-
+	 bagof(Value,is_a_valid_inheritance_target(Owner,Value),Valid).
+
+assign_all_inheritance_target([],[]).
+assign_all_inheritance_target([Owner|T],[Value|Valid]) :-
+     self_target(Owner,Val),
+     member(Value,Val),
+     assign_all_inheritance_target(T,Valid).
+assign_all_inheritance_target([Owner|T],[Value|Valid]) :-
+     is_a_valid_inheritance_target(Owner,Value),
+     assign_all_inheritance_target(T,Valid).
+     
+collect_valid_inheritance_target([],[]).
+collect_valid_inheritance_target([Owner|Rest],Valid) :-
+     all_valid_inheritance_target(Owner,ValidS),
+     collect_valid_inheritance_target(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_connectionsource_role(Owner,Value) :- 
+     true.
+     
+all_valid_connectionsource_role(Owner,Valid) :-
+	 bagof(Value,is_a_valid_connectionsource_role(Owner,Value),Valid).
+
+assign_all_connectionsource_role([],[]).
+assign_all_connectionsource_role([Owner|T],[Value|Valid]) :-
+     self_role(Owner,Val),
+     member(Value,Val),
+     assign_all_connectionsource_role(T,Valid).
+assign_all_connectionsource_role([Owner|T],[Value|Valid]) :-
+     is_a_valid_connectionsource_role(Owner,Value),
+     assign_all_connectionsource_role(T,Valid).
+     
+collect_valid_connectionsource_role([],[]).
+collect_valid_connectionsource_role([Owner|Rest],Valid) :-
+     all_valid_connectionsource_role(Owner,ValidS),
+     collect_valid_connectionsource_role(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_connectionsource_cardinality(Owner,Value) :- 
+     true.
+     
+all_valid_connectionsource_cardinality(Owner,Valid) :-
+	 bagof(Value,is_a_valid_connectionsource_cardinality(Owner,Value),Valid).
+
+assign_all_connectionsource_cardinality([],[]).
+assign_all_connectionsource_cardinality([Owner|T],[Value|Valid]) :-
+     self_cardinality(Owner,Val),
+     member(Value,Val),
+     assign_all_connectionsource_cardinality(T,Valid).
+assign_all_connectionsource_cardinality([Owner|T],[Value|Valid]) :-
+     is_a_valid_connectionsource_cardinality(Owner,Value),
+     assign_all_connectionsource_cardinality(T,Valid).
+     
+collect_valid_connectionsource_cardinality([],[]).
+collect_valid_connectionsource_cardinality([Owner|Rest],Valid) :-
+     all_valid_connectionsource_cardinality(Owner,ValidS),
+     collect_valid_connectionsource_cardinality(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_connectionsource_source(Owner,Value) :- 
+     true.
+     
+all_valid_connectionsource_source(Owner,Valid) :-
+	 bagof(Value,is_a_valid_connectionsource_source(Owner,Value),Valid).
+
+assign_all_connectionsource_source([],[]).
+assign_all_connectionsource_source([Owner|T],[Value|Valid]) :-
+     self_source(Owner,Val),
+     member(Value,Val),
+     assign_all_connectionsource_source(T,Valid).
+assign_all_connectionsource_source([Owner|T],[Value|Valid]) :-
+     is_a_valid_connectionsource_source(Owner,Value),
+     assign_all_connectionsource_source(T,Valid).
+     
+collect_valid_connectionsource_source([],[]).
+collect_valid_connectionsource_source([Owner|Rest],Valid) :-
+     all_valid_connectionsource_source(Owner,ValidS),
+     collect_valid_connectionsource_source(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_connectionsource_target(Owner,Value) :- 
+     true.
+     
+all_valid_connectionsource_target(Owner,Valid) :-
+	 bagof(Value,is_a_valid_connectionsource_target(Owner,Value),Valid).
+
+assign_all_connectionsource_target([],[]).
+assign_all_connectionsource_target([Owner|T],[Value|Valid]) :-
+     self_target(Owner,Val),
+     member(Value,Val),
+     assign_all_connectionsource_target(T,Valid).
+assign_all_connectionsource_target([Owner|T],[Value|Valid]) :-
+     is_a_valid_connectionsource_target(Owner,Value),
+     assign_all_connectionsource_target(T,Valid).
+     
+collect_valid_connectionsource_target([],[]).
+collect_valid_connectionsource_target([Owner|Rest],Valid) :-
+     all_valid_connectionsource_target(Owner,ValidS),
+     collect_valid_connectionsource_target(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_containment_parentrole(Owner,Value) :- 
+     true.
+     
+all_valid_containment_parentrole(Owner,Valid) :-
+	 bagof(Value,is_a_valid_containment_parentrole(Owner,Value),Valid).
+
+assign_all_containment_parentrole([],[]).
+assign_all_containment_parentrole([Owner|T],[Value|Valid]) :-
+     self_parentrole(Owner,Val),
+     member(Value,Val),
+     assign_all_containment_parentrole(T,Valid).
+assign_all_containment_parentrole([Owner|T],[Value|Valid]) :-
+     is_a_valid_containment_parentrole(Owner,Value),
+     assign_all_containment_parentrole(T,Valid).
+     
+collect_valid_containment_parentrole([],[]).
+collect_valid_containment_parentrole([Owner|Rest],Valid) :-
+     all_valid_containment_parentrole(Owner,ValidS),
+     collect_valid_containment_parentrole(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_containment_childrole(Owner,Value) :- 
+     true.
+     
+all_valid_containment_childrole(Owner,Valid) :-
+	 bagof(Value,is_a_valid_containment_childrole(Owner,Value),Valid).
+
+assign_all_containment_childrole([],[]).
+assign_all_containment_childrole([Owner|T],[Value|Valid]) :-
+     self_childrole(Owner,Val),
+     member(Value,Val),
+     assign_all_containment_childrole(T,Valid).
+assign_all_containment_childrole([Owner|T],[Value|Valid]) :-
+     is_a_valid_containment_childrole(Owner,Value),
+     assign_all_containment_childrole(T,Valid).
+     
+collect_valid_containment_childrole([],[]).
+collect_valid_containment_childrole([Owner|Rest],Valid) :-
+     all_valid_containment_childrole(Owner,ValidS),
+     collect_valid_containment_childrole(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_containment_cardinality(Owner,Value) :- 
+     true.
+     
+all_valid_containment_cardinality(Owner,Valid) :-
+	 bagof(Value,is_a_valid_containment_cardinality(Owner,Value),Valid).
+
+assign_all_containment_cardinality([],[]).
+assign_all_containment_cardinality([Owner|T],[Value|Valid]) :-
+     self_cardinality(Owner,Val),
+     member(Value,Val),
+     assign_all_containment_cardinality(T,Valid).
+assign_all_containment_cardinality([Owner|T],[Value|Valid]) :-
+     is_a_valid_containment_cardinality(Owner,Value),
+     assign_all_containment_cardinality(T,Valid).
+     
+collect_valid_containment_cardinality([],[]).
+collect_valid_containment_cardinality([Owner|Rest],Valid) :-
+     all_valid_containment_cardinality(Owner,ValidS),
+     collect_valid_containment_cardinality(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_containment_source(Owner,Value) :- 
+     true.
+     
+all_valid_containment_source(Owner,Valid) :-
+	 bagof(Value,is_a_valid_containment_source(Owner,Value),Valid).
+
+assign_all_containment_source([],[]).
+assign_all_containment_source([Owner|T],[Value|Valid]) :-
+     self_source(Owner,Val),
+     member(Value,Val),
+     assign_all_containment_source(T,Valid).
+assign_all_containment_source([Owner|T],[Value|Valid]) :-
+     is_a_valid_containment_source(Owner,Value),
+     assign_all_containment_source(T,Valid).
+     
+collect_valid_containment_source([],[]).
+collect_valid_containment_source([Owner|Rest],Valid) :-
+     all_valid_containment_source(Owner,ValidS),
+     collect_valid_containment_source(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_containment_target(Owner,Value) :- 
+     true.
+     
+all_valid_containment_target(Owner,Valid) :-
+	 bagof(Value,is_a_valid_containment_target(Owner,Value),Valid).
+
+assign_all_containment_target([],[]).
+assign_all_containment_target([Owner|T],[Value|Valid]) :-
+     self_target(Owner,Val),
+     member(Value,Val),
+     assign_all_containment_target(T,Valid).
+assign_all_containment_target([Owner|T],[Value|Valid]) :-
+     is_a_valid_containment_target(Owner,Value),
+     assign_all_containment_target(T,Valid).
+     
+collect_valid_containment_target([],[]).
+collect_valid_containment_target([Owner|Rest],Valid) :-
+     all_valid_containment_target(Owner,ValidS),
+     collect_valid_containment_target(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_inheritancebase_source(Owner,Value) :- 
+     true.
+     
+all_valid_inheritancebase_source(Owner,Valid) :-
+	 bagof(Value,is_a_valid_inheritancebase_source(Owner,Value),Valid).
+
+assign_all_inheritancebase_source([],[]).
+assign_all_inheritancebase_source([Owner|T],[Value|Valid]) :-
+     self_source(Owner,Val),
+     member(Value,Val),
+     assign_all_inheritancebase_source(T,Valid).
+assign_all_inheritancebase_source([Owner|T],[Value|Valid]) :-
+     is_a_valid_inheritancebase_source(Owner,Value),
+     assign_all_inheritancebase_source(T,Valid).
+     
+collect_valid_inheritancebase_source([],[]).
+collect_valid_inheritancebase_source([Owner|Rest],Valid) :-
+     all_valid_inheritancebase_source(Owner,ValidS),
+     collect_valid_inheritancebase_source(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_inheritancebase_target(Owner,Value) :- 
+     true.
+     
+all_valid_inheritancebase_target(Owner,Valid) :-
+	 bagof(Value,is_a_valid_inheritancebase_target(Owner,Value),Valid).
+
+assign_all_inheritancebase_target([],[]).
+assign_all_inheritancebase_target([Owner|T],[Value|Valid]) :-
+     self_target(Owner,Val),
+     member(Value,Val),
+     assign_all_inheritancebase_target(T,Valid).
+assign_all_inheritancebase_target([Owner|T],[Value|Valid]) :-
+     is_a_valid_inheritancebase_target(Owner,Value),
+     assign_all_inheritancebase_target(T,Valid).
+     
+collect_valid_inheritancebase_target([],[]).
+collect_valid_inheritancebase_target([Owner|Rest],Valid) :-
+     all_valid_inheritancebase_target(Owner,ValidS),
+     collect_valid_inheritancebase_target(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_connectiontarget_role(Owner,Value) :- 
+     true.
+     
+all_valid_connectiontarget_role(Owner,Valid) :-
+	 bagof(Value,is_a_valid_connectiontarget_role(Owner,Value),Valid).
+
+assign_all_connectiontarget_role([],[]).
+assign_all_connectiontarget_role([Owner|T],[Value|Valid]) :-
+     self_role(Owner,Val),
+     member(Value,Val),
+     assign_all_connectiontarget_role(T,Valid).
+assign_all_connectiontarget_role([Owner|T],[Value|Valid]) :-
+     is_a_valid_connectiontarget_role(Owner,Value),
+     assign_all_connectiontarget_role(T,Valid).
+     
+collect_valid_connectiontarget_role([],[]).
+collect_valid_connectiontarget_role([Owner|Rest],Valid) :-
+     all_valid_connectiontarget_role(Owner,ValidS),
+     collect_valid_connectiontarget_role(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_connectiontarget_cardinality(Owner,Value) :- 
+     true.
+     
+all_valid_connectiontarget_cardinality(Owner,Valid) :-
+	 bagof(Value,is_a_valid_connectiontarget_cardinality(Owner,Value),Valid).
+
+assign_all_connectiontarget_cardinality([],[]).
+assign_all_connectiontarget_cardinality([Owner|T],[Value|Valid]) :-
+     self_cardinality(Owner,Val),
+     member(Value,Val),
+     assign_all_connectiontarget_cardinality(T,Valid).
+assign_all_connectiontarget_cardinality([Owner|T],[Value|Valid]) :-
+     is_a_valid_connectiontarget_cardinality(Owner,Value),
+     assign_all_connectiontarget_cardinality(T,Valid).
+     
+collect_valid_connectiontarget_cardinality([],[]).
+collect_valid_connectiontarget_cardinality([Owner|Rest],Valid) :-
+     all_valid_connectiontarget_cardinality(Owner,ValidS),
+     collect_valid_connectiontarget_cardinality(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_connectiontarget_source(Owner,Value) :- 
+     true.
+     
+all_valid_connectiontarget_source(Owner,Valid) :-
+	 bagof(Value,is_a_valid_connectiontarget_source(Owner,Value),Valid).
+
+assign_all_connectiontarget_source([],[]).
+assign_all_connectiontarget_source([Owner|T],[Value|Valid]) :-
+     self_source(Owner,Val),
+     member(Value,Val),
+     assign_all_connectiontarget_source(T,Valid).
+assign_all_connectiontarget_source([Owner|T],[Value|Valid]) :-
+     is_a_valid_connectiontarget_source(Owner,Value),
+     assign_all_connectiontarget_source(T,Valid).
+     
+collect_valid_connectiontarget_source([],[]).
+collect_valid_connectiontarget_source([Owner|Rest],Valid) :-
+     all_valid_connectiontarget_source(Owner,ValidS),
+     collect_valid_connectiontarget_source(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_connectiontarget_target(Owner,Value) :- 
+     true.
+     
+all_valid_connectiontarget_target(Owner,Valid) :-
+	 bagof(Value,is_a_valid_connectiontarget_target(Owner,Value),Valid).
+
+assign_all_connectiontarget_target([],[]).
+assign_all_connectiontarget_target([Owner|T],[Value|Valid]) :-
+     self_target(Owner,Val),
+     member(Value,Val),
+     assign_all_connectiontarget_target(T,Valid).
+assign_all_connectiontarget_target([Owner|T],[Value|Valid]) :-
+     is_a_valid_connectiontarget_target(Owner,Value),
+     assign_all_connectiontarget_target(T,Valid).
+     
+collect_valid_connectiontarget_target([],[]).
+collect_valid_connectiontarget_target([Owner|Rest],Valid) :-
+     all_valid_connectiontarget_target(Owner,ValidS),
+     collect_valid_connectiontarget_target(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_attributeonconnection_attributelocation(Owner,Value) :- 
+     true.
+     
+all_valid_attributeonconnection_attributelocation(Owner,Valid) :-
+	 bagof(Value,is_a_valid_attributeonconnection_attributelocation(Owner,Value),Valid).
+
+assign_all_attributeonconnection_attributelocation([],[]).
+assign_all_attributeonconnection_attributelocation([Owner|T],[Value|Valid]) :-
+     self_attributelocation(Owner,Val),
+     member(Value,Val),
+     assign_all_attributeonconnection_attributelocation(T,Valid).
+assign_all_attributeonconnection_attributelocation([Owner|T],[Value|Valid]) :-
+     is_a_valid_attributeonconnection_attributelocation(Owner,Value),
+     assign_all_attributeonconnection_attributelocation(T,Valid).
+     
+collect_valid_attributeonconnection_attributelocation([],[]).
+collect_valid_attributeonconnection_attributelocation([Owner|Rest],Valid) :-
+     all_valid_attributeonconnection_attributelocation(Owner,ValidS),
+     collect_valid_attributeonconnection_attributelocation(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_attributeonconnection_labelforeground(Owner,Value) :- 
+     true.
+     
+all_valid_attributeonconnection_labelforeground(Owner,Valid) :-
+	 bagof(Value,is_a_valid_attributeonconnection_labelforeground(Owner,Value),Valid).
+
+assign_all_attributeonconnection_labelforeground([],[]).
+assign_all_attributeonconnection_labelforeground([Owner|T],[Value|Valid]) :-
+     self_labelforeground(Owner,Val),
+     member(Value,Val),
+     assign_all_attributeonconnection_labelforeground(T,Valid).
+assign_all_attributeonconnection_labelforeground([Owner|T],[Value|Valid]) :-
+     is_a_valid_attributeonconnection_labelforeground(Owner,Value),
+     assign_all_attributeonconnection_labelforeground(T,Valid).
+     
+collect_valid_attributeonconnection_labelforeground([],[]).
+collect_valid_attributeonconnection_labelforeground([Owner|Rest],Valid) :-
+     all_valid_attributeonconnection_labelforeground(Owner,ValidS),
+     collect_valid_attributeonconnection_labelforeground(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_attributeonconnection_labelfontsize(Owner,Value) :- 
+     true.
+     
+all_valid_attributeonconnection_labelfontsize(Owner,Valid) :-
+	 bagof(Value,is_a_valid_attributeonconnection_labelfontsize(Owner,Value),Valid).
+
+assign_all_attributeonconnection_labelfontsize([],[]).
+assign_all_attributeonconnection_labelfontsize([Owner|T],[Value|Valid]) :-
+     self_labelfontsize(Owner,Val),
+     member(Value,Val),
+     assign_all_attributeonconnection_labelfontsize(T,Valid).
+assign_all_attributeonconnection_labelfontsize([Owner|T],[Value|Valid]) :-
+     is_a_valid_attributeonconnection_labelfontsize(Owner,Value),
+     assign_all_attributeonconnection_labelfontsize(T,Valid).
+     
+collect_valid_attributeonconnection_labelfontsize([],[]).
+collect_valid_attributeonconnection_labelfontsize([Owner|Rest],Valid) :-
+     all_valid_attributeonconnection_labelfontsize(Owner,ValidS),
+     collect_valid_attributeonconnection_labelfontsize(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_attributeonconnection_labelbackground(Owner,Value) :- 
+     true.
+     
+all_valid_attributeonconnection_labelbackground(Owner,Valid) :-
+	 bagof(Value,is_a_valid_attributeonconnection_labelbackground(Owner,Value),Valid).
+
+assign_all_attributeonconnection_labelbackground([],[]).
+assign_all_attributeonconnection_labelbackground([Owner|T],[Value|Valid]) :-
+     self_labelbackground(Owner,Val),
+     member(Value,Val),
+     assign_all_attributeonconnection_labelbackground(T,Valid).
+assign_all_attributeonconnection_labelbackground([Owner|T],[Value|Valid]) :-
+     is_a_valid_attributeonconnection_labelbackground(Owner,Value),
+     assign_all_attributeonconnection_labelbackground(T,Valid).
+     
+collect_valid_attributeonconnection_labelbackground([],[]).
+collect_valid_attributeonconnection_labelbackground([Owner|Rest],Valid) :-
+     all_valid_attributeonconnection_labelbackground(Owner,ValidS),
+     collect_valid_attributeonconnection_labelbackground(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_attributeonconnection_voffset(Owner,Value) :- 
+     true.
+     
+all_valid_attributeonconnection_voffset(Owner,Valid) :-
+	 bagof(Value,is_a_valid_attributeonconnection_voffset(Owner,Value),Valid).
+
+assign_all_attributeonconnection_voffset([],[]).
+assign_all_attributeonconnection_voffset([Owner|T],[Value|Valid]) :-
+     self_voffset(Owner,Val),
+     member(Value,Val),
+     assign_all_attributeonconnection_voffset(T,Valid).
+assign_all_attributeonconnection_voffset([Owner|T],[Value|Valid]) :-
+     is_a_valid_attributeonconnection_voffset(Owner,Value),
+     assign_all_attributeonconnection_voffset(T,Valid).
+     
+collect_valid_attributeonconnection_voffset([],[]).
+collect_valid_attributeonconnection_voffset([Owner|Rest],Valid) :-
+     all_valid_attributeonconnection_voffset(Owner,ValidS),
+     collect_valid_attributeonconnection_voffset(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_attributeonconnection_labelfontname(Owner,Value) :- 
+     true.
+     
+all_valid_attributeonconnection_labelfontname(Owner,Valid) :-
+	 bagof(Value,is_a_valid_attributeonconnection_labelfontname(Owner,Value),Valid).
+
+assign_all_attributeonconnection_labelfontname([],[]).
+assign_all_attributeonconnection_labelfontname([Owner|T],[Value|Valid]) :-
+     self_labelfontname(Owner,Val),
+     member(Value,Val),
+     assign_all_attributeonconnection_labelfontname(T,Valid).
+assign_all_attributeonconnection_labelfontname([Owner|T],[Value|Valid]) :-
+     is_a_valid_attributeonconnection_labelfontname(Owner,Value),
+     assign_all_attributeonconnection_labelfontname(T,Valid).
+     
+collect_valid_attributeonconnection_labelfontname([],[]).
+collect_valid_attributeonconnection_labelfontname([Owner|Rest],Valid) :-
+     all_valid_attributeonconnection_labelfontname(Owner,ValidS),
+     collect_valid_attributeonconnection_labelfontname(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_attributeonconnection_labelfontstyle(Owner,Value) :- 
+     true.
+     
+all_valid_attributeonconnection_labelfontstyle(Owner,Valid) :-
+	 bagof(Value,is_a_valid_attributeonconnection_labelfontstyle(Owner,Value),Valid).
+
+assign_all_attributeonconnection_labelfontstyle([],[]).
+assign_all_attributeonconnection_labelfontstyle([Owner|T],[Value|Valid]) :-
+     self_labelfontstyle(Owner,Val),
+     member(Value,Val),
+     assign_all_attributeonconnection_labelfontstyle(T,Valid).
+assign_all_attributeonconnection_labelfontstyle([Owner|T],[Value|Valid]) :-
+     is_a_valid_attributeonconnection_labelfontstyle(Owner,Value),
+     assign_all_attributeonconnection_labelfontstyle(T,Valid).
+     
+collect_valid_attributeonconnection_labelfontstyle([],[]).
+collect_valid_attributeonconnection_labelfontstyle([Owner|Rest],Valid) :-
+     all_valid_attributeonconnection_labelfontstyle(Owner,ValidS),
+     collect_valid_attributeonconnection_labelfontstyle(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_attributeonconnection_drawattributelabel(Owner,Value) :- 
+     true.
+     
+all_valid_attributeonconnection_drawattributelabel(Owner,Valid) :-
+	 bagof(Value,is_a_valid_attributeonconnection_drawattributelabel(Owner,Value),Valid).
+
+assign_all_attributeonconnection_drawattributelabel([],[]).
+assign_all_attributeonconnection_drawattributelabel([Owner|T],[Value|Valid]) :-
+     self_drawattributelabel(Owner,Val),
+     member(Value,Val),
+     assign_all_attributeonconnection_drawattributelabel(T,Valid).
+assign_all_attributeonconnection_drawattributelabel([Owner|T],[Value|Valid]) :-
+     is_a_valid_attributeonconnection_drawattributelabel(Owner,Value),
+     assign_all_attributeonconnection_drawattributelabel(T,Valid).
+     
+collect_valid_attributeonconnection_drawattributelabel([],[]).
+collect_valid_attributeonconnection_drawattributelabel([Owner|Rest],Valid) :-
+     all_valid_attributeonconnection_drawattributelabel(Owner,ValidS),
+     collect_valid_attributeonconnection_drawattributelabel(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_attributeonconnection_source(Owner,Value) :- 
+     true.
+     
+all_valid_attributeonconnection_source(Owner,Valid) :-
+	 bagof(Value,is_a_valid_attributeonconnection_source(Owner,Value),Valid).
+
+assign_all_attributeonconnection_source([],[]).
+assign_all_attributeonconnection_source([Owner|T],[Value|Valid]) :-
+     self_source(Owner,Val),
+     member(Value,Val),
+     assign_all_attributeonconnection_source(T,Valid).
+assign_all_attributeonconnection_source([Owner|T],[Value|Valid]) :-
+     is_a_valid_attributeonconnection_source(Owner,Value),
+     assign_all_attributeonconnection_source(T,Valid).
+     
+collect_valid_attributeonconnection_source([],[]).
+collect_valid_attributeonconnection_source([Owner|Rest],Valid) :-
+     all_valid_attributeonconnection_source(Owner,ValidS),
+     collect_valid_attributeonconnection_source(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_attributeonconnection_target(Owner,Value) :- 
+     true.
+     
+all_valid_attributeonconnection_target(Owner,Valid) :-
+	 bagof(Value,is_a_valid_attributeonconnection_target(Owner,Value),Valid).
+
+assign_all_attributeonconnection_target([],[]).
+assign_all_attributeonconnection_target([Owner|T],[Value|Valid]) :-
+     self_target(Owner,Val),
+     member(Value,Val),
+     assign_all_attributeonconnection_target(T,Valid).
+assign_all_attributeonconnection_target([Owner|T],[Value|Valid]) :-
+     is_a_valid_attributeonconnection_target(Owner,Value),
+     assign_all_attributeonconnection_target(T,Valid).
+     
+collect_valid_attributeonconnection_target([],[]).
+collect_valid_attributeonconnection_target([Owner|Rest],Valid) :-
+     all_valid_attributeonconnection_target(Owner,ValidS),
+     collect_valid_attributeonconnection_target(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+     
+
+instance_of(ID,Type) :- 
+   is_a(ID,Type),
+   self_type(ID,_).
+   
+all_entitys(All) :-
+     bagof(Val,instance_of(Val,entity),All).
+all_inheritances(All) :-
+     bagof(Val,instance_of(Val,inheritance),All).
+all_connections(All) :-
+     bagof(Val,instance_of(Val,connection),All).
+all_attributes(All) :-
+     bagof(Val,instance_of(Val,attribute),All).
+all_modelelements(All) :-
+     bagof(Val,instance_of(Val,modelelement),All).
+all_aspects(All) :-
+     bagof(Val,instance_of(Val,aspect),All).
+all_constraints(All) :-
+     bagof(Val,instance_of(Val,constraint),All).
+all_metamodels(All) :-
+     bagof(Val,instance_of(Val,metamodel),All).
+
+
+is_a_valid_entity_isabstract(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_entity_isroot(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_entity_drawname(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_entity_drawtype(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_entity_labelforeground(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_entity_labelfontsize(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_entity_labelbackground(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_entity_labelfontname(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_entity_isopaque(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_entity_backgroundcontentcolor(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_entity_labelfontstyle(Owner,Value) :- 
+     
+     float(Value),
+     true.
+
+is_a_valid_entity_description(Owner,Value) :- 
+     
+     is_a_valid_modelelement_description(Owner,Value),
+     true.
+
+is_a_valid_entity_id(Owner,Value) :- 
+     
+     is_a_valid_modelelement_id(Owner,Value),
+     true.
+
+is_a_valid_entity_name(Owner,Value) :- 
+     
+     is_a_valid_modelelement_name(Owner,Value),
+     true.
+
+is_a_valid_entity_annotation(Owner,Value) :- 
+     
+     is_a_valid_modelelement_annotation(Owner,Value),
+     true.
+
+is_a_valid_entity_tags(Owner,Value) :- 
+     
+     is_a_valid_modelelement_tags(Owner,Value),
+     true.
+
+is_a_valid_entity_metamodel(Owner,Value) :- 
+     
+     is_a_valid_modelelement_metamodel(Owner,Value),
+     true.    
+all_valid_entity_metamodel(Owner,Valid) :-
+	 bagof(Value,is_a_valid_entity_metamodel(Owner,Value),Valid).
+
+batch_assign_all_entity_metamodel(Result) :-
+     all_entitys(Input),
+     assign_all_entity_metamodel(Input,TResult),
+     relate_all(TResult,self_metamodel,Result).
+
+assign_all_entity_metamodel([],[]).
+assign_all_entity_metamodel([Owner|T],[Owner,Value|Valid]) :-
+     self_metamodel(Owner,Val),
+     member(Value,Val),
+     assign_all_entity_metamodel(T,Valid).
+assign_all_entity_metamodel([Owner|T],[Owner,Value|Valid]) :-
+     is_a_valid_entity_metamodel(Owner,Value),
+     assign_all_entity_metamodel(T,Valid).
+     
+collect_valid_entity_metamodel([],[]).
+collect_valid_entity_metamodel([Owner|Rest],Valid) :-
+     all_valid_entity_metamodel(Owner,ValidS),
+     collect_valid_entity_metamodel(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_entity_abstract(Owner,Value) :- 
+     
+     is_a_valid_modelelement_abstract(Owner,Value),
+     true.
+
+is_a_valid_entity_issubtype(Owner,Value) :- 
+     
+     is_a_valid_modelelement_issubtype(Owner,Value),
+     true.
+
+is_a_valid_entity_location(Owner,Value) :- 
+     
+     is_a_valid_modelelement_location(Owner,Value),
+     true.
+
+is_a_valid_entity_size(Owner,Value) :- 
+     
+     is_a_valid_modelelement_size(Owner,Value),
+     true.
+
+is_a_valid_entity_visibility_id(Owner,Value) :- 
+     
+     is_a_valid_modelelement_visibility_id(Owner,Value),
+     true.
+
+is_a_valid_entity_owner(Owner,Value) :- 
+     
+     is_a_valid_modelelement_owner(Owner,Value),
+     true.
+
+is_a_valid_entity_expanded(Owner,Value) :- 
+     
+     is_a_valid_modelelement_expanded(Owner,Value),
+     true.
+
+is_a_valid_entity_visibleentities(Owner,Value) :- 
+     
+     instance_of(Value,modelelement),
+     true.    
+all_valid_entity_visibleentities(Owner,Valid) :-
+	 bagof(Value,is_a_valid_entity_visibleentities(Owner,Value),Valid).
+
+batch_assign_all_entity_visibleentities(Result) :-
+     all_entitys(Input),
+     assign_all_entity_visibleentities(Input,TResult),
+     relate_all(TResult,self_visibleentities,Result).
+
+assign_all_entity_visibleentities([],[]).
+assign_all_entity_visibleentities([Owner|T],[Owner,Value|Valid]) :-
+     self_visibleentities(Owner,Val),
+     member(Value,Val),
+     assign_all_entity_visibleentities(T,Valid).
+assign_all_entity_visibleentities([Owner|T],[Owner,Value|Valid]) :-
+     is_a_valid_entity_visibleentities(Owner,Value),
+     assign_all_entity_visibleentities(T,Valid).
+     
+collect_valid_entity_visibleentities([],[]).
+collect_valid_entity_visibleentities([Owner|Rest],Valid) :-
+     all_valid_entity_visibleentities(Owner,ValidS),
+     collect_valid_entity_visibleentities(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_entity_attributes(Owner,Value) :- 
+     
+     is_a_valid_modelelement_attributes(Owner,Value),
+     true.    
+all_valid_entity_attributes(Owner,Valid) :-
+	 bagof(Value,is_a_valid_entity_attributes(Owner,Value),Valid).
+
+batch_assign_all_entity_attributes(Result) :-
+     all_entitys(Input),
+     assign_all_entity_attributes(Input,TResult),
+     relate_all(TResult,self_attributes,Result).
+
+assign_all_entity_attributes([],[]).
+assign_all_entity_attributes([Owner|T],[Owner,Value|Valid]) :-
+     self_attributes(Owner,Val),
+     member(Value,Val),
+     assign_all_entity_attributes(T,Valid).
+assign_all_entity_attributes([Owner|T],[Owner,Value|Valid]) :-
+     is_a_valid_entity_attributes(Owner,Value),
+     assign_all_entity_attributes(T,Valid).
+     
+collect_valid_entity_attributes([],[]).
+collect_valid_entity_attributes([Owner|Rest],Valid) :-
+     all_valid_entity_attributes(Owner,ValidS),
+     collect_valid_entity_attributes(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_entity_derivedfrom(Owner,Value) :- 
+     
+     instance_of(Value,inheritance),
+     true.    
+all_valid_entity_derivedfrom(Owner,Valid) :-
+	 bagof(Value,is_a_valid_entity_derivedfrom(Owner,Value),Valid).
+
+batch_assign_all_entity_derivedfrom(Result) :-
+     all_entitys(Input),
+     assign_all_entity_derivedfrom(Input,TResult),
+     relate_all(TResult,self_derivedfrom,Result).
+
+assign_all_entity_derivedfrom([],[]).
+assign_all_entity_derivedfrom([Owner|T],[Owner,Value|Valid]) :-
+     self_derivedfrom(Owner,Val),
+     member(Value,Val),
+     assign_all_entity_derivedfrom(T,Valid).
+assign_all_entity_derivedfrom([Owner|T],[Owner,Value|Valid]) :-
+     is_a_valid_entity_derivedfrom(Owner,Value),
+     assign_all_entity_derivedfrom(T,Valid).
+     
+collect_valid_entity_derivedfrom([],[]).
+collect_valid_entity_derivedfrom([Owner|Rest],Valid) :-
+     all_valid_entity_derivedfrom(Owner,ValidS),
+     collect_valid_entity_derivedfrom(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_entity_connectiontarget(Owner,Value) :- 
+     
+     instance_of(Value,connection),
+     true.    
+all_valid_entity_connectiontarget(Owner,Valid) :-
+	 bagof(Value,is_a_valid_entity_connectiontarget(Owner,Value),Valid).
+
+batch_assign_all_entity_connectiontarget(Result) :-
+     all_entitys(Input),
+     assign_all_entity_connectiontarget(Input,TResult),
+     relate_all(TResult,self_connectiontarget,Result).
+
+assign_all_entity_connectiontarget([],[]).
+assign_all_entity_connectiontarget([Owner|T],[Owner,Value|Valid]) :-
+     self_connectiontarget(Owner,Val),
+     member(Value,Val),
+     assign_all_entity_connectiontarget(T,Valid).
+assign_all_entity_connectiontarget([Owner|T],[Owner,Value|Valid]) :-
+     is_a_valid_entity_connectiontarget(Owner,Value),
+     assign_all_entity_connectiontarget(T,Valid).
+     
+collect_valid_entity_connectiontarget([],[]).
+collect_valid_entity_connectiontarget([Owner|Rest],Valid) :-
+     all_valid_entity_connectiontarget(Owner,ValidS),
+     collect_valid_entity_connectiontarget(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_entity_containedentities(Owner,Value) :- 
+     
+     instance_of(Value,entity),
+     true.    
+all_valid_entity_containedentities(Owner,Valid) :-
+	 bagof(Value,is_a_valid_entity_containedentities(Owner,Value),Valid).
+
+batch_assign_all_entity_containedentities(Result) :-
+     all_entitys(Input),
+     assign_all_entity_containedentities(Input,TResult),
+     relate_all(TResult,self_containedentities,Result).
+
+assign_all_entity_containedentities([],[]).
+assign_all_entity_containedentities([Owner|T],[Owner,Value|Valid]) :-
+     self_containedentities(Owner,Val),
+     member(Value,Val),
+     assign_all_entity_containedentities(T,Valid).
+assign_all_entity_containedentities([Owner|T],[Owner,Value|Valid]) :-
+     is_a_valid_entity_containedentities(Owner,Value),
+     assign_all_entity_containedentities(T,Valid).
+     
+collect_valid_entity_containedentities([],[]).
+collect_valid_entity_containedentities([Owner|Rest],Valid) :-
+     all_valid_entity_containedentities(Owner,ValidS),
+     collect_valid_entity_containedentities(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_entity_derived(Owner,Value) :- 
+     
+     instance_of(Value,inheritance),
+     true.    
+all_valid_entity_derived(Owner,Valid) :-
+	 bagof(Value,is_a_valid_entity_derived(Owner,Value),Valid).
+
+batch_assign_all_entity_derived(Result) :-
+     all_entitys(Input),
+     assign_all_entity_derived(Input,TResult),
+     relate_all(TResult,self_derived,Result).
+
+assign_all_entity_derived([],[]).
+assign_all_entity_derived([Owner|T],[Owner,Value|Valid]) :-
+     self_derived(Owner,Val),
+     member(Value,Val),
+     assign_all_entity_derived(T,Valid).
+assign_all_entity_derived([Owner|T],[Owner,Value|Valid]) :-
+     is_a_valid_entity_derived(Owner,Value),
+     assign_all_entity_derived(T,Valid).
+     
+collect_valid_entity_derived([],[]).
+collect_valid_entity_derived([Owner|Rest],Valid) :-
+     all_valid_entity_derived(Owner,ValidS),
+     collect_valid_entity_derived(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_entity_connectionsource(Owner,Value) :- 
+     
+     instance_of(Value,connection),
+     true.    
+all_valid_entity_connectionsource(Owner,Valid) :-
+	 bagof(Value,is_a_valid_entity_connectionsource(Owner,Value),Valid).
+
+batch_assign_all_entity_connectionsource(Result) :-
+     all_entitys(Input),
+     assign_all_entity_connectionsource(Input,TResult),
+     relate_all(TResult,self_connectionsource,Result).
+
+assign_all_entity_connectionsource([],[]).
+assign_all_entity_connectionsource([Owner|T],[Owner,Value|Valid]) :-
+     self_connectionsource(Owner,Val),
+     member(Value,Val),
+     assign_all_entity_connectionsource(T,Valid).
+assign_all_entity_connectionsource([Owner|T],[Owner,Value|Valid]) :-
+     is_a_valid_entity_connectionsource(Owner,Value),
+     assign_all_entity_connectionsource(T,Valid).
+     
+collect_valid_entity_connectionsource([],[]).
+collect_valid_entity_connectionsource([Owner|Rest],Valid) :-
+     all_valid_entity_connectionsource(Owner,ValidS),
+     collect_valid_entity_connectionsource(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_entity_containerentities(Owner,Value) :- 
+     
+     instance_of(Value,entity),
+     true.    
+all_valid_entity_containerentities(Owner,Valid) :-
+	 bagof(Value,is_a_valid_entity_containerentities(Owner,Value),Valid).
+
+batch_assign_all_entity_containerentities(Result) :-
+     all_entitys(Input),
+     assign_all_entity_containerentities(Input,TResult),
+     relate_all(TResult,self_containerentities,Result).
+
+assign_all_entity_containerentities([],[]).
+assign_all_entity_containerentities([Owner|T],[Owner,Value|Valid]) :-
+     self_containerentities(Owner,Val),
+     member(Value,Val),
+     assign_all_entity_containerentities(T,Valid).
+assign_all_entity_containerentities([Owner|T],[Owner,Value|Valid]) :-
+     is_a_valid_entity_containerentities(Owner,Value),
+     assign_all_entity_containerentities(T,Valid).
+     
+collect_valid_entity_containerentities([],[]).
+collect_valid_entity_containerentities([Owner|Rest],Valid) :-
+     all_valid_entity_containerentities(Owner,ValidS),
+     collect_valid_entity_containerentities(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_inheritance_id(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_inheritance_name(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_inheritance_annotation(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_inheritance_tags(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_inheritance_metamodel(Owner,Value) :- 
+     
+     instance_of(Value,metamodel),
+     true.    
+all_valid_inheritance_metamodel(Owner,Valid) :-
+	 bagof(Value,is_a_valid_inheritance_metamodel(Owner,Value),Valid).
+
+batch_assign_all_inheritance_metamodel(Result) :-
+     all_inheritances(Input),
+     assign_all_inheritance_metamodel(Input,TResult),
+     relate_all(TResult,self_metamodel,Result).
+
+assign_all_inheritance_metamodel([],[]).
+assign_all_inheritance_metamodel([Owner|T],[Owner,Value|Valid]) :-
+     self_metamodel(Owner,Val),
+     member(Value,Val),
+     assign_all_inheritance_metamodel(T,Valid).
+assign_all_inheritance_metamodel([Owner|T],[Owner,Value|Valid]) :-
+     is_a_valid_inheritance_metamodel(Owner,Value),
+     assign_all_inheritance_metamodel(T,Valid).
+     
+collect_valid_inheritance_metamodel([],[]).
+collect_valid_inheritance_metamodel([Owner|Rest],Valid) :-
+     all_valid_inheritance_metamodel(Owner,ValidS),
+     collect_valid_inheritance_metamodel(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_inheritance_abstract(Owner,Value) :- 
+     
+     isboolean(Value),
+     true.
+
+is_a_valid_inheritance_issubtype(Owner,Value) :- 
+     
+     isboolean(Value),
+     true.
+
+is_a_valid_inheritance_location(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_inheritance_size(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_inheritance_visibility_id(Owner,Value) :- 
+     
+     isboolean(Value),
+     true.
+
+is_a_valid_inheritance_owner(Owner,Value) :- 
+     
+     instance_of(Value,inheritance),
+     true.
+
+is_a_valid_inheritance_expanded(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_inheritance_base(Owner,Value) :- 
+     
+     instance_of(Value,entity),
+     true.    
+all_valid_inheritance_base(Owner,Valid) :-
+	 bagof(Value,is_a_valid_inheritance_base(Owner,Value),Valid).
+
+batch_assign_all_inheritance_base(Result) :-
+     all_inheritances(Input),
+     assign_all_inheritance_base(Input,TResult),
+     relate_all(TResult,self_base,Result).
+
+assign_all_inheritance_base([],[]).
+assign_all_inheritance_base([Owner|T],[Owner,Value|Valid]) :-
+     self_base(Owner,Val),
+     member(Value,Val),
+     assign_all_inheritance_base(T,Valid).
+assign_all_inheritance_base([Owner|T],[Owner,Value|Valid]) :-
+     is_a_valid_inheritance_base(Owner,Value),
+     assign_all_inheritance_base(T,Valid).
+     
+collect_valid_inheritance_base([],[]).
+collect_valid_inheritance_base([Owner|Rest],Valid) :-
+     all_valid_inheritance_base(Owner,ValidS),
+     collect_valid_inheritance_base(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_inheritance_derived(Owner,Value) :- 
+     
+     instance_of(Value,entity),
+     true.    
+all_valid_inheritance_derived(Owner,Valid) :-
+	 bagof(Value,is_a_valid_inheritance_derived(Owner,Value),Valid).
+
+batch_assign_all_inheritance_derived(Result) :-
+     all_inheritances(Input),
+     assign_all_inheritance_derived(Input,TResult),
+     relate_all(TResult,self_derived,Result).
+
+assign_all_inheritance_derived([],[]).
+assign_all_inheritance_derived([Owner|T],[Owner,Value|Valid]) :-
+     self_derived(Owner,Val),
+     member(Value,Val),
+     assign_all_inheritance_derived(T,Valid).
+assign_all_inheritance_derived([Owner|T],[Owner,Value|Valid]) :-
+     is_a_valid_inheritance_derived(Owner,Value),
+     assign_all_inheritance_derived(T,Valid).
+     
+collect_valid_inheritance_derived([],[]).
+collect_valid_inheritance_derived([Owner|Rest],Valid) :-
+     all_valid_inheritance_derived(Owner,ValidS),
+     collect_valid_inheritance_derived(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_connection_sourcedecoration(Owner,Value) :- 
+     
+     float(Value),
+     true.
+
+is_a_valid_connection_targetdecoration(Owner,Value) :- 
+     
+     float(Value),
+     true.
+
+is_a_valid_connection_linestyle(Owner,Value) :- 
+     
+     float(Value),
+     true.
+
+is_a_valid_connection_linecolor(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_connection_linewidth(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_connection_description(Owner,Value) :- 
+     
+     is_a_valid_modelelement_description(Owner,Value),
+     true.
+
+is_a_valid_connection_id(Owner,Value) :- 
+     
+     is_a_valid_modelelement_id(Owner,Value),
+     true.
+
+is_a_valid_connection_name(Owner,Value) :- 
+     
+     is_a_valid_modelelement_name(Owner,Value),
+     true.
+
+is_a_valid_connection_annotation(Owner,Value) :- 
+     
+     is_a_valid_modelelement_annotation(Owner,Value),
+     true.
+
+is_a_valid_connection_tags(Owner,Value) :- 
+     
+     is_a_valid_modelelement_tags(Owner,Value),
+     true.
+
+is_a_valid_connection_metamodel(Owner,Value) :- 
+     
+     is_a_valid_modelelement_metamodel(Owner,Value),
+     true.    
+all_valid_connection_metamodel(Owner,Valid) :-
+	 bagof(Value,is_a_valid_connection_metamodel(Owner,Value),Valid).
+
+batch_assign_all_connection_metamodel(Result) :-
+     all_connections(Input),
+     assign_all_connection_metamodel(Input,TResult),
+     relate_all(TResult,self_metamodel,Result).
+
+assign_all_connection_metamodel([],[]).
+assign_all_connection_metamodel([Owner|T],[Owner,Value|Valid]) :-
+     self_metamodel(Owner,Val),
+     member(Value,Val),
+     assign_all_connection_metamodel(T,Valid).
+assign_all_connection_metamodel([Owner|T],[Owner,Value|Valid]) :-
+     is_a_valid_connection_metamodel(Owner,Value),
+     assign_all_connection_metamodel(T,Valid).
+     
+collect_valid_connection_metamodel([],[]).
+collect_valid_connection_metamodel([Owner|Rest],Valid) :-
+     all_valid_connection_metamodel(Owner,ValidS),
+     collect_valid_connection_metamodel(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_connection_abstract(Owner,Value) :- 
+     
+     is_a_valid_modelelement_abstract(Owner,Value),
+     true.
+
+is_a_valid_connection_issubtype(Owner,Value) :- 
+     
+     is_a_valid_modelelement_issubtype(Owner,Value),
+     true.
+
+is_a_valid_connection_location(Owner,Value) :- 
+     
+     is_a_valid_modelelement_location(Owner,Value),
+     true.
+
+is_a_valid_connection_size(Owner,Value) :- 
+     
+     is_a_valid_modelelement_size(Owner,Value),
+     true.
+
+is_a_valid_connection_visibility_id(Owner,Value) :- 
+     
+     is_a_valid_modelelement_visibility_id(Owner,Value),
+     true.
+
+is_a_valid_connection_owner(Owner,Value) :- 
+     
+     is_a_valid_modelelement_owner(Owner,Value),
+     true.
+
+is_a_valid_connection_expanded(Owner,Value) :- 
+     
+     is_a_valid_modelelement_expanded(Owner,Value),
+     true.
+
+is_a_valid_connection_visibleentities(Owner,Value) :- 
+     
+     instance_of(Value,modelelement),
+     true.    
+all_valid_connection_visibleentities(Owner,Valid) :-
+	 bagof(Value,is_a_valid_connection_visibleentities(Owner,Value),Valid).
+
+batch_assign_all_connection_visibleentities(Result) :-
+     all_connections(Input),
+     assign_all_connection_visibleentities(Input,TResult),
+     relate_all(TResult,self_visibleentities,Result).
+
+assign_all_connection_visibleentities([],[]).
+assign_all_connection_visibleentities([Owner|T],[Owner,Value|Valid]) :-
+     self_visibleentities(Owner,Val),
+     member(Value,Val),
+     assign_all_connection_visibleentities(T,Valid).
+assign_all_connection_visibleentities([Owner|T],[Owner,Value|Valid]) :-
+     is_a_valid_connection_visibleentities(Owner,Value),
+     assign_all_connection_visibleentities(T,Valid).
+     
+collect_valid_connection_visibleentities([],[]).
+collect_valid_connection_visibleentities([Owner|Rest],Valid) :-
+     all_valid_connection_visibleentities(Owner,ValidS),
+     collect_valid_connection_visibleentities(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_connection_attributes(Owner,Value) :- 
+     
+     is_a_valid_modelelement_attributes(Owner,Value),
+     true.    
+all_valid_connection_attributes(Owner,Valid) :-
+	 bagof(Value,is_a_valid_connection_attributes(Owner,Value),Valid).
+
+batch_assign_all_connection_attributes(Result) :-
+     all_connections(Input),
+     assign_all_connection_attributes(Input,TResult),
+     relate_all(TResult,self_attributes,Result).
+
+assign_all_connection_attributes([],[]).
+assign_all_connection_attributes([Owner|T],[Owner,Value|Valid]) :-
+     self_attributes(Owner,Val),
+     member(Value,Val),
+     assign_all_connection_attributes(T,Valid).
+assign_all_connection_attributes([Owner|T],[Owner,Value|Valid]) :-
+     is_a_valid_connection_attributes(Owner,Value),
+     assign_all_connection_attributes(T,Valid).
+     
+collect_valid_connection_attributes([],[]).
+collect_valid_connection_attributes([Owner|Rest],Valid) :-
+     all_valid_connection_attributes(Owner,ValidS),
+     collect_valid_connection_attributes(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_connection_connectiontarget(Owner,Value) :- 
+     
+     instance_of(Value,entity),
+     true.    
+all_valid_connection_connectiontarget(Owner,Valid) :-
+	 bagof(Value,is_a_valid_connection_connectiontarget(Owner,Value),Valid).
+
+batch_assign_all_connection_connectiontarget(Result) :-
+     all_connections(Input),
+     assign_all_connection_connectiontarget(Input,TResult),
+     relate_all(TResult,self_connectiontarget,Result).
+
+assign_all_connection_connectiontarget([],[]).
+assign_all_connection_connectiontarget([Owner|T],[Owner,Value|Valid]) :-
+     self_connectiontarget(Owner,Val),
+     member(Value,Val),
+     assign_all_connection_connectiontarget(T,Valid).
+assign_all_connection_connectiontarget([Owner|T],[Owner,Value|Valid]) :-
+     is_a_valid_connection_connectiontarget(Owner,Value),
+     assign_all_connection_connectiontarget(T,Valid).
+     
+collect_valid_connection_connectiontarget([],[]).
+collect_valid_connection_connectiontarget([Owner|Rest],Valid) :-
+     all_valid_connection_connectiontarget(Owner,ValidS),
+     collect_valid_connection_connectiontarget(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_connection_connectionsource(Owner,Value) :- 
+     
+     instance_of(Value,entity),
+     true.    
+all_valid_connection_connectionsource(Owner,Valid) :-
+	 bagof(Value,is_a_valid_connection_connectionsource(Owner,Value),Valid).
+
+batch_assign_all_connection_connectionsource(Result) :-
+     all_connections(Input),
+     assign_all_connection_connectionsource(Input,TResult),
+     relate_all(TResult,self_connectionsource,Result).
+
+assign_all_connection_connectionsource([],[]).
+assign_all_connection_connectionsource([Owner|T],[Owner,Value|Valid]) :-
+     self_connectionsource(Owner,Val),
+     member(Value,Val),
+     assign_all_connection_connectionsource(T,Valid).
+assign_all_connection_connectionsource([Owner|T],[Owner,Value|Valid]) :-
+     is_a_valid_connection_connectionsource(Owner,Value),
+     assign_all_connection_connectionsource(T,Valid).
+     
+collect_valid_connection_connectionsource([],[]).
+collect_valid_connection_connectionsource([Owner|Rest],Valid) :-
+     all_valid_connection_connectionsource(Owner,ValidS),
+     collect_valid_connection_connectionsource(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_connection_lineattributes(Owner,Value) :- 
+     
+     instance_of(Value,attribute),
+     true.    
+all_valid_connection_lineattributes(Owner,Valid) :-
+	 bagof(Value,is_a_valid_connection_lineattributes(Owner,Value),Valid).
+
+batch_assign_all_connection_lineattributes(Result) :-
+     all_connections(Input),
+     assign_all_connection_lineattributes(Input,TResult),
+     relate_all(TResult,self_lineattributes,Result).
+
+assign_all_connection_lineattributes([],[]).
+assign_all_connection_lineattributes([Owner|T],[Owner,Value|Valid]) :-
+     self_lineattributes(Owner,Val),
+     member(Value,Val),
+     assign_all_connection_lineattributes(T,Valid).
+assign_all_connection_lineattributes([Owner|T],[Owner,Value|Valid]) :-
+     is_a_valid_connection_lineattributes(Owner,Value),
+     assign_all_connection_lineattributes(T,Valid).
+     
+collect_valid_connection_lineattributes([],[]).
+collect_valid_connection_lineattributes([Owner|Rest],Valid) :-
+     all_valid_connection_lineattributes(Owner,ValidS),
+     collect_valid_connection_lineattributes(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_attribute_allowedvalues(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_attribute_type(Owner,Value) :- 
+     
+     float(Value),
+     true.
+
+is_a_valid_attribute_defaultvalue(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_attribute_description(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_attribute_id(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_attribute_name(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_attribute_annotation(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_attribute_tags(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_attribute_metamodel(Owner,Value) :- 
+     
+     instance_of(Value,metamodel),
+     true.    
+all_valid_attribute_metamodel(Owner,Valid) :-
+	 bagof(Value,is_a_valid_attribute_metamodel(Owner,Value),Valid).
+
+batch_assign_all_attribute_metamodel(Result) :-
+     all_attributes(Input),
+     assign_all_attribute_metamodel(Input,TResult),
+     relate_all(TResult,self_metamodel,Result).
+
+assign_all_attribute_metamodel([],[]).
+assign_all_attribute_metamodel([Owner|T],[Owner,Value|Valid]) :-
+     self_metamodel(Owner,Val),
+     member(Value,Val),
+     assign_all_attribute_metamodel(T,Valid).
+assign_all_attribute_metamodel([Owner|T],[Owner,Value|Valid]) :-
+     is_a_valid_attribute_metamodel(Owner,Value),
+     assign_all_attribute_metamodel(T,Valid).
+     
+collect_valid_attribute_metamodel([],[]).
+collect_valid_attribute_metamodel([Owner|Rest],Valid) :-
+     all_valid_attribute_metamodel(Owner,ValidS),
+     collect_valid_attribute_metamodel(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_attribute_abstract(Owner,Value) :- 
+     
+     isboolean(Value),
+     true.
+
+is_a_valid_attribute_issubtype(Owner,Value) :- 
+     
+     isboolean(Value),
+     true.
+
+is_a_valid_attribute_location(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_attribute_size(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_attribute_visibility_id(Owner,Value) :- 
+     
+     isboolean(Value),
+     true.
+
+is_a_valid_attribute_owner(Owner,Value) :- 
+     
+     instance_of(Value,attribute),
+     true.
+
+is_a_valid_attribute_expanded(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_attribute_owner(Owner,Value) :- 
+     
+     instance_of(Value,modelelement),
+     true.    
+all_valid_attribute_owner(Owner,Valid) :-
+	 bagof(Value,is_a_valid_attribute_owner(Owner,Value),Valid).
+
+batch_assign_all_attribute_owner(Result) :-
+     all_attributes(Input),
+     assign_all_attribute_owner(Input,TResult),
+     relate_all(TResult,self_owner,Result).
+
+assign_all_attribute_owner([],[]).
+assign_all_attribute_owner([Owner|T],[Owner,Value|Valid]) :-
+     self_owner(Owner,Val),
+     member(Value,Val),
+     assign_all_attribute_owner(T,Valid).
+assign_all_attribute_owner([Owner|T],[Owner,Value|Valid]) :-
+     is_a_valid_attribute_owner(Owner,Value),
+     assign_all_attribute_owner(T,Valid).
+     
+collect_valid_attribute_owner([],[]).
+collect_valid_attribute_owner([Owner|Rest],Valid) :-
+     all_valid_attribute_owner(Owner,ValidS),
+     collect_valid_attribute_owner(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_attribute_lines(Owner,Value) :- 
+     
+     instance_of(Value,connection),
+     true.    
+all_valid_attribute_lines(Owner,Valid) :-
+	 bagof(Value,is_a_valid_attribute_lines(Owner,Value),Valid).
+
+batch_assign_all_attribute_lines(Result) :-
+     all_attributes(Input),
+     assign_all_attribute_lines(Input,TResult),
+     relate_all(TResult,self_lines,Result).
+
+assign_all_attribute_lines([],[]).
+assign_all_attribute_lines([Owner|T],[Owner,Value|Valid]) :-
+     self_lines(Owner,Val),
+     member(Value,Val),
+     assign_all_attribute_lines(T,Valid).
+assign_all_attribute_lines([Owner|T],[Owner,Value|Valid]) :-
+     is_a_valid_attribute_lines(Owner,Value),
+     assign_all_attribute_lines(T,Valid).
+     
+collect_valid_attribute_lines([],[]).
+collect_valid_attribute_lines([Owner|Rest],Valid) :-
+     all_valid_attribute_lines(Owner,ValidS),
+     collect_valid_attribute_lines(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_modelelement_description(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_modelelement_id(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_modelelement_name(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_modelelement_annotation(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_modelelement_tags(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_modelelement_metamodel(Owner,Value) :- 
+     
+     instance_of(Value,metamodel),
+     true.    
+all_valid_modelelement_metamodel(Owner,Valid) :-
+	 bagof(Value,is_a_valid_modelelement_metamodel(Owner,Value),Valid).
+
+batch_assign_all_modelelement_metamodel(Result) :-
+     all_modelelements(Input),
+     assign_all_modelelement_metamodel(Input,TResult),
+     relate_all(TResult,self_metamodel,Result).
+
+assign_all_modelelement_metamodel([],[]).
+assign_all_modelelement_metamodel([Owner|T],[Owner,Value|Valid]) :-
+     self_metamodel(Owner,Val),
+     member(Value,Val),
+     assign_all_modelelement_metamodel(T,Valid).
+assign_all_modelelement_metamodel([Owner|T],[Owner,Value|Valid]) :-
+     is_a_valid_modelelement_metamodel(Owner,Value),
+     assign_all_modelelement_metamodel(T,Valid).
+     
+collect_valid_modelelement_metamodel([],[]).
+collect_valid_modelelement_metamodel([Owner|Rest],Valid) :-
+     all_valid_modelelement_metamodel(Owner,ValidS),
+     collect_valid_modelelement_metamodel(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_modelelement_abstract(Owner,Value) :- 
+     
+     isboolean(Value),
+     true.
+
+is_a_valid_modelelement_issubtype(Owner,Value) :- 
+     
+     isboolean(Value),
+     true.
+
+is_a_valid_modelelement_location(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_modelelement_size(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_modelelement_visibility_id(Owner,Value) :- 
+     
+     isboolean(Value),
+     true.
+
+is_a_valid_modelelement_owner(Owner,Value) :- 
+     
+     instance_of(Value,modelelement),
+     true.
+
+is_a_valid_modelelement_expanded(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_modelelement_containingaspects(Owner,Value) :- 
+     
+     instance_of(Value,aspect),
+     true.    
+all_valid_modelelement_containingaspects(Owner,Valid) :-
+	 bagof(Value,is_a_valid_modelelement_containingaspects(Owner,Value),Valid).
+
+batch_assign_all_modelelement_containingaspects(Result) :-
+     all_modelelements(Input),
+     assign_all_modelelement_containingaspects(Input,TResult),
+     relate_all(TResult,self_containingaspects,Result).
+
+assign_all_modelelement_containingaspects([],[]).
+assign_all_modelelement_containingaspects([Owner|T],[Owner,Value|Valid]) :-
+     self_containingaspects(Owner,Val),
+     member(Value,Val),
+     assign_all_modelelement_containingaspects(T,Valid).
+assign_all_modelelement_containingaspects([Owner|T],[Owner,Value|Valid]) :-
+     is_a_valid_modelelement_containingaspects(Owner,Value),
+     assign_all_modelelement_containingaspects(T,Valid).
+     
+collect_valid_modelelement_containingaspects([],[]).
+collect_valid_modelelement_containingaspects([Owner|Rest],Valid) :-
+     all_valid_modelelement_containingaspects(Owner,ValidS),
+     collect_valid_modelelement_containingaspects(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_modelelement_attributes(Owner,Value) :- 
+     
+     instance_of(Value,attribute),
+     true.    
+all_valid_modelelement_attributes(Owner,Valid) :-
+	 bagof(Value,is_a_valid_modelelement_attributes(Owner,Value),Valid).
+
+batch_assign_all_modelelement_attributes(Result) :-
+     all_modelelements(Input),
+     assign_all_modelelement_attributes(Input,TResult),
+     relate_all(TResult,self_attributes,Result).
+
+assign_all_modelelement_attributes([],[]).
+assign_all_modelelement_attributes([Owner|T],[Owner,Value|Valid]) :-
+     self_attributes(Owner,Val),
+     member(Value,Val),
+     assign_all_modelelement_attributes(T,Valid).
+assign_all_modelelement_attributes([Owner|T],[Owner,Value|Valid]) :-
+     is_a_valid_modelelement_attributes(Owner,Value),
+     assign_all_modelelement_attributes(T,Valid).
+     
+collect_valid_modelelement_attributes([],[]).
+collect_valid_modelelement_attributes([Owner|Rest],Valid) :-
+     all_valid_modelelement_attributes(Owner,ValidS),
+     collect_valid_modelelement_attributes(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_aspect_description(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_aspect_id(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_aspect_name(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_aspect_annotation(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_aspect_tags(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_aspect_metamodel(Owner,Value) :- 
+     
+     instance_of(Value,metamodel),
+     true.    
+all_valid_aspect_metamodel(Owner,Valid) :-
+	 bagof(Value,is_a_valid_aspect_metamodel(Owner,Value),Valid).
+
+batch_assign_all_aspect_metamodel(Result) :-
+     all_aspects(Input),
+     assign_all_aspect_metamodel(Input,TResult),
+     relate_all(TResult,self_metamodel,Result).
+
+assign_all_aspect_metamodel([],[]).
+assign_all_aspect_metamodel([Owner|T],[Owner,Value|Valid]) :-
+     self_metamodel(Owner,Val),
+     member(Value,Val),
+     assign_all_aspect_metamodel(T,Valid).
+assign_all_aspect_metamodel([Owner|T],[Owner,Value|Valid]) :-
+     is_a_valid_aspect_metamodel(Owner,Value),
+     assign_all_aspect_metamodel(T,Valid).
+     
+collect_valid_aspect_metamodel([],[]).
+collect_valid_aspect_metamodel([Owner|Rest],Valid) :-
+     all_valid_aspect_metamodel(Owner,ValidS),
+     collect_valid_aspect_metamodel(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_aspect_abstract(Owner,Value) :- 
+     
+     isboolean(Value),
+     true.
+
+is_a_valid_aspect_issubtype(Owner,Value) :- 
+     
+     isboolean(Value),
+     true.
+
+is_a_valid_aspect_location(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_aspect_size(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_aspect_visibility_id(Owner,Value) :- 
+     
+     isboolean(Value),
+     true.
+
+is_a_valid_aspect_owner(Owner,Value) :- 
+     
+     instance_of(Value,aspect),
+     true.
+
+is_a_valid_aspect_expanded(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_aspect_visibleentities(Owner,Value) :- 
+     
+     instance_of(Value,modelelement),
+     true.    
+all_valid_aspect_visibleentities(Owner,Valid) :-
+	 bagof(Value,is_a_valid_aspect_visibleentities(Owner,Value),Valid).
+
+batch_assign_all_aspect_visibleentities(Result) :-
+     all_aspects(Input),
+     assign_all_aspect_visibleentities(Input,TResult),
+     relate_all(TResult,self_visibleentities,Result).
+
+assign_all_aspect_visibleentities([],[]).
+assign_all_aspect_visibleentities([Owner|T],[Owner,Value|Valid]) :-
+     self_visibleentities(Owner,Val),
+     member(Value,Val),
+     assign_all_aspect_visibleentities(T,Valid).
+assign_all_aspect_visibleentities([Owner|T],[Owner,Value|Valid]) :-
+     is_a_valid_aspect_visibleentities(Owner,Value),
+     assign_all_aspect_visibleentities(T,Valid).
+     
+collect_valid_aspect_visibleentities([],[]).
+collect_valid_aspect_visibleentities([Owner|Rest],Valid) :-
+     all_valid_aspect_visibleentities(Owner,ValidS),
+     collect_valid_aspect_visibleentities(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_constraint_code(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_constraint_constrainttype(Owner,Value) :- 
+     
+     float(Value),
+     true.
+
+is_a_valid_constraint_id(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_constraint_name(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_constraint_annotation(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_constraint_tags(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_constraint_metamodel(Owner,Value) :- 
+     
+     instance_of(Value,metamodel),
+     true.    
+all_valid_constraint_metamodel(Owner,Valid) :-
+	 bagof(Value,is_a_valid_constraint_metamodel(Owner,Value),Valid).
+
+batch_assign_all_constraint_metamodel(Result) :-
+     all_constraints(Input),
+     assign_all_constraint_metamodel(Input,TResult),
+     relate_all(TResult,self_metamodel,Result).
+
+assign_all_constraint_metamodel([],[]).
+assign_all_constraint_metamodel([Owner|T],[Owner,Value|Valid]) :-
+     self_metamodel(Owner,Val),
+     member(Value,Val),
+     assign_all_constraint_metamodel(T,Valid).
+assign_all_constraint_metamodel([Owner|T],[Owner,Value|Valid]) :-
+     is_a_valid_constraint_metamodel(Owner,Value),
+     assign_all_constraint_metamodel(T,Valid).
+     
+collect_valid_constraint_metamodel([],[]).
+collect_valid_constraint_metamodel([Owner|Rest],Valid) :-
+     all_valid_constraint_metamodel(Owner,ValidS),
+     collect_valid_constraint_metamodel(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_constraint_abstract(Owner,Value) :- 
+     
+     isboolean(Value),
+     true.
+
+is_a_valid_constraint_issubtype(Owner,Value) :- 
+     
+     isboolean(Value),
+     true.
+
+is_a_valid_constraint_location(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_constraint_size(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_constraint_visibility_id(Owner,Value) :- 
+     
+     isboolean(Value),
+     true.
+
+is_a_valid_constraint_owner(Owner,Value) :- 
+     
+     instance_of(Value,constraint),
+     true.
+
+is_a_valid_constraint_expanded(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_metamodel_dsmlid(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_metamodel_fileextensions(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_metamodel_category(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_metamodel_description(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_metamodel_id(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_metamodel_name(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_metamodel_annotation(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_metamodel_tags(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_metamodel_aspect(Owner,Value) :- 
+     
+     instance_of(Value,aspect),
+     true.    
+all_valid_metamodel_aspect(Owner,Valid) :-
+	 bagof(Value,is_a_valid_metamodel_aspect(Owner,Value),Valid).
+
+batch_assign_all_metamodel_aspect(Result) :-
+     all_metamodels(Input),
+     assign_all_metamodel_aspect(Input,TResult),
+     relate_all(TResult,self_aspect,Result).
+
+assign_all_metamodel_aspect([],[]).
+assign_all_metamodel_aspect([Owner|T],[Owner,Value|Valid]) :-
+     self_aspect(Owner,Val),
+     member(Value,Val),
+     assign_all_metamodel_aspect(T,Valid).
+assign_all_metamodel_aspect([Owner|T],[Owner,Value|Valid]) :-
+     is_a_valid_metamodel_aspect(Owner,Value),
+     assign_all_metamodel_aspect(T,Valid).
+     
+collect_valid_metamodel_aspect([],[]).
+collect_valid_metamodel_aspect([Owner|Rest],Valid) :-
+     all_valid_metamodel_aspect(Owner,ValidS),
+     collect_valid_metamodel_aspect(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_metamodel_modelobject(Owner,Value) :- 
+     
+     instance_of(Value,modelelement),
+     true.    
+all_valid_metamodel_modelobject(Owner,Valid) :-
+	 bagof(Value,is_a_valid_metamodel_modelobject(Owner,Value),Valid).
+
+batch_assign_all_metamodel_modelobject(Result) :-
+     all_metamodels(Input),
+     assign_all_metamodel_modelobject(Input,TResult),
+     relate_all(TResult,self_modelobject,Result).
+
+assign_all_metamodel_modelobject([],[]).
+assign_all_metamodel_modelobject([Owner|T],[Owner,Value|Valid]) :-
+     self_modelobject(Owner,Val),
+     member(Value,Val),
+     assign_all_metamodel_modelobject(T,Valid).
+assign_all_metamodel_modelobject([Owner|T],[Owner,Value|Valid]) :-
+     is_a_valid_metamodel_modelobject(Owner,Value),
+     assign_all_metamodel_modelobject(T,Valid).
+     
+collect_valid_metamodel_modelobject([],[]).
+collect_valid_metamodel_modelobject([Owner|Rest],Valid) :-
+     all_valid_metamodel_modelobject(Owner,ValidS),
+     collect_valid_metamodel_modelobject(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_metamodel_attribute(Owner,Value) :- 
+     
+     instance_of(Value,attribute),
+     true.    
+all_valid_metamodel_attribute(Owner,Valid) :-
+	 bagof(Value,is_a_valid_metamodel_attribute(Owner,Value),Valid).
+
+batch_assign_all_metamodel_attribute(Result) :-
+     all_metamodels(Input),
+     assign_all_metamodel_attribute(Input,TResult),
+     relate_all(TResult,self_attribute,Result).
+
+assign_all_metamodel_attribute([],[]).
+assign_all_metamodel_attribute([Owner|T],[Owner,Value|Valid]) :-
+     self_attribute(Owner,Val),
+     member(Value,Val),
+     assign_all_metamodel_attribute(T,Valid).
+assign_all_metamodel_attribute([Owner|T],[Owner,Value|Valid]) :-
+     is_a_valid_metamodel_attribute(Owner,Value),
+     assign_all_metamodel_attribute(T,Valid).
+     
+collect_valid_metamodel_attribute([],[]).
+collect_valid_metamodel_attribute([Owner|Rest],Valid) :-
+     all_valid_metamodel_attribute(Owner,ValidS),
+     collect_valid_metamodel_attribute(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_metamodel_constraints(Owner,Value) :- 
+     
+     instance_of(Value,constraint),
+     true.    
+all_valid_metamodel_constraints(Owner,Valid) :-
+	 bagof(Value,is_a_valid_metamodel_constraints(Owner,Value),Valid).
+
+batch_assign_all_metamodel_constraints(Result) :-
+     all_metamodels(Input),
+     assign_all_metamodel_constraints(Input,TResult),
+     relate_all(TResult,self_constraints,Result).
+
+assign_all_metamodel_constraints([],[]).
+assign_all_metamodel_constraints([Owner|T],[Owner,Value|Valid]) :-
+     self_constraints(Owner,Val),
+     member(Value,Val),
+     assign_all_metamodel_constraints(T,Valid).
+assign_all_metamodel_constraints([Owner|T],[Owner,Value|Valid]) :-
+     is_a_valid_metamodel_constraints(Owner,Value),
+     assign_all_metamodel_constraints(T,Valid).
+     
+collect_valid_metamodel_constraints([],[]).
+collect_valid_metamodel_constraints([Owner|Rest],Valid) :-
+     all_valid_metamodel_constraints(Owner,ValidS),
+     collect_valid_metamodel_constraints(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_metamodel_inheritance(Owner,Value) :- 
+     
+     instance_of(Value,inheritance),
+     true.    
+all_valid_metamodel_inheritance(Owner,Valid) :-
+	 bagof(Value,is_a_valid_metamodel_inheritance(Owner,Value),Valid).
+
+batch_assign_all_metamodel_inheritance(Result) :-
+     all_metamodels(Input),
+     assign_all_metamodel_inheritance(Input,TResult),
+     relate_all(TResult,self_inheritance,Result).
+
+assign_all_metamodel_inheritance([],[]).
+assign_all_metamodel_inheritance([Owner|T],[Owner,Value|Valid]) :-
+     self_inheritance(Owner,Val),
+     member(Value,Val),
+     assign_all_metamodel_inheritance(T,Valid).
+assign_all_metamodel_inheritance([Owner|T],[Owner,Value|Valid]) :-
+     is_a_valid_metamodel_inheritance(Owner,Value),
+     assign_all_metamodel_inheritance(T,Valid).
+     
+collect_valid_metamodel_inheritance([],[]).
+collect_valid_metamodel_inheritance([Owner|Rest],Valid) :-
+     all_valid_metamodel_inheritance(Owner,ValidS),
+     collect_valid_metamodel_inheritance(Rest,CValid),
+     append(ValidS,CValid,Valid).
+     
+
+is_a_valid_metamodel_abstract(Owner,Value) :- 
+     
+     isboolean(Value),
+     true.
+
+is_a_valid_metamodel_issubtype(Owner,Value) :- 
+     
+     isboolean(Value),
+     true.
+
+is_a_valid_metamodel_location(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_metamodel_size(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+is_a_valid_metamodel_visibility_id(Owner,Value) :- 
+     
+     isboolean(Value),
+     true.
+
+is_a_valid_metamodel_owner(Owner,Value) :- 
+     
+     instance_of(Value,metamodel),
+     true.
+
+is_a_valid_metamodel_expanded(Owner,Value) :- 
+     
+     atomic(Value),
+     true.
+
+     

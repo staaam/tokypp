@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="lost.tok.DiscussionViewer.emf" nsURI="lost.tok.discussionViewer" nsPrefix="discussionviewer">
+  
+   <eClassifiers xsi:type="ecore:EClass" name="MementoValue">
+     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="0"/>
+     <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="0"/>
+   </eClassifiers>
+   <eClassifiers xsi:type="ecore:EClass" name="Memento">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="0"/>
+  		 <eStructuralFeatures xsi:type="ecore:EReference" name="data" upperBound="2000"
+        eType="#//MementoValue" containment="true"/>
+   </eClassifiers>
+   <eClassifiers xsi:type="ecore:EClass" name="Subtype">
+   	 <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="AnonymousSubtype"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="base" upperBound="1"
+        eType="#//ModelObject"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="instances" upperBound="2000"
+        eType="#//ModelObject"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="links" upperBound="20000"
+        eType="#//SubtypeLink" containment="true"/>
+   </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="SubtypeLink">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="base" upperBound="1"
+        eType="#//ModelObject"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="instance" upperBound="1"
+        eType="#//ModelObject"/>
+   </eClassifiers>
+   <eClassifiers xsi:type="ecore:EClass" name="ModelObject">
+     <eStructuralFeatures xsi:type="ecore:EAttribute" name="Name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="0"/>
+     <eStructuralFeatures xsi:type="ecore:EAttribute" name="Id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="0"/>
+     <eStructuralFeatures xsi:type="ecore:EAttribute" name="X" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0"/>
+     <eStructuralFeatures xsi:type="ecore:EAttribute" name="Y" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0"/>
+     <eStructuralFeatures xsi:type="ecore:EAttribute" name="Width" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="100"/>
+     <eStructuralFeatures xsi:type="ecore:EAttribute" name="Height" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="100"/>
+     <eStructuralFeatures xsi:type="ecore:EAttribute" name="ExpandedWidth" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="200"/>
+     <eStructuralFeatures xsi:type="ecore:EAttribute" name="ExpandedHeight" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="200"/>
+     <eStructuralFeatures xsi:type="ecore:EAttribute" name="Expanded" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+     <eStructuralFeatures xsi:type="ecore:EAttribute" name="Subtype" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+     <eStructuralFeatures xsi:type="ecore:EAttribute" name="Visible" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+     <eStructuralFeatures xsi:type="ecore:EAttribute" name="ModelLinkTarget" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+  </eClassifiers>
+     
+ <eClassifiers xsi:type="ecore:EClass" name="AbstractDicObject" eSuperTypes="#//ModelObject">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="Relates1" lowerBound="0" upperBound="2147483647"
+        eType="#//AbstractDicObject" />
+      <eStructuralFeatures xsi:type="ecore:EReference" name="Relates2" lowerBound="0" upperBound="2147483647"
+        eType="#//AbstractDicObject" />
+  </eClassifiers>
+
+     
+ <eClassifiers xsi:type="ecore:EClass" name="Opinion" eSuperTypes="#//AbstractDicObject">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="oneOpinion" lowerBound="0" upperBound="2147483647"
+        eType="#//Quote" />
+  </eClassifiers>
+
+     
+ <eClassifiers xsi:type="ecore:EClass" name="Quote" eSuperTypes="#//AbstractDicObject">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="manyQuotes" lowerBound="0" upperBound="2147483647"
+        eType="#//Opinion" />
+  </eClassifiers>
+
+     
+ <eClassifiers xsi:type="ecore:EClass" name="DiscussionViewer" eSuperTypes="#//ModelObject">
+  </eClassifiers>
+
+     
+ <eClassifiers xsi:type="ecore:EClass" name="RelationConnection">
+ 	 <eStructuralFeatures xsi:type="ecore:EReference" name="Source" eType="#//AbstractDicObject"/>
+     <eStructuralFeatures xsi:type="ecore:EReference" name="Target" eType="#//AbstractDicObject"/>
+  </eClassifiers>
+
+     
+ <eClassifiers xsi:type="ecore:EClass" name="ContainmentConnection">
+ 	 <eStructuralFeatures xsi:type="ecore:EReference" name="Source" eType="#//Opinion"/>
+     <eStructuralFeatures xsi:type="ecore:EReference" name="Target" eType="#//Quote"/>
+  </eClassifiers>
+
+  <eClassifiers xsi:type="ecore:EClass" name="Root">
+  	<eStructuralFeatures xsi:type="ecore:EReference" name="mementos" upperBound="2000"
+        eType="#//Memento" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subtypes" upperBound="2000"
+        eType="#//Subtype" containment="true"/>
+   <eStructuralFeatures xsi:type="ecore:EReference" name="RealRoot" upperBound="1"
+        eType="#//DiscussionViewer" containment="true"/>
+   
+     <eStructuralFeatures xsi:type="ecore:EReference" name="AbstractDicObject" upperBound="2000"
+        eType="#//AbstractDicObject" containment="true"/>
+     <eStructuralFeatures xsi:type="ecore:EReference" name="Opinion" upperBound="2000"
+        eType="#//Opinion" containment="true"/>
+     <eStructuralFeatures xsi:type="ecore:EReference" name="Quote" upperBound="2000"
+        eType="#//Quote" containment="true"/>
+     <eStructuralFeatures xsi:type="ecore:EReference" name="DiscussionViewer" upperBound="2000"
+        eType="#//DiscussionViewer" containment="true"/>
+     <eStructuralFeatures xsi:type="ecore:EReference" name="RelationConnection" upperBound="2000"
+        eType="#//RelationConnection" containment="true"/>
+     <eStructuralFeatures xsi:type="ecore:EReference" name="ContainmentConnection" upperBound="2000"
+        eType="#//ContainmentConnection" containment="true"/>
+      
+  </eClassifiers>
+
+</ecore:EPackage>
