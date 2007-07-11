@@ -1,0 +1,4 @@
+<prolog-rule-base>
+  <constraints class="linked-list"/>
+  <libraryrules class="linked-list"/>
+</prolog-rule-base>

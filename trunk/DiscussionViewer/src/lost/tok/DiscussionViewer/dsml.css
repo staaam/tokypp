@@ -1,0 +1,12 @@
+Relation{
+dst-decoration: arrow;
+src-decoration: arrow;
+line-width: 3;
+line-color: (0,200,0);
+line-style: dash;
+}
+
+Containment{
+	src-decoration: diamond;
+	line-color:(27, 0, 255);
+}

@@ -1,0 +1,31 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: DiscussionViewer Plug-in
+Bundle-SymbolicName: lost.tok.DiscussionViewer; singleton:=true
+Bundle-Version: 1.0.0
+Bundle-ClassPath: DiscussionViewer.jar
+Bundle-Activator: lost.tok.DiscussionViewer.DiscussionViewerPlugin
+Bundle-Vendor: GEMS
+Bundle-Localization: plugin
+Export-Package: lost.tok.DiscussionViewer,
+ lost.tok.DiscussionViewer.emf,
+ lost.tok.DiscussionViewer.emf.impl,
+ lost.tok.DiscussionViewer.emf.util,
+ lost.tok.DiscussionViewer.icons
+Require-Bundle: org.gems.designer.dsml,
+ org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.jface.text,
+ org.eclipse.core.resources,
+ org.eclipse.ui.editors,
+ org.eclipse.ui.ide,
+ org.eclipse.ui.workbench.texteditor,
+ org.eclipse.draw2d,
+ org.eclipse.gef,
+ org.eclipse.ui.views,
+ org.eclipse.emf,
+ org.eclipse.emf.ecore,
+ org.eclipse.emf.ecore.xmi,
+ org.eclipse.platform,
+ org.gems.designer.dsml.emf
+Eclipse-LazyStart: true

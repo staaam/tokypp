@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+
+     <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            default="true"
+            name="Discussion Viewer"
+            extensions="dis"
+            icon="DiscussionViewer.gif"
+            class="lost.tok.DiscussionViewer.DSMLEditor"
+            contributorClass="org.gems.designer.actions.LogicActionBarContributor"
+            id="lost.tok.DiscussionViewer.editor">
+      </editor>
+   </extension>
+  
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            name="Information"
+            id="lost.tok.DiscussionViewer">
+      </category>
+      <wizard
+            name="Discussion Viewer"
+            icon="DiscussionViewer.gif"
+            category="lost.tok.DiscussionViewer"
+            class="lost.tok.DiscussionViewer.GemsCreationWizard"
+            id="lost.tok.DiscussionViewer.NewWizard">
+      </wizard>
+   </extension>
+      <extension
+         point="org.gems.designer.dsml.serializer">
+      <serializer
+            class="lost.tok.DiscussionViewer.Serializer"
+            models="readers,lost.tok.discussionViewer"/>
+   </extension>
+      <extension
+            id="lostTokDiscussionViewer"
+            point="org.eclipse.core.runtime.products">
+         <product
+               application="org.eclipse.ui.ide.workbench"
+               name="Discussion Viewer"/>
+      </extension>
+
+</plugin>

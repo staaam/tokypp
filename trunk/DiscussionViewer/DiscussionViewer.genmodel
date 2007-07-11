@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/DiscussionViewer/src"
+    modelName="DiscussionViewer">
+  <foreignModel>C:/Documents and Settings/ateter/workspace/DiscussionViewer/DiscussionViewer.ecore</foreignModel>
+  <genPackages prefix="DiscussionViewer"  basePackage=""  disposableProviderFactory="true"
+      ecorePackage="DiscussionViewer.ecore#/">
+    <genClasses ecoreClass="DiscussionViewer.ecore#//MementoValue">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DiscussionViewer.ecore#//MementoValue/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DiscussionViewer.ecore#//MementoValue/value"/>
+    </genClasses>
+    <genClasses ecoreClass="DiscussionViewer.ecore#//Memento">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DiscussionViewer.ecore#//Memento/id"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DiscussionViewer.ecore#//Memento/data"/>
+    </genClasses>
+    <genClasses ecoreClass="DiscussionViewer.ecore#//Subtype">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DiscussionViewer.ecore#//Subtype/name"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DiscussionViewer.ecore#//Subtype/base"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DiscussionViewer.ecore#//Subtype/instances"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DiscussionViewer.ecore#//Subtype/links"/>
+    </genClasses>
+    <genClasses ecoreClass="DiscussionViewer.ecore#//SubtypeLink">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DiscussionViewer.ecore#//SubtypeLink/base"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DiscussionViewer.ecore#//SubtypeLink/instance"/>
+    </genClasses>
+    <genClasses ecoreClass="DiscussionViewer.ecore#//ModelObject">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DiscussionViewer.ecore#//ModelObject/Name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DiscussionViewer.ecore#//ModelObject/Id"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DiscussionViewer.ecore#//ModelObject/X"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DiscussionViewer.ecore#//ModelObject/Y"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DiscussionViewer.ecore#//ModelObject/Width"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DiscussionViewer.ecore#//ModelObject/Height"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DiscussionViewer.ecore#//ModelObject/ExpandedWidth"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DiscussionViewer.ecore#//ModelObject/ExpandedHeight"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DiscussionViewer.ecore#//ModelObject/Expanded"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DiscussionViewer.ecore#//ModelObject/Subtype"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DiscussionViewer.ecore#//ModelObject/Visible"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DiscussionViewer.ecore#//ModelObject/ModelLinkTarget"/>
+    </genClasses>
+    <genClasses ecoreClass="DiscussionViewer.ecore#//AbstractDicObject">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DiscussionViewer.ecore#//AbstractDicObject/Relates1"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DiscussionViewer.ecore#//AbstractDicObject/Relates2"/>
+    </genClasses>
+    <genClasses ecoreClass="DiscussionViewer.ecore#//Opinion">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DiscussionViewer.ecore#//Opinion/oneOpinion"/>
+    </genClasses>
+    <genClasses ecoreClass="DiscussionViewer.ecore#//Quote">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DiscussionViewer.ecore#//Quote/manyQuotes"/>
+    </genClasses>
+    <genClasses ecoreClass="DiscussionViewer.ecore#//DiscussionViewer"/>
+    <genClasses ecoreClass="DiscussionViewer.ecore#//RelationConnection">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DiscussionViewer.ecore#//RelationConnection/Source"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DiscussionViewer.ecore#//RelationConnection/Target"/>
+    </genClasses>
+    <genClasses ecoreClass="DiscussionViewer.ecore#//ContainmentConnection">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DiscussionViewer.ecore#//ContainmentConnection/Source"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DiscussionViewer.ecore#//ContainmentConnection/Target"/>
+    </genClasses>
+    <genClasses ecoreClass="DiscussionViewer.ecore#//Root">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DiscussionViewer.ecore#//Root/mementos"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DiscussionViewer.ecore#//Root/subtypes"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DiscussionViewer.ecore#//Root/RealRoot"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DiscussionViewer.ecore#//Root/AbstractDicObject"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DiscussionViewer.ecore#//Root/Opinion"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DiscussionViewer.ecore#//Root/Quote"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DiscussionViewer.ecore#//Root/DiscussionViewer"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DiscussionViewer.ecore#//Root/RelationConnection"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DiscussionViewer.ecore#//Root/ContainmentConnection"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>
