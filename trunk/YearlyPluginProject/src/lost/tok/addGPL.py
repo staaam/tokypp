@@ -1,4 +1,9 @@
-/* Tree of Knowledge - An information management Eclipse plugin
+import os
+import sys
+import os.path
+
+GPL = \
+"""/* Tree of Knowledge - An information management Eclipse plugin
  * Copyright (C) 2007 Team Lost
  * 
  * This program is free software; you can redistribute it and/or
@@ -17,28 +22,20 @@
  * Boston, MA  02110-1301, USA.
  */
 
-package lost.tok;
+"""
 
-import java.util.Map;
-
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IncrementalProjectBuilder;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
-
-public class ToKBuilder extends IncrementalProjectBuilder {
-
-	public static String BUILDER_ID = "lost.tok.ToKBuilder"; //$NON-NLS-1$
-
-	public ToKBuilder() {
-		System.out.println("tokBuilder"); //$NON-NLS-1$
-	}
-
-	@Override
-	protected IProject[] build(int kind, Map args, IProgressMonitor monitor)
-			throws CoreException {
-		System.out.println("build"); //$NON-NLS-1$
-		return null;
-	}
-
-}
+def recAddGPL(source):
+    if os.path.isdir(source):
+        for aFile in os.listdir(source):
+            recAddGPL(source + os.sep + aFile)
+    elif os.path.isfile(source) and source.endswith(".java"):
+        f = open(source)
+        code = f.read()
+        f.close()
+        newCode = GPL + code
+        print "Adding GPL shit to",source
+        f = open(source, 'w')
+        f.write(newCode)
+        f.close
+                        
+recAddGPL('.')
